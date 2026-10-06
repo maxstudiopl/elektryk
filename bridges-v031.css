@@ -10,3 +10,11 @@
 .comb-highlight{stroke-width:2!important;opacity:.7}
 .comb-badge{background:linear-gradient(#5a3c1d,#33200f)!important;border-color:#d09a52!important;color:#ffe8c2!important;padding:3px 6px!important}
 .comb-badge b{font-size:5.5px!important;letter-spacing:.35px!important}
+
+/* v0.4.12 — mostki zasilające FR → SPD/RCD + tor N */
+.bridge-path[data-phase="N"]{stroke:#0989d8}
+.bridge-end[data-phase="N"]{fill:#0989d8}
+.feed-path{stroke-width:6.8!important}
+.feed-badge{background:linear-gradient(#183548,#0d2534)!important;border-color:#438bb5!important;color:#dff4ff!important}
+.feed-badge[data-phase="N"] span{background:#087bbf!important}
+.bridge-badge[data-phase="N"] span{background:#087bbf!important}
