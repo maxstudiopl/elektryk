@@ -12,7 +12,7 @@ if(consoleBox){
   const box=document.createElement('div');box.className='bridge-console';box.innerHTML=
     '<div class="bridge-console-head"><b>MOSTKI / GRZEBIEŃ ZASILAJĄCY</b><span id="bridgePhase">L1</span></div>'+
     '<div class="bridge-mode-grid"><button id="bridgeModeBtn" class="bridge-mode-btn">⛓ MOSTEK — WYŁĄCZONY</button><button id="combModeBtn" class="bridge-mode-btn comb-mode-btn">▰ GRZEBIEŃ — WYŁĄCZONY</button></div>'+
-    '<div class="bridge-help">MOSTEK: L1/L2/L3 oraz N/PE. FR/RCD → aparaty, N → listwa N, PE z WLZ/SPD → listwa PE. GRZEBIEŃ: zasila ciąg sąsiednich MCB/RCBO.</div>'+
+    '<div class="bridge-help">MOSTEK: L1/L2/L3 oraz N/PE, w tym listwy zaciskowe N i PE. GRZEBIEŃ: zasila ciąg sąsiednich MCB/RCBO.</div>'+
     '<div class="bridge-actions"><button id="undoBridge">↩ COFNIJ OSTATNI</button><button id="clearBridges" class="danger">× USUŃ ZASILANIE</button></div>'+
     '<div class="bridge-counter"><span>Mostki / grzebienie</span><b id="bridgeCount">0</b></div>';
   consoleBox.appendChild(box);
@@ -60,6 +60,8 @@ function eligibleBridge(t){
   if(code==='RCD'&&zone==='bottom')return role==='L'||role==='N';
   if(code==='RCBO'&&zone==='bottom')return role==='L'||role==='N';
   if(code==='SPD'&&zone==='bottom')return role==='PE';
+  if(code==='NTB')return role==='N';
+  if(code==='PETB')return role==='PE';
   if(isFeedTargetCode(code))return zone==='top';
   return false;
 }
@@ -73,7 +75,7 @@ function terminalForDevice(m,phase){
 }
 function toggleBridgeMode(on){
   bridgeMode=on;combMode=false;clearStart();refreshButtons();highlightEligible();refreshPhase();
-  setStatus(on?'Tryb MOSTEK: obsługuje L1/L2/L3 oraz N i PE. FR/RCD → aparaty, N → listwa N, PE z WLZ/SPD → listwa PE.':'Tryb mostków wyłączony.');
+  setStatus(on?'Tryb MOSTEK: obsługuje L1/L2/L3 oraz N i PE. Możesz też zasilać listwy zaciskowe N i PE.':'Tryb mostków wyłączony.');
 }
 function toggleCombMode(on){
   combMode=on;bridgeMode=false;clearStart();refreshButtons();highlightEligible();refreshPhase();
@@ -168,20 +170,25 @@ function validBridgePair(a,b){
   const ca=codeOf(a),cb=codeOf(b),za=a.dataset.zone,zb=b.dataset.zone,ra=a.dataset.role,rb=b.dataset.role;
 
   if(ra==='PE'&&rb==='PE'){
-    const zones=[za,zb];
-    const codes=[ca,cb];
-    const hasBar=zones.includes('bar');
-    const hasSupply=zones.includes('supply');
+    const zones=[za,zb],codes=[ca,cb];
+    const hasBar=zones.includes('bar'),hasSupply=zones.includes('supply');
     const hasSpd=codes.includes('SPD')&&(za==='bottom'||zb==='bottom');
-    if(hasBar&&(hasSupply||hasSpd))return {ok:true,kind:'feed',source:hasSupply?'WLZ':'SPD'};
-    return {ok:false,msg:'Mostek PE wykonaj pomiędzy WLZ lub wyjściem PE SPD a listwą PE.'};
+    const hasPeStrip=codes.includes('PETB');
+    if((hasBar||hasPeStrip)&&(hasSupply||hasSpd||hasBar||hasPeStrip)){
+      return {ok:true,kind:'feed',source:hasSupply?'WLZ':hasSpd?'SPD':'PE'};
+    }
+    return {ok:false,msg:'Mostek PE połącz z WLZ, wyjściem PE SPD, listwą PE lub listwą zaciskową PE.'};
   }
 
   if(ra==='N'&&rb==='N'){
     const hasBar=za==='bar'||zb==='bar';
+    const hasNStrip=ca==='NTB'||cb==='NTB';
     const aFeed=(isFrCode(ca)||ca==='RCD'||ca==='RCBO')&&za==='bottom';
     const bFeed=(isFrCode(cb)||cb==='RCD'||cb==='RCBO')&&zb==='bottom';
-    if(hasBar&&(aFeed||bFeed))return {ok:true,kind:'feed',source:'N'};
+    if((hasBar||hasNStrip)&&(aFeed||bFeed||hasBar||hasNStrip)){
+      return {ok:true,kind:'feed',source:'N'};
+    }
+    return {ok:false,msg:'Mostek N połącz z wyjściem N FR/RCD/RCBO, listwą N lub listwą zaciskową N.'};
   }
 
   if(!isAdjacent(a,b))return {ok:false,msg:'Mostek może łączyć tylko bezpośrednio sąsiednie aparaty w tym samym rzędzie.'};
