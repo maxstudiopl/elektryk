@@ -28,11 +28,19 @@ function decorateCircuits(){const names=['LIGHT','SOCKET','KITCHEN','WASH'];docu
 const terminalMap={FR:{top:[['L1','L1'],['L2','L2'],['L3','L3'],['N','N']],bottom:[['L1','L1'],['L2','L2'],['L3','L3'],['N','N']]},RCD:{top:[['L','L'],['N','N']],bottom:[['L','L'],['N','N']]},B16:{top:[['L','L']],bottom:[['L','L']]},B10:{top:[['L','L']],bottom:[['L','L']]},RCBO:{top:[['L','L'],['N','N']],bottom:[['L','L'],['N','N']]},SPD:{top:[['L','L'],['N','N']],bottom:[['PE','PE']]}};
 function decorateMounted(){document.querySelectorAll('.mounted-device').forEach(m=>{if(m.dataset.terminalsReady)return;const code=m.dataset.code,map=terminalMap[code];if(!map)return;m.dataset.terminalsReady='1';const top=m.querySelector('.device-topterm'),bottom=m.querySelector('.device-bottomterm');if(top){top.innerHTML='';map.top.forEach(([label,role],i)=>top.appendChild(wireTerminal(label,role,`${m.dataset.mountId}:TOP:${role}:${i}`,'top')))}if(bottom){bottom.innerHTML='';map.bottom.forEach(([label,role],i)=>bottom.appendChild(wireTerminal(label,role,`${m.dataset.mountId}:BOTTOM:${role}:${i}`,'bottom')))}});pruneConnections();draw()}
 function terminalCenter(el){const r=el.getBoundingClientRect(),c=cabinet.getBoundingClientRect();return{x:r.left+r.width/2-c.left,y:r.top+r.height/2-c.top}}
-function shortestRoute(A,B,a,b){
+function shortestRoute(A,B,a,b,type){
   const dx=Math.abs(B.x-A.x),dy=Math.abs(B.y-A.y);
   if(dx<2)return `M ${A.x} ${A.y} L ${B.x} ${B.y}`;
   if(dy<2)return `M ${A.x} ${A.y} L ${B.x} ${B.y}`;
   const az=a.dataset.zone||'',bz=b.dataset.zone||'';
+
+  // PE z WLZ do listwy PE: trasa górą, potem pionowo przy listwie.
+  // Długość Manhattan pozostaje najkrótsza (dx + dy), zmienia się tylko kolejność odcinków.
+  if(type==='PE' && ((az==='supply'&&bz==='bar')||(az==='bar'&&bz==='supply'))){
+    if(az==='supply')return `M ${A.x} ${A.y} L ${B.x} ${A.y} L ${B.x} ${B.y}`;
+    return `M ${A.x} ${A.y} L ${A.x} ${B.y} L ${B.x} ${B.y}`;
+  }
+
   const aVertical=az==='top'||az==='bottom'||az==='supply';
   const bVertical=bz==='top'||bz==='bottom'||bz==='load';
   if(aVertical&&!bVertical)return `M ${A.x} ${A.y} L ${A.x} ${B.y} L ${B.x} ${B.y}`;
@@ -41,7 +49,7 @@ function shortestRoute(A,B,a,b){
   return `M ${A.x} ${A.y} L ${A.x} ${B.y} L ${B.x} ${B.y}`;
 }
 function addPath(d,type,cls){const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);p.setAttribute('class',cls);p.dataset.wire=type;if(cls==='wire-path')p.setAttribute('stroke',COLORS[type]||'#d06a25');svg.appendChild(p)}
-function draw(){svg.innerHTML='';connections.forEach(c=>{const a=document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`),b=document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`);if(!a||!b)return;const A=terminalCenter(a),B=terminalCenter(b),d=shortestRoute(A,B,a,b);addPath(d,c.type,'wire-shadow');addPath(d,c.type,'wire-path')})}
+function draw(){svg.innerHTML='';connections.forEach(c=>{const a=document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`),b=document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`);if(!a||!b)return;const A=terminalCenter(a),B=terminalCenter(b),d=shortestRoute(A,B,a,b,c.type);addPath(d,c.type,'wire-shadow');addPath(d,c.type,'wire-path')})}
 function refreshUsed(){document.querySelectorAll('.wire-terminal').forEach(t=>t.classList.toggle('used-terminal',endpointUsed(t.dataset.terminal)))}
 function pruneConnections(){const before=connections.length;connections=connections.filter(c=>document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`)&&document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`));if(before!==connections.length){cancelStart();refreshUsed();updateCounters()}}
 function connectClick(el){const role=el.dataset.role,id=el.dataset.terminal;if(!roleAccepts(role,selectedWire)){markBad(el,`żyła ${selectedWire} nie pasuje do zacisku ${role}.`);return}if(endpointUsed(id)){markBad(el,'ten zacisk jest już zajęty. Usuń przewód lub wybierz inny zacisk.');return}if(!startTerminal){startTerminal={id,el,role};el.classList.add('start-terminal');status(`<b>PUNKT 1:</b> ${id}. Teraz kliknij drugi zacisk dla ${selectedWire}.`);return}if(startTerminal.id===id){cancelStart();status('<b>ANULOWANO:</b> wybór pierwszego zacisku.');return}if(connections.some(c=>(c.a===startTerminal.id&&c.b===id)||(c.a===id&&c.b===startTerminal.id))){markBad(el,'takie połączenie już istnieje.');cancelStart();return}const cable=document.querySelector('.cable-buttons button.active')?.textContent.trim()||'';connections.push({id:'W'+wireSeq++,a:startTerminal.id,b:id,type:selectedWire,cable});startTerminal.el.classList.remove('start-terminal');startTerminal=null;refreshUsed();draw();updateCounters();status(`<b>POŁĄCZONO:</b> ${selectedWire} • ${cable||'przewód'} • ${connections[connections.length-1].a} → ${id}`,'success')}
