@@ -16,7 +16,9 @@ const PARTS={
   C20:{code:'C20',name:'C20 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'C20',rating:'20A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
   C25:{code:'C25',name:'C25 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'C25',rating:'25A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
   RCBO:{code:'RCBO',name:'RCBO B16 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'ELX RCBO',brandClass:'cyan',type:'RCBO',rating:'B16',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
-  SPD:{code:'SPD',name:'SPD Typ 2',modules:2,category:'OCHRONA',className:'device-spd medium',top:'L • N',brand:'ELX SPD',brandClass:'orange',type:'SPD',rating:'T2',meta:'275V • 1P+N',fn:'PRZEPIĘCIA',bottom:'PE',kind:'spd',spd:true}
+  SPD:{code:'SPD',name:'SPD Typ 2',modules:2,category:'OCHRONA',className:'device-spd medium',top:'L • N',brand:'ELX SPD',brandClass:'orange',type:'SPD',rating:'T2',meta:'275V • 1P+N',fn:'PRZEPIĘCIA',bottom:'PE',kind:'spd',spd:true},
+  NTB:{code:'NTB',name:'Listwa zaciskowa N',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-n medium',top:'N1 • N2 • N3 • N4',brand:'ELX TERMINAL',brandClass:'blue',type:'N',rating:'8×N',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ NEUTRALNY N',bottom:'N5 • N6 • N7 • N8',kind:'terminal-n',passive:true},
+  PETB:{code:'PETB',name:'Listwa zaciskowa PE',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-pe medium',top:'PE1 • PE2 • PE3 • PE4',brand:'ELX TERMINAL',brandClass:'green',type:'PE',rating:'8×PE',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ OCHRONNY PE',bottom:'PE5 • PE6 • PE7 • PE8',kind:'terminal-pe',passive:true}
 }
 
 const MODULES_PER_ROW=18;
@@ -62,7 +64,7 @@ function apparatusHtml(p){
     <div class="device-topterm">${p.top}</div><div class="brand-strip ${p.brandClass}">${p.brand}</div>
     <div class="device-type">${p.type}</div><div class="device-rating">${p.rating}</div><div class="device-meta">${p.meta}</div><div class="device-function">${p.fn}</div>
     ${p.test?`<div class="test-btn ${p.testClass||''}">${p.test}</div>`:''}
-    ${p.spd?'<div class="spd-window"><span>OK</span></div>':'<div class="lever '+(p.kind==='fr'?'redlever':'')+'"><span>I</span><span>O</span></div>'}
+    ${p.spd?'<div class="spd-window"><span>OK</span></div>':p.passive?'<div class="terminal-strip-visual"><span></span><span></span><span></span><span></span></div>':'<div class="lever '+(p.kind==='fr'?'redlever':'')+'"><span>I</span><span>O</span></div>'}
     <div class="device-bottomterm">${p.bottom}</div>
   </article>`;
 }
@@ -230,6 +232,7 @@ document.getElementById('resetMount')?.addEventListener('click',resetAll);
     if(txt==='MCB')show=card.dataset.category==='MCB';
     else if(txt.includes('RCD'))show=card.dataset.category==='RCD';
     else if(txt==='OCHRONA')show=card.dataset.category==='OCHRONA';
+    else if(txt==='ZACISKI')show=card.dataset.category==='ZACISKI';
     card.classList.toggle('hidden-by-filter',!show);
   });
 }));
