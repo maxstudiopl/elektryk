@@ -32,7 +32,9 @@ FR100:{top:[['L1','L1'],['L2','L2'],['L3','L3'],['N','N']],bottom:[['L1','L1'],[
 RCD:{top:[['L','L'],['N','N']],bottom:[['L','L'],['N','N']]},
 MCB:{top:[['L','L']],bottom:[['L','L']]},
 RCBO:{top:[['L','L'],['N','N']],bottom:[['L','L'],['N','N']]},
-SPD:{top:[['L','L'],['N','N']],bottom:[['PE','PE']]}
+SPD:{top:[['L','L'],['N','N']],bottom:[['PE','PE']]},
+NTB:{top:[['N1','N'],['N2','N'],['N3','N'],['N4','N']],bottom:[['N5','N'],['N6','N'],['N7','N'],['N8','N']]},
+PETB:{top:[['PE1','PE'],['PE2','PE'],['PE3','PE'],['PE4','PE']],bottom:[['PE5','PE'],['PE6','PE'],['PE7','PE'],['PE8','PE']]}
 };
 function decorateMounted(){document.querySelectorAll('.mounted-device').forEach(m=>{if(m.dataset.terminalsReady)return;const code=m.dataset.code,map=terminalMap[code]||(/^[BC]\d+$/.test(code)?terminalMap.MCB:null);if(!map)return;m.dataset.terminalsReady='1';const top=m.querySelector('.device-topterm'),bottom=m.querySelector('.device-bottomterm');if(top){top.innerHTML='';map.top.forEach(([label,role],i)=>top.appendChild(wireTerminal(label,role,`${m.dataset.mountId}:TOP:${role}:${i}`,'top')))}if(bottom){bottom.innerHTML='';map.bottom.forEach(([label,role],i)=>bottom.appendChild(wireTerminal(label,role,`${m.dataset.mountId}:BOTTOM:${role}:${i}`,'bottom')))}});pruneConnections();draw()}
 function terminalCenter(el){const r=el.getBoundingClientRect(),c=cabinet.getBoundingClientRect();return{x:r.left+r.width/2-c.left,y:r.top+r.height/2-c.top}}
