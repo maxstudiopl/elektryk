@@ -121,7 +121,7 @@ function setSwitchVisual(m){
 function decorateSwitches(){
   document.querySelectorAll('.mounted-device').forEach(m=>{
     const code=m.dataset.code;
-    if(!['FR','RCD','B10','B16','RCBO'].includes(code))return;
+    if(!(code==='RCD'||code==='RCBO'||code.startsWith('FR')||/^[BC]\d+$/.test(code)))return;
     if(!m.dataset.switchState)m.dataset.switchState='on';
     setSwitchVisual(m);
     const lever=m.querySelector('.lever');
@@ -141,7 +141,7 @@ function clearVisualStates(){
   document.querySelectorAll('.wire-terminal').forEach(t=>t.classList.remove('electrically-live','phase-collision'));
   document.querySelectorAll('.circuits>div').forEach(c=>c.classList.remove('load-powered','load-partial','load-error'));
 }
-function pathHasProtection(codes){return codes.some(c=>['B10','B16','RCBO'].includes(c))}
+function pathHasProtection(codes){return codes.some(c=>c==='RCBO'||/^[BC]\d+$/.test(c))}
 function pathHasResidual(codes){return codes.some(c=>['RCD','RCBO'].includes(c))}
 function loadState(load,reaches){
   const lId=`LOAD:${load.id}:L`,nId=`LOAD:${load.id}:N`,peId=`LOAD:${load.id}:PE`;
@@ -150,7 +150,7 @@ function loadState(load,reaches){
   const nRoute=routeTo(reaches.N,nId),peRoute=routeTo(reaches.PE,peId);
   const codes=routeDeviceCodes(phaseRoute),nCodes=routeDeviceCodes(nRoute);
   const hasPhase=!!phase,hasN=!!nRoute,hasPE=!!peRoute;
-  const hasFR=codes.includes('FR');
+  const hasFR=codes.some(c=>c.startsWith('FR'));
   const protectedPath=pathHasProtection(codes);
   const residual=pathHasResidual(codes);
   const residualNok=!residual || (codes.includes('RCBO')?nCodes.includes('RCBO'):nCodes.includes('RCD'));
@@ -209,7 +209,7 @@ function buildIssues(states,collisions){
     if(!s.hasPhase)missing.push('L');if(!s.hasN)missing.push('N');if(!s.hasPE)missing.push('PE');
     if(missing.length)issues.push({type:'error',text:`${s.load.label}: brak ${missing.join(', ')}.`});
     if(s.hasPhase&&!s.hasFR)issues.push({type:'error',text:`${s.load.label}: faza omija rozłącznik FR.`});
-    if(s.hasPhase&&!s.protectedPath)issues.push({type:'error',text:`${s.load.label}: brak zabezpieczenia B10/B16/RCBO w torze fazowym.`});
+    if(s.hasPhase&&!s.protectedPath)issues.push({type:'error',text:`${s.load.label}: brak zabezpieczenia nadprądowego MCB/RCBO w torze fazowym.`});
     if(s.hasPhase&&!s.residual)issues.push({type:'error',text:`${s.load.label}: tor nie przechodzi przez RCD/RCBO.`});
     if(s.hasN&&s.residual&&!s.residualNok)issues.push({type:'error',text:`${s.load.label}: przewód N omija właściwy RCD/RCBO.`});
   });
