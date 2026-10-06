@@ -18,7 +18,9 @@ const PARTS={
   RCBO:{code:'RCBO',name:'RCBO B16 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'ELX RCBO',brandClass:'cyan',type:'RCBO',rating:'B16',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
   SPD:{code:'SPD',name:'SPD Typ 2',modules:2,category:'OCHRONA',className:'device-spd medium',top:'L • N',brand:'ELX SPD',brandClass:'orange',type:'SPD',rating:'T2',meta:'275V • 1P+N',fn:'PRZEPIĘCIA',bottom:'PE',kind:'spd',spd:true},
   NTB:{code:'NTB',name:'Listwa zaciskowa N',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-n medium',top:'N1 • N2 • N3 • N4',brand:'ELX TERMINAL',brandClass:'blue',type:'N',rating:'8×N',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ NEUTRALNY N',bottom:'N5 • N6 • N7 • N8',kind:'terminal-n',passive:true},
-  PETB:{code:'PETB',name:'Listwa zaciskowa PE',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-pe medium',top:'PE1 • PE2 • PE3 • PE4',brand:'ELX TERMINAL',brandClass:'green',type:'PE',rating:'8×PE',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ OCHRONNY PE',bottom:'PE5 • PE6 • PE7 • PE8',kind:'terminal-pe',passive:true}
+  PETB:{code:'PETB',name:'Listwa zaciskowa PE',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-pe medium',top:'PE1 • PE2 • PE3 • PE4',brand:'ELX TERMINAL',brandClass:'green',type:'PE',rating:'8×PE',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ OCHRONNY PE',bottom:'PE5 • PE6 • PE7 • PE8',kind:'terminal-pe',passive:true},
+  NTB12:{code:'NTB12',name:'Listwa N kompakt 12',modules:1,category:'ZACISKI',className:'device-terminal device-terminal-n device-terminal-compact',top:'N1 • N2 • N3 • N4 • N5 • N6',brand:'ELX COMPACT',brandClass:'blue',type:'N',rating:'12×N',meta:'KOMPAKT • 1M',fn:'12 ZACISKÓW NEUTRALNYCH',bottom:'N7 • N8 • N9 • N10 • N11 • N12',kind:'terminal-n',passive:true,compact:true},
+  PETB12:{code:'PETB12',name:'Listwa PE kompakt 12',modules:1,category:'ZACISKI',className:'device-terminal device-terminal-pe device-terminal-compact',top:'PE1 • PE2 • PE3 • PE4 • PE5 • PE6',brand:'ELX COMPACT',brandClass:'green',type:'PE',rating:'12×PE',meta:'KOMPAKT • 1M',fn:'12 ZACISKÓW OCHRONNYCH',bottom:'PE7 • PE8 • PE9 • PE10 • PE11 • PE12',kind:'terminal-pe',passive:true,compact:true}
 }
 
 const MODULES_PER_ROW=18;
@@ -64,7 +66,7 @@ function apparatusHtml(p){
     <div class="device-topterm">${p.top}</div><div class="brand-strip ${p.brandClass}">${p.brand}</div>
     <div class="device-type">${p.type}</div><div class="device-rating">${p.rating}</div><div class="device-meta">${p.meta}</div><div class="device-function">${p.fn}</div>
     ${p.test?`<div class="test-btn ${p.testClass||''}">${p.test}</div>`:''}
-    ${p.spd?'<div class="spd-window"><span>OK</span></div>':p.passive?'<div class="terminal-strip-visual"><span></span><span></span><span></span><span></span></div>':'<div class="lever '+(p.kind==='fr'?'redlever':'')+'"><span>I</span><span>O</span></div>'}
+    ${p.spd?'<div class="spd-window"><span>OK</span></div>':p.compact?'<div class="terminal-strip-visual compact"><span></span><span></span><span></span><span></span><span></span><span></span></div>':p.passive?'<div class="terminal-strip-visual"><span></span><span></span><span></span><span></span></div>':'<div class="lever '+(p.kind==='fr'?'redlever':'')+'"><span>I</span><span>O</span></div>'}
     <div class="device-bottomterm">${p.bottom}</div>
   </article>`;
 }
