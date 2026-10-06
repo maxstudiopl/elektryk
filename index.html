@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Elektryk Symulator Damian Górny — v0.1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-bolt">⚡</span><div><b>ELEKTRYK</b><small>SYMULATOR • DAMIAN GÓRNY</small></div></div>
+    <nav class="mainnav">
+      <button class="navbtn active">▣ ROZDZIELNICA</button>
+      <button class="navbtn">ⓘ O GRZE</button>
+      <button class="navbtn">◉ TEORIA</button>
+      <button class="navbtn">▦ SCHEMATY</button>
+      <button class="navbtn">⌘ STEROWANIE</button>
+      <button class="navbtn">🏅 KAMPANIA</button>
+      <button class="navbtn">⚙ USTAWIENIA</button>
+    </nav>
+    <div class="profile"><span>⭐ 1250 XP</span><b>Poziom 4</b></div>
+  </header>
+
+  <main class="game-shell">
+    <aside class="leftbar panel-stack">
+      <section class="panel task-shortcut">
+        <button class="task-button"><span>▤</span><div><b>WYBIERZ ZADANIE</b><small>Kliknij, aby otworzyć listę</small></div><i>›</i></button>
+      </section>
+      <section class="panel active-task">
+        <div class="panel-title">AKTYWNE ZADANIE</div>
+        <h2>Montaż podstawowej rozdzielnicy</h2>
+        <p>Przygotuj układ ochrony i zabezpieczeń dla mieszkania. Na tym etapie pokazujemy wyłącznie wygląd stanowiska.</p>
+        <div class="task-goals">
+          <span>○ rozłącznik główny FR</span>
+          <span>○ RCD</span>
+          <span>○ B10 dla oświetlenia</span>
+          <span>○ B16 dla gniazd</span>
+        </div>
+        <div class="reward"><span>Nagroda</span><b>150 XP</b><em>☆☆☆</em></div>
+      </section>
+    </aside>
+
+    <section class="workspace">
+      <div class="cabinet-head">
+        <div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div>
+        <span class="version">v0.1 • DESIGN</span>
+      </div>
+
+      <div class="cabinet">
+        <div class="cabinet-inner">
+          <div class="supply-box">
+            <div class="supply-cable"></div>
+            <div class="supply-title">WLZ</div>
+            <div class="supply-sub">WEJŚCIE ZASILANIA</div>
+            <div class="supply-terminals">
+              <span class="l1">L1</span><span class="l2">L2</span><span class="l3">L3</span><span class="n">N</span><span class="pe">PE</span>
+            </div>
+          </div>
+
+          <div class="duct top-duct"><span>KANAŁ PRZEWODOWY — ZASILANIE OD GÓRY</span></div>
+
+          <div class="din-zone">
+            <div class="din-rail"></div>
+            <div class="devices-row">
+              <article class="device device-fr wide">
+                <div class="device-topterm">L1&nbsp;&nbsp;L2&nbsp;&nbsp;L3&nbsp;&nbsp;N</div>
+                <div class="brand-strip red">ELX</div>
+                <b>FR</b><small>63A • 4P</small>
+                <div class="lever redlever"></div>
+                <div class="device-bottomterm"></div>
+              </article>
+              <article class="device device-rcd medium">
+                <div class="device-topterm">L&nbsp;&nbsp;&nbsp;N</div>
+                <div class="brand-strip blue">ELX</div>
+                <b>RCD</b><small>40A • 30mA • A</small>
+                <div class="test-btn">T</div><div class="lever"></div>
+                <div class="device-bottomterm"></div>
+              </article>
+              <article class="device"><div class="device-topterm">L</div><div class="brand-strip red">ELX</div><b>B16</b><small>1P • 230V</small><div class="lever"></div><div class="device-bottomterm"></div></article>
+              <article class="device"><div class="device-topterm">L</div><div class="brand-strip red">ELX</div><b>B16</b><small>1P • 230V</small><div class="lever"></div><div class="device-bottomterm"></div></article>
+              <article class="device"><div class="device-topterm">L</div><div class="brand-strip red">ELX</div><b>B10</b><small>1P • 230V</small><div class="lever"></div><div class="device-bottomterm"></div></article>
+              <article class="device device-rcbo medium"><div class="device-topterm">L&nbsp;&nbsp;&nbsp;N</div><div class="brand-strip blue">ELX</div><b>RCBO</b><small>B16 • 30mA</small><div class="test-btn yellow">T</div><div class="lever"></div><div class="device-bottomterm"></div></article>
+              <article class="device device-spd"><div class="device-topterm">L</div><div class="brand-strip orange">ELX</div><b>SPD</b><small>T2 • 275V</small><div class="spd-window"></div><div class="device-bottomterm"></div></article>
+            </div>
+
+            <div class="bars">
+              <div class="bar nbar"><b>N</b><div class="bar-screws">● ● ● ● ● ●</div></div>
+              <div class="bar pebar"><b>PE</b><div class="bar-screws">● ● ● ● ● ●</div></div>
+            </div>
+          </div>
+
+          <div class="duct bottom-duct"><span>KANAŁ PRZEWODOWY — WYJŚCIA DO OBWODÓW</span></div>
+
+          <div class="circuits">
+            <div><b>💡 OŚWIETLENIE</b><small>L • N • PE</small></div>
+            <div><b>◉ GNIAZDA</b><small>L • N • PE</small></div>
+            <div><b>▣ KUCHNIA</b><small>L • N • PE</small></div>
+            <div><b>◎ PRALKA</b><small>L • N • PE</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="workspace-footer">
+        <div><span>MODUŁY</span><b>0 / 18</b></div>
+        <div><span>POŁĄCZENIA</span><b>0</b></div>
+        <div><span>BŁĘDY</span><b>0</b></div>
+        <div><span>TRYB</span><b>PROJEKT</b></div>
+      </div>
+    </section>
+
+    <aside class="rightbar panel-stack">
+      <section class="panel catalog-panel">
+        <div class="panel-title">APARATURA DIN</div>
+        <div class="category-tabs"><button class="active">GŁÓWNE / OCHRONA</button><button>RÓŻNICÓWKI</button><button>MCB</button><button>STEROWANIE</button></div>
+        <div class="catalog-grid">
+          <button class="catalog-card"><span class="mini-device mini-fr"><i></i></span><b>FR 63A 4P</b><small>Rozłącznik główny</small></button>
+          <button class="catalog-card"><span class="mini-device mini-spd"><i></i></span><b>SPD T2</b><small>Ochrona przepięć</small></button>
+          <button class="catalog-card"><span class="mini-device mini-rcd"><i></i></span><b>RCD 40A</b><small>30mA • Typ A</small></button>
+          <button class="catalog-card"><span class="mini-device"><i></i></span><b>B16</b><small>MCB • 1P</small></button>
+        </div>
+      </section>
+
+      <section class="panel details-panel">
+        <div class="panel-title">SZCZEGÓŁY ELEMENTU</div>
+        <div class="details-content"><div class="detail-device"></div><div><b>Wyłącznik nadprądowy B16</b><small>1 moduł DIN</small><p>Podgląd wyglądu elementu. Mechanikę dodamy dopiero po zaakceptowaniu interfejsu.</p></div></div>
+      </section>
+
+      <section class="panel cable-panel">
+        <div class="panel-title">PRZEWODY I KABLE</div>
+        <div class="cable-buttons"><button>3×1,5</button><button>3×2,5</button><button class="active">5×1,5</button><button>5×2,5</button></div>
+        <div class="wire-colors"><span class="wire brown">L1</span><span class="wire black">L2</span><span class="wire gray">L3</span><span class="wire blue">N</span><span class="wire green">PE</span></div>
+      </section>
+    </aside>
+  </main>
+
+  <div class="task-modal" id="taskModal" hidden>
+    <div class="task-window"><div class="task-window-head"><div><b>WYBIERZ ZADANIE</b><small>Wygląd okna wyboru zadań</small></div><button id="closeTasks">×</button></div><div class="task-cards"><button><b>01</b><span>Podstawowa rozdzielnica</span><small>150 XP</small></button><button><b>02</b><span>Obwód gniazd</span><small>100 XP</small></button><button><b>03</b><span>Łazienka z RCD</span><small>180 XP</small></button></div></div>
+  </div>
+
+  <script src="ui.js"></script>
+</body>
+</html>
