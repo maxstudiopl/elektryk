@@ -12,7 +12,7 @@ if(consoleBox){
   const box=document.createElement('div');box.className='bridge-console';box.innerHTML=
     '<div class="bridge-console-head"><b>MOSTKI / GRZEBIEŃ ZASILAJĄCY</b><span id="bridgePhase">L1</span></div>'+
     '<div class="bridge-mode-grid"><button id="bridgeModeBtn" class="bridge-mode-btn">⛓ MOSTEK — WYŁĄCZONY</button><button id="combModeBtn" class="bridge-mode-btn comb-mode-btn">▰ GRZEBIEŃ — WYŁĄCZONY</button></div>'+
-    '<div class="bridge-help">MOSTEK: połącz dwa sąsiednie zabezpieczenia. GRZEBIEŃ: kliknij pierwszy i ostatni MCB/RCBO w jednym rzędzie, a zasilanie zostanie rozprowadzone po całym ciągu.</div>'+
+    '<div class="bridge-help">MOSTEK: MCB/RCBO ↔ MCB/RCBO lub zasilanie FR dół → SPD/RCD/RCBO/MCB góra. Dla FR dostępny jest też tor N. GRZEBIEŃ: kliknij pierwszy i ostatni MCB/RCBO w jednym rzędzie.</div>'+
     '<div class="bridge-actions"><button id="undoBridge">↩ COFNIJ OSTATNI</button><button id="clearBridges" class="danger">× USUŃ ZASILANIE</button></div>'+
     '<div class="bridge-counter"><span>Mostki / grzebienie</span><b id="bridgeCount">0</b></div>';
   consoleBox.appendChild(box);
