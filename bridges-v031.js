@@ -12,7 +12,7 @@ if(consoleBox){
   const box=document.createElement('div');box.className='bridge-console';box.innerHTML=
     '<div class="bridge-console-head"><b>MOSTKI / GRZEBIEŃ ZASILAJĄCY</b><span id="bridgePhase">L1</span></div>'+
     '<div class="bridge-mode-grid"><button id="bridgeModeBtn" class="bridge-mode-btn">⛓ MOSTEK — WYŁĄCZONY</button><button id="combModeBtn" class="bridge-mode-btn comb-mode-btn">▰ GRZEBIEŃ — WYŁĄCZONY</button></div>'+
-    '<div class="bridge-help">MOSTEK: MCB/RCBO ↔ MCB/RCBO lub zasilanie FR dół → SPD/RCD/RCBO/MCB góra. Dla FR dostępny jest też tor N. GRZEBIEŃ: kliknij pierwszy i ostatni MCB/RCBO w jednym rzędzie.</div>'+
+    '<div class="bridge-help">MOSTEK: FR dół → SPD/RCD/RCBO/MCB góra oraz RCD dół L → pierwszy B/C góra L. MCB/RCBO można też łączyć parami. GRZEBIEŃ: zasila dalszy ciąg sąsiednich MCB/RCBO.</div>'+
     '<div class="bridge-actions"><button id="undoBridge">↩ COFNIJ OSTATNI</button><button id="clearBridges" class="danger">× USUŃ ZASILANIE</button></div>'+
     '<div class="bridge-counter"><span>Mostki / grzebienie</span><b id="bridgeCount">0</b></div>';
   consoleBox.appendChild(box);
@@ -52,6 +52,7 @@ function eligibleBridge(t){
   const code=codeOf(t),zone=t.dataset.zone,role=t.dataset.role;
   if(!['L','L1','L2','L3','N'].includes(role))return false;
   if(isFrCode(code))return zone==='bottom';
+  if(code==='RCD'&&zone==='bottom')return role==='L';
   if(isFeedTargetCode(code))return zone==='top';
   return false;
 }
@@ -65,7 +66,7 @@ function terminalForDevice(m,phase){
 }
 function toggleBridgeMode(on){
   bridgeMode=on;combMode=false;clearStart();refreshButtons();highlightEligible();refreshPhase();
-  setStatus(on?'Tryb MOSTEK: możesz łączyć MCB/RCBO oraz wykonać zasilanie FR dół → SPD/RCD/RCBO/MCB góra. Dostępny także tor N.':'Tryb mostków wyłączony.');
+  setStatus(on?'Tryb MOSTEK: FR dół → SPD/RCD/RCBO/MCB góra oraz RCD dół L → pierwszy B/C góra L. Dalej użyj grzebienia na szeregu B/C.':'Tryb mostków wyłączony.');
 }
 function toggleCombMode(on){
   combMode=on;bridgeMode=false;clearStart();refreshButtons();highlightEligible();refreshPhase();
@@ -165,8 +166,19 @@ function validBridgePair(a,b){
     if(fr.dataset.zone!=='bottom'||target.dataset.zone!=='top'||!isFeedTargetCode(codeOf(target))){
       return {ok:false,msg:'Z FR mostek wychodzi z dolnego zacisku do górnego zacisku SPD, RCD, RCBO lub MCB.'};
     }
-    return {ok:true,kind:'feed'};
+    return {ok:true,kind:'feed',source:'FR'};
   }
+
+  const aRcdOut=ca==='RCD'&&za==='bottom'&&a.dataset.role==='L';
+  const bRcdOut=cb==='RCD'&&zb==='bottom'&&b.dataset.role==='L';
+  if(aRcdOut||bRcdOut){
+    const rcd=aRcdOut?a:b,target=aRcdOut?b:a;
+    if(target.dataset.zone!=='top'||!/^[BC]\d+$/.test(codeOf(target))){
+      return {ok:false,msg:'Z RCD mostek wychodzi z dolnego zacisku L do górnego zacisku pierwszego wyłącznika B/C.'};
+    }
+    return {ok:true,kind:'feed',source:'RCD'};
+  }
+
   if(isBreakerCode(ca)&&isBreakerCode(cb)&&za==='top'&&zb==='top')return {ok:true,kind:'bridge'};
   return {ok:false,msg:'Ten typ aparatów nie może być połączony tym mostkiem.'};
 }
@@ -180,8 +192,10 @@ function createBridge(t){
   const pair=validBridgePair(start.el,t);
   if(!pair.ok){flash(t);clearStart();setStatus(pair.msg);return}
   if(bridgeExists(start.id,t.dataset.terminal)){flash(t);clearStart();setStatus('Takie połączenie już istnieje.');return}
-  bridges.push({id:'BR'+seq++,a:start.id,b:t.dataset.terminal,phase:type,kind:pair.kind});
-  clearStart();redraw();setStatus(pair.kind==='feed'?'Dodano mostek zasilający '+type+' z FR.':'Dodano mostek '+type+'.');
+  bridges.push({id:'BR'+seq++,a:start.id,b:t.dataset.terminal,phase:type,kind:pair.kind,source:pair.source||''});
+  clearStart();redraw();
+  if(pair.kind==='feed')setStatus('Dodano mostek zasilający '+type+' z '+(pair.source||'aparatu')+'.');
+  else setStatus('Dodano mostek '+type+'.');
 }
 function createComb(t){
   const phase=selectedPhase();
