@@ -64,7 +64,7 @@ function clearBridges(){bridges=[];clearStart();redraw();setStatus('Usunięto ws
 function flash(t){t.classList.add('bad-terminal');setTimeout(()=>t.classList.remove('bad-terminal'),500)}
 function setStatus(txt){const s=document.getElementById('wiringStatus');if(s)s.innerHTML='<b>MOSTKI:</b> '+txt}
 cabinet.addEventListener('click',e=>{if(!bridgeMode)return;const t=e.target.closest('.wire-terminal');if(t&&eligible(t)){e.stopPropagation();e.preventDefault();click(t)}} ,true);
-const obs=new MutationObserver(()=>requestAnimationFrame(()=>{redraw()}));obs.observe(document.querySelector('.mount-grid')||cabinet,{childList:true,subtree:true});window.addEventListener('resize',()=>requestAnimationFrame(redraw));
+const obs=new MutationObserver(()=>requestAnimationFrame(()=>{redraw()}));obs.observe(document.querySelector('.din-zone')||cabinet,{childList:true,subtree:true});window.addEventListener('resize',()=>requestAnimationFrame(redraw));
 refreshPhase();redraw();
 window.ElektrykBridges={getBridges:()=>bridges.slice(),clear:clearBridges,redraw,remove:removeBridge};
 })();
