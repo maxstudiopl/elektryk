@@ -59,8 +59,8 @@ function internalDeviceEdges(graph){
   document.querySelectorAll('.mounted-device').forEach(m=>{
     const code=m.dataset.code,id=m.dataset.mountId;
 
-    if(code==='NTB'||code==='PETB'){
-      const role=code==='NTB'?'N':'PE';
+    if(['NTB','NTB12','PETB','PETB12'].includes(code)){
+      const role=code.startsWith('NTB')?'N':'PE';
       const terminals=[...m.querySelectorAll('.wire-terminal')].filter(t=>t.dataset.role===role);
       for(let i=1;i<terminals.length;i++){
         addEdge(graph,terminals[i-1].dataset.terminal,terminals[i].dataset.terminal,role,{kind:'terminal-strip',code,mountId:id});
