@@ -1,7 +1,7 @@
 (()=>{
 const cabinet=document.querySelector('.cabinet-inner');
-const mountGrid=document.querySelector('.mount-grid');
-if(!cabinet||!mountGrid)return;
+const mountRoot=document.querySelector('.din-zone');
+if(!cabinet||!mountRoot)return;
 
 const LOADS=[
   {id:'LIGHT',label:'Oświetlenie'},
@@ -249,7 +249,7 @@ function analyze(manual=false){
   return lastAnalysis;
 }
 
-const observer=new MutationObserver(()=>requestAnimationFrame(()=>{decorateSwitches();analyze(false)}));observer.observe(mountGrid,{childList:true,subtree:true});
+const observer=new MutationObserver(()=>requestAnimationFrame(()=>{decorateSwitches();analyze(false)}));observer.observe(mountRoot,{childList:true,subtree:true});
 setInterval(()=>{const s=signature();if(s!==lastSignature)analyze(false)},350);
 decorateSwitches();analyze(false);
 window.ElektrykPower={analyze:()=>analyze(true),getLast:()=>lastAnalysis};
