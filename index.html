@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Elektryk Symulator Damian Górny — v0.3.2</title>
+  <title>Elektryk Symulator Damian Górny — v0.4.0</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="apparatus.css">
   <link rel="stylesheet" href="stage2.css">
   <link rel="stylesheet" href="stage3.css">
   <link rel="stylesheet" href="bridges-v031.css">
+  <link rel="stylesheet" href="stage4.css">
 </head>
 <body>
   <header class="topbar">
@@ -33,14 +34,14 @@
       <section class="panel active-task">
         <div class="panel-title">AKTYWNE ZADANIE</div>
         <h2>Montaż podstawowej rozdzielnicy</h2>
-        <p>Zamontuj wymagane aparaty na szynie DIN, wykonaj zasilanie oraz mostki pomiędzy kolejnymi zabezpieczeniami.</p>
+        <p>Zamontuj wymagane aparaty, wykonaj zasilanie, mostki oraz pełny tor L/N/PE. Symulator sprawdza teraz ciągłość zasilania i ochronę każdego odbiornika.</p>
         <div class="task-goals"><span>○ rozłącznik główny FR</span><span>○ RCD</span><span>○ B10 dla oświetlenia</span><span>○ B16 dla gniazd</span></div>
         <div class="reward"><span>Nagroda</span><b>150 XP</b><em>☆☆☆</em></div>
       </section>
     </aside>
 
     <section class="workspace">
-      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.3.2 • DOPRACOWANE MOSTKI</span></div>
+      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.4.0 • SYMULACJA ZASILANIA</span></div>
       <div class="cabinet">
         <div class="cabinet-inner">
           <div class="supply-box"><div class="supply-cable"></div><div class="supply-title">WLZ</div><div class="supply-sub">WEJŚCIE ZASILANIA</div><div class="supply-terminals"><span class="l1">L1</span><span class="l2">L2</span><span class="l3">L3</span><span class="n">N</span><span class="pe">PE</span></div></div>
@@ -56,7 +57,7 @@
           <div class="circuits"><div><b>💡 OŚWIETLENIE</b><small>L • N • PE</small></div><div><b>◉ GNIAZDA</b><small>L • N • PE</small></div><div><b>▣ KUCHNIA</b><small>L • N • PE</small></div><div><b>◎ PRALKA</b><small>L • N • PE</small></div></div>
         </div>
       </div>
-      <div class="workspace-footer"><div><span>MODUŁY</span><b>0 / 18</b></div><div><span>POŁĄCZENIA</span><b>0</b></div><div><span>BŁĘDY</span><b>0</b></div><div><span>TRYB</span><b>PRZEWODY + MOSTKI</b></div></div>
+      <div class="workspace-footer"><div><span>MODUŁY</span><b>0 / 18</b></div><div><span>POŁĄCZENIA</span><b>0</b></div><div><span>BŁĘDY</span><b>0</b></div><div><span>TRYB</span><b>SYMULACJA ZASILANIA</b></div></div>
     </section>
 
     <aside class="rightbar panel-stack">
@@ -82,5 +83,6 @@
   <script src="stage2.js"></script>
   <script src="stage3.js"></script>
   <script src="bridges-v031.js"></script>
+  <script src="stage4.js"></script>
 </body>
 </html>
