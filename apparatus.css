@@ -31,3 +31,25 @@
 .catalog-card.terminal-pe-card{border-color:#71884b}
 .catalog-card[data-part="NTB"] .mini-device:before{background:#168bd0!important}
 .catalog-card[data-part="PETB"] .mini-device:before{background:linear-gradient(90deg,#d9d32c 0 50%,#5e9435 50% 100%)!important}
+
+/* v0.4.17 — kompaktowe izolowane listwy N / PE 12×, 1M */
+.device-terminal-compact{padding-left:1px!important;padding-right:1px!important}
+.device-terminal-compact .device-topterm,.device-terminal-compact .device-bottomterm{left:1px!important;right:1px!important;height:27px!important;padding:1px!important;gap:0!important}
+.device-terminal-compact .wire-terminal{min-width:0!important;width:13%!important;height:18px!important;padding:0!important;font-size:4px!important;border-radius:50%!important}
+.device-terminal-compact .brand-strip{left:1px!important;right:1px!important;font-size:4.5px!important;letter-spacing:0!important}
+.device-terminal-compact .device-type{font-size:19px!important}
+.device-terminal-compact .device-rating{font-size:7px!important}
+.device-terminal-compact .device-meta{font-size:4.5px!important;white-space:normal!important;line-height:1.05!important}
+.device-terminal-compact .device-function{left:1px!important;right:1px!important;font-size:4px!important;letter-spacing:0!important;line-height:1.05!important}
+.device-terminal-compact.device-terminal-n{background:linear-gradient(90deg,#0872b4,#1498db 35%,#0b81c6 65%,#075e9d)!important}
+.device-terminal-compact.device-terminal-pe{background:linear-gradient(90deg,#cfca25,#e5dc2c 28%,#67a538 30%,#74b740 70%,#d8d126 72%,#c7c121)!important}
+.device-terminal-compact .device-type,.device-terminal-compact .device-rating,.device-terminal-compact .device-meta{color:#fff!important;text-shadow:0 1px 1px #0008!important}
+.device-terminal-compact .terminal-strip-visual.compact{left:3px!important;right:3px!important;top:91px!important;height:50px!important;grid-template-columns:repeat(2,1fr)!important;grid-template-rows:repeat(3,1fr)!important;gap:2px!important;padding:3px!important;background:#eceeebaa!important}
+.device-terminal-compact .terminal-strip-visual.compact span{min-width:0!important}
+.mini-terminal-compact{width:24px!important;border-radius:3px!important}
+.mini-terminal-compact strong{font-size:8px!important}
+.mini-terminal-compact em{font-size:4.5px!important}
+.catalog-card[data-part="NTB12"] .mini-device{background:linear-gradient(#1598dc,#0870ad)!important;border-color:#0a5e93!important}
+.catalog-card[data-part="PETB12"] .mini-device{background:linear-gradient(90deg,#d9d22b 0 30%,#6aaa3a 30% 70%,#d9d22b 70% 100%)!important;border-color:#658631!important}
+.catalog-card[data-part="NTB12"] .mini-device strong,.catalog-card[data-part="NTB12"] .mini-device em,
+.catalog-card[data-part="PETB12"] .mini-device strong,.catalog-card[data-part="PETB12"] .mini-device em{color:#fff!important;text-shadow:0 1px #0009}
