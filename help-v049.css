@@ -1,4 +1,4 @@
-/* v0.4.10 — większa i czytelniejsza typografia pomocy */
+/* v0.4.11 — interaktywny schemat przewodów + czytelna typografia */
 .task-help-controls{display:grid;grid-template-columns:1fr 1.25fr;gap:5px;margin:9px 14px 0}
 .task-help-controls button{padding:8px 5px;border:1px solid #37667f;border-radius:4px;background:#0a1d29;color:#d8edf7;font-size:9px;font-weight:900;cursor:pointer}
 .task-help-controls button:first-child{border-color:#8b7131;background:#292313;color:#ffe09a}.task-help-controls button:hover{filter:brightness(1.15)}
@@ -18,3 +18,42 @@
 .solution-steps{display:grid;grid-template-columns:1fr 1fr;gap:5px}.solution-steps div{padding:7px;background:#0c1c26;border:1px solid #244353;border-radius:3px;color:#aebfc8;font-size:8.5px;line-height:1.55}.solution-steps b{color:#58c8ff}
 .solution-section.compact p{margin:4px 0;color:#aabfc9;font-size:8.5px;line-height:1.55}
 @media(max-width:1000px){.solution-steps{grid-template-columns:1fr}.solution-device{min-width:34px}.solution-device.fr{min-width:68px}.solution-device.rcd,.solution-device.rcbo,.solution-device.spd{min-width:52px}}
+
+/* v0.4.11 — graficzny schemat połączeń */
+.schematic-section{overflow:hidden}
+.wire-legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 9px;padding:7px 8px;background:#0b1d28;border:1px solid #29495b;border-radius:4px}
+.wire-legend span{display:flex;align-items:center;gap:5px;color:#b8cbd5;font-size:8px;font-weight:700}
+.wire-legend i{display:inline-block;width:24px;height:4px;border-radius:3px;background:#888}
+.wire-legend i.L1{background:#8b4a17}.wire-legend i.L2{background:#161819;border:1px solid #687176}.wire-legend i.L3{background:#747c80}.wire-legend i.N{background:#0788d6}.wire-legend i.PE{background:repeating-linear-gradient(90deg,#e1d92a 0 6px,#5b9f39 6px 12px)}.wire-legend i.COMB{height:7px;background:#b56d27}
+.solution-schematic-wrap{overflow:auto;padding:6px;background:#d7dad7;border:1px solid #6d7678;border-radius:5px;box-shadow:inset 0 0 20px #0002}
+.solution-schematic{display:block;width:100%;min-width:900px;height:auto;background:linear-gradient(135deg,#c6c9c6,#eef0ed 40%,#c1c5c2);border:7px solid #626a6d}
+.solution-schematic text{font-family:Arial,Helvetica,sans-serif;user-select:none}
+.scheme-source{fill:#182126;stroke:#4f5b60;stroke-width:2}.scheme-source-title{fill:#fff;font-size:11px;font-weight:900;text-anchor:middle}.scheme-source-label{fill:#e6eef1;font-size:7px;font-weight:800;text-anchor:end}
+.scheme-row-title{fill:#3d4b51;font-size:9px;font-weight:900}.scheme-din{fill:#a7afb2;stroke:#616a6d;stroke-width:2}
+.scheme-device rect{fill:#f6f7f4;stroke:#606765;stroke-width:1.5}.scheme-device.fr rect{stroke:#a93a32;stroke-width:3}.scheme-device.rcd rect{stroke:#167fb7;stroke-width:3}.scheme-device.rcbo rect{stroke:#299bb8;stroke-width:3}.scheme-device.spd rect{stroke:#d47425;stroke-width:3}.scheme-device.mcb rect{stroke:#50595c;stroke-width:2}
+.scheme-code{fill:#151a1c;font-size:11px;font-weight:900;text-anchor:middle}.scheme-rating{fill:#50595c;font-size:7px;font-weight:800;text-anchor:middle}
+.scheme-port{fill:#e9ece9;stroke:#30383b;stroke-width:1.5}.scheme-port.source.L1{fill:#8b4a17}.scheme-port.source.L2{fill:#161819}.scheme-port.source.L3{fill:#747c80}.scheme-port.source.N{fill:#0788d6}.scheme-port.source.PE{fill:#5b9f39}
+.scheme-port-label{fill:#313b3f;font-size:6px;font-weight:900;text-anchor:middle}.scheme-port-label.bottom{dominant-baseline:hanging}
+.scheme-load rect{fill:#e7e9e6;stroke:#788083;stroke-width:1.2}.scheme-load text{fill:#273137;font-size:6px;font-weight:900;text-anchor:middle}.scheme-load-port{stroke:#fff;stroke-width:1}.scheme-load-port.L{fill:#8b4a17}.scheme-load-port.N{fill:#0788d6}.scheme-load-port.PE{fill:#5b9f39}
+.scheme-bus{fill:none;stroke-width:5;stroke-linecap:round;opacity:.8}.scheme-bus.phase.L1{stroke:#8b4a17}.scheme-bus.phase.L2{stroke:#161819}.scheme-bus.phase.L3{stroke:#747c80}.scheme-bus.nmain,.scheme-bus.nsection{stroke:#0788d6}.scheme-bus.pe{stroke:#5b9f39;stroke-dasharray:11 4}
+.scheme-bus-label{fill:#4b5559;font-size:6px;font-weight:900}.scheme-bus-label.n,.scheme-bus-label.nsection{fill:#056aa5}.scheme-bus-label.pe{fill:#437d2d}
+.solution-wire{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;opacity:.82;cursor:pointer;pointer-events:stroke;transition:opacity .15s,stroke-width .15s,filter .15s}
+.solution-wire.wire-L1{stroke:#8b4a17}.solution-wire.wire-L2{stroke:#161819}.solution-wire.wire-L3{stroke:#747c80}.solution-wire.wire-N{stroke:#0788d6}.solution-wire.wire-PE{stroke:#5b9f39;stroke-dasharray:10 4}.solution-wire.wire-COMB{stroke:#b56d27;stroke-width:7}
+.solution-wire:hover{opacity:1;stroke-width:6}.solution-wire.wire-COMB:hover{stroke-width:9}
+.solution-wire.active{opacity:1!important;stroke-width:8!important;filter:url(#wireGlow)}.solution-wire.wire-COMB.active{stroke-width:11!important}
+.solution-schema-note{margin-top:8px;padding:8px 9px;border-left:4px solid #3d85aa;background:#0c202c;color:#b9d4e0;font-size:8.5px;line-height:1.5}
+.solution-row-summary{display:grid;grid-template-columns:76px 1fr 58px;gap:8px;align-items:center;padding:8px;margin-bottom:5px;background:#0b1d27;border:1px solid #274756;border-radius:4px}
+.solution-row-summary b{font-size:8px;color:#6cc9f5}.solution-row-summary span{font-size:8.5px;color:#bdced7;line-height:1.4}.solution-row-summary em{font-style:normal;text-align:right;color:#ffd066;font:bold 8px Arial}
+.solution-filters{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.solution-filters button{padding:6px 8px;background:#0b1b25;border:1px solid #31566b;border-radius:4px;color:#a9c0cd;font-size:7px;font-weight:900;cursor:pointer}
+.solution-filters button:hover,.solution-filters button.active{background:#0d6fae;border-color:#4bb9f5;color:#fff}
+.wire-step-list{display:grid;gap:4px;max-height:360px;overflow:auto;padding-right:3px}
+.wire-step{display:grid;grid-template-columns:34px 58px minmax(130px,1fr) 20px minmax(130px,1fr);gap:7px;align-items:center;width:100%;padding:8px;background:#0a1922;border:1px solid #284757;border-radius:4px;color:#d9e6ec;text-align:left;cursor:pointer}
+.wire-step:hover{border-color:#4b9bc4;background:#0d222e}.wire-step.active{border-color:#ffd05a;background:#2a2415;box-shadow:0 0 0 1px #8c6b22}
+.wire-step>b{display:flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;background:#112b3a;color:#6fcfff;font-size:8px}
+.wire-step>strong{font-size:8.5px;line-height:1.35}.wire-step>i{font-style:normal;color:#63c9fa;text-align:center;font-size:13px}.wire-step>small{grid-column:3/6;color:#8faab8;font-size:7.5px;line-height:1.35}
+.wire-chip{display:inline-flex;align-items:center;justify-content:center;height:22px;padding:0 5px;border-radius:3px;border:1px solid #4b5559;background:#17232a;color:#fff;font:bold 7px Arial}
+.wire-chip.L1{background:#5e3213}.wire-chip.L2{background:#111}.wire-chip.L3{background:#62696d}.wire-chip.N{background:#075f97}.wire-chip.PE{background:#427a2d}.wire-chip.COMB{background:#87511e}
+@media(max-width:1100px){
+  .wire-step{grid-template-columns:30px 52px 1fr 16px 1fr}.wire-step>strong{font-size:8px}.solution-schematic{min-width:820px}
+}
