@@ -1,13 +1,23 @@
 (()=>{
 
 const PARTS={
-  FR:{code:'FR',name:'FR 63A 4P',modules:4,category:'OCHRONA',className:'device-fr wide',top:'L1 • L2 • L3 • N',brand:'ELX MAIN',brandClass:'red',type:'FR',rating:'63A',meta:'4P • 400V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'1 • 2 • 3 • N',kind:'fr'},
+  FR:{code:'FR',name:'FR 63A 4P',modules:4,category:'OCHRONA',className:'device-fr wide',top:'L1 • L2 • L3 • N',brand:'ELX MAIN',brandClass:'red',type:'FR',rating:'63A',meta:'4P • 400V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L1 • L2 • L3 • N',kind:'fr'},
+  FR40:{code:'FR40',name:'FR 40A 2P',modules:2,category:'OCHRONA',className:'device-fr medium',top:'L • N',brand:'ELX MAIN',brandClass:'red',type:'FR',rating:'40A',meta:'2P • 230V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L • N',kind:'fr'},
+  FR100:{code:'FR100',name:'FR 100A 4P',modules:4,category:'OCHRONA',className:'device-fr wide',top:'L1 • L2 • L3 • N',brand:'ELX MAIN',brandClass:'red',type:'FR',rating:'100A',meta:'4P • 400V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L1 • L2 • L3 • N',kind:'fr'},
   RCD:{code:'RCD',name:'RCD 40A / 30mA',modules:2,category:'RCD',className:'device-rcd medium',top:'L • N',brand:'ELX RCD',brandClass:'blue',type:'RCD',rating:'40A',meta:'30mA • Typ A • 2P',fn:'OCHRONA RÓŻNICOWA',bottom:'L • N',kind:'rcd',test:'T'},
-  B16:{code:'B16',name:'B16 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'B16',rating:'16A',meta:'1P • 230V',fn:'GNIAZDA',bottom:'2',kind:'mcb'},
-  B10:{code:'B10',name:'B10 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'B10',rating:'10A',meta:'1P • 230V',fn:'OŚWIETLENIE',bottom:'2',kind:'mcb'},
+  B6:{code:'B6',name:'B6 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'B6',rating:'6A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  B10:{code:'B10',name:'B10 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'B10',rating:'10A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  B13:{code:'B13',name:'B13 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'B13',rating:'13A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  B16:{code:'B16',name:'B16 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'B16',rating:'16A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  B20:{code:'B20',name:'B20 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'B20',rating:'20A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  B25:{code:'B25',name:'B25 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'B25',rating:'25A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  C10:{code:'C10',name:'C10 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'C10',rating:'10A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
+  C16:{code:'C16',name:'C16 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'C16',rating:'16A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
+  C20:{code:'C20',name:'C20 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'C20',rating:'20A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
+  C25:{code:'C25',name:'C25 1P',modules:1,category:'MCB',className:'',top:'1',brand:'ELX MCB',brandClass:'dark',type:'C25',rating:'25A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
   RCBO:{code:'RCBO',name:'RCBO B16 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'ELX RCBO',brandClass:'cyan',type:'RCBO',rating:'B16',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
   SPD:{code:'SPD',name:'SPD Typ 2',modules:2,category:'OCHRONA',className:'device-spd medium',top:'L • N',brand:'ELX SPD',brandClass:'orange',type:'SPD',rating:'T2',meta:'275V • 1P+N',fn:'PRZEPIĘCIA',bottom:'PE',kind:'spd',spd:true}
-};
+}
 
 const MODULES_PER_ROW=18;
 let selected=null,rowCount=1,occupied=[],mounted=[],seq=1,errors=0;
@@ -52,7 +62,7 @@ function apparatusHtml(p){
     <div class="device-topterm">${p.top}</div><div class="brand-strip ${p.brandClass}">${p.brand}</div>
     <div class="device-type">${p.type}</div><div class="device-rating">${p.rating}</div><div class="device-meta">${p.meta}</div><div class="device-function">${p.fn}</div>
     ${p.test?`<div class="test-btn ${p.testClass||''}">${p.test}</div>`:''}
-    ${p.spd?'<div class="spd-window"><span>OK</span></div>':'<div class="lever '+(p.code==='FR'?'redlever':'')+'"><span>I</span><span>O</span></div>'}
+    ${p.spd?'<div class="spd-window"><span>OK</span></div>':'<div class="lever '+(p.kind==='fr'?'redlever':'')+'"><span>I</span><span>O</span></div>'}
     <div class="device-bottomterm">${p.bottom}</div>
   </article>`;
 }
@@ -155,6 +165,8 @@ function selectPart(code,card){
   setHint(`<b>GOTOWY DO MONTAŻU:</b> kliknij pierwszy wolny moduł dla ${PARTS[code].name}.`);
 }
 function inferCode(card){
+  const explicit=(card.dataset.part||'').trim().toUpperCase();
+  if(explicit&&PARTS[explicit])return explicit;
   const t=(card.querySelector('.mini-device strong')?.textContent||'').trim().toUpperCase();
   return PARTS[t]?t:null;
 }
