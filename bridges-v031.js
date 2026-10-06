@@ -60,8 +60,8 @@ function eligibleBridge(t){
   if(code==='RCD'&&zone==='bottom')return role==='L'||role==='N';
   if(code==='RCBO'&&zone==='bottom')return role==='L'||role==='N';
   if(code==='SPD'&&zone==='bottom')return role==='PE';
-  if(code==='NTB')return role==='N';
-  if(code==='PETB')return role==='PE';
+  if(code==='NTB'||code==='NTB12')return role==='N';
+  if(code==='PETB'||code==='PETB12')return role==='PE';
   if(isFeedTargetCode(code))return zone==='top';
   return false;
 }
@@ -173,7 +173,7 @@ function validBridgePair(a,b){
     const zones=[za,zb],codes=[ca,cb];
     const hasBar=zones.includes('bar'),hasSupply=zones.includes('supply');
     const hasSpd=codes.includes('SPD')&&(za==='bottom'||zb==='bottom');
-    const hasPeStrip=codes.includes('PETB');
+    const hasPeStrip=codes.some(code=>code==='PETB'||code==='PETB12');
     if((hasBar||hasPeStrip)&&(hasSupply||hasSpd||hasBar||hasPeStrip)){
       return {ok:true,kind:'feed',source:hasSupply?'WLZ':hasSpd?'SPD':'PE'};
     }
@@ -182,7 +182,7 @@ function validBridgePair(a,b){
 
   if(ra==='N'&&rb==='N'){
     const hasBar=za==='bar'||zb==='bar';
-    const hasNStrip=ca==='NTB'||cb==='NTB';
+    const hasNStrip=['NTB','NTB12'].includes(ca)||['NTB','NTB12'].includes(cb);
     const aFeed=(isFrCode(ca)||ca==='RCD'||ca==='RCBO')&&za==='bottom';
     const bFeed=(isFrCode(cb)||cb==='RCD'||cb==='RCBO')&&zb==='bottom';
     if((hasBar||hasNStrip)&&(aFeed||bFeed||hasBar||hasNStrip)){
