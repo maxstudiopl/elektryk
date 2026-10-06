@@ -23,30 +23,49 @@ if(consoleBox){
   box.querySelector('#clearBridges').onclick=clearBridges;
 }
 
-function selectedPhase(){
+function selectedWireType(){
   const txt=document.querySelector('.wire.active')?.textContent.trim().toUpperCase();
-  return ['L1','L2','L3'].includes(txt)?txt:'L1';
+  return ['L1','L2','L3','N'].includes(txt)?txt:'L1';
 }
-function refreshPhase(){const el=document.getElementById('bridgePhase');if(el)el.textContent=selectedPhase()}
+function selectedPhase(){
+  const type=selectedWireType();
+  return ['L1','L2','L3'].includes(type)?type:'L1';
+}
+function activeBridgeType(){return bridgeMode?selectedWireType():selectedPhase()}
+function refreshPhase(){const el=document.getElementById('bridgePhase');if(el)el.textContent=activeBridgeType()}
 document.querySelectorAll('.wire').forEach(w=>w.addEventListener('click',()=>{
   refreshPhase();
-  if(bridgeMode||combMode){clearStart();highlightEligible();setStatus('Wybrano '+selectedPhase()+'. Wybierz zaciski zasilania.')}
+  if(bridgeMode||combMode){clearStart();highlightEligible();setStatus('Wybrano '+activeBridgeType()+'. Wybierz zaciski zasilania.')}
 }));
 
 function mountedOf(t){return t.closest('.mounted-device')}
 function codeOf(t){return mountedOf(t)?.dataset.code||''}
 function isBreakerCode(code){return code==='RCBO'||/^[BC]\d+$/.test(code)}
-function eligible(t){
+function isFrCode(code){return code==='FR'||code==='FR40'||code==='FR100'||code.startsWith('FR')}
+function isFeedTargetCode(code){return code==='SPD'||code==='RCD'||code==='RCBO'||isBreakerCode(code)}
+function roleMatchesConductor(role,type){
+  if(type==='N')return role==='N';
+  return role==='L'||role===type;
+}
+function eligibleBridge(t){
+  if(!t?.classList.contains('wire-terminal'))return false;
+  const code=codeOf(t),zone=t.dataset.zone,role=t.dataset.role;
+  if(!['L','L1','L2','L3','N'].includes(role))return false;
+  if(isFrCode(code))return zone==='bottom';
+  if(isFeedTargetCode(code))return zone==='top';
+  return false;
+}
+function eligibleComb(t){
   if(!t?.classList.contains('wire-terminal')||t.dataset.zone!=='top')return false;
   return isBreakerCode(codeOf(t))&&['L','L1','L2','L3'].includes(t.dataset.role);
 }
-function roleMatchesPhase(role,phase){return role==='L'||role===phase}
+function eligible(t){return bridgeMode?eligibleBridge(t):combMode?eligibleComb(t):false}
 function terminalForDevice(m,phase){
-  return [...m.querySelectorAll('.device-topterm .wire-terminal')].find(t=>eligible(t)&&roleMatchesPhase(t.dataset.role,phase))||null;
+  return [...m.querySelectorAll('.device-topterm .wire-terminal')].find(t=>eligibleComb(t)&&roleMatchesConductor(t.dataset.role,phase))||null;
 }
 function toggleBridgeMode(on){
   bridgeMode=on;combMode=false;clearStart();refreshButtons();highlightEligible();refreshPhase();
-  setStatus(on?'Tryb MOSTEK: kliknij dwa bezpośrednio sąsiednie zabezpieczenia.':'Tryb mostków wyłączony.');
+  setStatus(on?'Tryb MOSTEK: możesz łączyć MCB/RCBO oraz wykonać zasilanie FR dół → SPD/RCD/RCBO/MCB góra. Dostępny także tor N.':'Tryb mostków wyłączony.');
 }
 function toggleCombMode(on){
   combMode=on;bridgeMode=false;clearStart();refreshButtons();highlightEligible();refreshPhase();
@@ -58,7 +77,8 @@ function refreshButtons(){
   if(c){c.classList.toggle('active',combMode);c.textContent=combMode?'▰ GRZEBIEŃ — WŁĄCZONY':'▰ GRZEBIEŃ — WYŁĄCZONY'}
 }
 function highlightEligible(){
-  document.querySelectorAll('.wire-terminal').forEach(t=>t.classList.toggle('bridge-eligible',(bridgeMode||combMode)&&eligible(t)&&roleMatchesPhase(t.dataset.role,selectedPhase())));
+  const type=activeBridgeType();
+  document.querySelectorAll('.wire-terminal').forEach(t=>t.classList.toggle('bridge-eligible',(bridgeMode||combMode)&&eligible(t)&&roleMatchesConductor(t.dataset.role,type)));
 }
 function clearStart(){if(start?.el)start.el.classList.remove('bridge-start');start=null}
 function center(el){const r=el.getBoundingClientRect(),c=cabinet.getBoundingClientRect();return{x:r.left+r.width/2-c.left,y:r.top+r.height/2-c.top}}
@@ -87,8 +107,8 @@ function redraw(){
   bridges.filter(b=>b.kind!=='comb').forEach((b,i)=>{
     const a=document.querySelector('[data-terminal="'+CSS.escape(b.a)+'"]'),z=document.querySelector('[data-terminal="'+CSS.escape(b.b)+'"]');if(!a||!z)return;
     const A=center(a),B=center(z),lift=Math.min(A.y,B.y)-15-(i%2)*4,d=bridgePath(A,B,lift);
-    addPath(d,b.phase,'bridge-shadow',b.id);addPath(d,b.phase,'bridge-path',b.id);addPath(d,b.phase,'bridge-highlight',b.id);addEnd(A.x,A.y,b.phase,b.id);addEnd(B.x,B.y,b.phase,b.id);
-    addBadge((A.x+B.x)/2,lift-15,b.phase,'MOSTEK',()=>removeBridge(b.id));
+    addPath(d,b.phase,'bridge-shadow',b.id);addPath(d,b.phase,'bridge-path'+(b.kind==='feed'?' feed-path':''),b.id);addPath(d,b.phase,'bridge-highlight',b.id);addEnd(A.x,A.y,b.phase,b.id);addEnd(B.x,B.y,b.phase,b.id);
+    addBadge((A.x+B.x)/2,lift-15,b.phase,b.kind==='feed'?'ZASILANIE':'MOSTEK',()=>removeBridge(b.id),false,b.kind==='feed');
   });
 
   let gi=0;
@@ -111,8 +131,9 @@ function redraw(){
   });
   updateStat();highlightEligible();
 }
-function addBadge(x,y,phase,label,onRemove,isComb=false){
-  const badge=document.createElement('button');badge.className='bridge-badge'+(isComb?' comb-badge':'');
+function addBadge(x,y,phase,label,onRemove,isComb=false,isFeed=false){
+  const badge=document.createElement('button');badge.className='bridge-badge'+(isComb?' comb-badge':'')+(isFeed?' feed-badge':'');
+  badge.dataset.phase=phase;
   badge.style.left=x+'px';badge.style.top=y+'px';badge.innerHTML='<span>'+phase+'</span><b>'+label+'</b><i>×</i>';
   badge.title='Kliknij, aby usunąć '+label.toLowerCase();badge.onclick=e=>{e.stopPropagation();onRemove()};labelLayer.appendChild(badge);
 }
@@ -135,19 +156,37 @@ function sameRowRange(a,b){
   const ia=all.indexOf(ma),ib=all.indexOf(mb);if(ia<0||ib<0)return null;
   return all.slice(Math.min(ia,ib),Math.max(ia,ib)+1);
 }
+function validBridgePair(a,b){
+  if(!isAdjacent(a,b))return {ok:false,msg:'Mostek może łączyć tylko bezpośrednio sąsiednie aparaty w tym samym rzędzie.'};
+  const ca=codeOf(a),cb=codeOf(b),za=a.dataset.zone,zb=b.dataset.zone;
+  const aFr=isFrCode(ca),bFr=isFrCode(cb);
+  if(aFr||bFr){
+    const fr=aFr?a:b,target=aFr?b:a;
+    if(fr.dataset.zone!=='bottom'||target.dataset.zone!=='top'||!isFeedTargetCode(codeOf(target))){
+      return {ok:false,msg:'Z FR mostek wychodzi z dolnego zacisku do górnego zacisku SPD, RCD, RCBO lub MCB.'};
+    }
+    return {ok:true,kind:'feed'};
+  }
+  if(isBreakerCode(ca)&&isBreakerCode(cb)&&za==='top'&&zb==='top')return {ok:true,kind:'bridge'};
+  return {ok:false,msg:'Ten typ aparatów nie może być połączony tym mostkiem.'};
+}
 function createBridge(t){
-  const phase=selectedPhase();
-  if(!roleMatchesPhase(t.dataset.role,phase)){flash(t);setStatus('Zacisk nie pasuje do fazy '+phase+'.');return}
-  if(!start){start={id:t.dataset.terminal,el:t,phase};t.classList.add('bridge-start');setStatus(phase+': wybierz sąsiedni aparat.');return}
+  const type=selectedWireType();
+  if(!roleMatchesConductor(t.dataset.role,type)){flash(t);setStatus('Zacisk '+t.dataset.role+' nie pasuje do wybranego toru '+type+'.');return}
+  if(!start){start={id:t.dataset.terminal,el:t,phase:type};t.classList.add('bridge-start');setStatus(type+': wybierz sąsiedni aparat.');return}
   if(start.id===t.dataset.terminal){clearStart();setStatus('Anulowano wybór.');return}
-  if(!isAdjacent(start.el,t)){flash(t);clearStart();setStatus('Mostek może łączyć tylko bezpośrednio sąsiednie aparaty w tym samym rzędzie.');return}
+  if(start.phase!==type){clearStart();flash(t);setStatus('Zmieniono tor podczas tworzenia mostka. Zacznij ponownie.');return}
+  if(!roleMatchesConductor(start.el.dataset.role,type)){clearStart();flash(t);setStatus('Pierwszy zacisk nie pasuje do toru '+type+'.');return}
+  const pair=validBridgePair(start.el,t);
+  if(!pair.ok){flash(t);clearStart();setStatus(pair.msg);return}
   if(bridgeExists(start.id,t.dataset.terminal)){flash(t);clearStart();setStatus('Takie połączenie już istnieje.');return}
-  bridges.push({id:'BR'+seq++,a:start.id,b:t.dataset.terminal,phase,kind:'bridge'});
-  clearStart();redraw();setStatus('Dodano mostek '+phase+'.');
+  bridges.push({id:'BR'+seq++,a:start.id,b:t.dataset.terminal,phase:type,kind:pair.kind});
+  clearStart();redraw();setStatus(pair.kind==='feed'?'Dodano mostek zasilający '+type+' z FR.':'Dodano mostek '+type+'.');
 }
 function createComb(t){
   const phase=selectedPhase();
-  if(!roleMatchesPhase(t.dataset.role,phase)){flash(t);setStatus('Zacisk nie pasuje do fazy '+phase+'.');return}
+  if(selectedWireType()==='N'){flash(t);setStatus('Grzebień działa dla faz L1/L2/L3. Wybierz fazę.');return}
+  if(!roleMatchesConductor(t.dataset.role,phase)){flash(t);setStatus('Zacisk nie pasuje do fazy '+phase+'.');return}
   if(!start){start={id:t.dataset.terminal,el:t,phase};t.classList.add('bridge-start');setStatus(phase+': początek grzebienia wybrany. Kliknij ostatni wyłącznik.');return}
   if(start.id===t.dataset.terminal){clearStart();setStatus('Anulowano wybór grzebienia.');return}
   const devices=sameRowRange(start.el,t);
