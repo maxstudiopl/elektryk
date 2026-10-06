@@ -1,7 +1,7 @@
 (()=>{
 const cabinet=document.querySelector('.cabinet-inner');
-const mountGrid=document.querySelector('.mount-grid');
-if(!cabinet||!mountGrid)return;
+const mountRoot=document.querySelector('.din-zone');
+if(!cabinet||!mountRoot)return;
 const COLORS={L1:'#8b4a17',L2:'#161819',L3:'#777f83',N:'#0989d8',PE:'#76a52d'};
 let selectedWire='L1',startTerminal=null,connections=[],wireSeq=1,wiringErrors=0;
 
@@ -56,7 +56,7 @@ function connectClick(el){const role=el.dataset.role,id=el.dataset.terminal;if(!
 function undoWire(){const c=connections.pop();if(!c)return;cancelStart();refreshUsed();draw();updateCounters();status(`<b>COFNIĘTO:</b> usunięto ${c.type} ${c.a} → ${c.b}.`)}
 function clearWires(){connections=[];cancelStart();refreshUsed();draw();updateCounters();status('<b>OKABLOWANIE:</b> wszystkie przewody usunięte.')}
 document.getElementById('undoWire')?.addEventListener('click',undoWire);document.getElementById('clearWires')?.addEventListener('click',clearWires);
-const observer=new MutationObserver(()=>requestAnimationFrame(decorateMounted));observer.observe(mountGrid,{childList:true,subtree:true});
+const observer=new MutationObserver(()=>requestAnimationFrame(decorateMounted));observer.observe(mountRoot,{childList:true,subtree:true});
 decorateSupply();decorateBars();decorateCircuits();decorateMounted();updateCounters();
 window.addEventListener('resize',()=>requestAnimationFrame(draw));
 window.ElektrykStage3={getConnections:()=>connections.slice(),redraw:draw,clear:clearWires};
