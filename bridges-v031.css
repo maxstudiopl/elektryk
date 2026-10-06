@@ -18,3 +18,9 @@
 .feed-badge{background:linear-gradient(#183548,#0d2534)!important;border-color:#438bb5!important;color:#dff4ff!important}
 .feed-badge[data-phase="N"] span{background:#087bbf!important}
 .bridge-badge[data-phase="N"] span{background:#087bbf!important}
+
+/* v0.4.15 — mostki N i PE */
+.bridge-path[data-phase="PE"]{stroke:#6b9d35;stroke-dasharray:10 4}
+.bridge-end[data-phase="PE"]{fill:#d7d22d;stroke:#477a2a}
+.bridge-badge[data-phase="PE"] span{background:linear-gradient(90deg,#d7d22d 0 50%,#5d9733 50% 100%)!important;color:#152014!important}
+.bridge-highlight[data-phase="PE"]{stroke:#fff9a8}
