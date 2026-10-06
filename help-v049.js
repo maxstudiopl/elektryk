@@ -312,7 +312,7 @@ function buildSchematic(plan){
   }).join('');
 
   const defs='<defs><filter id="wireGlow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
-  const svg='<div class="solution-schematic-wrap"><svg class="solution-schematic" viewBox="0 0 '+width+' '+height+'" role="img" aria-label="Schemat połączeń zadania">'+defs+shapes+busShapes.join('')+deviceSvg.join('')+wireSvg+'</svg></div>';
+  const svg='<div class="solution-schematic-wrap"><svg class="solution-schematic" viewBox="0 0 '+width+' '+height+'" role="img" aria-label="Schemat połączeń zadania">'+defs+busShapes.join('')+wireSvg+shapes+deviceSvg.join('')+'</svg></div>';
   return {svg:svg,connections:connections};
 }
 
