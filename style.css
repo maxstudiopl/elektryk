@@ -145,3 +145,43 @@
   margin:0!important;
   padding:0!important;
 }
+
+/* v0.6.3 — WLZ niższy i wydłużony w prawą stronę */
+.supply-box{
+  width:380px!important;
+  min-height:92px!important;
+  height:92px!important;
+  padding:11px 18px 10px 58px!important;
+  overflow:visible!important;
+}
+.supply-title{
+  width:92px!important;
+  font-size:18px!important;
+  line-height:1!important;
+}
+.supply-sub{
+  width:96px!important;
+  margin-top:4px!important;
+  font-size:7.5px!important;
+  line-height:1.25!important;
+}
+.supply-terminal-labels{
+  position:absolute!important;
+  left:158px!important;
+  top:17px!important;
+  width:194px!important;
+  grid-template-columns:repeat(5,30px)!important;
+  column-gap:11px!important;
+  margin:0!important;
+  font-size:9px!important;
+}
+.supply-terminals{
+  position:absolute!important;
+  left:158px!important;
+  top:38px!important;
+  width:194px!important;
+  grid-template-columns:repeat(5,30px)!important;
+  column-gap:11px!important;
+  margin:0!important;
+  padding:0!important;
+}
