@@ -53,3 +53,50 @@
 .catalog-card[data-part="PETB12"] .mini-device{background:linear-gradient(90deg,#d9d22b 0 30%,#6aaa3a 30% 70%,#d9d22b 70% 100%)!important;border-color:#658631!important}
 .catalog-card[data-part="NTB12"] .mini-device strong,.catalog-card[data-part="NTB12"] .mini-device em,
 .catalog-card[data-part="PETB12"] .mini-device strong,.catalog-card[data-part="PETB12"] .mini-device em{color:#fff!important;text-shadow:0 1px #0009}
+
+/* v0.4.18 — bardziej realistyczny wygląd aparatów DIN na bazie referencji */
+.device[data-kind="mcb"]{
+  background:linear-gradient(90deg,#aeb3b0 0,#e6e9e6 5%,#fafbf9 12%,#fdfefc 54%,#eceeeb 88%,#a8adaa 100%)!important;
+  border-color:#5d6462!important;
+  box-shadow:inset 1px 0 #fff,inset -1px 0 #73797688,2px 5px 8px #0005!important
+}
+.device[data-kind="mcb"]:before{
+  content:'';
+  position:absolute;left:4px;right:4px;top:57px;height:5px;
+  background:linear-gradient(90deg,#d53b32,#f05b4f);
+  border-top:1px solid #b22820;border-bottom:1px solid #a8aaa7
+}
+.device[data-kind="mcb"]:after{
+  content:'IEC • 230/400 V';
+  position:absolute;left:5px;right:5px;top:66px;
+  color:#4f5759;font:bold 4.5px Arial;letter-spacing:.15px;text-align:center
+}
+.device[data-kind="mcb"] .device-type{margin-top:21px!important;font-size:15px!important}
+.device[data-kind="mcb"] .device-rating{font-size:11px!important}
+.device[data-kind="mcb"] .device-meta{font-size:5.4px!important;color:#485055!important}
+.device[data-kind="mcb"] .device-function{bottom:33px!important;background:#f1f2ef!important;color:#333b3e!important;border-color:#b9bfbb!important}
+.device[data-kind="mcb"] .lever{
+  top:111px!important;width:29px!important;height:34px!important;
+  background:linear-gradient(90deg,#1b1e1f 0,#383c3b 17%,#666b68 45%,#252828 53%,#4c504e 79%,#161818 100%)!important;
+  border:1px solid #0c0e0e!important;border-radius:2px!important;
+  box-shadow:inset 0 3px 2px #ffffff2b,inset 0 -4px 4px #0007,0 2px 3px #0005!important
+}
+.device[data-kind="mcb"] .device-topterm,
+.device[data-kind="mcb"] .device-bottomterm{
+  background:linear-gradient(#f4f5f2,#d4d7d3 52%,#9ba19e)!important;
+  border-color:#747b78!important;
+  box-shadow:inset 0 2px #fff,inset 0 -2px #70777466!important
+}
+.device[data-kind="mcb"] .wire-terminal{
+  background:radial-gradient(circle at 42% 37%,#f5f6f3 0 17%,#7d8581 20% 31%,#d7dad7 34% 56%,#59615e 59% 100%)!important;
+  border-color:#555d5a!important;
+  color:#1a1f20!important;
+  text-shadow:0 1px #fff8
+}
+.device[data-kind="mcb"] .brand-strip{
+  top:40px!important;height:14px!important;
+  background:linear-gradient(#6b7070,#34393a)!important;
+  border-top:2px solid #d83e34!important
+}
+/* aparat 1M ma być smukły jak rzeczywisty wyłącznik modułowy */
+.mount-grid .mounted-device>.device[data-kind="mcb"]{border-radius:2px!important}
