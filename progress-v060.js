@@ -107,8 +107,7 @@ function completeTask(detail){
   if(!task||!detail?.complete||!requirementsDone())return false;
   const id=Number(task.id);
   const seconds=Math.max(1,Math.round((Date.now()-taskStartedAt)/1000));
-  data.attempts[id]=(data.attempts[id]||0)+1;
-  const attempts=data.attempts[id];
+  const attempts=Math.max(1,Number(data.attempts[id]||1));
   const stars=starsFor(seconds,failedChecks);
   const first=!data.completed[id];
   const previousStars=Number(data.bestStars[id]||0);
@@ -128,8 +127,12 @@ document.addEventListener('elektryk:task-started',e=>{
   taskStartedAt=Date.now();failedChecks=0;renderStats();
 });
 document.addEventListener('elektryk:power-check',e=>{
+  const id=Number(window.ElektrykStage2?.getTask?.()?.id||currentTaskId||1);
+  data.attempts[id]=(data.attempts[id]||0)+1;
+  save();
   if(e.detail?.complete&&requirementsDone())completeTask(e.detail);
   else failedChecks++;
+  renderStats();
 });
 setInterval(()=>{
   const t=document.getElementById('progressTimer');
