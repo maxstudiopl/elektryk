@@ -180,3 +180,16 @@
 }
 @keyframes guidePulse{50%{box-shadow:inset 0 0 0 2px #fff,0 0 0 4px #1e9ed699,0 0 18px #38c2ffbb}}
 @keyframes targetPulse{50%{transform:scale(1.12);box-shadow:inset 0 0 0 2px #fff,0 0 0 5px #27b65f99,0 0 22px #5df08dbb}}
+
+/* v0.6.1 — kompaktowe gniazda WLZ */
+.supply-terminals span.wire-terminal{
+  width:27px!important;
+  height:27px!important;
+  min-width:27px!important;
+  max-width:27px!important;
+  outline-offset:2px!important;
+}
+.supply-terminals span.wire-terminal:before{
+  width:7px!important;
+  height:7px!important;
+}
