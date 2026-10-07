@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Elektryk Symulator Damian Górny — v0.6.4</title>
-  <link rel="stylesheet" href="style.css?v=0604">
-  <link rel="stylesheet" href="apparatus.css?v=0604">
-  <link rel="stylesheet" href="stage2.css?v=0604">
-  <link rel="stylesheet" href="stage3.css?v=0604">
-  <link rel="stylesheet" href="bridges-v031.css?v=0604">
-  <link rel="stylesheet" href="stage4.css?v=0604">
-  <link rel="stylesheet" href="tasks-v046.css?v=0604">
-  <link rel="stylesheet" href="busbars-v047.css?v=0604">
-  <link rel="stylesheet" href="help-v049.css?v=0604">
-  <link rel="stylesheet" href="auth-v050.css?v=0604">
-  <link rel="stylesheet" href="progress-v060.css?v=0604">
+  <title>Elektryk Symulator Damian Górny — v0.6.5</title>
+  <link rel="stylesheet" href="style.css?v=0605">
+  <link rel="stylesheet" href="apparatus.css?v=0605">
+  <link rel="stylesheet" href="stage2.css?v=0605">
+  <link rel="stylesheet" href="stage3.css?v=0605">
+  <link rel="stylesheet" href="bridges-v031.css?v=0605">
+  <link rel="stylesheet" href="stage4.css?v=0605">
+  <link rel="stylesheet" href="tasks-v046.css?v=0605">
+  <link rel="stylesheet" href="busbars-v047.css?v=0605">
+  <link rel="stylesheet" href="help-v049.css?v=0605">
+  <link rel="stylesheet" href="auth-v050.css?v=0605">
+  <link rel="stylesheet" href="progress-v060.css?v=0605">
   <style>
     /* v0.4.5 critical DIN layout hotfix — bypasses stale cached CSS */
     .mount-grid .mounted-device{position:absolute!important;top:0!important;height:194px!important;margin:0!important;padding:0!important;transform:none!important;box-sizing:border-box!important;z-index:12!important}
@@ -27,6 +27,9 @@
     .supply-sub{position:absolute!important;left:58px!important;top:34px!important}
     .supply-terminal-labels{position:absolute!important;left:158px!important;top:13px!important;width:190px!important;grid-template-columns:repeat(5,28px)!important;column-gap:12px!important;margin:0!important}
     .supply-terminals{position:absolute!important;left:158px!important;top:32px!important;width:190px!important;grid-template-columns:repeat(5,28px)!important;column-gap:12px!important;margin:0!important}
+
+    /* v0.6.5 critical visual refresh */
+    .supply-cable i{display:none!important}
   </style>
 </head>
 <body class="auth-locked">
@@ -78,7 +81,7 @@
     </aside>
 
     <section class="workspace">
-      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.6.4 • POPRAWIONY WLZ + KABLE</span></div>
+      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.6.5 • CZYSTY WLZ + REALISTYCZNE KABLE</span></div>
       <div class="cabinet">
         <div class="cabinet-inner">
           <div class="supply-box">
@@ -146,6 +149,6 @@
   </main>
 
   <div class="task-modal" id="taskModal" hidden><div class="task-window"><div class="task-window-head"><div><b>WYBIERZ ZADANIE</b><small>Wybierz zadanie treningowe</small></div><button id="closeTasks">×</button></div><div class="task-cards"><button><b>01</b><span>Podstawowa rozdzielnica</span><small>150 XP</small></button><button><b>02</b><span>Obwód gniazd</span><small>100 XP</small></button><button><b>03</b><span>Łazienka z RCD</span><small>180 XP</small></button></div></div></div>
-  <script src="auth-v050.js?v=0604"></script>
+  <script src="auth-v050.js?v=0605"></script>
 </body>
 </html>
