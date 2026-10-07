@@ -63,3 +63,14 @@ radial-gradient(circle at 50% 0,#14354d 0,#081722 42%,#02070b 100%)}
 }
 .auth-footer a{color:#70cfff;text-decoration:none}
 .auth-footer a:hover{color:#fff;text-decoration:underline}
+
+/* v0.5.4 — badge beta pod nagłówkiem */
+.auth-brand-line{display:block!important}
+.auth-brand-line em{display:none!important}
+.auth-beta{
+  display:inline-flex;align-items:center;
+  margin-top:9px;padding:4px 8px;
+  border:1px solid #c79a14;border-radius:9px;
+  background:#362a06;color:#ffd238;
+  font:900 7.5px Arial;letter-spacing:.65px
+}
