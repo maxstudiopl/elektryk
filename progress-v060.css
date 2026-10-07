@@ -1,0 +1,29 @@
+/* v0.6.0 — progres gracza, XP, gwiazdki i wynik zadania */
+.player-progress{margin:0 14px 12px;padding:9px;background:#071722;border:1px solid #31566d;border-radius:5px}
+.player-progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.player-progress-head b{font-size:8px;color:#eaf7fc;letter-spacing:.35px}
+.player-progress-head span{font:bold 8px Arial;color:#ffd166}
+.player-progress-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.player-progress-grid div{padding:6px 3px;text-align:center;background:#0b1d28;border:1px solid #294959;border-radius:3px}
+.player-progress-grid span{display:block;color:#7794a4;font-size:5.5px}
+.player-progress-grid b{display:block;margin-top:2px;color:#58c9ff;font-size:9px}
+.player-progress-current{margin-top:6px;padding:6px;border-left:3px solid #3c9ed0;background:#0c202c;color:#9fc1d2;font-size:6.5px}
+.task-card{padding-bottom:27px!important}
+.task-save-state{position:absolute;left:10px;right:10px;bottom:8px;padding-top:5px;border-top:1px solid #234252;color:#6d8795;font:bold 6px Arial}
+.task-card.task-completed{border-color:#3d8c58!important}
+.task-card.task-completed .task-save-state{color:#78e49a}
+.task-card.task-completed:after{content:'✓';position:absolute;right:9px;top:8px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:#1b6b39;color:#a9f4bf;font:bold 11px Arial}
+.task-result-modal{position:fixed;inset:0;z-index:20000;display:grid;place-items:center;background:#02070bcc;padding:20px}
+.task-result-modal[hidden]{display:none}
+.task-result-card{position:relative;width:min(390px,92vw);padding:26px;border:1px solid #3786b5;border-radius:9px;background:linear-gradient(180deg,#0d2a3d,#071721);box-shadow:0 30px 80px #000c;text-align:center}
+.task-result-close{position:absolute;right:10px;top:8px;border:0;background:transparent;color:#8eabba;font-size:20px;cursor:pointer}
+.task-result-kicker{color:#70d394;font:bold 7px Arial;letter-spacing:1px}
+.task-result-card h2{margin:7px 0 5px;font-size:17px}
+.task-result-stars{color:#ffd34f;font-size:25px;letter-spacing:3px;text-shadow:0 0 10px #ffc62f44}
+.task-result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:14px}
+.task-result-grid div{padding:9px 3px;background:#091c28;border:1px solid #294d61;border-radius:4px}
+.task-result-grid span{display:block;color:#7897a8;font-size:6px}
+.task-result-grid b{display:block;margin-top:3px;font-size:12px;color:#e9f7fc}
+.task-result-note{margin-top:10px;color:#91aebb;font-size:7px;line-height:1.45}
+.task-result-ok{width:100%;height:36px;margin-top:13px;border:1px solid #36aef0;border-radius:4px;background:#0b78ba;color:#fff;font:bold 9px Arial;cursor:pointer}
+.task-result-ok:hover{filter:brightness(1.1)}
