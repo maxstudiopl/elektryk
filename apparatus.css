@@ -168,3 +168,172 @@
 .mount-grid .mounted-device.switch-off .lever{
   transform:translateX(-50%) translateY(7px)!important;
 }
+
+/* v0.7.0 — kompletna rodzina aparatury DIN fikcyjnej marki XYZ */
+.device{
+  font-family:Arial,Helvetica,sans-serif!important;
+}
+.mount-grid .mounted-device>.device{
+  background:
+    linear-gradient(90deg,#b7bbb8 0,#e2e5e2 3%,#fbfcfa 8%,#fff 48%,#f3f4f1 91%,#a8aeaa 97%,#858c88 100%)!important;
+  border:1px solid #626966!important;
+  border-radius:2px!important;
+  box-shadow:inset 1px 0 #fff,inset -1px 0 #6e747180,0 4px 8px #0004!important;
+}
+.mount-grid .mounted-device>.device:before{
+  content:'';
+  position:absolute;left:3px;right:3px;top:55px;height:2px;
+  background:#2297c8!important;
+  border:0!important;
+}
+.brand-strip,
+.brand-strip.dark,
+.brand-strip.red,
+.brand-strip.blue,
+.brand-strip.cyan,
+.brand-strip.orange,
+.brand-strip.green{
+  top:39px!important;
+  left:4px!important;right:4px!important;height:14px!important;
+  display:flex!important;align-items:center!important;
+  padding-left:5px!important;
+  background:linear-gradient(180deg,#0d4564,#082f47)!important;
+  border-top:2px solid #31b4e6!important;
+  color:#fff!important;
+  font:bold 6px Arial!important;
+  letter-spacing:.7px!important;
+  text-shadow:0 1px #0007!important;
+}
+.device-type{
+  margin-top:18px!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  letter-spacing:-.2px!important;
+  color:#111719!important;
+}
+.device-rating{
+  margin-top:2px!important;
+  font-size:10px!important;
+  font-weight:800!important;
+  color:#20282b!important;
+}
+.device-meta{
+  margin-top:3px!important;
+  font-size:5.2px!important;
+  color:#596164!important;
+  letter-spacing:.05px!important;
+}
+.device-function{
+  left:4px!important;right:4px!important;bottom:34px!important;
+  padding:3px 2px!important;
+  background:#f1f3f0!important;
+  border-top:1px solid #c4c9c5!important;
+  border-bottom:1px solid #c4c9c5!important;
+  color:#465054!important;
+  font:bold 4.8px Arial!important;
+  letter-spacing:.15px!important;
+}
+.device[data-kind="mcb"]:after{
+  content:'XYZ • IEC 60898';
+  top:60px!important;
+  left:5px!important;right:5px!important;
+  color:#667073!important;
+  font:bold 4.2px Arial!important;
+  letter-spacing:.08px!important;
+  text-align:center!important;
+}
+.device[data-kind="mcb"] .brand-strip{
+  background:linear-gradient(180deg,#0d4564,#082f47)!important;
+  border-top-color:#31b4e6!important;
+}
+.device[data-kind="mcb"] .device-topterm,
+.device[data-kind="mcb"] .device-bottomterm,
+.device-fr .device-topterm,.device-fr .device-bottomterm,
+.device-rcd .device-topterm,.device-rcd .device-bottomterm,
+.device-rcbo .device-topterm,.device-rcbo .device-bottomterm{
+  background:linear-gradient(#f7f8f5,#d8dbd7 50%,#a4aaa6)!important;
+  border-color:#747c78!important;
+  box-shadow:inset 0 2px #fff,inset 0 -2px #69716d55!important;
+}
+.mount-grid .mounted-device .lever{
+  top:106px!important;
+  background:linear-gradient(90deg,#121515 0,#333837 18%,#656b68 46%,#212525 54%,#454a48 82%,#111414 100%)!important;
+  border:1px solid #080a0a!important;
+  border-radius:2px!important;
+  box-shadow:inset 0 3px 2px #ffffff30,inset 0 -4px 4px #0008,0 2px 3px #0005!important;
+}
+.mount-grid .mounted-device[data-modules="1"] .lever{width:28px!important}
+.mount-grid .mounted-device[data-modules="2"] .lever{
+  width:58px!important;
+  background:
+    linear-gradient(90deg,transparent calc(50% - 1px),#090b0b calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px)),
+    linear-gradient(90deg,#121515 0,#3e4341 13%,#626865 44%,#202424 52%,#4a504d 82%,#111414 100%)!important;
+}
+.mount-grid .mounted-device[data-modules="3"] .lever{
+  width:88px!important;
+  background:
+    linear-gradient(90deg,transparent 32.5%,#090b0b 32.5% 34%,transparent 34% 65.5%,#090b0b 65.5% 67%,transparent 67%),
+    linear-gradient(90deg,#121515 0,#3e4341 10%,#626865 44%,#202424 52%,#4a504d 86%,#111414 100%)!important;
+}
+.mount-grid .mounted-device[data-modules="4"] .lever{
+  background:
+    linear-gradient(90deg,transparent 24%,#090b0b 24% 25.5%,transparent 25.5% 49%,#090b0b 49% 50.5%,transparent 50.5% 74%,#090b0b 74% 75.5%,transparent 75.5%),
+    linear-gradient(#d94d43,#a82620 47%,#7b1612 53%,#c9342c)!important;
+}
+.mount-grid .mounted-device[data-modules="3"]>.device{
+  background-image:
+    linear-gradient(90deg,transparent 32.8%,#9da4a055 33.1%,transparent 33.4%,transparent 66.1%,#9da4a055 66.4%,transparent 66.7%),
+    linear-gradient(90deg,#b7bbb8 0,#e2e5e2 3%,#fbfcfa 8%,#fff 48%,#f3f4f1 91%,#a8aeaa 97%,#858c88 100%)!important;
+}
+.mount-grid .mounted-device[data-modules="3"]:after{
+  content:'3M';
+  position:absolute;right:3px;bottom:-13px;
+  color:#667176;font:700 5px Arial;letter-spacing:.2px;z-index:25;pointer-events:none;
+}
+.device-mcb-2p .device-type,
+.device-mcb-3p .device-type{font-size:17px!important}
+.device-mcb-2p .device-meta,
+.device-mcb-3p .device-meta{font-size:5.6px!important}
+.device-rcd .brand-strip,.device-rcbo .brand-strip{
+  border-top-color:#43a8e1!important;
+}
+.device-spd .brand-strip{
+  border-top-color:#e49a32!important;
+}
+.device-fr .brand-strip{
+  border-top-color:#d45046!important;
+}
+.test-btn{
+  border:1px solid #4d5553!important;
+  border-radius:50%!important;
+  background:#dce1de!important;
+  color:#1b2325!important;
+  box-shadow:inset 0 1px #fff,0 1px 2px #0004!important;
+}
+.test-btn.yellow{background:#e8b63a!important}
+.spd-window{
+  border-radius:2px!important;
+  border:1px solid #747d79!important;
+  background:linear-gradient(#3ca65a 0 68%,#d5d8d5 69% 100%)!important;
+}
+.mini-device:before,
+.detail-device:before{
+  content:'XYZ'!important;
+  background:linear-gradient(180deg,#0d4564,#082f47)!important;
+  border-top:1px solid #31b4e6!important;
+  color:#fff!important;
+}
+.mini-mcb-2p{width:52px!important}
+.mini-mcb-3p{width:68px!important}
+.mini-mcb-2p i{
+  width:30px!important;
+  background:linear-gradient(90deg,#222 0 47%,#090b0b 48% 52%,#222 53% 100%)!important;
+}
+.mini-mcb-3p i{
+  width:44px!important;
+  background:linear-gradient(90deg,#222 0 31%,#090b0b 32% 34%,#222 35% 65%,#090b0b 66% 68%,#222 69% 100%)!important;
+}
+.xyz-variant-card{
+  border-color:#70828a!important;
+}
+.xyz-variant-card small{color:#4d6978!important}
