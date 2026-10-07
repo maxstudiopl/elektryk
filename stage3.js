@@ -114,7 +114,7 @@ function undoWire(){const c=connections.pop();if(!c)return;cancelStart();refresh
 function clearWires(){connections=[];cancelStart();refreshUsed();draw();updateCounters();status('<b>OKABLOWANIE:</b> wszystkie przewody usunięte.')}
 document.getElementById('undoWire')?.addEventListener('click',undoWire);document.getElementById('clearWires')?.addEventListener('click',clearWires);
 const observer=new MutationObserver(()=>requestAnimationFrame(decorateMounted));observer.observe(mountRoot,{childList:true,subtree:true});
-decorateSupply();decorateBars();decorateCircuits();decorateMounted();updateCounters();
+decorateSupply();decorateBars();decorateCircuits();decorateMounted();refreshUsed();updateCounters();
 window.addEventListener('resize',()=>requestAnimationFrame(draw));
 window.ElektrykStage3={getConnections:()=>connections.slice(),redraw:draw,clear:clearWires,refreshTerminals:refreshUsed,refreshBars:()=>{decorateBars();refreshUsed();draw()}};
 })();
