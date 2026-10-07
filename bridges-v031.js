@@ -40,7 +40,7 @@ document.querySelectorAll('.wire').forEach(w=>w.addEventListener('click',()=>{
 
 function mountedOf(t){return t.closest('.mounted-device')}
 function codeOf(t){return mountedOf(t)?.dataset.code||''}
-function isBreakerCode(code){return code==='RCBO'||/^[BC]\d+$/.test(code)}
+function isBreakerCode(code){return code==='RCBO'||/^[BC]\d+(?:_(?:2P|3P))?$/.test(code)}
 function isFrCode(code){return code==='FR'||code==='FR40'||code==='FR100'||code.startsWith('FR')}
 function isFeedTargetCode(code){return code==='SPD'||code==='RCD'||code==='RCBO'||isBreakerCode(code)}
 function roleMatchesConductor(role,type){
@@ -211,7 +211,7 @@ function validBridgePair(a,b){
   const bRcdOut=cb==='RCD'&&zb==='bottom'&&b.dataset.role==='L';
   if(aRcdOut||bRcdOut){
     const rcd=aRcdOut?a:b,target=aRcdOut?b:a;
-    if(target.dataset.zone!=='top'||!/^[BC]\d+$/.test(codeOf(target))){
+    if(target.dataset.zone!=='top'||!/^[BC]\d+(?:_(?:2P|3P))?$/.test(codeOf(target))){
       return {ok:false,msg:'Z RCD mostek wychodzi z dolnego zacisku L do górnego zacisku pierwszego wyłącznika B/C.'};
     }
     return {ok:true,kind:'feed',source:'RCD'};
