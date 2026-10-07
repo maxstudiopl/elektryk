@@ -126,7 +126,11 @@ function setSwitchVisual(m){
   m.classList.toggle('switch-off',!on);
   let badge=m.querySelector('.switch-state-badge');
   if(!badge){badge=document.createElement('span');badge.className='switch-state-badge';m.appendChild(badge)}
-  badge.textContent=on?'ON':'OFF';
+  badge.textContent='';
+  badge.classList.toggle('state-on',on);
+  badge.classList.toggle('state-off',!on);
+  badge.title=on?'Stan aparatu: ZAŁĄCZONY':'Stan aparatu: WYŁĄCZONY';
+  badge.setAttribute('aria-label',badge.title);
 }
 function decorateSwitches(){
   document.querySelectorAll('.mounted-device').forEach(m=>{
