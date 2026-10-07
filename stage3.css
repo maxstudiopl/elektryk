@@ -130,3 +130,18 @@
   transform:none!important;outline:2px solid #fff!important;outline-offset:3px!important
 }
 .supply-terminals span.wire-terminal.used-terminal:before{background:#fff!important}
+
+/* v0.5.8 — inteligentne prowadzenie przewodów */
+.wire-shadow{
+  stroke-width:8!important;
+  opacity:.32!important;
+  filter:blur(.15px)
+}
+.wire-path{
+  stroke-width:4.2!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+  filter:drop-shadow(0 1px 1px #0007)!important
+}
+.wire-path[data-wire="PE"]{stroke-dasharray:none!important}
+.wire-ferrule-metal{stroke-width:4.6!important}
