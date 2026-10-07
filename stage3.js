@@ -61,7 +61,28 @@ function shortestRoute(A,B,a,b,type){
   return `M ${A.x} ${A.y} L ${A.x} ${B.y} L ${B.x} ${B.y}`;
 }
 function addPath(d,type,cls){const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);p.setAttribute('class',cls);p.dataset.wire=type;if(cls==='wire-path')p.setAttribute('stroke',COLORS[type]||'#d06a25');svg.appendChild(p)}
-function draw(){svg.innerHTML='';connections.forEach(c=>{const a=document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`),b=document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`);if(!a||!b)return;const A=terminalCenter(a),B=terminalCenter(b),d=shortestRoute(A,B,a,b,c.type);addPath(d,c.type,'wire-shadow');addPath(d,c.type,'wire-path')})}
+function addFerrule(P,Q,type,end){
+  const dx=Q.x-P.x,dy=Q.y-P.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len;
+  const dir=end==='start'?1:-1;
+  const sx=P.x+ux*dir*2,sy=P.y+uy*dir*2;
+  const ex=P.x+ux*dir*10,ey=P.y+uy*dir*10;
+  const metal=document.createElementNS('http://www.w3.org/2000/svg','line');
+  metal.setAttribute('x1',sx);metal.setAttribute('y1',sy);metal.setAttribute('x2',ex);metal.setAttribute('y2',ey);
+  metal.setAttribute('class','wire-ferrule-metal');metal.dataset.wire=type;svg.appendChild(metal);
+  const collar=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  collar.setAttribute('cx',P.x+ux*dir*11.5);collar.setAttribute('cy',P.y+uy*dir*11.5);collar.setAttribute('r','3.8');
+  collar.setAttribute('class','wire-ferrule-collar');collar.dataset.wire=type;svg.appendChild(collar);
+}
+function draw(){
+  svg.innerHTML='';
+  connections.forEach(c=>{
+    const a=document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`),b=document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`);
+    if(!a||!b)return;
+    const A=terminalCenter(a),B=terminalCenter(b),d=shortestRoute(A,B,a,b,c.type);
+    addPath(d,c.type,'wire-shadow');addPath(d,c.type,'wire-path');
+    addFerrule(A,B,c.type,'start');addFerrule(B,A,c.type,'end');
+  })
+}
 function refreshUsed(){document.querySelectorAll('.wire-terminal').forEach(t=>t.classList.toggle('used-terminal',endpointUsed(t.dataset.terminal)))}
 function pruneConnections(){const before=connections.length;connections=connections.filter(c=>document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`)&&document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`));if(before!==connections.length){cancelStart();refreshUsed();updateCounters()}}
 function connectClick(el){const role=el.dataset.role,id=el.dataset.terminal;if(!roleAccepts(role,selectedWire)){markBad(el,`żyła ${selectedWire} nie pasuje do zacisku ${role}.`);return}if(endpointUsed(id)){markBad(el,'ten zacisk jest już zajęty. Usuń przewód lub wybierz inny zacisk.');return}if(!startTerminal){startTerminal={id,el,role};el.classList.add('start-terminal');status(`<b>PUNKT 1:</b> ${id}. Teraz kliknij drugi zacisk dla ${selectedWire}.`);return}if(startTerminal.id===id){cancelStart();status('<b>ANULOWANO:</b> wybór pierwszego zacisku.');return}if(connections.some(c=>(c.a===startTerminal.id&&c.b===id)||(c.a===id&&c.b===startTerminal.id))){markBad(el,'takie połączenie już istnieje.');cancelStart();return}const cable=document.querySelector('.cable-buttons button.active')?.textContent.trim()||'';connections.push({id:'W'+wireSeq++,a:startTerminal.id,b:id,type:selectedWire,cable});startTerminal.el.classList.remove('start-terminal');startTerminal=null;refreshUsed();draw();updateCounters();status(`<b>POŁĄCZONO:</b> ${selectedWire} • ${cable||'przewód'} • ${connections[connections.length-1].a} → ${id}`,'success')}
