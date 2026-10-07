@@ -495,3 +495,11 @@
 .circuit-node[data-exit="top-right"] .circuit-terminals{top:39px!important}
 .circuit-node[data-exit="top-right"]>b{top:58px!important}
 .circuit-node[data-exit="top-right"]>small{top:71px!important}
+
+/* v0.7.2 — przewody prowadzone wewnątrz kanałów */
+.duct{
+  z-index:8!important;
+}
+.wire-layer{
+  z-index:7!important;
+}
