@@ -5,14 +5,15 @@ const PASS_HASH='3dee654f9d15a95ed45332ec703f94258cb70f86cf2cdaaeb7d3240b399d354
 const SESSION_KEY='elektryk_auth_v050';
 const SESSION_MS=8*60*60*1000;
 const scripts=[
-  'ui.js?v=0509',
-  'stage2.js?v=0509',
-  'stage3.js?v=0509',
-  'bridges-v031.js?v=0509',
-  'stage4.js?v=0509',
-  'tasks-v046.js?v=0509',
-  'busbars-v047.js?v=0509',
-  'help-v049.js?v=0509'
+  'ui.js?v=0600',
+  'stage2.js?v=0600',
+  'stage3.js?v=0600',
+  'bridges-v031.js?v=0600',
+  'stage4.js?v=0600',
+  'tasks-v046.js?v=0600',
+  'busbars-v047.js?v=0600',
+  'help-v049.js?v=0600',
+  'progress-v060.js?v=0600'
 ];
 let gameLoaded=false;
 
