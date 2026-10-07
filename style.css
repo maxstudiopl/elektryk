@@ -255,3 +255,19 @@
 }
 .supply-cable{left:15px!important;top:-22px!important;width:26px!important;height:57px!important}
 .supply-cable i{bottom:-21px!important;height:29px!important}
+
+/* v0.6.5 — czysty WLZ bez pokazanych żył kabla wejściowego */
+.supply-cable{
+  left:17px!important;
+  top:-24px!important;
+  width:22px!important;
+  height:61px!important;
+  border-radius:10px!important;
+  background:linear-gradient(90deg,#050708 0%,#30373a 42%,#15191b 66%,#050708 100%)!important;
+  border:1px solid #545f64!important;
+  box-shadow:inset 0 1px 1px #ffffff12,0 2px 5px #0008!important;
+  overflow:hidden!important;
+}
+.supply-cable i{
+  display:none!important;
+}
