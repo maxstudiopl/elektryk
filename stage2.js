@@ -24,6 +24,8 @@ const PARTS={
 }
 
 const MODULES_PER_ROW=18;
+const ROW_PITCH=252;
+const DIN_ZONE_EXTRA=96;
 let selected=null,rowCount=1,occupied=[],mounted=[],seq=1,errors=0;
 let currentTask={id:1,rows:1,requirements:{FR:1,RCD:1,B10:1,B16:1}};
 
@@ -100,11 +102,11 @@ function renderRows(count){
     row.appendChild(grid);rowsHost.appendChild(row);
   }
 
-  const innerHeight=620+(rowCount-1)*230;
+  const innerHeight=700+(rowCount-1)*270;
   cabinetInner.style.height=innerHeight+'px';
   cabinetInner.dataset.rows=String(rowCount);
-  dinZone.style.height=(rowCount*215+52)+'px';
-  hint.style.top=(rowCount*215+8)+'px';
+  dinZone.style.height=(rowCount*ROW_PITCH+DIN_ZONE_EXTRA)+'px';
+  hint.style.top=(rowCount*ROW_PITCH+48)+'px';
 
   const subtitle=document.querySelector('.cabinet-head small');
   if(subtitle)subtitle.textContent=`230/400 V • 3F + N + PE • ${totalModules()} modułów`;
