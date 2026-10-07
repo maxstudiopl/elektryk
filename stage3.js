@@ -61,16 +61,15 @@ function shortestRoute(A,B,a,b,type){
   return `M ${A.x} ${A.y} L ${A.x} ${B.y} L ${B.x} ${B.y}`;
 }
 function addPath(d,type,cls){const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);p.setAttribute('class',cls);p.dataset.wire=type;if(cls==='wire-path')p.setAttribute('stroke',COLORS[type]||'#d06a25');svg.appendChild(p)}
-function addFerrule(P,Q,type,end){
+function addFerrule(P,Q,type){
   const dx=Q.x-P.x,dy=Q.y-P.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len;
-  const dir=end==='start'?1:-1;
-  const sx=P.x+ux*dir*2,sy=P.y+uy*dir*2;
-  const ex=P.x+ux*dir*10,ey=P.y+uy*dir*10;
+  const sx=P.x+ux*2,sy=P.y+uy*2;
+  const ex=P.x+ux*10,ey=P.y+uy*10;
   const metal=document.createElementNS('http://www.w3.org/2000/svg','line');
   metal.setAttribute('x1',sx);metal.setAttribute('y1',sy);metal.setAttribute('x2',ex);metal.setAttribute('y2',ey);
   metal.setAttribute('class','wire-ferrule-metal');metal.dataset.wire=type;svg.appendChild(metal);
   const collar=document.createElementNS('http://www.w3.org/2000/svg','circle');
-  collar.setAttribute('cx',P.x+ux*dir*11.5);collar.setAttribute('cy',P.y+uy*dir*11.5);collar.setAttribute('r','3.8');
+  collar.setAttribute('cx',P.x+ux*11.5);collar.setAttribute('cy',P.y+uy*11.5);collar.setAttribute('r','3.8');
   collar.setAttribute('class','wire-ferrule-collar');collar.dataset.wire=type;svg.appendChild(collar);
 }
 function draw(){
@@ -80,7 +79,7 @@ function draw(){
     if(!a||!b)return;
     const A=terminalCenter(a),B=terminalCenter(b),d=shortestRoute(A,B,a,b,c.type);
     addPath(d,c.type,'wire-shadow');addPath(d,c.type,'wire-path');
-    addFerrule(A,B,c.type,'start');addFerrule(B,A,c.type,'end');
+    addFerrule(A,B,c.type);addFerrule(B,A,c.type);
   })
 }
 function refreshUsed(){document.querySelectorAll('.wire-terminal').forEach(t=>t.classList.toggle('used-terminal',endpointUsed(t.dataset.terminal)))}
