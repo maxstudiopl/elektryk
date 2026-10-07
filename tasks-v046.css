@@ -39,3 +39,28 @@
   color:#667278;font:bold 5px Arial;letter-spacing:.7px;z-index:2;pointer-events:none;opacity:.88
 }
 .din-row:last-child:after{opacity:.72}
+
+/* v0.5.7 — realistyczna szyna DIN i pola modułowe */
+.din-row{padding-top:10px}
+.din-row .din-rail{
+  top:114px!important;height:50px!important;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 25px,#5d666955 25px 27px,transparent 27px 50px),
+    linear-gradient(#6d777b 0 10%,#e9ecec 11% 25%,#7a8487 26% 42%,#f1f3f3 43% 61%,#697275 62% 78%,#c9cecf 79% 100%)!important;
+  border:1px solid #596164!important;
+  box-shadow:inset 0 1px #fff,0 4px 7px #0005!important
+}
+.din-row .din-rail:before{
+  content:'';
+  position:absolute;left:12px;right:12px;top:18px;height:9px;
+  background:repeating-linear-gradient(90deg,#586164 0 14px,transparent 14px 31px);
+  opacity:.68;border-radius:2px
+}
+.din-row .mount-grid{
+  background:repeating-linear-gradient(90deg,transparent 0 calc(5.555% - 1px),#7e898d38 calc(5.555% - 1px) 5.555%);
+}
+.din-slot:not(.occupied):after{
+  content:attr(data-label);
+  position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);
+  color:#7b868a;font:600 4.5px Arial;opacity:.75
+}
