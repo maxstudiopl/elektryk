@@ -29,3 +29,19 @@
   background:#ef554a!important;
   box-shadow:inset 0 1px 1px #ffffff99,0 0 0 2px #852a2433,0 0 7px #ef554a88!important;
 }
+
+/* v0.6.4 — status obwodu nie tworzy prostokątnej ramki wokół kabla */
+.circuits>div.circuit-node.load-powered,
+.circuits>div.circuit-node.load-partial,
+.circuits>div.circuit-node.load-error{
+  border:0!important;background:transparent!important;box-shadow:none!important;
+}
+.circuit-node.load-partial .circuit-sheath{
+  box-shadow:inset 0 1px 1px #ffffff18,0 2px 4px #0007!important;
+}
+.circuit-node.load-powered .circuit-sheath{
+  box-shadow:0 0 0 2px #47c674,0 0 10px #47c67477!important;
+}
+.circuit-node.load-error .circuit-sheath{
+  box-shadow:0 0 0 2px #e2574d,0 0 10px #e2574d77!important;
+}
