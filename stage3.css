@@ -99,3 +99,34 @@
 }
 .device-topterm .wire-terminal.used-terminal,
 .device-bottomterm .wire-terminal.used-terminal{z-index:22!important}
+
+/* v0.5.2 — dokładne gniazda WLZ */
+.supply-terminals span.wire-terminal{
+  width:28px!important;height:28px!important;min-width:28px!important;max-width:28px!important;
+  padding:0!important;border-radius:50%!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  font-size:0!important;
+  background:radial-gradient(circle at 45% 38%,#f6f7f4 0 16%,#8b9390 18% 29%,#d8dcd8 32% 50%,#59615f 54% 70%,#23292a 73% 100%)!important;
+  border:2px solid #313839!important;
+  box-shadow:inset 0 0 0 2px #bdc3c0,0 2px 3px #0008!important;
+  outline-offset:3px!important;
+  cursor:crosshair!important
+}
+.supply-terminals span.wire-terminal:before{
+  content:'';
+  width:8px;height:8px;border-radius:50%;
+  background:#202526;border:1px solid #777f7c;
+  box-shadow:inset 0 1px 2px #000,0 1px #fff5
+}
+.supply-terminals span.wire-terminal.l1{border-bottom:5px solid #8b4a17!important}
+.supply-terminals span.wire-terminal.l2{border-bottom:5px solid #111!important}
+.supply-terminals span.wire-terminal.l3{border-bottom:5px solid #777f83!important}
+.supply-terminals span.wire-terminal.n{border-bottom:5px solid #0989d8!important}
+.supply-terminals span.wire-terminal.pe{border-bottom:5px solid #78a839!important}
+.supply-terminals span.wire-terminal.start-terminal{
+  transform:scale(1.12)!important;outline:3px solid #ffca38!important;outline-offset:3px!important
+}
+.supply-terminals span.wire-terminal.used-terminal{
+  transform:none!important;outline:2px solid #fff!important;outline-offset:3px!important
+}
+.supply-terminals span.wire-terminal.used-terminal:before{background:#fff!important}
