@@ -1,2 +1,31 @@
 /* v0.4.0 — ETAP 4: analiza toru zasilania i stany ON/OFF */
 .power-analyzer{margin:0 14px 12px;padding:9px;background:#071722;border:1px solid #31566d;border-radius:5px}.power-analyzer-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:7px}.power-analyzer-head b{font-size:9px;color:#e9f7fc;letter-spacing:.3px}.power-analyzer-head span{font-size:6.5px;color:#7ea0b2}.power-main-status{padding:8px;border:1px solid #3b5665;background:#0d202b;border-radius:4px;font-size:7.5px;line-height:1.4;color:#b4c8d3}.power-main-status.ok{border-color:#3d8858;background:#13291c;color:#aef1c1}.power-main-status.warn{border-color:#94752f;background:#2b2515;color:#ffe39a}.power-main-status.error{border-color:#a94c43;background:#2d1716;color:#ffc0ba}.power-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:6px}.power-summary div{padding:6px 3px;text-align:center;background:#0b1d28;border:1px solid #294959;border-radius:3px}.power-summary span{display:block;font-size:5.5px;color:#7794a4}.power-summary b{display:block;margin-top:2px;font-size:10px}.power-summary .good b{color:#5edf88}.power-summary .bad b{color:#ff776c}.power-summary .partial b{color:#ffd166}.power-check-btn{width:100%;margin-top:6px;padding:7px;background:#0c6fae;border:1px solid #43b4f5;border-radius:3px;color:white;font-size:7px;font-weight:800;cursor:pointer}.power-check-btn:hover{background:#0d86d1}.power-issues{display:grid;gap:3px;margin-top:6px}.power-issue{padding:5px 6px;border-left:3px solid #986f29;background:#211e14;color:#dbc990;font-size:6.5px;line-height:1.35}.power-issue.error{border-left-color:#c04d44;background:#291716;color:#f0aaa4}.power-issue.ok{border-left-color:#3d8e59;background:#13251a;color:#a7dfb7}.switch-state-badge{position:absolute;left:50%;top:-18px;transform:translateX(-50%);z-index:22;min-width:28px;padding:2px 4px;border-radius:3px;border:1px solid #397751;background:#153321;color:#9ceab2;text-align:center;font:bold 5.5px Arial;pointer-events:none}.mounted-device.switch-off .switch-state-badge{border-color:#8c493f;background:#321916;color:#ffafa7}.mounted-device .lever{cursor:pointer!important}.mounted-device.switch-off .lever{transform:translateX(-50%) translateY(8px)!important;filter:brightness(.72)}.mounted-device.input-live .device{box-shadow:inset 1px 0 #fff,inset -1px 0 #7778,2px 5px 9px #0006,0 0 0 1px #f3b53d,0 0 11px #e5a82f55!important}.mounted-device.output-live .device{box-shadow:inset 1px 0 #fff,inset -1px 0 #7778,2px 5px 9px #0006,0 0 0 2px #46c979,0 0 16px #38b86870!important}.mounted-device.phase-conflict .device{animation:powerConflict .7s infinite alternate;box-shadow:0 0 0 2px #eb5146,0 0 18px #eb514699!important}@keyframes powerConflict{to{filter:brightness(1.08)}}.supply-box.power-source-live{box-shadow:inset 0 0 0 1px #0a0e10,0 4px 8px #0005,0 0 0 2px #55c57b,0 0 16px #45bc7055!important}.circuits>div{transition:.18s ease}.circuits>div.load-powered{border-color:#4f9e69!important;box-shadow:inset 0 1px #fff,0 2px 4px #0002,0 0 0 2px #4ac776,0 0 13px #42bd6e66!important}.circuits>div.load-partial{border-color:#c3953d!important;box-shadow:inset 0 1px #fff,0 0 0 2px #dfad4c!important}.circuits>div.load-error{border-color:#bd544b!important;box-shadow:inset 0 1px #fff,0 0 0 2px #e15e54!important}.circuit-power-state{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:5px}.circuit-power-state span{padding:2px;border-radius:2px;background:#8b969133;color:#666;font:bold 5px Arial}.circuit-power-state span.on{background:#2e9c5840;color:#176532}.circuit-power-state span.off{background:#be564b25;color:#8a2f29}.circuit-status-label{margin-top:3px;font:bold 5.5px Arial;color:#717b77}.load-powered .circuit-status-label{color:#207541}.load-error .circuit-status-label{color:#a03931}.load-partial .circuit-status-label{color:#8b661d}.wire-terminal.electrically-live{outline:2px solid #5bce80;outline-offset:1px}.wire-terminal.phase-collision{outline:3px solid #ed5146!important;box-shadow:0 0 12px #ed5146!important}.power-route-hint{position:absolute;right:8px;top:8px;padding:3px 5px;border-radius:3px;background:#173423;border:1px solid #44815a;color:#a9e6bb;font:bold 5px Arial;z-index:17}
+/* v0.6.3 — dioda stanu zamiast tekstu ON / OFF */
+.switch-state-badge{
+  position:absolute!important;
+  left:auto!important;
+  right:7px!important;
+  top:79px!important;
+  transform:none!important;
+  width:9px!important;
+  height:9px!important;
+  min-width:9px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  border:1px solid #17632f!important;
+  background:#42d46f!important;
+  box-shadow:inset 0 1px 1px #ffffff99,0 0 0 2px #1c6a3533,0 0 7px #44da7188!important;
+  font-size:0!important;
+  pointer-events:none!important;
+}
+.switch-state-badge.state-on{
+  border-color:#17632f!important;
+  background:#42d46f!important;
+  box-shadow:inset 0 1px 1px #ffffff99,0 0 0 2px #1c6a3533,0 0 7px #44da7188!important;
+}
+.switch-state-badge.state-off,
+.mounted-device.switch-off .switch-state-badge{
+  border-color:#7e241e!important;
+  background:#ef554a!important;
+  box-shadow:inset 0 1px 1px #ffffff99,0 0 0 2px #852a2433,0 0 7px #ef554a88!important;
+}
