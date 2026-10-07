@@ -135,7 +135,7 @@ function setSwitchVisual(m){
 function decorateSwitches(){
   document.querySelectorAll('.mounted-device').forEach(m=>{
     const code=m.dataset.code;
-    if(!(code==='RCD'||code==='RCBO'||code.startsWith('FR')||/^[BC]\d+$/.test(code)))return;
+    if(!(code==='RCD'||code==='RCBO'||code.startsWith('FR')||/^[BC]\\d+(?:_(?:2P|3P))?$/.test(code)))return;
     if(!m.dataset.switchState)m.dataset.switchState='on';
     setSwitchVisual(m);
     const lever=m.querySelector('.lever');
@@ -155,7 +155,7 @@ function clearVisualStates(){
   document.querySelectorAll('.wire-terminal').forEach(t=>t.classList.remove('electrically-live','phase-collision'));
   document.querySelectorAll('.circuits>div').forEach(c=>c.classList.remove('load-powered','load-partial','load-error'));
 }
-function pathHasProtection(codes){return codes.some(c=>c==='RCBO'||/^[BC]\d+$/.test(c))}
+function pathHasProtection(codes){return codes.some(c=>c==='RCBO'||/^[BC]\\d+(?:_(?:2P|3P))?$/.test(c))}
 function pathHasResidual(codes){return codes.some(c=>['RCD','RCBO'].includes(c))}
 function loadState(load,reaches){
   const lId=`LOAD:${load.id}:L`,nId=`LOAD:${load.id}:N`,peId=`LOAD:${load.id}:PE`;
