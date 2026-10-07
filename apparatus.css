@@ -137,3 +137,34 @@
     linear-gradient(90deg,transparent 24.7%,#aeb3b055 25%,transparent 25.3%,transparent 49.7%,#aeb3b055 50%,transparent 50.3%,transparent 74.7%,#aeb3b055 75%,transparent 75.3%),
     linear-gradient(90deg,#a7aca9 0,#e8eae7 3%,#fff 8%,#f5f6f3 90%,#9ea4a1 100%)!important
 }
+
+/* v0.6.3 — wycentrowana dźwignia z czytelnym 1 / 0 */
+.mount-grid .mounted-device .lever{
+  left:50%!important;
+  top:106px!important;
+  transform:translateX(-50%)!important;
+  overflow:visible!important;
+}
+.mount-grid .mounted-device .lever span{
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  transform:translateX(-50%)!important;
+  color:#202526!important;
+  font:bold 8px Arial!important;
+  line-height:1!important;
+  text-shadow:0 1px #fff!important;
+  z-index:4!important;
+  pointer-events:none!important;
+}
+.mount-grid .mounted-device .lever span:first-child{
+  top:-13px!important;
+  bottom:auto!important;
+}
+.mount-grid .mounted-device .lever span:last-child{
+  top:auto!important;
+  bottom:-13px!important;
+}
+.mount-grid .mounted-device.switch-off .lever{
+  transform:translateX(-50%) translateY(7px)!important;
+}
