@@ -9,11 +9,11 @@
   overflow:visible!important;pointer-events:auto!important
 }
 .din-zone>.bars .nbar{
-  top:-24px!important;
+  top:-42px!important;
   background:linear-gradient(180deg,#147fca,#0c67a8)!important
 }
 .din-zone>.bars .pebar{
-  top:var(--pe-bar-top,231px)!important;
+  top:var(--pe-bar-top,276px)!important;
   background:linear-gradient(180deg,#2a9a47,#1f7938)!important
 }
 .din-zone>.bars .bar>b{
@@ -46,3 +46,8 @@
   .din-zone>.bars .bar .wire-terminal{width:14px!important;height:14px!important;min-width:14px!important}
 }
 .mount-hint{right:0!important}.din-zone>.bars{left:0!important;right:0!important}
+
+/* v0.4.18 — więcej miejsca roboczego wokół szyn N/PE */
+.din-zone>.bars .bar{height:28px!important}
+.din-zone>.bars .nbar{box-shadow:0 3px 8px #0005!important}
+.din-zone>.bars .pebar{box-shadow:0 3px 8px #0005!important}
