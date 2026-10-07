@@ -74,3 +74,32 @@ radial-gradient(circle at 50% 0,#14354d 0,#081722 42%,#02070b 100%)}
   background:#362a06;color:#ffd238;
   font:900 7.5px Arial;letter-spacing:.65px
 }
+
+/* v0.5.4b — WERSJA BETA na górnej krawędzi ramki */
+.auth-card{position:relative!important}
+.auth-beta{display:none!important}
+.auth-beta-edge{
+  position:absolute;
+  top:-8px;
+  right:34px;
+  padding:0 9px;
+  background:#0b2f49;
+  color:#ffd436;
+  font:900 8px Arial;
+  letter-spacing:.9px;
+  line-height:16px;
+  text-transform:uppercase;
+  z-index:3;
+  text-shadow:0 0 8px #ffd43644;
+}
+.auth-beta-edge:before,
+.auth-beta-edge:after{
+  content:'';
+  position:absolute;
+  top:8px;
+  width:7px;
+  height:1px;
+  background:#2d7db0;
+}
+.auth-beta-edge:before{left:-7px}
+.auth-beta-edge:after{right:-7px}
