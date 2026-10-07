@@ -57,7 +57,7 @@ function startTask(task,btn){
   const panelTitle=document.querySelector('.active-task .panel-title');
   if(panelTitle)panelTitle.textContent='AKTYWNE ZADANIE • '+String(task.id).padStart(2,'0')+'/20';
   const version=document.querySelector('.cabinet-head .version');
-  if(version)version.textContent='v0.5.7 • ZADANIE '+String(task.id).padStart(2,'0')+' • '+task.rows+'×18M';
+  if(version)version.textContent='v0.5.8 • ZADANIE '+String(task.id).padStart(2,'0')+' • '+task.rows+'×18M';
 }
 render();
 const first=cards.querySelector('[data-task-id="1"]');
