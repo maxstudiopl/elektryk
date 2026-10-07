@@ -50,8 +50,23 @@ function render(){
     cards.appendChild(btn);
   });
 }
+function applyCircuitLayout(task){
+  const host=document.querySelector('.circuits');if(!host)return;
+  const layout=Number(task.id)<=5?'bottom':'mixed';
+  host.classList.remove('layout-bottom','layout-mixed');
+  host.classList.add('layout-'+layout);
+  [...host.children].forEach((c,i)=>{
+    const exit=layout==='mixed'&&i>=2?'top-right':'bottom';
+    c.dataset.exit=exit;
+  });
+  requestAnimationFrame(()=>{
+    window.ElektrykStage3?.redraw?.();
+    window.ElektrykStage3?.refreshGuidance?.();
+  });
+}
 function startTask(task,btn){
   window.ElektrykStage2.configureTask(task);
+  applyCircuitLayout(task);
   document.dispatchEvent(new CustomEvent('elektryk:task-started',{detail:{task}}));
   cards.querySelectorAll('.task-card').forEach(function(x){x.classList.toggle('selected-task',x===btn)});
   if(modal)modal.hidden=true;
