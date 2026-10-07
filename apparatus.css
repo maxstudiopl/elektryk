@@ -337,3 +337,281 @@
   border-color:#70828a!important;
 }
 .xyz-variant-card small{color:#4d6978!important}
+
+/* v0.7.1 — realistyczny front aparatury XYZ + bez etykiet nad aparatami */
+
+/* usuwamy nazwę/ramkę nad aparatem */
+.mount-grid .mounted-device:before{
+  display:none!important;
+  content:none!important;
+}
+.mount-grid .mounted-device{
+  overflow:visible!important;
+}
+
+/* obudowa jak jedna spójna seria producenta */
+.mount-grid .mounted-device>.device{
+  background:
+    linear-gradient(90deg,#9ea39f 0%,#d8dcd8 3%,#f8f9f6 8%,#ffffff 48%,#f2f3ef 91%,#b6bbb7 97%,#858b87 100%)!important;
+  border:1px solid #5d6461!important;
+  border-radius:2px!important;
+  box-shadow:
+    inset 1px 0 #fff,
+    inset -1px 0 #6f767280,
+    inset 0 1px #ffffffcc,
+    0 3px 6px #0005!important;
+}
+
+/* zamiast dużego kolorowego paska: jasna tabliczka z marką XYZ */
+.brand-strip,
+.brand-strip.dark,
+.brand-strip.red,
+.brand-strip.blue,
+.brand-strip.cyan,
+.brand-strip.orange,
+.brand-strip.green{
+  top:38px!important;
+  left:4px!important;
+  right:4px!important;
+  height:15px!important;
+  padding:0 4px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  background:linear-gradient(#f8f9f6,#e4e7e3)!important;
+  border-top:2px solid #1f95c5!important;
+  border-bottom:1px solid #aeb4b0!important;
+  color:#22292b!important;
+  font:bold 6px Arial!important;
+  letter-spacing:.55px!important;
+  text-shadow:none!important;
+}
+
+/* subtelna linia serii producenta */
+.mount-grid .mounted-device>.device:before{
+  content:''!important;
+  display:block!important;
+  position:absolute!important;
+  left:4px!important;
+  right:4px!important;
+  top:56px!important;
+  height:2px!important;
+  background:#2aa6d5!important;
+  border:0!important;
+  opacity:.95!important;
+}
+
+/* czytelne nadruki techniczne */
+.device-type{
+  margin-top:20px!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:-.15px!important;
+  color:#111718!important;
+}
+.device-rating{
+  margin-top:3px!important;
+  font-size:10px!important;
+  font-weight:800!important;
+  color:#202729!important;
+}
+.device-meta{
+  margin-top:3px!important;
+  font-size:5.2px!important;
+  font-weight:700!important;
+  color:#596164!important;
+  letter-spacing:.04px!important;
+}
+.device-function{
+  left:4px!important;
+  right:4px!important;
+  bottom:34px!important;
+  padding:3px 2px!important;
+  background:#f2f3ef!important;
+  border-top:1px solid #c2c8c3!important;
+  border-bottom:1px solid #c2c8c3!important;
+  color:#465053!important;
+  font:bold 4.7px Arial!important;
+  letter-spacing:.12px!important;
+}
+
+/* front MCB */
+.device[data-kind="mcb"]:after{
+  content:'XYZ  •  IEC 60898-1'!important;
+  position:absolute!important;
+  left:5px!important;
+  right:5px!important;
+  top:61px!important;
+  text-align:center!important;
+  color:#667073!important;
+  font:bold 4px Arial!important;
+  letter-spacing:.06px!important;
+}
+.device[data-kind="mcb"] .device-type{
+  margin-top:22px!important;
+  font-size:16px!important;
+}
+
+/* dźwignie jak realna jedna seria */
+.mount-grid .mounted-device .lever{
+  left:50%!important;
+  top:105px!important;
+  height:35px!important;
+  transform:translateX(-50%)!important;
+  border:1px solid #0d1010!important;
+  border-radius:2px!important;
+  box-shadow:
+    inset 0 3px 2px #ffffff2d,
+    inset 0 -4px 4px #0008,
+    0 2px 3px #0005!important;
+}
+.device[data-kind="mcb"] .lever{
+  background:linear-gradient(90deg,#111414 0%,#303533 18%,#626865 46%,#202423 54%,#454a47 82%,#101313 100%)!important;
+}
+.device-fr .lever{
+  background:linear-gradient(#e55349 0%,#be332c 44%,#7e1713 52%,#ce3d34 59%,#8b1915 100%)!important;
+}
+.device-rcd .lever{
+  background:linear-gradient(#2f98d0 0%,#1679af 45%,#0b4f7b 53%,#2187bd 61%,#0b4568 100%)!important;
+}
+.device-rcbo .lever{
+  background:linear-gradient(90deg,#1c2224 0%,#42494a 45%,#1679af 48%,#0b4f7b 55%,#252b2c 58%,#111515 100%)!important;
+}
+
+/* oznaczenia 1 / 0 bliżej dźwigni i bez przesunięć */
+.mount-grid .mounted-device .lever span{
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  transform:translateX(-50%)!important;
+  color:#23292a!important;
+  font:bold 7px Arial!important;
+  line-height:1!important;
+  text-shadow:0 1px #fff!important;
+  pointer-events:none!important;
+}
+.mount-grid .mounted-device .lever span:first-child{
+  top:-11px!important;
+  bottom:auto!important;
+}
+.mount-grid .mounted-device .lever span:last-child{
+  top:auto!important;
+  bottom:-11px!important;
+}
+
+/* zaciski śrubowe — bardziej techniczne */
+.device-topterm,
+.device-bottomterm{
+  background:linear-gradient(#f4f5f2,#d3d7d3 50%,#a8aeaa)!important;
+  border:1px solid #747c78!important;
+  box-shadow:inset 0 2px #fff,inset 0 -2px #69716d55!important;
+}
+.device-topterm .wire-terminal,
+.device-bottomterm .wire-terminal{
+  border-radius:50%!important;
+  background:
+    radial-gradient(circle at 44% 38%,#f7f8f5 0 15%,#7d8581 17% 29%,#d6dad6 31% 50%,#59615e 53% 68%,#252a29 71% 100%)!important;
+  border:1px solid #555d59!important;
+  box-shadow:inset 0 0 0 1px #c4c9c5,0 1px 2px #0006!important;
+}
+.device-topterm .wire-terminal:before,
+.device-bottomterm .wire-terminal:before{
+  content:''!important;
+  width:7px!important;
+  height:2px!important;
+  border-radius:1px!important;
+  background:#343a38!important;
+  box-shadow:0 1px #ffffff44!important;
+}
+
+/* RCD / RCBO */
+.device-rcd .brand-strip,
+.device-rcbo .brand-strip{
+  border-top-color:#268fce!important;
+}
+.device-rcd .device-function,
+.device-rcbo .device-function{
+  background:#edf6fb!important;
+  color:#175f82!important;
+  border-color:#b3d2e1!important;
+}
+.device-rcd .test-btn,
+.device-rcbo .test-btn{
+  top:80px!important;
+  right:7px!important;
+  width:17px!important;
+  height:17px!important;
+  border-radius:2px!important;
+  background:#e9ece8!important;
+  border:1px solid #69716e!important;
+  color:#183f50!important;
+  font:bold 8px Arial!important;
+  box-shadow:inset 0 1px #fff,0 1px 2px #0004!important;
+}
+.device-rcbo .test-btn.yellow{
+  background:#e6b63b!important;
+  color:#4c3705!important;
+}
+
+/* FR */
+.device-fr .brand-strip{
+  border-top-color:#d14d43!important;
+}
+.device-fr .device-function{
+  background:#fff1ef!important;
+  color:#7f241d!important;
+  border-color:#dfb1ac!important;
+}
+
+/* SPD */
+.device-spd .brand-strip{
+  border-top-color:#e59c32!important;
+}
+.device-spd .device-function{
+  background:#fff5e9!important;
+  color:#89511c!important;
+  border-color:#dfc4a5!important;
+}
+.device-spd .spd-window{
+  top:103px!important;
+  width:27px!important;
+  height:21px!important;
+  border:1px solid #606866!important;
+  border-radius:2px!important;
+  background:linear-gradient(#38a357 0 67%,#d7dbd7 68% 100%)!important;
+  box-shadow:inset 0 1px #ffffff66,0 1px 2px #0004!important;
+}
+.device-spd .spd-window span{
+  line-height:17px!important;
+  color:#0e572a!important;
+  font:bold 5px Arial!important;
+}
+
+/* pozycja diody stanu bardziej naturalna */
+.switch-state-badge{
+  top:76px!important;
+  right:7px!important;
+  width:8px!important;
+  height:8px!important;
+  min-width:8px!important;
+}
+
+/* miniatury katalogu też spójne z XYZ */
+.mini-device:before,
+.detail-device:before{
+  content:'XYZ'!important;
+  background:linear-gradient(#f7f8f5,#e3e6e2)!important;
+  color:#22292b!important;
+  border-top:2px solid #1f95c5!important;
+  border-bottom:1px solid #aeb4b0!important;
+}
+.mini-device i{
+  background:linear-gradient(90deg,#141717,#4c5250 45%,#171a1a 55%,#2e3331)!important;
+}
+.mini-fr i{
+  background:linear-gradient(#d84c43,#8f1d18)!important;
+}
+.mini-rcd i{
+  background:linear-gradient(#2d96cd,#0b527c)!important;
+}
