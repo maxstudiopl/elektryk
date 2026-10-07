@@ -52,6 +52,7 @@ function render(){
 }
 function startTask(task,btn){
   window.ElektrykStage2.configureTask(task);
+  document.dispatchEvent(new CustomEvent('elektryk:task-started',{detail:{task}}));
   cards.querySelectorAll('.task-card').forEach(function(x){x.classList.toggle('selected-task',x===btn)});
   if(modal)modal.hidden=true;
   const panelTitle=document.querySelector('.active-task .panel-title');
