@@ -193,3 +193,19 @@
   width:7px!important;
   height:7px!important;
 }
+
+/* v0.6.2 — dokładne położenie pięciu gniazd WLZ */
+.supply-terminals span.wire-terminal{
+  width:28px!important;
+  height:28px!important;
+  min-width:28px!important;
+  max-width:28px!important;
+  margin:0!important;
+  justify-self:center!important;
+}
+.supply-terminals span.wire-terminal.guide-compatible,
+.supply-terminals span.wire-terminal.guide-target,
+.supply-terminals span.wire-terminal.guide-source,
+.supply-terminals span.wire-terminal.used-terminal{
+  transform:none!important;
+}
