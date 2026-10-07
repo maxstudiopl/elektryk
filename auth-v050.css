@@ -103,3 +103,18 @@ radial-gradient(circle at 50% 0,#14354d 0,#081722 42%,#02070b 100%)}
 }
 .auth-beta-edge:before{left:-7px}
 .auth-beta-edge:after{right:-7px}
+
+/* v0.5.5 — uproszczona i lepiej dopasowana etykieta BETA */
+.auth-beta-edge{
+  top:-22px!important;
+  right:18px!important;
+  padding:0!important;
+  background:transparent!important;
+  color:#ffd436!important;
+  font:900 8px Arial!important;
+  letter-spacing:1.1px!important;
+  line-height:14px!important;
+  text-shadow:0 0 6px #ffd43633!important;
+}
+.auth-beta-edge:before,
+.auth-beta-edge:after{display:none!important}
