@@ -158,8 +158,26 @@ function rowBounds(el){
   return{
     top:r.top-c.top-cabinet.clientTop,
     bottom:r.bottom-c.top-cabinet.clientTop,
-    center:(r.top+r.bottom)/2-c.top-cabinet.clientTop
+    center:(r.top+r.bottom)/2-c.top-cabinet.clientTop,
+    index:Number(row.dataset.row||0)
   };
+}
+function ductCenter(which,lane=0){
+  const duct=document.querySelector(which==='top'?'.top-duct':'.bottom-duct');
+  if(!duct)return null;
+  const r=duct.getBoundingClientRect(),c=cabinet.getBoundingClientRect();
+  const center=r.top+r.height/2-c.top-cabinet.clientTop;
+  return center+Math.max(-9,Math.min(9,lane));
+}
+function barKind(el){
+  if(el.closest?.('.nbar'))return 'N';
+  if(el.closest?.('.pebar'))return 'PE';
+  return el.dataset.role==='N'?'N':el.dataset.role==='PE'?'PE':'';
+}
+function routeThroughChannel(A,B,EA,EB,which,lane){
+  const y=ductCenter(which,lane);
+  if(y==null)return null;
+  return roundedPath([A,EA,{x:EA.x,y},{x:EB.x,y},EB,B],8);
 }
 function dedupePoints(points){
   const out=[];
@@ -219,42 +237,41 @@ function smartRoute(A,B,a,b,type,connection,index){
   const EA=escape(A,routeAz,aRow,'a'),EB=escape(B,routeBz,bRow,'b');
   points.push(EA);
 
-  // WLZ -> aparat/listwa: wspólny górny korytarz.
+  // WLZ -> aparat/listwa: zawsze przez górny kanał przewodowy.
   if(az==='supply'||bz==='supply'){
-    const supplyFirst=az==='supply';
-    const S=supplyFirst?EA:EB,T=supplyFirst?EB:EA;
-    const targetRow=supplyFirst?bRow:aRow;
-    const corridor=Math.max(150,(targetRow?.top??190)-28+lane);
-    const route=[S,{x:S.x,y:corridor},{x:T.x,y:corridor},T];
-    if(supplyFirst){points.splice(1,points.length-1,...route.slice(0,-1));points.push(B)}
-    else{
-      const rev=[...route].reverse();
-      points.splice(1,points.length-1,...rev.slice(0,-1));points.push(B);
-    }
-    return roundedPath(points,8);
+    const via=routeThroughChannel(A,B,EA,EB,'top',lane);
+    if(via)return via;
   }
 
-  // Wyjścia do odbiorników: korytarz pod ostatnim rzędem DIN.
+  // Połączenia do listew N / PE nigdy nie idą "za listwą":
+  // N korzysta z górnego kanału, PE z dolnego kanału.
+  if(az==='bar'||bz==='bar'){
+    const barEl=az==='bar'?a:b;
+    const kind=barKind(barEl);
+    const via=routeThroughChannel(A,B,EA,EB,kind==='PE'?'bottom':'top',lane);
+    if(via)return via;
+  }
+
+  // Wyjścia do odbiorników: przez fizyczny kanał górny lub dolny.
   if(az==='load'||bz==='load'){
-    const loadFirst=az==='load';
-    const L=loadFirst?EA:EB,T=loadFirst?EB:EA;
-    const row=loadFirst?bRow:aRow;
-    const exit=loadFirst?aExit:bExit;
-    const corridor=exit==='top-right'
-      ?(row?.top??190)-30+lane
-      :(row?.bottom??(Math.min(A.y,B.y)-35))+30+lane;
-    const route=[L,{x:L.x,y:corridor},{x:T.x,y:corridor},T];
-    if(loadFirst){points.splice(1,points.length-1,...route.slice(0,-1));points.push(B)}
-    else{
-      const rev=[...route].reverse();
-      points.splice(1,points.length-1,...rev.slice(0,-1));points.push(B);
-    }
-    return roundedPath(points,8);
+    const exit=az==='load'?aExit:bExit;
+    const via=routeThroughChannel(A,B,EA,EB,exit==='top-right'?'top':'bottom',lane);
+    if(via)return via;
   }
 
-  // Ten sam rząd: zaciski górne idą nad aparaturą, dolne pod aparaturą.
+  // Ten sam rząd: skrajne rzędy korzystają z prawdziwych kanałów.
+  // Dzięki temu przewód nie przechodzi pod listwą N/PE.
   if(aRow&&bRow&&Math.abs(aRow.center-bRow.center)<5){
     const useTop=(aTop&&bTop)||(!aBottom&&!bBottom&&A.y<=aRow.center&&B.y<=bRow.center);
+    const rows=window.ElektrykStage2?.getRows?.()||1;
+    if(useTop&&aRow.index===0){
+      const via=routeThroughChannel(A,B,EA,EB,'top',lane);
+      if(via)return via;
+    }
+    if(!useTop&&aRow.index===rows-1){
+      const via=routeThroughChannel(A,B,EA,EB,'bottom',lane);
+      if(via)return via;
+    }
     const corridor=useTop?aRow.top-22+lane:aRow.bottom-22+lane;
     points.push({x:EA.x,y:corridor},{x:EB.x,y:corridor},EB,B);
     return roundedPath(points,8);
