@@ -305,3 +305,66 @@
 .circuit-node .circuit-status-label{display:none!important}
 .circuit-node.load-powered .circuit-sheath{box-shadow:0 0 0 2px #47c674,0 0 12px #47c67488!important}
 .circuit-node.load-error .circuit-sheath{box-shadow:0 0 0 2px #e2574d,0 0 12px #e2574d77!important}
+
+/* v0.6.4 — realistyczniejsze wyjścia obwodów bez dużych ramek */
+.circuits>div.circuit-node{
+  width:88px!important;height:88px!important;
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  outline:0!important;
+}
+.circuit-node>b{
+  left:2px!important;right:2px!important;top:0!important;
+  padding:2px 3px!important;
+  border:1px solid #7d8788!important;border-radius:3px!important;
+  background:linear-gradient(#e7e9e6,#c8cdca)!important;
+  color:#283235!important;
+  box-shadow:0 1px 2px #0003!important;
+  font:bold 6.5px Arial!important;
+}
+.circuit-node>small{
+  top:15px!important;font-size:5px!important;color:#667174!important;
+}
+.circuit-cable-visual{
+  left:8px!important;right:8px!important;top:29px!important;height:59px!important;
+}
+.circuit-sheath{
+  left:50%!important;bottom:0!important;
+  width:17px!important;height:31px!important;
+  border-radius:8px 8px 3px 3px!important;
+  background:linear-gradient(90deg,#050708,#2d3437 42%,#111619 65%,#050708)!important;
+  border:1px solid #50595d!important;
+  box-shadow:inset 0 1px 1px #ffffff18,0 2px 4px #0007!important;
+}
+.circuit-core{
+  bottom:25px!important;top:auto!important;
+  width:4px!important;height:28px!important;
+  transform-origin:50% 100%!important;
+  border-radius:3px!important;
+  box-shadow:0 1px 1px #0006!important;
+}
+.circuit-core.core-l{left:29px!important;transform:rotate(-22deg)!important;background:#8b4a17!important}
+.circuit-core.core-n{left:34px!important;transform:none!important;background:#0989d8!important}
+.circuit-core.core-pe{left:39px!important;transform:rotate(22deg)!important;background:linear-gradient(#e8df27 0 50%,#54a13b 50% 100%)!important}
+.circuit-terminals{
+  left:9px!important;right:9px!important;top:25px!important;
+  display:grid!important;grid-template-columns:repeat(3,16px)!important;
+  justify-content:center!important;gap:7px!important;
+}
+.circuit-terminals .wire-terminal{
+  width:16px!important;height:16px!important;min-width:16px!important;max-width:16px!important;
+  font-size:5.5px!important;
+}
+.circuit-node[data-exit="top-right"] .circuit-cable-visual{
+  top:0!important;height:59px!important;transform:rotate(180deg)!important;
+}
+.circuit-node[data-exit="top-right"] .circuit-terminals{top:48px!important}
+.circuit-node[data-exit="top-right"]>b{top:68px!important}
+.circuit-node[data-exit="top-right"]>small{top:82px!important}
+.circuits.layout-bottom .circuit-node:nth-child(1){left:6%!important;bottom:3px!important}
+.circuits.layout-bottom .circuit-node:nth-child(2){left:31%!important;bottom:3px!important}
+.circuits.layout-bottom .circuit-node:nth-child(3){left:56%!important;bottom:3px!important}
+.circuits.layout-bottom .circuit-node:nth-child(4){left:81%!important;bottom:3px!important}
+.circuits.layout-mixed .circuit-node:nth-child(1){left:10%!important;bottom:3px!important}
+.circuits.layout-mixed .circuit-node:nth-child(2){left:38%!important;bottom:3px!important}
+.circuits.layout-mixed .circuit-node:nth-child(3){right:102px!important;top:5px!important}
+.circuits.layout-mixed .circuit-node:nth-child(4){right:8px!important;top:5px!important}
