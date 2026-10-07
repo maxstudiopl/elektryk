@@ -68,7 +68,7 @@ function apparatusHtml(p){
     <div class="device-topterm">${p.top}</div><div class="brand-strip ${p.brandClass}">${p.brand}</div>
     <div class="device-type">${p.type}</div><div class="device-rating">${p.rating}</div><div class="device-meta">${p.meta}</div><div class="device-function">${p.fn}</div>
     ${p.test?`<div class="test-btn ${p.testClass||''}">${p.test}</div>`:''}
-    ${p.spd?'<div class="spd-window"><span>OK</span></div>':p.compact?'<div class="terminal-strip-visual compact"><span></span><span></span><span></span><span></span><span></span><span></span></div>':p.passive?'<div class="terminal-strip-visual"><span></span><span></span><span></span><span></span></div>':'<div class="lever '+(p.kind==='fr'?'redlever':'')+'"><span>I</span><span>O</span></div>'}
+    ${p.spd?'<div class="spd-window"><span>OK</span></div>':p.compact?'<div class="terminal-strip-visual compact"><span></span><span></span><span></span><span></span><span></span><span></span></div>':p.passive?'<div class="terminal-strip-visual"><span></span><span></span><span></span><span></span></div>':'<div class="lever '+(p.kind==='fr'?'redlever':'')+'"><span>1</span><span>0</span></div>'}
     <div class="device-bottomterm">${p.bottom}</div>
   </article>`;
 }
