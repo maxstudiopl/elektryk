@@ -16,7 +16,7 @@ prepareBar(pebar,'PE','LISTWA OCHRONNA');
 function sync(){
   const rows=window.ElektrykStage2?.getRows?.()||Number(document.querySelector('.cabinet-inner')?.dataset.rows)||1;
   const count=rows===1?12:rows===2?18:24;
-  const peTop=rows*223;
+  const peTop=rows*252+26;
   zone.style.setProperty('--pe-bar-top',peTop+'px');
   zone.style.setProperty('--bar-count',String(count));
   [nbar,pebar].forEach(bar=>{
