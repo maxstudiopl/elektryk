@@ -59,25 +59,127 @@ function terminalCenter(el){
     y:r.top+r.height/2-c.top-cabinet.clientTop
   };
 }
-function shortestRoute(A,B,a,b,type){
-  const dx=Math.abs(B.x-A.x),dy=Math.abs(B.y-A.y);
-  if(dx<2)return `M ${A.x} ${A.y} L ${B.x} ${B.y}`;
-  if(dy<2)return `M ${A.x} ${A.y} L ${B.x} ${B.y}`;
+function laneOffset(connection,index){
+  const n=parseInt(String(connection?.id||'W0').replace(/\D/g,''),10)||index||0;
+  const lanes=[-12,-8,-4,0,4,8,12];
+  return lanes[n%lanes.length];
+}
+function rowBounds(el){
+  const row=el.closest?.('.din-row');
+  if(!row)return null;
+  const r=row.getBoundingClientRect(),c=cabinet.getBoundingClientRect();
+  return{
+    top:r.top-c.top-cabinet.clientTop,
+    bottom:r.bottom-c.top-cabinet.clientTop,
+    center:(r.top+r.bottom)/2-c.top-cabinet.clientTop
+  };
+}
+function dedupePoints(points){
+  const out=[];
+  points.forEach(p=>{
+    const last=out[out.length-1];
+    if(!last||Math.abs(last.x-p.x)>.5||Math.abs(last.y-p.y)>.5)out.push(p);
+  });
+  let changed=true;
+  while(changed&&out.length>2){
+    changed=false;
+    for(let i=1;i<out.length-1;i++){
+      const a=out[i-1],b=out[i],c=out[i+1];
+      if((Math.abs(a.x-b.x)<.5&&Math.abs(b.x-c.x)<.5)||(Math.abs(a.y-b.y)<.5&&Math.abs(b.y-c.y)<.5)){
+        out.splice(i,1);changed=true;break;
+      }
+    }
+  }
+  return out;
+}
+function roundedPath(points,radius=7){
+  const pts=dedupePoints(points);
+  if(pts.length<2)return '';
+  let d=`M ${pts[0].x} ${pts[0].y}`;
+  for(let i=1;i<pts.length-1;i++){
+    const p0=pts[i-1],p=pts[i],p1=pts[i+1];
+    const d0=Math.hypot(p.x-p0.x,p.y-p0.y);
+    const d1=Math.hypot(p1.x-p.x,p1.y-p.y);
+    const r=Math.min(radius,d0/2,d1/2);
+    const a={x:p.x+(p0.x-p.x)*(r/d0),y:p.y+(p0.y-p.y)*(r/d0)};
+    const b={x:p.x+(p1.x-p.x)*(r/d1),y:p.y+(p1.y-p.y)*(r/d1)};
+    d+=` L ${a.x} ${a.y} Q ${p.x} ${p.y} ${b.x} ${b.y}`;
+  }
+  const last=pts[pts.length-1];
+  return d+` L ${last.x} ${last.y}`;
+}
+function smartRoute(A,B,a,b,type,connection,index){
   const az=a.dataset.zone||'',bz=b.dataset.zone||'';
+  const lane=laneOffset(connection,index);
+  const aRow=rowBounds(a),bRow=rowBounds(b);
+  const aTop=az==='top',aBottom=az==='bottom',bTop=bz==='top',bBottom=bz==='bottom';
+  const points=[A];
 
-  // PE z WLZ do listwy PE: trasa górą, potem pionowo przy listwie.
-  // Długość Manhattan pozostaje najkrótsza (dx + dy), zmienia się tylko kolejność odcinków.
-  if(type==='PE' && ((az==='supply'&&bz==='bar')||(az==='bar'&&bz==='supply'))){
-    if(az==='supply')return `M ${A.x} ${A.y} L ${B.x} ${A.y} L ${B.x} ${B.y}`;
-    return `M ${A.x} ${A.y} L ${A.x} ${B.y} L ${B.x} ${B.y}`;
+  // Bezpośrednie pionowe wyjście z zacisku — przewód nie skręca przy samej śrubie.
+  const escape=(P,zone,row,side)=>{
+    if(zone==='top')return {x:P.x,y:P.y-18};
+    if(zone==='bottom')return {x:P.x,y:P.y+18};
+    if(zone==='supply')return {x:P.x,y:P.y+22};
+    if(zone==='load')return {x:P.x,y:P.y-22};
+    if(zone==='bar')return {x:P.x,y:P.y+(side==='a'?-12:12)};
+    return {x:P.x,y:P.y};
+  };
+  const EA=escape(A,az,aRow,'a'),EB=escape(B,bz,bRow,'b');
+  points.push(EA);
+
+  // WLZ -> aparat/listwa: wspólny górny korytarz.
+  if(az==='supply'||bz==='supply'){
+    const supplyFirst=az==='supply';
+    const S=supplyFirst?EA:EB,T=supplyFirst?EB:EA;
+    const targetRow=supplyFirst?bRow:aRow;
+    const corridor=Math.max(150,(targetRow?.top??190)-28+lane);
+    const route=[S,{x:S.x,y:corridor},{x:T.x,y:corridor},T];
+    if(supplyFirst){points.splice(1,points.length-1,...route.slice(0,-1));points.push(B)}
+    else{
+      const rev=[...route].reverse();
+      points.splice(1,points.length-1,...rev.slice(0,-1));points.push(B);
+    }
+    return roundedPath(points,8);
   }
 
-  const aVertical=az==='top'||az==='bottom'||az==='supply';
-  const bVertical=bz==='top'||bz==='bottom'||bz==='load';
-  if(aVertical&&!bVertical)return `M ${A.x} ${A.y} L ${A.x} ${B.y} L ${B.x} ${B.y}`;
-  if(!aVertical&&bVertical)return `M ${A.x} ${A.y} L ${B.x} ${A.y} L ${B.x} ${B.y}`;
-  if(dx>=dy)return `M ${A.x} ${A.y} L ${B.x} ${A.y} L ${B.x} ${B.y}`;
-  return `M ${A.x} ${A.y} L ${A.x} ${B.y} L ${B.x} ${B.y}`;
+  // Wyjścia do odbiorników: korytarz pod ostatnim rzędem DIN.
+  if(az==='load'||bz==='load'){
+    const loadFirst=az==='load';
+    const L=loadFirst?EA:EB,T=loadFirst?EB:EA;
+    const row=loadFirst?bRow:aRow;
+    const corridor=(row?.bottom??(Math.min(A.y,B.y)-35))+30+lane;
+    const route=[L,{x:L.x,y:corridor},{x:T.x,y:corridor},T];
+    if(loadFirst){points.splice(1,points.length-1,...route.slice(0,-1));points.push(B)}
+    else{
+      const rev=[...route].reverse();
+      points.splice(1,points.length-1,...rev.slice(0,-1));points.push(B);
+    }
+    return roundedPath(points,8);
+  }
+
+  // Ten sam rząd: zaciski górne idą nad aparaturą, dolne pod aparaturą.
+  if(aRow&&bRow&&Math.abs(aRow.center-bRow.center)<5){
+    const useTop=(aTop&&bTop)||(!aBottom&&!bBottom&&A.y<=aRow.center&&B.y<=bRow.center);
+    const corridor=useTop?aRow.top-22+lane:aRow.bottom-22+lane;
+    points.push({x:EA.x,y:corridor},{x:EB.x,y:corridor},EB,B);
+    return roundedPath(points,8);
+  }
+
+  // Różne rzędy DIN: przewód wykorzystuje wolną strefę pomiędzy rzędami.
+  if(aRow&&bRow){
+    const upper=aRow.center<bRow.center?aRow:bRow;
+    const lower=aRow.center<bRow.center?bRow:aRow;
+    const corridor=(upper.bottom+lower.top)/2+lane;
+    points.push({x:EA.x,y:corridor},{x:EB.x,y:corridor},EB,B);
+    return roundedPath(points,8);
+  }
+
+  // Listwy N/PE i pozostałe punkty: ortogonalnie, ale z odsunięciem torów.
+  const dx=Math.abs(B.x-A.x),dy=Math.abs(B.y-A.y);
+  if(dx<2||dy<2)return roundedPath([A,B],8);
+  const midY=(A.y+B.y)/2+lane;
+  points.push({x:EA.x,y:midY},{x:EB.x,y:midY},EB,B);
+  return roundedPath(points,8);
 }
 function addPath(d,type,cls){const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);p.setAttribute('class',cls);p.dataset.wire=type;if(cls==='wire-path')p.setAttribute('stroke',COLORS[type]||'#d06a25');svg.appendChild(p)}
 function addFerrule(P,Q,type){
@@ -96,7 +198,7 @@ function draw(){
   connections.forEach(c=>{
     const a=document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`),b=document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`);
     if(!a||!b)return;
-    const A=terminalCenter(a),B=terminalCenter(b),d=shortestRoute(A,B,a,b,c.type);
+    const A=terminalCenter(a),B=terminalCenter(b),d=smartRoute(A,B,a,b,c.type,c,connections.indexOf(c));
     addPath(d,c.type,'wire-shadow');addPath(d,c.type,'wire-path');
     addFerrule(A,B,c.type);addFerrule(B,A,c.type);
   })
