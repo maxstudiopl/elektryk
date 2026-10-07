@@ -185,3 +185,41 @@
   margin:0!important;
   padding:0!important;
 }
+
+/* v0.6.4 — finalna geometria WLZ: wszystko wewnątrz jednej obudowy */
+.supply-box{
+  left:18px!important;top:16px!important;
+  width:372px!important;height:88px!important;min-height:88px!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+  background:linear-gradient(180deg,#263238 0%,#151e22 100%)!important;
+  border:2px solid #637177!important;border-radius:5px!important;
+}
+.supply-title{
+  position:absolute!important;left:58px!important;top:13px!important;
+  width:88px!important;margin:0!important;
+  font-size:17px!important;line-height:1!important;letter-spacing:.5px!important;
+}
+.supply-sub{
+  position:absolute!important;left:58px!important;top:34px!important;
+  width:92px!important;margin:0!important;
+  font-size:6.8px!important;line-height:1.2!important;letter-spacing:.2px!important;
+}
+.supply-terminal-labels{
+  position:absolute!important;left:158px!important;top:13px!important;
+  width:190px!important;height:12px!important;margin:0!important;
+  display:grid!important;grid-template-columns:repeat(5,28px)!important;
+  column-gap:12px!important;justify-content:start!important;
+  color:#eef7fa!important;font:bold 8px Arial!important;text-align:center!important;
+}
+.supply-terminals{
+  position:absolute!important;left:158px!important;top:32px!important;
+  width:190px!important;height:34px!important;margin:0!important;padding:0!important;
+  display:grid!important;grid-template-columns:repeat(5,28px)!important;
+  column-gap:12px!important;justify-content:start!important;align-items:center!important;
+}
+.supply-cable{
+  left:15px!important;top:-22px!important;width:26px!important;height:57px!important;
+}
+.supply-cable i{bottom:-21px!important;height:29px!important}
