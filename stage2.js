@@ -141,7 +141,7 @@ function mount(row,start){
   const id='M'+seq++;
   for(let i=start;i<start+p.modules;i++){occupied[row][i]=id;grid.children[i].classList.add('occupied')}
   const wrap=document.createElement('div');
-  wrap.className='mounted-device';wrap.dataset.mountId=id;wrap.dataset.code=p.code;wrap.dataset.row=row;
+  wrap.className='mounted-device';wrap.dataset.mountId=id;wrap.dataset.code=p.code;wrap.dataset.row=row;wrap.dataset.modules=String(p.modules);wrap.dataset.deviceLabel=p.name;
   wrap.style.left=`${start/MODULES_PER_ROW*100}%`;wrap.style.width=`${p.modules/MODULES_PER_ROW*100}%`;
   wrap.innerHTML=`<button class="remove-device" title="Usuń aparat">×</button>${apparatusHtml(p)}`;
   grid.appendChild(wrap);
