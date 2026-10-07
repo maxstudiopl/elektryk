@@ -91,7 +91,13 @@ function highlightEligible(){
   document.querySelectorAll('.wire-terminal').forEach(t=>t.classList.toggle('bridge-eligible',(bridgeMode||combMode)&&eligible(t)&&roleMatchesConductor(t.dataset.role,type)));
 }
 function clearStart(){if(start?.el)start.el.classList.remove('bridge-start');start=null}
-function center(el){const r=el.getBoundingClientRect(),c=cabinet.getBoundingClientRect();return{x:r.left+r.width/2-c.left,y:r.top+r.height/2-c.top}}
+function center(el){
+  const r=el.getBoundingClientRect(),c=cabinet.getBoundingClientRect();
+  return{
+    x:r.left+r.width/2-c.left-cabinet.clientLeft,
+    y:r.top+r.height/2-c.top-cabinet.clientTop
+  };
+}
 function addPath(d,phase,cls,id,groupId){
   const p=document.createElementNS('http://www.w3.org/2000/svg','path');
   p.setAttribute('d',d);p.setAttribute('class',cls);p.dataset.phase=phase;p.dataset.bridgeId=id;
@@ -139,7 +145,7 @@ function redraw(){
     }
     gi++;
   });
-  updateStat();highlightEligible();
+  updateStat();highlightEligible();window.ElektrykStage3?.refreshTerminals?.();
 }
 function addBadge(x,y,phase,label,onRemove,isComb=false,isFeed=false){
   const badge=document.createElement('button');badge.className='bridge-badge'+(isComb?' comb-badge':'')+(isFeed?' feed-badge':'');
