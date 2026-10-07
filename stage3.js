@@ -13,7 +13,14 @@ const statusEl=document.getElementById('wiringStatus'),modeLabel=document.getEle
 const footerStats=document.querySelectorAll('.workspace-footer b'),connectionStat=footerStats[1]||null;
 function status(text,state=''){if(!statusEl)return;statusEl.className='wiring-status'+(state?' '+state:'');statusEl.innerHTML=text}
 function updateCounters(){if(connectionStat)connectionStat.textContent=connections.length;const p=document.querySelector('#wiringProgress span');if(p)p.textContent=`${connections.length} połączeń • ${wiringErrors} bł.`}
-function setWire(type){selectedWire=type;document.querySelectorAll('.wire').forEach(w=>w.classList.toggle('active',w.textContent.trim().toUpperCase()===type));if(modeLabel)modeLabel.textContent='Wybrano '+type;cancelStart();status(`<b>${type}:</b> kliknij pierwszy zacisk.`)}
+function setWire(type){
+  selectedWire=type;
+  document.querySelectorAll('.wire').forEach(w=>w.classList.toggle('active',w.textContent.trim().toUpperCase()===type));
+  if(modeLabel)modeLabel.textContent='Wybrano '+type;
+  cancelStart(false);
+  refreshGuidance();
+  status(`<b>${type}:</b> podświetlone są wolne zaciski pasujące do tej żyły.`);
+}
 document.querySelectorAll('.wire').forEach(w=>w.addEventListener('click',()=>setWire(w.textContent.trim().toUpperCase())));setWire('L1');
 
 function roleAccepts(role,type){if(role==='L')return ['L1','L2','L3'].includes(type);if(role==='L1'||role==='L2'||role==='L3')return role===type;if(role==='N')return type==='N';if(role==='PE')return type==='PE';return true}
@@ -21,9 +28,40 @@ function wireAtEndpoint(id){return connections.find(c=>c.a===id||c.b===id)||null
 function bridgeAtEndpoint(id){return window.ElektrykBridges?.getBridges?.().find(b=>b.a===id||b.b===id)||null}
 function endpointUsed(id){return !!wireAtEndpoint(id)}
 function markBad(el,msg){wiringErrors++;el.classList.add('bad-terminal');setTimeout(()=>el.classList.remove('bad-terminal'),650);status('<b>BŁĄD:</b> '+msg,'error');updateCounters()}
-function cancelStart(){if(startTerminal?.el)startTerminal.el.classList.remove('start-terminal');startTerminal=null}
+function clearGuidance(){
+  document.querySelectorAll('.wire-terminal').forEach(t=>{
+    t.classList.remove('guide-compatible','guide-target','guide-dim','guide-source');
+  });
+}
+function isWireFree(el){return !endpointUsed(el.dataset.terminal)}
+function refreshGuidance(){
+  clearGuidance();
+  document.querySelectorAll('.wire-terminal').forEach(t=>{
+    const compatible=roleAccepts(t.dataset.role,selectedWire);
+    const free=isWireFree(t);
+    if(startTerminal){
+      if(t===startTerminal.el){t.classList.add('guide-source');return}
+      if(compatible&&free)t.classList.add('guide-target');
+      else t.classList.add('guide-dim');
+    }else{
+      if(compatible&&free)t.classList.add('guide-compatible');
+      else if(!t.classList.contains('used-terminal'))t.classList.add('guide-dim');
+    }
+  });
+}
+function cancelStart(refresh=true){
+  if(startTerminal?.el)startTerminal.el.classList.remove('start-terminal');
+  startTerminal=null;
+  if(refresh)refreshGuidance();
+}
 function bindTerminal(el){if(el.dataset.wireBound)return;el.dataset.wireBound='1';el.addEventListener('click',e=>{e.stopPropagation();connectClick(el)})}
-function wireTerminal(label,role,id,zone){const b=document.createElement('button');b.type='button';b.className='wire-terminal';b.textContent=label;b.dataset.role=role;b.dataset.terminal=id;b.dataset.zone=zone;bindTerminal(b);return b}
+function wireTerminal(label,role,id,zone){
+  const b=document.createElement('button');
+  b.type='button';b.className='wire-terminal';b.textContent=label;
+  b.dataset.role=role;b.dataset.terminal=id;b.dataset.zone=zone;
+  bindTerminal(b);
+  return b
+}
 function decorateSupply(){
   document.querySelectorAll('.supply-terminals span').forEach((s,i)=>{
     const role=['L1','L2','L3','N','PE'][i];
@@ -51,7 +89,18 @@ PETB:{top:[['PE1','PE'],['PE2','PE'],['PE3','PE'],['PE4','PE']],bottom:[['PE5','
 NTB12:{top:[['N1','N'],['N2','N'],['N3','N'],['N4','N'],['N5','N'],['N6','N']],bottom:[['N7','N'],['N8','N'],['N9','N'],['N10','N'],['N11','N'],['N12','N']]},
 PETB12:{top:[['PE1','PE'],['PE2','PE'],['PE3','PE'],['PE4','PE'],['PE5','PE'],['PE6','PE']],bottom:[['PE7','PE'],['PE8','PE'],['PE9','PE'],['PE10','PE'],['PE11','PE'],['PE12','PE']]}
 };
-function decorateMounted(){document.querySelectorAll('.mounted-device').forEach(m=>{if(m.dataset.terminalsReady)return;const code=m.dataset.code,map=terminalMap[code]||(/^[BC]\d+$/.test(code)?terminalMap.MCB:null);if(!map)return;m.dataset.terminalsReady='1';const top=m.querySelector('.device-topterm'),bottom=m.querySelector('.device-bottomterm');if(top){top.innerHTML='';map.top.forEach(([label,role],i)=>top.appendChild(wireTerminal(label,role,`${m.dataset.mountId}:TOP:${role}:${i}`,'top')))}if(bottom){bottom.innerHTML='';map.bottom.forEach(([label,role],i)=>bottom.appendChild(wireTerminal(label,role,`${m.dataset.mountId}:BOTTOM:${role}:${i}`,'bottom')))}});pruneConnections();draw()}
+function decorateMounted(){
+  document.querySelectorAll('.mounted-device').forEach(m=>{
+    if(m.dataset.terminalsReady)return;
+    const code=m.dataset.code,map=terminalMap[code]||(/^[BC]\d+$/.test(code)?terminalMap.MCB:null);
+    if(!map)return;
+    m.dataset.terminalsReady='1';
+    const top=m.querySelector('.device-topterm'),bottom=m.querySelector('.device-bottomterm');
+    if(top){top.innerHTML='';map.top.forEach(([label,role],i)=>top.appendChild(wireTerminal(label,role,`${m.dataset.mountId}:TOP:${role}:${i}`,'top')))}
+    if(bottom){bottom.innerHTML='';map.bottom.forEach(([label,role],i)=>bottom.appendChild(wireTerminal(label,role,`${m.dataset.mountId}:BOTTOM:${role}:${i}`,'bottom')))}
+  });
+  pruneConnections();refreshUsed();refreshGuidance();draw()
+}
 function terminalCenter(el){
   const r=el.getBoundingClientRect(),c=cabinet.getBoundingClientRect();
   return{
@@ -219,15 +268,22 @@ function refreshUsed(){
     t.title=used
       ?('ZAJĘTY • '+(wire?('PRZEWÓD '+wire.type):('MOSTEK '+(bridge?.phase||''))))
       :('WOLNY • '+(t.dataset.role||'zacisk'));
-  })
+  });
+  refreshGuidance();
 }
 function pruneConnections(){const before=connections.length;connections=connections.filter(c=>document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`)&&document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`));if(before!==connections.length){cancelStart();refreshUsed();updateCounters()}}
-function connectClick(el){const role=el.dataset.role,id=el.dataset.terminal;if(!roleAccepts(role,selectedWire)){markBad(el,`żyła ${selectedWire} nie pasuje do zacisku ${role}.`);return}if(endpointUsed(id)){markBad(el,'ten zacisk jest już zajęty. Usuń przewód lub wybierz inny zacisk.');return}if(!startTerminal){startTerminal={id,el,role};el.classList.add('start-terminal');status(`<b>PUNKT 1:</b> ${id}. Teraz kliknij drugi zacisk dla ${selectedWire}.`);return}if(startTerminal.id===id){cancelStart();status('<b>ANULOWANO:</b> wybór pierwszego zacisku.');return}if(connections.some(c=>(c.a===startTerminal.id&&c.b===id)||(c.a===id&&c.b===startTerminal.id))){markBad(el,'takie połączenie już istnieje.');cancelStart();return}const cable=document.querySelector('.cable-buttons button.active')?.textContent.trim()||'';connections.push({id:'W'+wireSeq++,a:startTerminal.id,b:id,type:selectedWire,cable});startTerminal.el.classList.remove('start-terminal');startTerminal=null;refreshUsed();draw();updateCounters();status(`<b>POŁĄCZONO:</b> ${selectedWire} • ${cable||'przewód'} • ${connections[connections.length-1].a} → ${id}`,'success')}
+function connectClick(el){const role=el.dataset.role,id=el.dataset.terminal;if(!roleAccepts(role,selectedWire)){markBad(el,`żyła ${selectedWire} nie pasuje do zacisku ${role}.`);return}if(endpointUsed(id)){markBad(el,'ten zacisk jest już zajęty. Usuń przewód lub wybierz inny zacisk.');return}if(!startTerminal){
+  startTerminal={id,el,role};
+  el.classList.add('start-terminal');
+  refreshGuidance();
+  status(`<b>PUNKT 1:</b> ${id}. Podświetlone mocniej zaciski są możliwym drugim końcem dla ${selectedWire}.`);
+  return
+}if(startTerminal.id===id){cancelStart();status('<b>ANULOWANO:</b> wybór pierwszego zacisku.');return}if(connections.some(c=>(c.a===startTerminal.id&&c.b===id)||(c.a===id&&c.b===startTerminal.id))){markBad(el,'takie połączenie już istnieje.');cancelStart();return}const cable=document.querySelector('.cable-buttons button.active')?.textContent.trim()||'';connections.push({id:'W'+wireSeq++,a:startTerminal.id,b:id,type:selectedWire,cable});startTerminal.el.classList.remove('start-terminal');startTerminal=null;refreshUsed();refreshGuidance();draw();updateCounters();status(`<b>POŁĄCZONO:</b> ${selectedWire} • ${cable||'przewód'} • ${connections[connections.length-1].a} → ${id}`,'success')}
 function undoWire(){const c=connections.pop();if(!c)return;cancelStart();refreshUsed();draw();updateCounters();status(`<b>COFNIĘTO:</b> usunięto ${c.type} ${c.a} → ${c.b}.`)}
 function clearWires(){connections=[];cancelStart();refreshUsed();draw();updateCounters();status('<b>OKABLOWANIE:</b> wszystkie przewody usunięte.')}
 document.getElementById('undoWire')?.addEventListener('click',undoWire);document.getElementById('clearWires')?.addEventListener('click',clearWires);
 const observer=new MutationObserver(()=>requestAnimationFrame(decorateMounted));observer.observe(mountRoot,{childList:true,subtree:true});
-decorateSupply();decorateBars();decorateCircuits();decorateMounted();refreshUsed();updateCounters();
+decorateSupply();decorateBars();decorateCircuits();decorateMounted();refreshUsed();refreshGuidance();updateCounters();
 window.addEventListener('resize',()=>requestAnimationFrame(draw));
-window.ElektrykStage3={getConnections:()=>connections.slice(),redraw:draw,clear:clearWires,refreshTerminals:refreshUsed,refreshBars:()=>{decorateBars();refreshUsed();draw()}};
+window.ElektrykStage3={getConnections:()=>connections.slice(),redraw:draw,clear:clearWires,refreshTerminals:()=>{refreshUsed();refreshGuidance()},refreshGuidance,refreshBars:()=>{decorateBars();refreshUsed();refreshGuidance();draw()}};
 })();
