@@ -75,7 +75,34 @@ function decorateSupply(){
   });
 }
 function decorateBars(){[['.nbar','N'],['.pebar','PE']].forEach(([sel,role])=>{const bar=document.querySelector(sel),box=bar?.querySelector('.bar-screws');if(!box)return;const count=Math.max(1,parseInt(box.dataset.count||'12',10)||12),stamp=role+':'+count;if(box.dataset.wired===stamp&&box.querySelectorAll('.wire-terminal').length===count)return;box.dataset.wired=stamp;box.innerHTML='';for(let i=1;i<=count;i++)box.appendChild(wireTerminal(String(i),role,`BAR:${role}:${i}`,'bar'))})}
-function decorateCircuits(){const names=['LIGHT','SOCKET','KITCHEN','WASH'];document.querySelectorAll('.circuits>div').forEach((c,i)=>{if(c.querySelector('.circuit-terminals'))return;const row=document.createElement('div');row.className='circuit-terminals';row.appendChild(wireTerminal('L','L',`LOAD:${names[i]}:L`,'load'));row.lastChild.classList.add('terminal-l');row.appendChild(wireTerminal('N','N',`LOAD:${names[i]}:N`,'load'));row.lastChild.classList.add('terminal-n');row.appendChild(wireTerminal('PE','PE',`LOAD:${names[i]}:PE`,'load'));row.lastChild.classList.add('terminal-pe');c.appendChild(row)})}
+function decorateCircuits(){
+  const defs=[
+    {id:'LIGHT',cable:'YDYp 3×1,5'},
+    {id:'SOCKET',cable:'YDYp 3×2,5'},
+    {id:'KITCHEN',cable:'YDYp 3×2,5'},
+    {id:'WASH',cable:'YDYp 3×2,5'}
+  ];
+  document.querySelectorAll('.circuits>div').forEach((c,i)=>{
+    const def=defs[i];if(!def)return;
+    c.classList.add('circuit-node');
+    c.dataset.circuit=def.id;
+    if(!c.dataset.exit)c.dataset.exit='bottom';
+    const small=c.querySelector('small');if(small)small.textContent=def.cable;
+    if(!c.querySelector('.circuit-cable-visual')){
+      const visual=document.createElement('div');
+      visual.className='circuit-cable-visual';
+      visual.innerHTML='<span class="circuit-sheath"></span><span class="circuit-core core-l"></span><span class="circuit-core core-n"></span><span class="circuit-core core-pe"></span>';
+      c.appendChild(visual);
+    }
+    if(!c.querySelector('.circuit-terminals')){
+      const row=document.createElement('div');row.className='circuit-terminals';
+      row.appendChild(wireTerminal('L','L',`LOAD:${def.id}:L`,'load'));row.lastChild.classList.add('terminal-l');
+      row.appendChild(wireTerminal('N','N',`LOAD:${def.id}:N`,'load'));row.lastChild.classList.add('terminal-n');
+      row.appendChild(wireTerminal('PE','PE',`LOAD:${def.id}:PE`,'load'));row.lastChild.classList.add('terminal-pe');
+      c.appendChild(row);
+    }
+  })
+}
 const terminalMap={
 FR:{top:[['L1','L1'],['L2','L2'],['L3','L3'],['N','N']],bottom:[['L1','L1'],['L2','L2'],['L3','L3'],['N','N']]},
 FR40:{top:[['L','L'],['N','N']],bottom:[['L','L'],['N','N']]},
@@ -159,6 +186,10 @@ function roundedPath(points,radius=7){
 }
 function smartRoute(A,B,a,b,type,connection,index){
   const az=a.dataset.zone||'',bz=b.dataset.zone||'';
+  const aExit=a.closest?.('.circuit-node')?.dataset.exit||'';
+  const bExit=b.closest?.('.circuit-node')?.dataset.exit||'';
+  const routeAz=az==='load'&&aExit==='top-right'?'load-top':az;
+  const routeBz=bz==='load'&&bExit==='top-right'?'load-top':bz;
   const lane=laneOffset(connection,index);
   const aRow=rowBounds(a),bRow=rowBounds(b);
   const aTop=az==='top',aBottom=az==='bottom',bTop=bz==='top',bBottom=bz==='bottom';
@@ -170,10 +201,11 @@ function smartRoute(A,B,a,b,type,connection,index){
     if(zone==='bottom')return {x:P.x,y:P.y+18};
     if(zone==='supply')return {x:P.x,y:P.y+22};
     if(zone==='load')return {x:P.x,y:P.y-22};
+    if(zone==='load-top')return {x:P.x,y:P.y+22};
     if(zone==='bar')return {x:P.x,y:P.y+(side==='a'?-12:12)};
     return {x:P.x,y:P.y};
   };
-  const EA=escape(A,az,aRow,'a'),EB=escape(B,bz,bRow,'b');
+  const EA=escape(A,routeAz,aRow,'a'),EB=escape(B,routeBz,bRow,'b');
   points.push(EA);
 
   // WLZ -> aparat/listwa: wspólny górny korytarz.
@@ -196,7 +228,10 @@ function smartRoute(A,B,a,b,type,connection,index){
     const loadFirst=az==='load';
     const L=loadFirst?EA:EB,T=loadFirst?EB:EA;
     const row=loadFirst?bRow:aRow;
-    const corridor=(row?.bottom??(Math.min(A.y,B.y)-35))+30+lane;
+    const exit=loadFirst?aExit:bExit;
+    const corridor=exit==='top-right'
+      ?(row?.top??190)-30+lane
+      :(row?.bottom??(Math.min(A.y,B.y)-35))+30+lane;
     const route=[L,{x:L.x,y:corridor},{x:T.x,y:corridor},T];
     if(loadFirst){points.splice(1,points.length-1,...route.slice(0,-1));points.push(B)}
     else{
