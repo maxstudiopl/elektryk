@@ -24,7 +24,18 @@ function markBad(el,msg){wiringErrors++;el.classList.add('bad-terminal');setTime
 function cancelStart(){if(startTerminal?.el)startTerminal.el.classList.remove('start-terminal');startTerminal=null}
 function bindTerminal(el){if(el.dataset.wireBound)return;el.dataset.wireBound='1';el.addEventListener('click',e=>{e.stopPropagation();connectClick(el)})}
 function wireTerminal(label,role,id,zone){const b=document.createElement('button');b.type='button';b.className='wire-terminal';b.textContent=label;b.dataset.role=role;b.dataset.terminal=id;b.dataset.zone=zone;bindTerminal(b);return b}
-function decorateSupply(){document.querySelectorAll('.supply-terminals span').forEach((s,i)=>{const role=['L1','L2','L3','N','PE'][i];s.classList.add('wire-terminal');s.dataset.role=role;s.dataset.terminal='SUPPLY:'+role;s.dataset.zone='supply';bindTerminal(s)})}
+function decorateSupply(){
+  document.querySelectorAll('.supply-terminals span').forEach((s,i)=>{
+    const role=['L1','L2','L3','N','PE'][i];
+    s.classList.add('wire-terminal');
+    s.dataset.role=role;
+    s.dataset.terminal='SUPPLY:'+role;
+    s.dataset.zone='supply';
+    s.dataset.supplyIndex=String(i+1);
+    s.title='WLZ '+role+' • WOLNY';
+    bindTerminal(s);
+  });
+}
 function decorateBars(){[['.nbar','N'],['.pebar','PE']].forEach(([sel,role])=>{const bar=document.querySelector(sel),box=bar?.querySelector('.bar-screws');if(!box)return;const count=Math.max(1,parseInt(box.dataset.count||'12',10)||12),stamp=role+':'+count;if(box.dataset.wired===stamp&&box.querySelectorAll('.wire-terminal').length===count)return;box.dataset.wired=stamp;box.innerHTML='';for(let i=1;i<=count;i++)box.appendChild(wireTerminal(String(i),role,`BAR:${role}:${i}`,'bar'))})}
 function decorateCircuits(){const names=['LIGHT','SOCKET','KITCHEN','WASH'];document.querySelectorAll('.circuits>div').forEach((c,i)=>{if(c.querySelector('.circuit-terminals'))return;const row=document.createElement('div');row.className='circuit-terminals';row.appendChild(wireTerminal('L','L',`LOAD:${names[i]}:L`,'load'));row.lastChild.classList.add('terminal-l');row.appendChild(wireTerminal('N','N',`LOAD:${names[i]}:N`,'load'));row.lastChild.classList.add('terminal-n');row.appendChild(wireTerminal('PE','PE',`LOAD:${names[i]}:PE`,'load'));row.lastChild.classList.add('terminal-pe');c.appendChild(row)})}
 const terminalMap={
