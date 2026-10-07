@@ -256,6 +256,17 @@ function analyze(manual=false){
   applyLiveVisuals(reaches,collisions);applyLoadVisuals(states);
   const issues=buildIssues(states,collisions);renderAnalyzer(states,collisions,issues,manual);
   lastAnalysis={states,collisions,issues};lastSignature=signature();
+  if(manual){
+    document.dispatchEvent(new CustomEvent('elektryk:power-check',{
+      detail:{
+        complete:states.length>0&&states.every(x=>x.complete)&&collisions.length===0&&!issues.some(i=>i.type==='error'),
+        completeLoads:states.filter(x=>x.complete).length,
+        totalLoads:states.length,
+        collisions:collisions.length,
+        errors:issues.filter(i=>i.type==='error').length
+      }
+    }));
+  }
   return lastAnalysis;
 }
 
