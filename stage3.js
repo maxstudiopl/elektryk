@@ -116,10 +116,21 @@ PETB:{top:[['PE1','PE'],['PE2','PE'],['PE3','PE'],['PE4','PE']],bottom:[['PE5','
 NTB12:{top:[['N1','N'],['N2','N'],['N3','N'],['N4','N'],['N5','N'],['N6','N']],bottom:[['N7','N'],['N8','N'],['N9','N'],['N10','N'],['N11','N'],['N12','N']]},
 PETB12:{top:[['PE1','PE'],['PE2','PE'],['PE3','PE'],['PE4','PE'],['PE5','PE'],['PE6','PE']],bottom:[['PE7','PE'],['PE8','PE'],['PE9','PE'],['PE10','PE'],['PE11','PE'],['PE12','PE']]}
 };
+function mcbMapFor(code){
+  const m=String(code||'').match(/^([BC]\d+)(?:_(2P|3P))?$/);
+  if(!m)return null;
+  const poles=m[2]==='3P'?3:m[2]==='2P'?2:1;
+  if(poles===1)return terminalMap.MCB;
+  const roles=poles===3?['L1','L2','L3']:['L1','L2'];
+  return{
+    top:roles.map((role,i)=>[String(i*2+1),role]),
+    bottom:roles.map((role,i)=>[String(i*2+2),role])
+  };
+}
 function decorateMounted(){
   document.querySelectorAll('.mounted-device').forEach(m=>{
     if(m.dataset.terminalsReady)return;
-    const code=m.dataset.code,map=terminalMap[code]||(/^[BC]\d+$/.test(code)?terminalMap.MCB:null);
+    const code=m.dataset.code,map=terminalMap[code]||mcbMapFor(code);
     if(!map)return;
     m.dataset.terminalsReady='1';
     const top=m.querySelector('.device-topterm'),bottom=m.querySelector('.device-bottomterm');
