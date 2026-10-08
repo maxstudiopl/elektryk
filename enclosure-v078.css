@@ -383,3 +383,141 @@
   background:linear-gradient(135deg,#cbd0cc,#f2f3ef 45%,#b4bbb7)!important;
   box-shadow:inset 0 0 0 2px #e1e4e0,0 4px 8px #0006!important;
 }
+
+
+/* v0.7.8 HOTFIX — korekty po teście rozdzielnicy 1×18 */
+
+/* 1. Wyjścia obwodów: kabel i żyły mają być dobrze widoczne oraz czytelnie połączone z zaciskami */
+.circuits>div.circuit-node{
+  width:96px!important;
+  height:96px!important;
+}
+.circuits.layout-bottom .circuit-node:nth-child(1),
+.circuits.layout-bottom .circuit-node:nth-child(2),
+.circuits.layout-bottom .circuit-node:nth-child(3),
+.circuits.layout-bottom .circuit-node:nth-child(4),
+.circuits.layout-mixed .circuit-node:nth-child(1),
+.circuits.layout-mixed .circuit-node:nth-child(2){
+  bottom:12px!important;
+}
+.circuit-cable-visual{
+  left:9px!important;
+  right:9px!important;
+  top:30px!important;
+  height:61px!important;
+  overflow:visible!important;
+}
+.circuit-sheath{
+  left:50%!important;
+  bottom:0!important;
+  width:19px!important;
+  height:35px!important;
+  border:1px solid #3e484b!important;
+  border-radius:9px 9px 4px 4px!important;
+  background:linear-gradient(90deg,#030506 0%,#313a3e 39%,#171d20 62%,#030506 100%)!important;
+  box-shadow:inset 0 1px 1px #ffffff28,0 2px 4px #0009!important;
+  z-index:2!important;
+}
+.circuit-core{
+  top:auto!important;
+  bottom:28px!important;
+  width:4px!important;
+  height:34px!important;
+  border-radius:3px!important;
+  box-shadow:0 1px 1px #0007!important;
+  z-index:3!important;
+}
+.circuit-core.core-l{
+  left:29px!important;
+  transform:rotate(-16deg)!important;
+}
+.circuit-core.core-n{
+  left:37px!important;
+  transform:none!important;
+}
+.circuit-core.core-pe{
+  left:45px!important;
+  transform:rotate(16deg)!important;
+}
+.circuit-terminals{
+  left:10px!important;
+  right:10px!important;
+  top:23px!important;
+  grid-template-columns:repeat(3,17px)!important;
+  gap:9px!important;
+  z-index:5!important;
+}
+.circuit-terminals .wire-terminal{
+  width:17px!important;
+  height:17px!important;
+  min-width:17px!important;
+  max-width:17px!important;
+}
+.circuit-node>b{
+  left:2px!important;
+  right:2px!important;
+}
+.circuit-node>small{
+  top:15px!important;
+}
+.circuit-node[data-exit="top-right"] .circuit-cable-visual{
+  height:61px!important;
+}
+
+/* 2. Komunikat montażu: bez czarnej belki przez całą rozdzielnicę */
+.mount-hint{
+  left:16px!important;
+  right:auto!important;
+  top:calc(100% + 10px)!important;
+  width:auto!important;
+  max-width:380px!important;
+  height:auto!important;
+  min-height:18px!important;
+  padding:0!important;
+  display:block!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  color:#596663!important;
+  font:700 6.5px Arial!important;
+  line-height:1.35!important;
+  z-index:14!important;
+  pointer-events:none!important;
+}
+.mount-hint b{
+  color:#34413f!important;
+}
+.mount-hint .selected-part{
+  display:none!important;
+}
+.mount-hint.success{
+  background:transparent!important;
+  border:0!important;
+  color:#36704b!important;
+}
+.mount-hint.success b{
+  color:#27603b!important;
+}
+.mount-hint.error{
+  background:transparent!important;
+  border:0!important;
+  color:#9d4038!important;
+}
+.mount-hint.error b{
+  color:#8c322b!important;
+}
+
+/* 3. Dźwignia 0/1: wyżej na froncie aparatu */
+.mount-grid .mounted-device .lever{
+  top:95px!important;
+}
+.mount-grid .mounted-device.switch-off .lever{
+  transform:translateX(-50%) translateY(6px)!important;
+}
+.mount-grid .mounted-device .lever span:first-child{
+  top:-10px!important;
+}
+.mount-grid .mounted-device .lever span:last-child{
+  bottom:-10px!important;
+}
