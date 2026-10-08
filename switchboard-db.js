@@ -11,6 +11,8 @@ const TEMPLATES=[
     sourceRef:null,
     level:'basic',
     engineStatus:'supported',
+    enclosureProfile:'training-18',
+    enclosureLook:{shell:'training',door:'none',depth:'standard',rowSpacing:'training'},
     notes:'Aktualny format treningowy gry.'
   },
   {
@@ -24,6 +26,8 @@ const TEMPLATES=[
     sourceRef:'SW-001',
     level:'intermediate',
     engineStatus:'supported',
+    enclosureProfile:'residential-3x12-flush',
+    enclosureLook:{shell:'residential',door:'recessed',depth:'medium',rowSpacing:'compact'},
     equipmentHint:{spd:true,rccb:2,mcb:14}
   },
   {
@@ -37,6 +41,8 @@ const TEMPLATES=[
     sourceRef:'SW-004',
     level:'intermediate',
     engineStatus:'supported',
+    enclosureProfile:'residential-3x12-surface',
+    enclosureLook:{shell:'surface',door:'surface',depth:'deep',rowSpacing:'compact'},
     equipmentHint:{spd:null,rccb:2,mcb:14}
   },
   {
@@ -50,6 +56,8 @@ const TEMPLATES=[
     sourceRef:'SW-007',
     level:'advanced',
     engineStatus:'supported',
+    enclosureProfile:'residential-5x12',
+    enclosureLook:{shell:'residential-xl',door:'recessed',depth:'deep',rowSpacing:'service'},
     equipmentHint:null
   },
   {
@@ -63,6 +71,8 @@ const TEMPLATES=[
     sourceRef:'SW-005',
     level:'advanced',
     engineStatus:'supported',
+    enclosureProfile:'residential-5x24-xl',
+    enclosureLook:{shell:'residential-xl-wide',door:'recessed',depth:'deep',rowSpacing:'service'},
     equipmentHint:null
   },
   {
@@ -93,7 +103,7 @@ function supported(){
 }
 
 window.ElektrykSwitchboardDB={
-  version:'0.2.0',
+  version:'0.3.0',
   all,
   get,
   byFamily,
