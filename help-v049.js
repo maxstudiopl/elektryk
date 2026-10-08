@@ -374,4 +374,47 @@ const title=document.querySelector('.active-task h2');
 if(title)new MutationObserver(function(){hintBox.hidden=true;hintIndex=0;lastTaskId=currentTask()?.id||null}).observe(title,{childList:true,subtree:true});
 
 window.ElektrykHelp={showHint:showHint,openSolution:openSolution};
+
+/* v0.7.12 — Nauka 2.0: przewodnik postępu zadania */
+const learning=document.createElement('section');
+learning.className='learning-v0712';
+learning.setAttribute('aria-label','Przewodnik nauki');
+learning.style.cssText='margin-top:12px;padding:12px;border:1px solid #45647b;border-radius:12px;background:#102337;color:#eff7ff;font-size:13px';
+learning.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>NAUKA 2.0 • POSTĘP</b><span id="learningProgress">0/4</span></div><div style="height:7px;margin:9px 0;background:#2d4657;border-radius:9px;overflow:hidden"><div id="learningBar" style="height:100%;width:0%;background:#39c99d;transition:width .25s"></div></div><ol id="learningSteps" style="padding-left:22px;margin:8px 0;line-height:1.8"></ol><p id="learningNext" style="margin:8px 0 0;line-height:1.5"></p><button id="learningRefresh" type="button" style="margin-top:10px;padding:8px 12px;border:1px solid #6393ab;background:#1b4358;color:white;border-radius:8px;cursor:pointer">↻ SPRAWDŹ POSTĘP</button>';
+hintBox.insertAdjacentElement('afterend',learning);
+function refreshLearning(){
+  const task=currentTask();if(!task)return;
+  const have=mountedCounts(), requirements=Object.entries(task.requirements||{});
+  const completeMount=requirements.every(([code,count])=>(have[code]||0)>=count);
+  const wires=window.ElektrykStage3?.getConnections?.()||[];
+  const bridge=window.ElektrykBridges?.getBridges?.()||[];
+  const analysis=window.ElektrykPower?.getLast?.();
+  const ready=!!analysis?.states?.length&&analysis.states.every(state=>state.complete)&&!(analysis.issues||[]).some(issue=>issue.type==='error');
+  const steps=[
+    {name:'Dobierz wymagane aparaty',ok:completeMount,detail:requirements.filter(([code,count])=>(have[code]||0)<count).map(([code,count])=>code+' '+(have[code]||0)+'/'+count).join(', ')},
+    {name:'Rozmieść aparaty na listwach DIN',ok:completeMount,detail:completeMount?'Wymagana liczba aparatów jest zamontowana':'Zamontuj brakujące aparaty'},
+    {name:'Wykonaj połączenia przewodami lub mostkami',ok:wires.length>0||bridge.length>0,detail:'Przewody: '+wires.length+' • mostki: '+bridge.length},
+    {name:'Sprawdź instalację analizatorem',ok:ready,detail:ready?'Wszystkie analizowane obwody poprawne':'Kliknij SPRAWDŹ INSTALACJĘ i usuń wskazane błędy'}
+  ];
+  const done=steps.filter(step=>step.ok).length;
+  learning.querySelector('#learningProgress').textContent=done+'/'+steps.length;
+  learning.querySelector('#learningBar').style.width=(done/steps.length*100)+'%';
+  const list=learning.querySelector('#learningSteps');list.replaceChildren();
+  steps.forEach(step=>{
+    const li=document.createElement('li');
+    li.style.color=step.ok?'#78edc4':'#e4ebf2';
+    const name=document.createElement('strong');name.textContent=(step.ok?'✓ ':'○ ')+step.name;li.appendChild(name);
+    if(step.detail){const detail=document.createElement('div');detail.style.cssText='color:#aac5d3;font-size:12px';detail.textContent=step.detail;li.appendChild(detail)}
+    list.appendChild(li);
+  });
+  learning.querySelector('#learningNext').textContent=done===steps.length?'✓ Zadanie ukończone. Możesz wybrać kolejne.':'NASTĘPNY KROK: '+(steps.find(step=>!step.ok)?.detail||'Kontynuuj zadanie');
+}
+learning.querySelector('#learningRefresh').addEventListener('click',refreshLearning);
+document.addEventListener('elektryk:task-started',()=>requestAnimationFrame(refreshLearning));
+document.getElementById('checkPower')?.addEventListener('click',()=>setTimeout(refreshLearning,40));
+const learningObserver=new MutationObserver(()=>{if(!learning.isConnected)return;refreshLearning()});
+const din=document.querySelector('.din-zone');
+if(din)learningObserver.observe(din,{childList:true,subtree:false});
+refreshLearning();
+
 })();
