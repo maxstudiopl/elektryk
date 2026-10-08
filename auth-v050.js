@@ -10,16 +10,17 @@ const LICENSE_TYPE='BETA / TESTOWA';
 const LICENSE_EXPIRY=null;
 
 const scripts=[
-  'ui.js?v=0710',
-  'switchboard-db.js?v=0710',
-  'stage2.js?v=0710',
-  'stage3.js?v=0710',
-  'bridges-v031.js?v=0710',
-  'stage4.js?v=0710',
-  'tasks-v046.js?v=0710',
-  'busbars-v047.js?v=0710',
-  'help-v049.js?v=0710',
-  'progress-v060.js?v=0710'
+  'ui.js?v=0711',
+  'switchboard-db.js?v=0711',
+  'stage2.js?v=0711',
+  'stage3.js?v=0711',
+  'bridges-v031.js?v=0711',
+  'stage4.js?v=0711',
+  'tasks-v046.js?v=0711',
+  'busbars-v047.js?v=0711',
+  'help-v049.js?v=0711',
+  'progress-v060.js?v=0711',
+  'freebuild-save-v0711.js?v=0711'
 ];
 
 let gameLoaded=false;
@@ -158,6 +159,7 @@ function updateModeHeader(mode){
   }
   document.querySelector('.task-shortcut')?.classList.toggle('mode-hidden',mode!=='learn');
   document.querySelector('.free-board-shortcut')?.classList.toggle('mode-hidden',mode!=='free');
+  document.querySelector('.free-save-panel')?.classList.toggle('mode-hidden',mode!=='free');
   document.querySelector('.reward')?.classList.toggle('mode-hidden',mode!=='learn');
 }
 function mountingLabel(value){
