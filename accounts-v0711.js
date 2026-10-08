@@ -10,7 +10,7 @@ const DEFAULTS={
     paymentStatus:'NIE DOTYCZY',paymentInfo:'',
     salt:'elektryk-v050-single-2026',
     passHash:'3dee654f9d15a95ed45332ec703f94258cb70f86cf2cdaaeb7d3240b399d354e',
-    createdAt:0
+    credentialVersion:2,createdAt:0
   },
   demo:{
     id:'demo',login:'demo',display:'Demo',role:'player',
@@ -19,7 +19,7 @@ const DEFAULTS={
     paymentStatus:'NIE DOTYCZY',paymentInfo:'',
     salt:'elektryk-v0711-player-2026',
     passHash:'06e5c32716fe194884663e2b1ca32644591c7e87916fdb61d0cce7eb7ba5596b',
-    createdAt:0
+    credentialVersion:2,createdAt:0
   },
   kamil:{
     id:'kamil',login:'kamil',display:'Kamil',role:'player',
@@ -28,7 +28,7 @@ const DEFAULTS={
     paymentStatus:'NIE DOTYCZY',paymentInfo:'',
     salt:'elektryk-v0711-player-2026',
     passHash:'06e5c32716fe194884663e2b1ca32644591c7e87916fdb61d0cce7eb7ba5596b',
-    createdAt:0
+    credentialVersion:2,createdAt:0
   }
 };
 
@@ -75,6 +75,7 @@ function normalize(base,patch={}){
     paymentInfo:cleanText(a.paymentInfo,180),
     salt:String(a.salt||''),
     passHash:String(a.passHash||''),
+    credentialVersion:Number(a.credentialVersion||0),
     createdAt:Number(a.createdAt||Date.now())
   };
 }
@@ -83,7 +84,12 @@ function all(){
   const ids=new Set([...Object.keys(DEFAULTS),...Object.keys(saved)]);
   return [...ids].map(id=>{
     const base=DEFAULTS[id]||{id,role:'player'};
-    const merged=normalize(base,saved[id]||{});
+    const patch=Object.assign({},saved[id]||{});
+    if(DEFAULTS[id]&&Number(patch.credentialVersion||0)<2){
+      delete patch.salt;
+      delete patch.passHash;
+    }
+    const merged=normalize(base,patch);
     merged.id=id;
     if(DEFAULTS[id]?.role==='admin')merged.role='admin';
     return merged;
@@ -126,6 +132,7 @@ function create(input={}){
     paymentInfo:cleanText(input.paymentInfo,180),
     salt:String(input.salt||''),
     passHash:String(input.passHash||''),
+    credentialVersion:2,
     createdAt:Date.now()
   });
   const data=readStore();
