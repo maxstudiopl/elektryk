@@ -120,6 +120,7 @@ function routeTo(result,target){
   nodes.reverse();edges.reverse();return {nodes,edges};
 }
 function routeDeviceCodes(route){return route?route.edges.filter(e=>e.meta?.kind==='device').map(e=>e.meta.code):[]}
+function routeDeviceIds(route){return route?route.edges.filter(e=>e.meta?.kind==='device').map(e=>e.meta.mountId):[]}
 function mountedById(id){return document.querySelector(`.mounted-device[data-mount-id="${CSS.escape(id)}"]`)}
 function setSwitchVisual(m){
   const on=m.dataset.switchState!=='off';
@@ -167,8 +168,9 @@ function loadState(load,reaches){
   const hasFR=codes.some(c=>c.startsWith('FR'));
   const protectedPath=pathHasProtection(codes);
   const residual=pathHasResidual(codes);
-  const residualDevices=codes.filter(c=>c.startsWith('RCD')||c.startsWith('RCBO'));
-  const residualNok=!residual || residualDevices.every(code=>nCodes.includes(code));
+  const residualDevices=(phaseRoute?.edges||[]).filter(e=>e.meta?.kind==='device'&&/^(RCD|RCBO)/.test(e.meta.code)).map(e=>e.meta.mountId);
+  const neutralDeviceIds=new Set(routeDeviceIds(nRoute));
+  const residualNok=!residual || residualDevices.every(id=>neutralDeviceIds.has(id));
   const complete=hasPhase&&hasN&&hasPE&&hasFR&&protectedPath&&residual&&residualNok;
   const any=hasPhase||hasN||hasPE;
   return {load,phase,phaseRoute,nRoute,peRoute,codes,nCodes,hasPhase,hasN,hasPE,hasFR,protectedPath,residual,residualNok,complete,any};
@@ -239,6 +241,7 @@ function renderAnalyzer(states,collisions,issues,manual){
   if(main){
     main.className='power-main-status '+(collisions.length||issues.some(i=>i.type==='error')?'error':ok===states.length?'ok':'warn');
     if(collisions.length)main.textContent='Wykryto kolizję faz — instalacja wymaga poprawy.';
+    else if(issues.some(i=>i.type==='error'))main.textContent='Wykryto błędy w połączeniach, neutralnych torach RCD lub osłonach grzebieni.';
     else if(ok===states.length)main.textContent='✓ Wszystkie odbiorniki mają pełny, chroniony tor zasilania.';
     else if(ok>0)main.textContent=`${ok} z ${states.length} odbiorników ma poprawne zasilanie. Pozostałe wymagają dokończenia.`;
     else main.textContent=manual?'Brak kompletnego toru zasilania. Sprawdź L, N, PE i kolejność aparatów.':'Analiza aktualizuje się automatycznie podczas budowy.';
@@ -259,7 +262,10 @@ function analyze(manual=false){
   const collisions=detectPhaseCollisions(reaches);
   const states=LOADS.map(l=>loadState(l,reaches));
   applyLiveVisuals(reaches,collisions);applyLoadVisuals(states);
-  const issues=buildIssues(states,collisions);renderAnalyzer(states,collisions,issues,manual);
+  const issues=buildIssues(states,collisions);
+  issues.push(...(window.ElektrykElectricalAudit?.inspect?.()||[]));
+  if(issues.some(i=>i.type==='error'))issues.splice(0,issues.length,...issues.filter(i=>i.type!=='ok'));
+  renderAnalyzer(states,collisions,issues,manual);
   lastAnalysis={states,collisions,issues};lastSignature=signature();
   if(manual){
     document.dispatchEvent(new CustomEvent('elektryk:power-check',{
