@@ -9,20 +9,21 @@ const LICENSE_TYPE='BETA / TESTOWA';
 const LICENSE_EXPIRY=null;
 
 const scripts=[
-  'ui.js?v=0706',
-  'switchboard-db.js?v=0706',
-  'stage2.js?v=0706',
-  'stage3.js?v=0706',
-  'bridges-v031.js?v=0706',
-  'stage4.js?v=0706',
-  'tasks-v046.js?v=0706',
-  'busbars-v047.js?v=0706',
-  'help-v049.js?v=0706',
-  'progress-v060.js?v=0706'
+  'ui.js?v=0707',
+  'switchboard-db.js?v=0707',
+  'stage2.js?v=0707',
+  'stage3.js?v=0707',
+  'bridges-v031.js?v=0707',
+  'stage4.js?v=0707',
+  'tasks-v046.js?v=0707',
+  'busbars-v047.js?v=0707',
+  'help-v049.js?v=0707',
+  'progress-v060.js?v=0707'
 ];
 
 let gameLoaded=false;
 let gameReadyPromise=null;
+let activeFreeTemplate=null;
 
 function hex(buffer){return [...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,'0')).join('')}
 async function digest(text){
@@ -140,11 +141,102 @@ function updateModeHeader(mode){
     }
   }
   document.querySelector('.task-shortcut')?.classList.toggle('mode-hidden',mode!=='learn');
+  document.querySelector('.free-board-shortcut')?.classList.toggle('mode-hidden',mode!=='free');
   document.querySelector('.reward')?.classList.toggle('mode-hidden',mode!=='learn');
 }
-async function enterGame(mode='learn'){
+function mountingLabel(value){
+  const map={
+    training:'TRENINGOWA',
+    surface:'NATYNKOWA',
+    flush:'PODTYNKOWA',
+    flush_or_surface:'POD / NADTYNKOWA',
+    unknown:'MODUŁOWA'
+  };
+  return map[value]||String(value||'MODUŁOWA').toUpperCase();
+}
+function levelLabel(value){
+  const map={basic:'PODSTAWOWA',intermediate:'ŚREDNIA',advanced:'DUŻA',special:'SPECJALNA'};
+  return map[value]||'MODUŁOWA';
+}
+function boardPreview(template){
+  const rows=Math.max(1,Number(template.rows)||1);
+  const cols=Math.max(1,Number(template.modulesPerRow)||12);
+  const host=document.createElement('div');
+  host.className='board-preview';
+  host.style.setProperty('--preview-rows',String(rows));
+  host.style.setProperty('--preview-cols',String(cols));
+  for(let r=0;r<rows;r++){
+    const row=document.createElement('div');
+    row.className='board-preview-row';
+    row.style.setProperty('--preview-cols',String(cols));
+    for(let i=0;i<cols;i++){
+      const slot=document.createElement('span');
+      slot.className='board-preview-slot';
+      row.appendChild(slot);
+    }
+    host.appendChild(row);
+  }
+  return host;
+}
+function renderBoardSelector(){
+  const grid=document.getElementById('boardSelectorGrid');
+  const count=document.getElementById('boardSelectorCount');
+  if(!grid)return;
+  grid.innerHTML='';
+  const templates=(window.ElektrykSwitchboardDB?.supported?.()||[])
+    .filter(t=>t.rows&&t.modulesPerRow&&t.family!=='construction');
+  if(count)count.textContent=templates.length+' dostępnych';
+
+  templates.forEach((template,index)=>{
+    const card=document.createElement('button');
+    card.type='button';
+    card.className='board-choice-card'+(template.id==='REF-3X12-FLUSH-SURFACE'?' recommended':'');
+    card.dataset.boardId=template.id;
+
+    const top=document.createElement('div');
+    top.className='board-card-top';
+    top.innerHTML='<span>'+mountingLabel(template.mounting)+'</span><em>'+(template.id==='REF-3X12-FLUSH-SURFACE'?'POLECANA':'DOSTĘPNA')+'</em>';
+
+    const title=document.createElement('strong');
+    title.textContent=template.name;
+    const sub=document.createElement('small');
+    sub.textContent=levelLabel(template.level)+' • baza '+(template.sourceRef||'symulator');
+
+    const preview=boardPreview(template);
+
+    const meta=document.createElement('div');
+    meta.className='board-card-meta';
+    meta.innerHTML=
+      '<div><span>RZĘDY</span><b>'+template.rows+'</b></div>'+
+      '<div><span>MODUŁY / RZĄD</span><b>'+template.modulesPerRow+'</b></div>'+
+      '<div><span>RAZEM</span><b>'+template.totalModules+'M</b></div>';
+
+    const action=document.createElement('span');
+    action.className='board-card-action';
+    action.textContent='WYBIERZ I ROZPOCZNIJ ›';
+
+    card.append(top,title,sub,preview,meta,action);
+    card.addEventListener('click',()=>enterGame('free',template));
+    grid.appendChild(card);
+  });
+}
+async function openBoardSelector(){
   if(!sessionValid()){location.reload();return}
   try{await loadScripts()}catch{return}
+  renderBoardSelector();
+  const modal=document.getElementById('boardSelectorModal');
+  if(modal)modal.hidden=false;
+}
+function closeBoardSelector(){
+  const modal=document.getElementById('boardSelectorModal');
+  if(modal)modal.hidden=true;
+}
+async function enterGame(mode='learn',freeTemplate=null){
+  if(!sessionValid()){location.reload();return}
+  try{await loadScripts()}catch{return}
+
+  closeBoardSelector();
+
   document.body.classList.remove('auth-locked');
   document.body.classList.add('auth-ready');
   const overlay=document.getElementById('authGate');
@@ -155,18 +247,24 @@ async function enterGame(mode='learn'){
   updateModeHeader(mode);
 
   if(mode==='learn'){
+    activeFreeTemplate=null;
     window.ElektrykTasks?.start?.(1);
   }
 
   if(mode==='free'){
     const db=window.ElektrykSwitchboardDB;
-    const template=db?.get?.('REF-3X12-FLUSH-SURFACE')||db?.supported?.()?.[0]||null;
-    if(template)window.ElektrykStage2?.configureBoard?.(template);
+    const template=freeTemplate||activeFreeTemplate||db?.get?.('REF-3X12-FLUSH-SURFACE')||db?.supported?.()?.[0]||null;
+    if(template){
+      activeFreeTemplate=template;
+      window.ElektrykStage2?.configureBoard?.(template);
+      const label=document.getElementById('currentFreeBoardLabel');
+      if(label)label.textContent=template.name;
+    }
     const panelTitle=document.querySelector('.active-task .panel-title');
     if(panelTitle)panelTitle.textContent='WOLNA BUDOWA';
   }
 
-  document.dispatchEvent(new CustomEvent('elektryk:mode-selected',{detail:{mode}}));
+  document.dispatchEvent(new CustomEvent('elektryk:mode-selected',{detail:{mode,template:activeFreeTemplate}}));
   window.ElektrykProgress?.refreshProfile?.();
 }
 function lock(){
@@ -208,7 +306,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('authLogout')?.addEventListener('click',lock);
 
   document.getElementById('modeLearn')?.addEventListener('click',()=>enterGame('learn'));
-  document.getElementById('modeFree')?.addEventListener('click',()=>enterGame('free'));
+  document.getElementById('modeFree')?.addEventListener('click',openBoardSelector);
+  document.getElementById('changeFreeBoard')?.addEventListener('click',openBoardSelector);
+  document.getElementById('closeBoardSelector')?.addEventListener('click',closeBoardSelector);
+  document.getElementById('boardSelectorModal')?.addEventListener('click',e=>{if(e.target.id==='boardSelectorModal')closeBoardSelector()});
 
   document.getElementById('openPlayerHub')?.addEventListener('click',showHub);
   document.getElementById('openGameSettings')?.addEventListener('click',openSettings);
@@ -229,6 +330,7 @@ window.ElektrykAuth={
   isAuthenticated:sessionValid,
   openHub:showHub,
   openSettings,
+  openBoardSelector,
   enterGame
 };
 })();
