@@ -1,0 +1,37 @@
+/* Elektryk Symulator v0.7.12 — Nauka 2.0: odwzorowanie rozdzielnicy */
+body:not([data-game-mode="learn"]) .learning-board-v0712,
+body:not([data-game-mode="learn"]) .learning-v0712 {display:none!important}
+.learning-board-v0712{box-sizing:border-box;margin:0 0 16px;padding:18px 20px;background:linear-gradient(125deg,#12283c,#0d1b2c);border:1px solid #315575;border-radius:13px;color:#edf8ff;box-shadow:0 8px 26px #07131c30}
+.learning-board-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.learning-board-eyebrow{font-size:11px;letter-spacing:.11em;font-weight:800;color:#66ccee}
+.learning-board-v0712 h2{font-size:18px;line-height:1.3;margin:5px 0 7px;color:#fff}
+.learning-board-v0712 p{font-size:12px;line-height:1.6;color:#c3d8e6;margin:0;max-width:730px}
+.learning-board-actions{display:flex;gap:8px;flex-wrap:wrap;align-self:center}
+.learning-board-actions button{background:#18384f;color:#f5fbff;border:1px solid #527790;border-radius:8px;padding:10px 11px;cursor:pointer;font-size:11px;font-weight:800;letter-spacing:.025em;white-space:nowrap;transition:background .2s}
+.learning-board-actions button:hover{background:#286180}
+.learning-board-actions button:focus-visible{outline:2px solid #71d6ff;outline-offset:2px}
+.learning-board-actions #learningCheckBoard{background:#196d5f;border-color:#32a98c}
+.learning-board-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:#c5d7e1;margin:14px 0 12px}
+.learning-board-legend span{display:flex;align-items:center;gap:6px}
+.lb-legend-sample{width:12px;height:12px;display:inline-block;border-radius:3px;background:#607b91;border:1px solid #9db6c8}
+.lb-legend-sample.matched{background:#276553;border-color:#65d9aa}
+.lb-legend-sample.missing{background:#72501f;border:1px dashed #ecc676}
+.learning-board-scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:5px 2px 12px}
+.learning-board-scroll:focus-visible{outline:2px solid #71d6ff;outline-offset:2px}
+#learningReferenceRows{min-width:760px;display:grid;gap:10px}
+.learning-reference-row{min-width:0}
+.learning-reference-row-title{font-size:10px;font-weight:800;color:#a6c5d7;letter-spacing:.06em;margin:0 0 5px}
+.learning-reference-rail{display:grid;grid-template-columns:repeat(18,minmax(38px,1fr));gap:3px;background:linear-gradient(to bottom,#728a9a 0 8px,#223c53 8px 100%);border:1px solid #5c7688;border-radius:7px;padding:9px 5px 5px;min-height:53px;box-sizing:border-box}
+.learning-reference-device,.learning-reference-empty{min-width:0;box-sizing:border-box;min-height:39px;display:flex;align-items:center;justify-content:center;border-radius:4px}
+.learning-reference-device{position:relative;border:1px dashed #e2bc77;background:#76551e;color:#fff7d8;font-weight:800;font-size:10px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:clip}
+.learning-reference-device.is-matched{background:#276755;border:1px solid #75e3b4;color:#e6fff3}
+.learning-reference-device.is-missing{background:#775122;border:1px dashed #edc16a}
+.learning-reference-device.learning-ref-fr{border-top:4px solid #a2c3e8}
+.learning-reference-device.learning-ref-rcd{border-top:4px solid #74bef2}
+.learning-reference-device.learning-ref-rcbo{border-top:4px solid #b09ef2}
+.learning-reference-device.learning-ref-spd{border-top:4px solid #ee96ae}
+.learning-reference-empty{border:1px solid #314e66;background:#172d40}
+.learning-board-result{margin-top:11px;padding:11px 13px;background:#243c53;border:1px solid #45647d;border-radius:8px;font-size:12px;line-height:1.5;color:#e4eff6}
+.learning-board-result.is-complete{background:#164636;border-color:#49ac86;color:#d5ffee}
+.learning-board-disclaimer{display:block;margin-top:9px;font-size:10px;line-height:1.45;color:#90abb9}
+@media(max-width:900px){.learning-board-v0712{padding:12px}.learning-board-v0712 h2{font-size:15px}.learning-board-actions button{font-size:10px}.learning-board-legend{gap:10px}}
