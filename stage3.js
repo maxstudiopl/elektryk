@@ -217,6 +217,78 @@ function roundedPath(points,radius=7){
   const last=pts[pts.length-1];
   return d+` L ${last.x} ${last.y}`;
 }
+function rectInCabinet(el){
+  if(!el)return null;
+  const r=el.getBoundingClientRect(),c=cabinet.getBoundingClientRect();
+  return{
+    left:r.left-c.left-cabinet.clientLeft,
+    right:r.right-c.left-cabinet.clientLeft,
+    top:r.top-c.top-cabinet.clientTop,
+    bottom:r.bottom-c.top-cabinet.clientTop,
+    width:r.width,
+    height:r.height
+  };
+}
+function endpointSide(el,zone,exit){
+  if(zone==='top'||zone==='supply'||zone==='load-top')return 'top';
+  if(zone==='bottom'||zone==='load')return 'bottom';
+  if(zone==='bar')return barKind(el)==='PE'?'bottom':'top';
+  return 'top';
+}
+function endpointEscape(P,el,zone,exit){
+  const mounted=el.closest?.('.mounted-device');
+  if(mounted){
+    const r=rectInCabinet(mounted);
+    if(zone==='top')return {x:P.x,y:r.top-9};
+    if(zone==='bottom')return {x:P.x,y:r.bottom+9};
+  }
+
+  if(zone==='supply'){
+    const r=rectInCabinet(el.closest?.('.supply-box'));
+    return {x:P.x,y:(r?.bottom??P.y)+9};
+  }
+  if(zone==='load-top'){
+    const r=rectInCabinet(el.closest?.('.circuit-node'));
+    return {x:P.x,y:(r?.bottom??P.y)+8};
+  }
+  if(zone==='load'){
+    const r=rectInCabinet(el.closest?.('.circuit-node'));
+    return {x:P.x,y:(r?.top??P.y)-8};
+  }
+  if(zone==='bar'){
+    const r=rectInCabinet(el.closest?.('.bar'));
+    return barKind(el)==='PE'
+      ?{x:P.x,y:(r?.bottom??P.y)+8}
+      :{x:P.x,y:(r?.top??P.y)-8};
+  }
+  return {x:P.x,y:P.y};
+}
+function serviceSideX(EA,EB,connection,index){
+  const c=cabinet.getBoundingClientRect();
+  const z=document.querySelector('.din-zone')?.getBoundingClientRect();
+  const n=parseInt(String(connection?.id||'W0').replace(/\D/g,''),10)||index||0;
+  const spread=(n%6)*4;
+
+  let left=14+spread;
+  let right=cabinet.clientWidth-14-spread;
+  if(z){
+    const zoneLeft=z.left-c.left-cabinet.clientLeft;
+    const zoneRight=z.right-c.left-cabinet.clientLeft;
+    left=Math.max(8,zoneLeft-14+spread);
+    right=Math.min(cabinet.clientWidth-8,zoneRight+14-spread);
+  }
+
+  const leftCost=Math.abs(EA.x-left)+Math.abs(EB.x-left);
+  const rightCost=Math.abs(EA.x-right)+Math.abs(EB.x-right);
+  return leftCost<=rightCost?left:right;
+}
+function sameRowServiceY(row,side,lane){
+  if(!row)return null;
+  const small=Math.max(-5,Math.min(5,lane*.35));
+  return side==='top'
+    ?row.top+4+small
+    :row.bottom-12+small;
+}
 function smartRoute(A,B,a,b,type,connection,index){
   const az=a.dataset.zone||'',bz=b.dataset.zone||'';
   const aExit=a.closest?.('.circuit-node')?.dataset.exit||'';
@@ -225,77 +297,45 @@ function smartRoute(A,B,a,b,type,connection,index){
   const routeBz=bz==='load'&&bExit==='top-right'?'load-top':bz;
   const lane=laneOffset(connection,index);
   const aRow=rowBounds(a),bRow=rowBounds(b);
-  const aTop=az==='top',aBottom=az==='bottom',bTop=bz==='top',bBottom=bz==='bottom';
-  const points=[A];
+  const sideA=endpointSide(a,routeAz,aExit);
+  const sideB=endpointSide(b,routeBz,bExit);
+  const EA=endpointEscape(A,a,routeAz,aExit);
+  const EB=endpointEscape(B,b,routeBz,bExit);
+  const aMounted=!!a.closest?.('.mounted-device');
+  const bMounted=!!b.closest?.('.mounted-device');
+  const sameRow=!!(aRow&&bRow&&aRow.index===bRow.index);
 
-  // Bezpośrednie pionowe wyjście z zacisku — przewód nie skręca przy samej śrubie.
-  const escape=(P,zone,row,side)=>{
-    if(zone==='top')return {x:P.x,y:P.y-18};
-    if(zone==='bottom')return {x:P.x,y:P.y+18};
-    if(zone==='supply')return {x:P.x,y:P.y+22};
-    if(zone==='load')return {x:P.x,y:P.y-22};
-    if(zone==='load-top')return {x:P.x,y:P.y+22};
-    if(zone==='bar')return {x:P.x,y:P.y+(side==='a'?-12:12)};
-    return {x:P.x,y:P.y};
-  };
-  const EA=escape(A,routeAz,aRow,'a'),EB=escape(B,routeBz,bRow,'b');
-  points.push(EA);
-
-  // WLZ -> aparat/listwa: zawsze przez górny kanał przewodowy.
-  if(az==='supply'||bz==='supply'){
-    const via=routeThroughChannel(A,B,EA,EB,'top',lane);
-    if(via)return via;
+  // Dwa zaciski po tej samej stronie tego samego rzędu:
+  // trasa biegnie w wolnym pasie nad / pod aparaturą, nigdy po froncie aparatów.
+  if(aMounted&&bMounted&&sameRow&&sideA===sideB){
+    const y=sameRowServiceY(aRow,sideA,lane);
+    return roundedPath([
+      A,EA,
+      {x:EA.x,y},
+      {x:EB.x,y},
+      EB,B
+    ],7);
   }
 
-  // Połączenia do listew N / PE nigdy nie idą "za listwą":
-  // N korzysta z górnego kanału, PE z dolnego kanału.
-  if(az==='bar'||bz==='bar'){
-    const barEl=az==='bar'?a:b;
-    const kind=barKind(barEl);
-    const via=routeThroughChannel(A,B,EA,EB,kind==='PE'?'bottom':'top',lane);
-    if(via)return via;
-  }
+  // Wszystkie połączenia zmieniające stronę aparatu, rząd DIN albo strefę
+  // zewnętrzną (WLZ, N/PE, odbiorniki) korzystają z pionowego korytarza
+  // serwisowego POZA aparaturą. Dzięki temu przewód nie przecina wyłączników.
+  const sideX=serviceSideX(EA,EB,connection,index);
 
-  // Wyjścia do odbiorników: przez fizyczny kanał górny lub dolny.
-  if(az==='load'||bz==='load'){
-    const exit=az==='load'?aExit:bExit;
-    const via=routeThroughChannel(A,B,EA,EB,exit==='top-right'?'top':'bottom',lane);
-    if(via)return via;
-  }
+  let yA=EA.y,yB=EB.y;
+  if(aMounted&&aRow)yA=sameRowServiceY(aRow,sideA,lane);
+  if(bMounted&&bRow)yB=sameRowServiceY(bRow,sideB,lane);
 
-  // Ten sam rząd: skrajne rzędy korzystają z prawdziwych kanałów.
-  // Dzięki temu przewód nie przechodzi pod listwą N/PE.
-  if(aRow&&bRow&&Math.abs(aRow.center-bRow.center)<5){
-    const useTop=(aTop&&bTop)||(!aBottom&&!bBottom&&A.y<=aRow.center&&B.y<=bRow.center);
-    const rows=window.ElektrykStage2?.getRows?.()||1;
-    if(useTop&&aRow.index===0){
-      const via=routeThroughChannel(A,B,EA,EB,'top',lane);
-      if(via)return via;
-    }
-    if(!useTop&&aRow.index===rows-1){
-      const via=routeThroughChannel(A,B,EA,EB,'bottom',lane);
-      if(via)return via;
-    }
-    const corridor=useTop?aRow.top-22+lane:aRow.bottom-22+lane;
-    points.push({x:EA.x,y:corridor},{x:EB.x,y:corridor},EB,B);
-    return roundedPath(points,8);
-  }
+  const pts=[A,EA];
 
-  // Różne rzędy DIN: przewód wykorzystuje wolną strefę pomiędzy rzędami.
-  if(aRow&&bRow){
-    const upper=aRow.center<bRow.center?aRow:bRow;
-    const lower=aRow.center<bRow.center?bRow:aRow;
-    const corridor=(upper.bottom+lower.top)/2+lane;
-    points.push({x:EA.x,y:corridor},{x:EB.x,y:corridor},EB,B);
-    return roundedPath(points,8);
-  }
+  if(Math.abs(EA.y-yA)>.5)pts.push({x:EA.x,y:yA});
+  pts.push({x:sideX,y:yA});
+  if(Math.abs(yA-yB)>.5)pts.push({x:sideX,y:yB});
+  pts.push({x:EB.x,y:yB});
+  if(Math.abs(EB.y-yB)>.5)pts.push(EB);
+  pts.push(B);
 
-  // Listwy N/PE i pozostałe punkty: ortogonalnie, ale z odsunięciem torów.
-  const dx=Math.abs(B.x-A.x),dy=Math.abs(B.y-A.y);
-  if(dx<2||dy<2)return roundedPath([A,B],8);
-  const midY=(A.y+B.y)/2+lane;
-  points.push({x:EA.x,y:midY},{x:EB.x,y:midY},EB,B);
-  return roundedPath(points,8);
+  return roundedPath(pts,9);
 }
 function addPath(d,type,cls){const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);p.setAttribute('class',cls);p.dataset.wire=type;if(cls==='wire-path')p.setAttribute('stroke',COLORS[type]||'#d06a25');svg.appendChild(p)}
 function addFerrule(P,Q,type){
