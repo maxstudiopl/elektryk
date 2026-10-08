@@ -265,7 +265,22 @@ function undoLast(){
   const last=bridges[bridges.length-1];if(!last)return;
   if(last.kind==='comb'&&last.groupId)removeGroup(last.groupId);else removeBridge(last.id);
 }
-function clearBridges(){bridges=[];clearStart();redraw();setStatus('Usunięto wszystkie mostki i grzebienie.')}
+function clearBridges(){bridges=[];seq=1;groupSeq=1;clearStart();redraw();setStatus('Usunięto wszystkie mostki i grzebienie.')}
+function setBridges(records=[]){
+  clearStart();
+  bridges=[...records].map((b,i)=>({
+    id:String(b.id||('BR'+(i+1))),
+    a:String(b.a||''),
+    b:String(b.b||''),
+    phase:String(b.phase||'L1'),
+    kind:b.kind==='comb'?'comb':'bridge',
+    groupId:b.groupId?String(b.groupId):undefined
+  })).filter(b=>b.a&&b.b&&['L1','L2','L3','N','PE'].includes(b.phase));
+  seq=bridges.reduce((m,b)=>Math.max(m,Number(String(b.id).replace(/\D/g,''))||0),0)+1;
+  groupSeq=bridges.reduce((m,b)=>Math.max(m,Number(String(b.groupId||'').replace(/\D/g,''))||0),0)+1;
+  redraw();
+  return bridges.length;
+}
 function flash(t){t.classList.add('bad-terminal');setTimeout(()=>t.classList.remove('bad-terminal'),500)}
 function setStatus(txt){const s=document.getElementById('wiringStatus');if(s)s.innerHTML='<b>ZASILANIE:</b> '+txt}
 
@@ -280,5 +295,12 @@ obs.observe(document.querySelector('.din-zone')||cabinet,{childList:true,subtree
 window.addEventListener('resize',()=>requestAnimationFrame(redraw));
 refreshPhase();refreshButtons();redraw();
 
-window.ElektrykBridges={getBridges:()=>bridges.slice(),clear:clearBridges,redraw,remove:removeBridge,removeGroup};
+window.ElektrykBridges={
+  getBridges:()=>bridges.map(b=>({...b})),
+  setBridges,
+  clear:clearBridges,
+  redraw,
+  remove:removeBridge,
+  removeGroup
+};
 })();
