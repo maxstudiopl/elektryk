@@ -76,6 +76,26 @@ function inspectRecords(input={}){
     if(upstream||inputDevices.size)add('error','Tory neutralne: N po stronie odbiorczej RCD/RCBO jest połączony z N zasilającym. Rozdziel N przed i za zabezpieczeniem.');
     if(deviceIds.size>1)add('error','Tory neutralne: wyjścia N różnych RCD/RCBO są połączone. Każda sekcja wymaga własnego toru N.');
   });
+  // Gdy dwie sekcje RCD mają połączone wyjścia fazowe, ich ochrona nie jest niezależna.
+  const phaseTerminals=terminals.filter(t=>t.role==='L'||isPhase(t.role));
+  const phaseParent=new Map(phaseTerminals.map(t=>[t.id,t.id]));
+  const phaseFind=x=>{let cur=x;while(phaseParent.get(cur)!==cur)cur=phaseParent.get(cur);return cur};
+  const phaseUnion=(a,b)=>{if(phaseParent.has(a)&&phaseParent.has(b))phaseParent.set(phaseFind(a),phaseFind(b))};
+  links.filter(l=>isPhase(l.phase)).forEach(l=>phaseUnion(l.a,l.b));
+  const phaseOutputs=new Map();
+  phaseTerminals.forEach(t=>{
+    const m=devices.get(t.mountId);
+    if(!m||!/^(RCD|RCBO)/.test(m.code)||t.zone!=='bottom')return;
+    const root=phaseFind(t.id);
+    if(!phaseOutputs.has(root))phaseOutputs.set(root,new Set());
+    phaseOutputs.get(root).add(m.id);
+  });
+  phaseOutputs.forEach((ids,root)=>{
+    if(ids.size>1)add('error','Wyjścia fazowe różnych RCD/RCBO zostały połączone. Usuń mostek lub grzebień łączący sekcje.');
+    if(phaseTerminals.some(t=>String(t.id).startsWith('SUPPLY:L')&&phaseFind(t.id)===root)){
+      add('error','Wyjście fazowe RCD/RCBO ma bezpośrednie połączenie z zasilaniem przed zabezpieczeniem.');
+    }
+  });
   return issues;
 }
 function inspect(){
