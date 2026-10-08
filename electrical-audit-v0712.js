@@ -25,6 +25,16 @@ function inspectRecords(input={}){
       add('error','Nieprawidłowy tor '+c.phase+' na zaciskach '+c.a+' / '+c.b+'. Sprawdź zgodność L, N i PE.');
     }
   });
+  const busbarMembership=new Map();
+  bridges.filter(b=>b.kind==='comb'||b.kind==='comb3').forEach(b=>{
+    for(const id of new Set([b.a,b.b])){
+      if(!busbarMembership.has(id))busbarMembership.set(id,new Set());
+      busbarMembership.get(id).add(b.groupId||b.id);
+    }
+  });
+  busbarMembership.forEach((set,id)=>{
+    if(set.size>1)add('error','Zacisk '+id+' należy do więcej niż jednego grzebienia. Grzebienie nie mogą się nakładać.');
+  });
   const groups=new Map();
   bridges.filter(b=>b.kind==='comb').forEach(b=>{
     const id=b.groupId||'bez-grupy-'+b.id;
