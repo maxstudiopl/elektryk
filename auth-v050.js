@@ -9,16 +9,16 @@ const LICENSE_TYPE='BETA / TESTOWA';
 const LICENSE_EXPIRY=null;
 
 const scripts=[
-  'ui.js?v=0709',
-  'switchboard-db.js?v=0709',
-  'stage2.js?v=0709',
-  'stage3.js?v=0709',
-  'bridges-v031.js?v=0709',
-  'stage4.js?v=0709',
-  'tasks-v046.js?v=0709',
-  'busbars-v047.js?v=0709',
-  'help-v049.js?v=0709',
-  'progress-v060.js?v=0709'
+  'ui.js?v=0710',
+  'switchboard-db.js?v=0710',
+  'stage2.js?v=0710',
+  'stage3.js?v=0710',
+  'bridges-v031.js?v=0710',
+  'stage4.js?v=0710',
+  'tasks-v046.js?v=0710',
+  'busbars-v047.js?v=0710',
+  'help-v049.js?v=0710',
+  'progress-v060.js?v=0710'
 ];
 
 let gameLoaded=false;
