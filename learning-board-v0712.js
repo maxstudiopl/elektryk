@@ -56,19 +56,22 @@ function renderReference(){
   rows.replaceChildren();
   if(!plan){renderedTask=null;return}
   renderedTask=plan.task.id;
+  const cols=plan.cols||18;
+  rows.style.setProperty('--learning-columns',String(cols));
+  rows.style.minWidth=Math.max(660,cols*43)+'px';
   plan.rows.forEach((row,rowIndex)=>{
     const wrap=document.createElement('div');
     wrap.className='learning-reference-row';
     const title=document.createElement('div');
     title.className='learning-reference-row-title';
-    title.textContent='LISTWA DIN '+(rowIndex+1)+' • '+row.used+'/18 MODUŁÓW';
+    title.textContent='LISTWA DIN '+(rowIndex+1)+' • '+row.used+'/'+cols+' MODUŁÓW';
     const rail=document.createElement('div');
     rail.className='learning-reference-rail';
     rail.setAttribute('role','group');
     rail.setAttribute('aria-label','Wzorcowa listwa DIN '+(rowIndex+1));
-    const occupied=Array(18).fill(false);
+    const occupied=Array(cols).fill(false);
     row.items.forEach(d=>{
-      for(let n=d.start;n<d.start+d.modules&&n<18;n++)occupied[n]=true;
+      for(let n=d.start;n<d.start+d.modules&&n<cols;n++)occupied[n]=true;
       const part=document.createElement('div');
       part.className='learning-reference-device learning-ref-'+d.code.toLowerCase();
       part.style.gridColumn=(d.start+1)+' / span '+d.modules;
