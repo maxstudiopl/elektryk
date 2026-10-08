@@ -35,7 +35,9 @@ function requirementsDone(){
   if(!task)return false;
   const counts={};
   mounted.forEach(m=>counts[m.code]=(counts[m.code]||0)+1);
-  return Object.entries(task.requirements||{}).every(([code,n])=>(counts[code]||0)>=Number(n));
+  const countsDone=Object.entries(task.requirements||{}).every(([code,n])=>(counts[code]||0)>=Number(n));
+  const reference=window.ElektrykLearningBoard?.evaluate?.();
+  return countsDone&&!!reference?.complete;
 }
 function currentMode(){return document.body.dataset.gameMode||'learn'}
 function profile(){
