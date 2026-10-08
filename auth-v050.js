@@ -69,7 +69,8 @@ function saveSession(user){
 }
 function clearSession(){localStorage.removeItem(SESSION_KEY)}
 function appStateStorageKey(){
-  return APP_STATE_KEY+':'+(currentUser()||'guest');
+  const user=currentUser()||'guest';
+  return user==='admin'?APP_STATE_KEY:(APP_STATE_KEY+':'+user);
 }
 function readAppState(){
   try{
@@ -328,8 +329,8 @@ async function enterGame(mode='learn',freeTemplate=null,taskId=null){
   window.ElektrykProgress?.refreshProfile?.();
 }
 function lock(){
-  clearSession();
   clearAppState();
+  clearSession();
   location.reload();
 }
 function showMessage(txt,type=''){
