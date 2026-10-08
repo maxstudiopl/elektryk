@@ -79,3 +79,12 @@
 .task-card-meta span{font-size:8px!important}
 .task-card em{font-size:8px!important}
 @media(max-width:740px){.task-catalog-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.task-catalog-tabs button{font-size:9px}.task-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+
+/* Rzeczywista siatka dla szkoleniowych obudów 12M i 24M */
+.cabinet[data-modules-per-row="12"] .din-row .mount-grid{
+ background:repeating-linear-gradient(90deg,transparent 0 calc(8.333333% - 1px),#7e898d38 calc(8.333333% - 1px) 8.333333%)!important;
+}
+.cabinet[data-modules-per-row="24"] .din-row .mount-grid{
+ background:repeating-linear-gradient(90deg,transparent 0 calc(4.166667% - 1px),#7e898d38 calc(4.166667% - 1px) 4.166667%)!important;
+}
