@@ -40,9 +40,9 @@ document.querySelectorAll('.wire').forEach(w=>w.addEventListener('click',()=>{
 
 function mountedOf(t){return t.closest('.mounted-device')}
 function codeOf(t){return mountedOf(t)?.dataset.code||''}
-function isBreakerCode(code){return code==='RCBO'||/^[BC]\d+(?:_(?:2P|3P))?$/.test(code)}
+function isBreakerCode(code){return code.startsWith('RCBO')||/^[BC]\d+(?:_(?:2P|3P))?$/.test(code)}
 function isFrCode(code){return code==='FR'||code==='FR40'||code==='FR100'||code.startsWith('FR')}
-function isFeedTargetCode(code){return code==='SPD'||code==='RCD'||code==='RCBO'||isBreakerCode(code)}
+function isFeedTargetCode(code){return code.startsWith('SPD')||code.startsWith('RCD')||code.startsWith('RCBO')||isBreakerCode(code)}
 function roleMatchesConductor(role,type){
   if(type==='N')return role==='N';
   if(type==='PE')return role==='PE';
@@ -57,9 +57,9 @@ function eligibleBridge(t){
   if(zone==='supply')return role==='N'||role==='PE';
 
   if(isFrCode(code))return zone==='bottom';
-  if(code==='RCD'&&zone==='bottom')return role==='L'||role==='N';
-  if(code==='RCBO'&&zone==='bottom')return role==='L'||role==='N';
-  if(code==='SPD'&&zone==='bottom')return role==='PE';
+  if(code.startsWith('RCD')&&zone==='bottom')return ['L','L1','L2','L3','N'].includes(role);
+  if(code.startsWith('RCBO')&&zone==='bottom')return role==='L'||role==='N';
+  if(code.startsWith('SPD')&&zone==='bottom')return role==='PE';
   if(code==='NTB'||code==='NTB12')return role==='N';
   if(code==='PETB'||code==='PETB12')return role==='PE';
   if(isFeedTargetCode(code))return zone==='top';
