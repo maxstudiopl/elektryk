@@ -43,7 +43,7 @@ const PARTS={
   PETB12:{code:'PETB12',name:'Listwa PE kompakt 12',modules:1,category:'ZACISKI',className:'device-terminal device-terminal-pe device-terminal-compact',top:'PE1 • PE2 • PE3 • PE4 • PE5 • PE6',brand:'XYZ',brandClass:'green',type:'PE',rating:'12×PE',meta:'KOMPAKT • 1M',fn:'12 ZACISKÓW OCHRONNYCH',bottom:'PE7 • PE8 • PE9 • PE10 • PE11 • PE12',kind:'terminal-pe',passive:true,compact:true}
 }
 
-const MODULES_PER_ROW=18;
+let modulesPerRow=18;
 const ROW_PITCH=252;
 const DIN_ZONE_EXTRA=96;
 let selected=null,rowCount=1,occupied=[],mounted=[],seq=1,errors=0;
@@ -81,7 +81,7 @@ if(activeTask){
 const footerStats=document.querySelectorAll('.workspace-footer b');
 const moduleStat=footerStats[0]||null,errorStat=footerStats[2]||null;
 
-function totalModules(){return rowCount*MODULES_PER_ROW}
+function totalModules(){return rowCount*modulesPerRow}
 function usedModules(){return occupied.reduce((n,row)=>n+row.filter(Boolean).length,0)}
 function apparatusHtml(p){
   return `<article class="device ${p.className}" data-kind="${p.kind}">
@@ -105,18 +105,21 @@ function updateStats(){
   if(errorStat)errorStat.textContent=errors;
   updateGoals();
 }
-function renderRows(count){
-  rowCount=Math.max(1,Math.min(3,Number(count)||1));
+function renderRows(count,perRow=modulesPerRow){
+  rowCount=Math.max(1,Math.min(5,Number(count)||1));
+  modulesPerRow=Math.max(6,Math.min(24,Number(perRow)||18));
   rowsHost.innerHTML='';
-  occupied=Array.from({length:rowCount},()=>Array(MODULES_PER_ROW).fill(null));
+  occupied=Array.from({length:rowCount},()=>Array(modulesPerRow).fill(null));
   mounted=[];seq=1;
+  rowsHost.style.setProperty('--modules-per-row',String(modulesPerRow));
+  cabinetInner.dataset.modulesPerRow=String(modulesPerRow);
 
   for(let r=0;r<rowCount;r++){
     const row=document.createElement('div');
     row.className='din-row';row.dataset.row=r;
-    row.innerHTML=`<div class="din-row-label"><span>LISTWA DIN ${r+1}</span><b>${r*18+1}–${r*18+18}</b></div><div class="din-rail"></div>`;
+    row.innerHTML=`<div class="din-row-label"><span>LISTWA DIN ${r+1}</span><b>${r*modulesPerRow+1}–${r*modulesPerRow+modulesPerRow}</b></div><div class="din-rail"></div>`;
     const grid=document.createElement('div');grid.className='mount-grid';grid.dataset.row=r;
-    for(let i=0;i<MODULES_PER_ROW;i++){
+    for(let i=0;i<modulesPerRow;i++){
       const s=document.createElement('div');s.className='din-slot';s.dataset.row=r;s.dataset.slot=i;s.dataset.label=i+1;grid.appendChild(s);
     }
     row.appendChild(grid);rowsHost.appendChild(row);
@@ -133,11 +136,11 @@ function renderRows(count){
 
   window.ElektrykStage3?.clear?.();
   window.ElektrykBridges?.clear?.();
-  document.dispatchEvent(new CustomEvent('elektryk:rails-changed',{detail:{rows:rowCount,totalModules:totalModules()}}));
+  document.dispatchEvent(new CustomEvent('elektryk:rails-changed',{detail:{rows:rowCount,modulesPerRow,totalModules:totalModules()}}));
   updateStats();
 }
 function canPlace(row,start,p){
-  if(row<0||row>=rowCount||start<0||start+p.modules>MODULES_PER_ROW)return false;
+  if(row<0||row>=rowCount||start<0||start+p.modules>modulesPerRow)return false;
   for(let i=start;i<start+p.modules;i++)if(occupied[row][i])return false;
   return true;
 }
@@ -147,7 +150,7 @@ function preview(row,start){
   const p=PARTS[selected],ok=canPlace(row,start,p);
   const grid=rowsHost.querySelector(`.mount-grid[data-row="${row}"]`);
   if(!grid)return;
-  for(let i=start;i<Math.min(MODULES_PER_ROW,start+p.modules);i++)grid.children[i]?.classList.add(ok?'preview-ok':'preview-bad');
+  for(let i=start;i<Math.min(modulesPerRow,start+p.modules);i++)grid.children[i]?.classList.add(ok?'preview-ok':'preview-bad');
 }
 function mount(row,start){
   if(!selected){setHint('<b>MONTAŻ DIN:</b> najpierw wybierz aparat w katalogu.','error');return}
@@ -162,7 +165,7 @@ function mount(row,start){
   for(let i=start;i<start+p.modules;i++){occupied[row][i]=id;grid.children[i].classList.add('occupied')}
   const wrap=document.createElement('div');
   wrap.className='mounted-device';wrap.dataset.mountId=id;wrap.dataset.code=p.code;wrap.dataset.row=row;wrap.dataset.modules=String(p.modules);wrap.dataset.deviceLabel=p.name;
-  wrap.style.left=`${start/MODULES_PER_ROW*100}%`;wrap.style.width=`${p.modules/MODULES_PER_ROW*100}%`;
+  wrap.style.left=`${start/modulesPerRow*100}%`;wrap.style.width=`${p.modules/modulesPerRow*100}%`;
   wrap.innerHTML=`<button class="remove-device" title="Usuń aparat">×</button>${apparatusHtml(p)}`;
   grid.appendChild(wrap);
   mounted.push({id,code:p.code,row,start,modules:p.modules,el:wrap});
@@ -180,7 +183,7 @@ function removeMount(id){
 }
 function resetAll(){
   mounted.slice().forEach(m=>m.el.remove());mounted=[];seq=1;
-  occupied=Array.from({length:rowCount},()=>Array(MODULES_PER_ROW).fill(null));
+  occupied=Array.from({length:rowCount},()=>Array(modulesPerRow).fill(null));
   rowsHost.querySelectorAll('.din-slot').forEach(s=>s.classList.remove('occupied','preview-ok','preview-bad'));
   errors=0;window.ElektrykStage3?.clear?.();window.ElektrykBridges?.clear?.();updateStats();
   setHint('<b>MONTAŻ DIN:</b> rozdzielnica została wyczyszczona.');
@@ -229,9 +232,9 @@ function configureTask(task){
   const reward=document.querySelector('.reward b');
   if(title)title.textContent=task.title;
   if(desc)desc.textContent=task.description;
-  if(reward)reward.textContent=`${task.xp} XP`;
+  if(reward){reward.style.display='';reward.querySelector('b')?reward.querySelector('b').textContent=`${task.xp} XP`:reward.textContent=`${task.xp} XP`}
   renderTaskGoals(task);
-  renderRows(task.rows);
+  renderRows(task.rows,18);
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
   setHint(`<b>ZADANIE ${String(task.id).padStart(2,'0')}:</b> ${task.title} • ${task.rows} ${task.rows===1?'listwa':'listwy'} DIN.`,'success');
   updateGoals();
@@ -253,6 +256,35 @@ function ensureMcbVariantCards(){
   });
 }
 ensureMcbVariantCards();
+
+function configureBoard(template){
+  if(!template||!template.rows||!template.modulesPerRow)return false;
+  selected=null;errors=0;
+  currentTask={
+    id:'FREE',
+    title:template.name||'Wolna budowa',
+    rows:Number(template.rows),
+    modulesPerRow:Number(template.modulesPerRow),
+    requirements:{}
+  };
+  document.querySelectorAll('.catalog-card').forEach(x=>x.classList.remove('install-selected'));
+  const title=document.querySelector('.active-task h2');
+  const desc=document.querySelector('.active-task p');
+  const reward=document.querySelector('.reward');
+  const goals=document.querySelector('.task-goals');
+  if(title)title.textContent=template.name||'Wolna budowa';
+  if(desc)desc.textContent='Tryb nauki bez narzuconego zadania. Samodzielnie dobierz aparaturę, rozmieść ją i wykonaj połączenia.';
+  if(reward)reward.style.display='none';
+  if(goals){goals.innerHTML='<span>WOLNA BUDOWA • brak wymaganej listy aparatów</span>'}
+  document.getElementById('taskComplete')?.classList.remove('show');
+  renderRows(template.rows,template.modulesPerRow);
+  hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
+  setHint(`<b>WOLNA BUDOWA:</b> ${template.name} • ${template.rows}×${template.modulesPerRow}M.`,'success');
+  const version=document.querySelector('.cabinet-head .version');
+  if(version)version.textContent=`v0.7.4 • WOLNA BUDOWA • ${template.rows}×${template.modulesPerRow}M`;
+  document.dispatchEvent(new CustomEvent('elektryk:board-changed',{detail:{template:{...template}}}));
+  return true;
+}
 
 document.querySelectorAll('.catalog-card').forEach(card=>{
   const code=inferCode(card);if(!code)return;
@@ -287,7 +319,10 @@ window.ElektrykStage2={
   getMounted:()=>mounted.map(({id,code,row,start,modules})=>({id,code,row,start,modules})),
   getTask:()=>currentTask,
   getRows:()=>rowCount,
+  getModulesPerRow:()=>modulesPerRow,
   getTotalModules:totalModules,
+  getBoardConfig:()=>({rows:rowCount,modulesPerRow,totalModules:totalModules()}),
+  configureBoard,
   parts:PARTS
 };
 })();
