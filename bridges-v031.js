@@ -359,7 +359,11 @@ function setStatus(txt){const s=document.getElementById('wiringStatus');if(s)s.i
 cabinet.addEventListener('click',e=>{
   if(!(bridgeMode||combMode||comb3Mode))return;
   const t=e.target.closest('.wire-terminal');
-  if(t&&eligible(t)){e.stopPropagation();e.preventDefault();bridgeMode?createBridge(t):comb3Mode?createComb3(t):createComb(t)}
+  if(t){
+    e.stopPropagation();e.preventDefault();
+    if(!eligible(t)){flash(t);setStatus('Ten zacisk nie obsługuje wybranego mostka ani grzebienia. Zmień tryb lub aparat.');return}
+    bridgeMode?createBridge(t):comb3Mode?createComb3(t):createComb(t);
+  }
 },true);
 
 const obs=new MutationObserver(()=>requestAnimationFrame(redraw));
