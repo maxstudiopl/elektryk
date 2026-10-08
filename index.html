@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Elektryk Symulator Damian Górny — v0.7.4</title>
-  <link rel="stylesheet" href="style.css?v=0704">
-  <link rel="stylesheet" href="apparatus.css?v=0704">
-  <link rel="stylesheet" href="stage2.css?v=0704">
-  <link rel="stylesheet" href="stage3.css?v=0704">
-  <link rel="stylesheet" href="bridges-v031.css?v=0704">
-  <link rel="stylesheet" href="stage4.css?v=0704">
-  <link rel="stylesheet" href="tasks-v046.css?v=0704">
-  <link rel="stylesheet" href="busbars-v047.css?v=0704">
-  <link rel="stylesheet" href="help-v049.css?v=0704">
-  <link rel="stylesheet" href="auth-v050.css?v=0704">
-  <link rel="stylesheet" href="progress-v060.css?v=0704">
+  <title>Elektryk Symulator Damian Górny — v0.7.5</title>
+  <link rel="stylesheet" href="style.css?v=0705">
+  <link rel="stylesheet" href="apparatus.css?v=0705">
+  <link rel="stylesheet" href="stage2.css?v=0705">
+  <link rel="stylesheet" href="stage3.css?v=0705">
+  <link rel="stylesheet" href="bridges-v031.css?v=0705">
+  <link rel="stylesheet" href="stage4.css?v=0705">
+  <link rel="stylesheet" href="tasks-v046.css?v=0705">
+  <link rel="stylesheet" href="busbars-v047.css?v=0705">
+  <link rel="stylesheet" href="help-v049.css?v=0705">
+  <link rel="stylesheet" href="auth-v050.css?v=0705">
+  <link rel="stylesheet" href="progress-v060.css?v=0705">
   <style>
     /* v0.4.5 critical DIN layout hotfix — bypasses stale cached CSS */
     .mount-grid .mounted-device{position:absolute!important;top:0!important;height:194px!important;margin:0!important;padding:0!important;transform:none!important;box-sizing:border-box!important;z-index:12!important}
@@ -43,12 +43,52 @@
           <small>BUDOWA I ROZBUDOWA ROZDZIELNIC</small>
         </div>
       </div>
-      <h1>LOGOWANIE</h1>
-      <p>Dostęp wyłącznie po zalogowaniu na aktywne konto.</p>
-      <label class="auth-field"><span>LOGIN</span><input id="authLogin" autocomplete="username" placeholder="Wpisz login"></label>
-      <label class="auth-field"><span>HASŁO</span><input id="authPassword" type="password" autocomplete="current-password" placeholder="Wpisz hasło"></label>
-      <button class="auth-submit" id="authSubmit">ZALOGUJ SIĘ</button>
-      <div class="auth-message" id="authMessage"></div>
+      <div class="auth-login-view" id="authLoginView">
+        <h1>LOGOWANIE</h1>
+        <p>Dostęp wyłącznie po zalogowaniu na aktywne konto.</p>
+        <label class="auth-field"><span>LOGIN</span><input id="authLogin" autocomplete="username" placeholder="Wpisz login"></label>
+        <label class="auth-field"><span>HASŁO</span><input id="authPassword" type="password" autocomplete="current-password" placeholder="Wpisz hasło"></label>
+        <button class="auth-submit" id="authSubmit">ZALOGUJ SIĘ</button>
+        <div class="auth-message" id="authMessage"></div>
+      </div>
+
+      <div class="player-hub" id="playerHub" hidden>
+        <div class="player-welcome">
+          <small>WITAJ W SYMULATORZE</small>
+          <h1>Witaj, <span id="hubPlayerName">GRACZU</span></h1>
+          <p>Wybierz tryb pracy i przejdź do rozdzielnicy.</p>
+        </div>
+
+        <div class="player-modes">
+          <button class="mode-card free" id="modeFree">
+            <span class="mode-icon">▦</span>
+            <b>WOLNA BUDOWA</b>
+            <small>Buduj i testuj własną rozdzielnicę bez narzuconych zadań.</small>
+          </button>
+          <button class="mode-card learn" id="modeLearn">
+            <span class="mode-icon">▤</span>
+            <b>NAUKA</b>
+            <small>Zadania treningowe, podpowiedzi, XP i analiza instalacji.</small>
+          </button>
+          <button class="mode-card exam" id="modeExam">
+            <span class="mode-icon">✓</span>
+            <b>EGZAMIN</b>
+            <small>Samodzielne wykonanie układu bez podpowiedzi.</small>
+            <em>W PRZYGOTOWANIU</em>
+          </button>
+        </div>
+
+        <section class="account-summary">
+          <div class="account-summary-head"><b>INFORMACJE O KONCIE</b><span class="account-active">● AKTYWNE</span></div>
+          <div class="account-grid">
+            <div><span>UŻYTKOWNIK</span><b id="hubAccountUser">—</b></div>
+            <div><span>LICENCJA</span><b id="hubLicense">BETA / TESTOWA</b></div>
+            <div><span>WYGAŚNIĘCIE DOSTĘPU</span><b id="hubLicenseExpiry">NIE USTAWIONO</b></div>
+            <div><span>AKTUALNA SESJA DO</span><b id="hubSessionExpiry">—</b></div>
+          </div>
+        </section>
+      </div>
+
       <footer class="auth-footer">PROJEKT WYKONAŁ DAMIAN GÓRNY — <a href="https://maxstudio.pl" target="_blank" rel="noopener noreferrer">MAXSTUDIO</a></footer>
     </div>
   </div>
@@ -81,7 +121,7 @@
     </aside>
 
     <section class="workspace">
-      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.7.4 • DYNAMICZNE ROZDZIELNICE</span></div>
+      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.7.5 • PANEL GRACZA</span></div>
       <div class="cabinet">
         <div class="cabinet-inner">
           <div class="supply-box">
@@ -149,6 +189,6 @@
   </main>
 
   <div class="task-modal" id="taskModal" hidden><div class="task-window"><div class="task-window-head"><div><b>WYBIERZ ZADANIE</b><small>Wybierz zadanie treningowe</small></div><button id="closeTasks">×</button></div><div class="task-cards"><button><b>01</b><span>Podstawowa rozdzielnica</span><small>150 XP</small></button><button><b>02</b><span>Obwód gniazd</span><small>100 XP</small></button><button><b>03</b><span>Łazienka z RCD</span><small>180 XP</small></button></div></div></div>
-  <script src="auth-v050.js?v=0704"></script>
+  <script src="auth-v050.js?v=0705"></script>
 </body>
 </html>
