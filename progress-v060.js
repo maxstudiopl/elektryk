@@ -33,13 +33,13 @@ function requirementsDone(){
   mounted.forEach(m=>counts[m.code]=(counts[m.code]||0)+1);
   return Object.entries(task.requirements||{}).every(([code,n])=>(counts[code]||0)>=Number(n));
 }
+function currentMode(){return document.body.dataset.gameMode||'learn'}
 function profile(){
-  const profile=document.querySelector('.profile');
-  if(!profile)return;
-  const xpEl=profile.querySelector(':scope>span');
-  const levelEl=profile.querySelector(':scope>b');
-  if(xpEl)xpEl.textContent='⭐ '+data.xp+' XP';
-  if(levelEl)levelEl.textContent='Poziom '+levelForXp(data.xp);
+  const top=document.getElementById('topPlayerLevel');
+  const mode=currentMode();
+  if(top){
+    top.textContent=mode==='learn'?'TWÓJ POZIOM: '+levelForXp(data.xp):'BEZ PUNKTACJI';
+  }
 }
 function ensureStats(){
   const host=document.querySelector('.active-task');
@@ -53,6 +53,9 @@ function ensureStats(){
 }
 function renderStats(){
   ensureStats();profile();
+  const progressBox=document.getElementById('playerProgress');
+  if(progressBox)progressBox.classList.toggle('mode-hidden',currentMode()!=='learn');
+  if(currentMode()!=='learn')return;
   const completed=Object.keys(data.completed||{}).filter(k=>data.completed[k]).length;
   const stars=Object.values(data.bestStars||{}).reduce((a,b)=>a+Number(b||0),0);
   const c=document.getElementById('progressCompleted'),s=document.getElementById('progressStars'),x=document.getElementById('progressXp'),l=document.getElementById('progressLevel');
@@ -126,8 +129,17 @@ document.addEventListener('elektryk:task-started',e=>{
   currentTaskId=Number(e.detail?.task?.id||window.ElektrykStage2?.getTask?.()?.id||1);
   taskStartedAt=Date.now();failedChecks=0;renderStats();
 });
+document.addEventListener('elektryk:mode-selected',e=>{
+  const mode=e.detail?.mode||'learn';
+  document.body.dataset.gameMode=mode;
+  taskStartedAt=Date.now();
+  failedChecks=0;
+  renderStats();
+});
 document.addEventListener('elektryk:power-check',e=>{
+  if(currentMode()!=='learn')return;
   const id=Number(window.ElektrykStage2?.getTask?.()?.id||currentTaskId||1);
+  if(!Number.isFinite(id))return;
   data.attempts[id]=(data.attempts[id]||0)+1;
   save();
   if(e.detail?.complete&&requirementsDone())completeTask(e.detail);
@@ -135,6 +147,7 @@ document.addEventListener('elektryk:power-check',e=>{
   renderStats();
 });
 setInterval(()=>{
+  if(currentMode()!=='learn')return;
   const t=document.getElementById('progressTimer');
   if(t)t.textContent=fmt((Date.now()-taskStartedAt)/1000);
 },1000);
@@ -142,6 +155,8 @@ setTimeout(renderStats,0);
 setTimeout(renderStats,500);
 window.ElektrykProgress={
   get:()=>JSON.parse(JSON.stringify(data)),
+  level:()=>levelForXp(data.xp),
+  refreshProfile:profile,
   reset:()=>{localStorage.removeItem(KEY);data=fresh();taskStartedAt=Date.now();failedChecks=0;renderStats()}
 };
 })();
