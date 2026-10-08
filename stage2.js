@@ -311,19 +311,16 @@ function configureTask(task){
   if(cabinetTitle)cabinetTitle.textContent='ROZDZIELNICA TRENINGOWA';
   if(rewardBox)rewardBox.style.display='';
   if(reward)reward.textContent=`${task.xp} XP`;
-  applyEnclosureProfile({
-    id:'TRAINING-TASK',
-    family:'training',
-    mounting:'training',
-    rows:task.rows,
-    modulesPerRow:18,
-    enclosureProfile:taskEnclosureProfile(task.rows),
-    enclosureLook:{shell:'training',door:'none',depth:'standard',rowSpacing:'training'}
+  const model=task.boardId&&task.boardId!=='TRAINING-TASK'?window.ElektrykSwitchboardDB?.get?.(task.boardId):null;
+  const cols=Number(task.modulesPerRow||model?.modulesPerRow||18);
+  applyEnclosureProfile(model||{
+    id:'TRAINING-TASK',family:'training',mounting:'training',rows:task.rows,modulesPerRow:cols,
+    enclosureProfile:taskEnclosureProfile(task.rows),enclosureLook:{shell:'training',door:'none',depth:'standard',rowSpacing:'training'}
   });
   renderTaskGoals(task);
-  renderRows(task.rows,18);
+  renderRows(task.rows,cols);
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
-  setHint(`<b>ZADANIE ${String(task.id).padStart(2,'0')}:</b> ${task.title} • ${task.rows} ${task.rows===1?'listwa':'listwy'} DIN.`,'success');
+  setHint(`<b>ZADANIE ${String(task.id).padStart(2,'0')}:</b> ${task.title} • ${task.rows}×${cols}M DIN.`,'success');
   updateGoals();
 }
 
