@@ -1,21 +1,5 @@
 (()=>{
-const ACCOUNTS={
-  admin:{
-    login:'admin',display:'Admin',role:'admin',
-    salt:'elektryk-v050-single-2026',
-    passHash:'3dee654f9d15a95ed45332ec703f94258cb70f86cf2cdaaeb7d3240b399d354e'
-  },
-  demo:{
-    login:'demo',display:'Demo',role:'player',
-    salt:'elektryk-v0711-player-2026',
-    passHash:'06e5c32716fe194884663e2b1ca32644591c7e87916fdb61d0cce7eb7ba5596b'
-  },
-  kamil:{
-    login:'kamil',display:'Kamil',role:'player',
-    salt:'elektryk-v0711-player-2026',
-    passHash:'06e5c32716fe194884663e2b1ca32644591c7e87916fdb61d0cce7eb7ba5596b'
-  }
-};
+const accountStore=()=>window.ElektrykAccounts;
 const SESSION_KEY='elektryk_auth_v050';
 const SETTINGS_KEY='elektryk_settings_v076';
 const APP_STATE_KEY='elektryk_app_state_v0710';
@@ -51,8 +35,14 @@ function sessionData(){
   try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch{return null}
 }
 function currentAccount(){
-  const s=sessionData();
-  return s?.user?ACCOUNTS[String(s.user).toLowerCase()]||null:null;
+  const sess=sessionData();
+  if(!sess)return null;
+  return sess.accountId
+    ?accountStore()?.byId?.(sess.accountId)||null
+    :accountStore()?.byLogin?.(sess.user)||null;
+}
+function currentAccountId(){
+  return currentAccount()?.id||null;
 }
 function currentUser(){
   return currentAccount()?.login||null;
@@ -61,16 +51,23 @@ function isAdmin(){
   return currentAccount()?.role==='admin';
 }
 function sessionValid(){
-  const s=sessionData();
-  return !!(s&&ACCOUNTS[String(s.user||'').toLowerCase()]&&Number(s.expires)>Date.now());
+  const sess=sessionData();
+  return !!(sess&&currentAccount()&&Number(sess.expires)>Date.now());
 }
-function saveSession(user){
-  localStorage.setItem(SESSION_KEY,JSON.stringify({user,expires:Date.now()+SESSION_MS}));
+function licenseActive(){
+  return !!accountStore()?.licenseActive?.(currentAccount());
+}
+function saveSession(account){
+  localStorage.setItem(SESSION_KEY,JSON.stringify({
+    accountId:account.id,
+    user:account.login,
+    expires:Date.now()+SESSION_MS
+  }));
 }
 function clearSession(){localStorage.removeItem(SESSION_KEY)}
 function appStateStorageKey(){
-  const user=currentUser()||'guest';
-  return user==='admin'?APP_STATE_KEY:(APP_STATE_KEY+':'+user);
+  const id=currentAccountId()||'guest';
+  return id==='admin'?APP_STATE_KEY:(APP_STATE_KEY+':'+id);
 }
 function readAppState(){
   try{
@@ -158,8 +155,8 @@ function populateHub(){
   const map={
     hubPlayerName:name,
     hubAccountUser:name,
-    hubLicense:LICENSE_TYPE,
-    hubLicenseExpiry:LICENSE_EXPIRY?formatDate(LICENSE_EXPIRY):'NIE USTAWIONO',
+    hubLicense:account?.license||'BRAK LICENCJI',
+    hubLicenseExpiry:account?.licenseExpiry?new Date(account.licenseExpiry+'T23:59:59').toLocaleDateString('pl-PL'):'NIE USTAWIONO',
     hubSessionExpiry:formatDate(s?.expires)
   };
   Object.entries(map).forEach(([id,value])=>{
@@ -280,6 +277,7 @@ function renderBoardSelector(){
 }
 async function openBoardSelector(){
   if(!sessionValid()){location.reload();return}
+  if(!licenseActive()){showHub();window.ElektrykAdminPlayers?.showLicenseWarning?.();return}
   try{await loadScripts()}catch{return}
   renderBoardSelector();
   const modal=document.getElementById('boardSelectorModal');
@@ -291,6 +289,7 @@ function closeBoardSelector(){
 }
 async function enterGame(mode='learn',freeTemplate=null,taskId=null){
   if(!sessionValid()){location.reload();return}
+  if(!licenseActive()){showHub();window.ElektrykAdminPlayers?.showLicenseWarning?.();return}
   try{await loadScripts()}catch{return}
 
   closeBoardSelector();
@@ -348,10 +347,10 @@ async function login(){
   if(!user||!pass){showMessage('Wpisz login i hasło.','error');return}
   btn.disabled=true;
   showMessage('Sprawdzanie danych…');
-  const account=ACCOUNTS[user]||null;
+  const account=accountStore()?.byLogin?.(user)||null;
   const hash=account?await digest(account.salt+pass):'';
   if(account&&hash===account.passHash){
-    saveSession(account.login);
+    saveSession(account);
     saveAppState({view:'hub',mode:'learn',taskId:1,freeTemplateId:null});
     showMessage('Dostęp przyznany.','ok');
     setTimeout(showHub,150);
@@ -422,7 +421,11 @@ window.ElektrykAuth={
   openSettings,
   openPlayersPanel,
   currentUser,
+  currentAccountId,
+  currentAccount,
   isAdmin,
+  licenseActive,
+  digest,
   openBoardSelector,
   enterGame
 };
