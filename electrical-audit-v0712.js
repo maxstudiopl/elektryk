@@ -46,6 +46,37 @@ function inspectRecords(input={}){
       }
     }
   });
+  // Grzebień 3P: trzy izolowane tory z powtarzającą się kolejnością L1-L2-L3.
+  const threePhaseGroups=new Map();
+  bridges.filter(b=>b.kind==='comb3').forEach(b=>{
+    const id=b.groupId||'bez-grupy-'+b.id;
+    if(!threePhaseGroups.has(id))threePhaseGroups.set(id,[]);
+    threePhaseGroups.get(id).push(b);
+  });
+  threePhaseGroups.forEach((items,groupId)=>{
+    if(items.some(b=>!b.endCaps))add('error','Grzebień 3F '+groupId+': brak osłon końcowych.');
+    const contacts=items.filter(b=>b.a===b.b).sort((a,b)=>a.position-b.position);
+    const phaseAt=i=>['L1','L2','L3'][i%3];
+    if(contacts.length<3||new Set(contacts.map(b=>b.a)).size!==contacts.length){
+      add('error','Grzebień 3F '+groupId+': niepełny układ kontaktów L1/L2/L3.');
+    }
+    let prior=null;
+    contacts.forEach((b,i)=>{
+      const terminal=term.get(b.a),device=devices.get(terminal?.mountId);
+      if(!device||!(/^[BC]\d+$/.test(device.code))||Number(device.modules)!==1||
+          !terminal||terminal.zone!=='top'||b.position!==i||b.phase!==phaseAt(i)||
+          prior&&(Number(prior.row)!==Number(device.row)||Number(prior.start)+1!==Number(device.start))){
+        add('error','Grzebień 3F '+groupId+': błędna kolejność faz, rodzaj MCB lub położenie na DIN.');
+      }
+      prior=device;
+    });
+    items.filter(b=>b.a!==b.b).forEach(b=>{
+      const a=contacts.find(c=>c.a===b.a),z=contacts.find(c=>c.a===b.b);
+      if(!a||!z||z.position-a.position!==3||a.phase!==z.phase||b.phase!==a.phase){
+        add('error','Grzebień 3F '+groupId+': nieprawidłowe połączenie toru fazowego między zębami.');
+      }
+    });
+  });
   // Izolacja torów N RCD/RCBO: sprawdzamy połączenia zewnętrzne i listwy N,
   // bez łączenia wejścia i wyjścia wewnątrz RCD.
   const neutral=terminals.filter(t=>t.role==='N'),parent=new Map(neutral.map(t=>[t.id,t.id]));
