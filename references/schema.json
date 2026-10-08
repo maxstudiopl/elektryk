@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "purpose": "Reference database for realistic switchboard models and future free-build mode.",
+  "model_fields": {
+    "id": "stable reference id",
+    "name": "display name",
+    "category": "residential|large_residential|construction|visual_reference",
+    "enclosure": {
+      "mounting": "flush|surface|portable|unknown",
+      "rows": "number|null",
+      "modules_per_row": "number|null",
+      "total_modules": "number|null"
+    },
+    "equipment": {
+      "mcb_count": "number|null",
+      "rccb_count": "number|null",
+      "rcbo_count": "number|null",
+      "spd": "boolean|null",
+      "raw_summary": "string"
+    },
+    "source": {
+      "type": "auction|image|catalog",
+      "url": "string",
+      "facts_origin": "string",
+      "verification": "pending|reviewed"
+    },
+    "training": {
+      "recommended_level": "basic|intermediate|advanced|special",
+      "free_build_template": "boolean",
+      "reference_only": "boolean"
+    },
+    "notes": "array of strings"
+  },
+  "safety_note": "Reference data describes visual/layout inspiration for a training simulator. It is not an execution design or standards-compliance certificate."
+}
