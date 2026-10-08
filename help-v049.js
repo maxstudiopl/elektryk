@@ -4,28 +4,7 @@ if(!stage2||!tasksApi)return;
 const active=document.querySelector('.active-task');
 if(!active)return;
 
-const SPECIFIC={
-1:['Zacznij od FR 63A 4P, potem ustaw RCD, B10 i B16 obok siebie.','Połącz WLZ z FR, następnie zasil RCD. B10 i B16 mogą dostać fazę przez grzebień.'],
-2:['Po jednym RCD ustaw dwa B10 i dwa B16 w jednym ciągu.','Najczytelniej: FR → RCD → B10 → B10 → B16 → B16.'],
-3:['RCBO traktuj jako osobno chroniony obwód; nie musi być za wspólnym RCD.','Najpierw zbuduj podstawową sekcję RCD, a RCBO zostaw jako wydzielony tor.'],
-4:['Zgrupuj dwa B10 razem, a cztery B16 razem za RCD.','Grzebień najbardziej opłaca się zastosować na ciągu czterech B16.'],
-5:['Dwa RCBO ustaw obok siebie jako wydzielone obwody, a B16 pozostaw w sekcji za RCD.','Nie próbuj zasilać RCBO z wyjścia innego RCBO — traktuj je jako równoległe odbiory z toru głównego.'],
-6:['SPD ustaw blisko FR, zanim przejdziesz do sekcji RCD i MCB.','Po stronie odbiorczej zbuduj RCD → B10/B16; SPD pozostaje aparatem ochronnym poza szeregowym torem odbiornika.'],
-7:['Podziel sześć MCB na dwie grupy i przypisz każdą grupę do osobnego RCD.','Każda sekcja RCD ma na schemacie własny tor N.'],
-8:['Najpierw rozplanuj 18 modułów w oknie rozwiązania.','SPD i RCBO zajmują po 2M, dlatego montuj szerokie aparaty jako pierwsze.'],
-9:['Pierwszy rząd przeznacz na wejście i część sekcji; drugi na dalsze grupy MCB.','Przy dwóch rzędach nie musisz wciskać wszystkiego w pierwszy — korzystaj z obu listew równomiernie.'],
-10:['RCBO możesz umieścić na drugim rzędzie razem z wydzielonymi obwodami garażu.','Rozdziel obwody domu i garażu na czytelne grupy zamiast mieszać MCB naprzemiennie.'],
-11:['Trzy RCD oznaczają trzy logiczne sekcje.','Dla każdej sekcji trzymaj osobny tor neutralny w schemacie rozwiązania.'],
-12:['Najpierw rozstaw FR, SPD, trzy RCD i dwa RCBO — dopiero potem MCB.','Przy dużej liczbie aparatów używaj grzebienia oddzielnie dla każdego ciągu zabezpieczeń.'],
-13:['Cztery RCD najlepiej rozłożyć pomiędzy oba rzędy.','Wydziel RCBO tak, żeby nie rozdzielał ciągu MCB przeznaczonego pod grzebień.'],
-14:['Podziel dwa rzędy na strefy funkcjonalne.','Zacznij od aparatów 4M/2M, bo później łatwiej wypełnić luki aparatami 1M.'],
-15:['Trzy RCBO warto zebrać w jednej części rozdzielnicy.','Przed układaniem 9×B16 policz wolne moduły.'],
-16:['Na trzech rzędach zarezerwuj pierwszy na wejście i część ochrony.','Nie prowadź jednego grzebienia między rzędami; każdy rząd ma własny ciąg.'],
-17:['Pięć RCD rozdziel pomiędzy trzy listwy, aby przy każdym zostało miejsce na grupę MCB.','Najpierw zbuduj szkielet FR/SPD/RCD/RCBO, potem dodawaj B10/B16.'],
-18:['To zadanie ma 50M aparatury, więc kolejność montażu jest istotna.','Schemat pokazuje podział sekcji tak, aby RCD i jego MCB pozostawały razem.'],
-19:['Przy 52M masz tylko 2 wolne moduły.','Grzebienie zakładaj dopiero po zakończeniu rozmieszczenia wszystkich aparatów.'],
-20:['MASTER wykorzystuje pełne 54M — nie ma miejsca na pusty moduł.','Skorzystaj z pełnego schematu przed montażem: każdy aparat ma wyznaczony rząd.']
-};
+const SPECIFIC=Object.fromEntries((tasksApi.all||[]).map(task=>[task.id,task.tips||[]]));
 
 const controls=document.createElement('div');
 controls.className='task-help-controls';
@@ -91,6 +70,7 @@ function makeDeviceFactory(){
 }
 function buildPlan(task){
   const req=task.requirements||{},make=makeDeviceFactory(),groups=[];
+  const cols=Number(task.modulesPerRow||18);
   const main=[];
   if(req.FR)main.push(make('FR',{kind:'main'}));
   if(req.SPD)main.push(make('SPD',{kind:'spd'}));
@@ -125,14 +105,14 @@ function buildPlan(task){
   const rows=Array.from({length:task.rows},function(){return {used:0,groups:[],items:[]};});
   groups.forEach(function(group){
     const gm=group.items.reduce(function(sum,d){return sum+d.modules},0);
-    let ri=rows.findIndex(function(r){return r.used+gm<=18});
+    let ri=rows.findIndex(function(r){return r.used+gm<=cols});
     if(ri<0)ri=rows.length-1;
     group.row=ri;group.start=rows[ri].used;
     let pos=group.start;
     group.items.forEach(function(d){d.row=ri;d.start=pos;pos+=d.modules;rows[ri].items.push(d)});
     rows[ri].groups.push(group);rows[ri].used+=gm;
   });
-  return {task:task,rows:rows,groups:groups,devices:rows.flatMap(function(r){return r.items})};
+  return {task:task,cols:cols,rows:rows,groups:groups,devices:rows.flatMap(function(r){return r.items})};
 }
 
 const COLORS={L1:'#8b4a17',L2:'#161819',L3:'#747c80',N:'#0788d6',PE:'#5b9f39',COMB:'#b56d27'};
@@ -172,7 +152,7 @@ function routePath(a,b,lane){
   return 'M '+a.x+' '+a.y+' L '+a.x+' '+ly+' L '+b.x+' '+ly+' L '+b.x+' '+b.y;
 }
 function buildSchematic(plan){
-  const width=1240,left=120,right=35,slot=(width-left-right)/18,rowTop=150,rowGap=235,devH=105;
+  const cols=plan.cols||18,width=1240,left=120,right=35,slot=(width-left-right)/cols,rowTop=150,rowGap=235,devH=105;
   const height=rowTop+plan.rows.length*rowGap+90;
   const nodeMap={},loads=[],busShapes=[],deviceSvg=[];
   const sourceX=18,sourceY=22,sourceW=88,sourceH=104;
@@ -185,7 +165,7 @@ function buildSchematic(plan){
 
   plan.rows.forEach(function(row,ri){
     const y=rowTop+ri*rowGap;
-    shapes+='<text class="scheme-row-title" x="'+left+'" y="'+(y-17)+'">LISTWA DIN '+(ri+1)+' • '+row.used+'/18M</text><rect class="scheme-din" x="'+left+'" y="'+(y+45)+'" width="'+(18*slot)+'" height="26" rx="2"/>';
+    shapes+='<text class="scheme-row-title" x="'+left+'" y="'+(y-17)+'">LISTWA DIN '+(ri+1)+' • '+row.used+'/'+cols+'M</text><rect class="scheme-din" x="'+left+'" y="'+(y+45)+'" width="'+(cols*slot)+'" height="26" rx="2"/>';
     row.items.forEach(function(d){
       const x=left+d.start*slot,w=Math.max(32,d.modules*slot-3);
       d._geom={x:x,y:y,w:w,h:devH};
@@ -329,7 +309,7 @@ function filterBar(){
 }
 function layoutSummary(plan){
   return '<section class="solution-section"><h3>ROZMIESZCZENIE APARATÓW</h3>'+plan.rows.map(function(row,i){
-    return '<div class="solution-row-summary"><b>LISTWA '+(i+1)+'</b><span>'+row.items.map(function(d){return d.code}).join(' → ')+'</span><em>'+row.used+'/18M</em></div>';
+    return '<div class="solution-row-summary"><b>LISTWA '+(i+1)+'</b><span>'+row.items.map(function(d){return d.code}).join(' → ')+'</span><em>'+row.used+'/'+plan.cols+'M</em></div>';
   }).join('')+'</section>';
 }
 
@@ -337,7 +317,7 @@ function openSolution(){
   const task=currentTask();if(!task)return;
   const plan=buildPlan(task),schema=buildSchematic(plan),tips=SPECIFIC[task.id]||[];
   document.getElementById('solutionTitle').textContent='ROZWIĄZANIE • '+String(task.id).padStart(2,'0')+' • '+task.title;
-  document.getElementById('solutionMeta').textContent=task.rows+'×18M • '+task.level+' • '+task.xp+' XP • kliknij krok, aby podświetlić przewód';
+  document.getElementById('solutionMeta').textContent=task.rows+'×'+(task.modulesPerRow||18)+'M • '+task.level+' • '+task.xp+' XP • kliknij krok, aby podświetlić przewód';
   document.getElementById('solutionLayout').innerHTML=
     layoutSummary(plan)+
     '<section class="solution-section schematic-section"><h3>SCHEMAT PRZEWODÓW — KONKRETNE ZACISKI</h3>'+wireLegend()+schema.svg+'<div class="solution-schema-note">RCD mają na schemacie oddzielne sekcje N. Przewody PE są prowadzone do wspólnej szyny ochronnej. Kolory przewodów służą do czytelności symulatora.</div></section>';
