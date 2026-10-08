@@ -4,6 +4,7 @@ const SALT='elektryk-v050-single-2026';
 const PASS_HASH='3dee654f9d15a95ed45332ec703f94258cb70f86cf2cdaaeb7d3240b399d354e';
 const SESSION_KEY='elektryk_auth_v050';
 const SETTINGS_KEY='elektryk_settings_v076';
+const APP_STATE_KEY='elektryk_app_state_v0710';
 const SESSION_MS=8*60*60*1000;
 const LICENSE_TYPE='BETA / TESTOWA';
 const LICENSE_EXPIRY=null;
@@ -24,6 +25,7 @@ const scripts=[
 let gameLoaded=false;
 let gameReadyPromise=null;
 let activeFreeTemplate=null;
+let restoringState=false;
 
 function hex(buffer){return [...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,'0')).join('')}
 async function digest(text){
@@ -41,6 +43,19 @@ function saveSession(){
   localStorage.setItem(SESSION_KEY,JSON.stringify({user:USER,expires:Date.now()+SESSION_MS}));
 }
 function clearSession(){localStorage.removeItem(SESSION_KEY)}
+function readAppState(){
+  try{
+    return Object.assign({view:'hub',mode:'learn',taskId:1,freeTemplateId:null},JSON.parse(localStorage.getItem(APP_STATE_KEY)||'{}'));
+  }catch{
+    return {view:'hub',mode:'learn',taskId:1,freeTemplateId:null};
+  }
+}
+function saveAppState(patch={}){
+  const next=Object.assign(readAppState(),patch);
+  localStorage.setItem(APP_STATE_KEY,JSON.stringify(next));
+  return next;
+}
+function clearAppState(){localStorage.removeItem(APP_STATE_KEY)}
 function formatDate(ts){
   if(!ts)return 'NIE USTAWIONO';
   try{return new Date(Number(ts)).toLocaleString('pl-PL',{dateStyle:'short',timeStyle:'short'})}
@@ -115,6 +130,7 @@ function populateHub(){
 }
 function showHub(){
   if(!sessionValid())return;
+  saveAppState({view:'hub'});
   const overlay=document.getElementById('authGate');
   const card=document.querySelector('.auth-card');
   const loginView=document.getElementById('authLoginView');
@@ -231,7 +247,7 @@ function closeBoardSelector(){
   const modal=document.getElementById('boardSelectorModal');
   if(modal)modal.hidden=true;
 }
-async function enterGame(mode='learn',freeTemplate=null){
+async function enterGame(mode='learn',freeTemplate=null,taskId=null){
   if(!sessionValid()){location.reload();return}
   try{await loadScripts()}catch{return}
 
@@ -248,7 +264,9 @@ async function enterGame(mode='learn',freeTemplate=null){
 
   if(mode==='learn'){
     activeFreeTemplate=null;
-    window.ElektrykTasks?.start?.(1);
+    const targetTask=Math.max(1,Number(taskId||readAppState().taskId||1));
+    window.ElektrykTasks?.start?.(targetTask);
+    saveAppState({view:'game',mode:'learn',taskId:targetTask,freeTemplateId:null});
   }
 
   if(mode==='free'){
@@ -259,6 +277,7 @@ async function enterGame(mode='learn',freeTemplate=null){
       window.ElektrykStage2?.configureBoard?.(template);
       const label=document.getElementById('currentFreeBoardLabel');
       if(label)label.textContent=template.name;
+      saveAppState({view:'game',mode:'free',freeTemplateId:template.id||null});
     }
     const panelTitle=document.querySelector('.active-task .panel-title');
     if(panelTitle)panelTitle.textContent='WOLNA BUDOWA';
@@ -269,6 +288,7 @@ async function enterGame(mode='learn',freeTemplate=null){
 }
 function lock(){
   clearSession();
+  clearAppState();
   location.reload();
 }
 function showMessage(txt,type=''){
@@ -289,6 +309,7 @@ async function login(){
   const hash=await digest(SALT+pass);
   if(user===USER&&hash===PASS_HASH){
     saveSession();
+    saveAppState({view:'hub',mode:'learn',taskId:1,freeTemplateId:null});
     showMessage('Dostęp przyznany.','ok');
     setTimeout(showHub,150);
   }else{
@@ -319,10 +340,33 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('settingAnimations')?.addEventListener('change',saveSettings);
   document.getElementById('settingGuidance')?.addEventListener('change',saveSettings);
 
+  document.addEventListener('elektryk:task-started',e=>{
+    if(restoringState)return;
+    const id=Number(e.detail?.task?.id||0);
+    if(id>0&&readAppState().mode==='learn')saveAppState({view:'game',mode:'learn',taskId:id});
+  });
+
   applySettings();
 
-  if(sessionValid())showHub();
-  else document.getElementById('authLogin')?.focus();
+  if(sessionValid()){
+    const state=readAppState();
+    if(state.view==='game'){
+      restoringState=true;
+      const snapshot={...state};
+      loadScripts()
+        .then(()=>{
+          restoringState=false;
+          if(snapshot.mode==='free'){
+            const template=window.ElektrykSwitchboardDB?.get?.(snapshot.freeTemplateId)||null;
+            return enterGame('free',template);
+          }
+          return enterGame('learn',null,snapshot.taskId||1);
+        })
+        .catch(()=>{restoringState=false;showHub()});
+    }else{
+      showHub();
+    }
+  }else document.getElementById('authLogin')?.focus();
 });
 
 window.ElektrykAuth={
