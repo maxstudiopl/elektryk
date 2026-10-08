@@ -154,6 +154,10 @@ async function enterGame(mode='learn'){
 
   updateModeHeader(mode);
 
+  if(mode==='learn'){
+    window.ElektrykTasks?.start?.(1);
+  }
+
   if(mode==='free'){
     const db=window.ElektrykSwitchboardDB;
     const template=db?.get?.('REF-3X12-FLUSH-SURFACE')||db?.supported?.()?.[0]||null;
