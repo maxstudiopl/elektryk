@@ -10,15 +10,15 @@ const LICENSE_EXPIRY=null;
 const scripts=[
   'ui.js?v=0711',
   'switchboard-db.js?v=0711',
-  'stage2.js?v=0711',
+  'stage2.js?v=0712ref',
   'stage3.js?v=0711',
   'bridges-v031.js?v=0711',
   'stage4.js?v=0711',
-  'tasks-v046.js?v=0711',
+  'tasks-v046.js?v=0712ref',
   'busbars-v047.js?v=0711',
   'help-v049.js?v=0712ref',
   'learning-board-v0712.js?v=0712ref',
-  'progress-v060.js?v=0711admin2',
+  'progress-v060.js?v=0712ref',
   'freebuild-save-v0711.js?v=0711admin2'
 ];
 
