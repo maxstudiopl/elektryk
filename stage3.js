@@ -395,10 +395,40 @@ function connectClick(el){const role=el.dataset.role,id=el.dataset.terminal;if(!
   return
 }if(startTerminal.id===id){cancelStart();status('<b>ANULOWANO:</b> wybór pierwszego zacisku.');return}if(connections.some(c=>(c.a===startTerminal.id&&c.b===id)||(c.a===id&&c.b===startTerminal.id))){markBad(el,'takie połączenie już istnieje.');cancelStart();return}const cable=document.querySelector('.cable-buttons button.active')?.textContent.trim()||'';connections.push({id:'W'+wireSeq++,a:startTerminal.id,b:id,type:selectedWire,cable});startTerminal.el.classList.remove('start-terminal');startTerminal=null;refreshUsed();refreshGuidance();draw();updateCounters();status(`<b>POŁĄCZONO:</b> ${selectedWire} • ${cable||'przewód'} • ${connections[connections.length-1].a} → ${id}`,'success')}
 function undoWire(){const c=connections.pop();if(!c)return;cancelStart();refreshUsed();draw();updateCounters();status(`<b>COFNIĘTO:</b> usunięto ${c.type} ${c.a} → ${c.b}.`)}
-function clearWires(){connections=[];cancelStart();refreshUsed();draw();updateCounters();status('<b>OKABLOWANIE:</b> wszystkie przewody usunięte.')}
+function clearWires(){connections=[];wireSeq=1;cancelStart();refreshUsed();draw();updateCounters();status('<b>OKABLOWANIE:</b> wszystkie przewody usunięte.')}
+function setConnections(records=[]){
+  cancelStart(false);
+  connections=[...records].map((c,i)=>({
+    id:String(c.id||('W'+(i+1))),
+    a:String(c.a||''),
+    b:String(c.b||''),
+    type:String(c.type||'L1'),
+    cable:String(c.cable||'')
+  })).filter(c=>c.a&&c.b&&['L1','L2','L3','N','PE'].includes(c.type));
+  const maxId=connections.reduce((m,c)=>Math.max(m,Number(String(c.id).replace(/\D/g,''))||0),0);
+  wireSeq=maxId+1;
+  requestAnimationFrame(()=>{
+    decorateMounted();
+    pruneConnections();
+    refreshUsed();
+    refreshGuidance();
+    draw();
+    updateCounters();
+  });
+  return connections.length;
+}
 document.getElementById('undoWire')?.addEventListener('click',undoWire);document.getElementById('clearWires')?.addEventListener('click',clearWires);
 const observer=new MutationObserver(()=>requestAnimationFrame(decorateMounted));observer.observe(mountRoot,{childList:true,subtree:true});
 decorateSupply();decorateBars();decorateCircuits();decorateMounted();refreshUsed();refreshGuidance();updateCounters();
 window.addEventListener('resize',()=>requestAnimationFrame(draw));
-window.ElektrykStage3={getConnections:()=>connections.slice(),redraw:draw,clear:clearWires,refreshTerminals:()=>{refreshUsed();refreshGuidance()},refreshGuidance,refreshBars:()=>{decorateBars();refreshUsed();refreshGuidance();draw()}};
+window.ElektrykStage3={
+  getConnections:()=>connections.map(c=>({...c})),
+  setConnections,
+  redraw:draw,
+  clear:clearWires,
+  refreshMounted:()=>{decorateMounted();refreshUsed();refreshGuidance();draw()},
+  refreshTerminals:()=>{refreshUsed();refreshGuidance()},
+  refreshGuidance,
+  refreshBars:()=>{decorateBars();refreshUsed();refreshGuidance();draw()}
+};
 })();
