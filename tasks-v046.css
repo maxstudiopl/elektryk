@@ -64,3 +64,18 @@
   position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);
   color:#7b868a;font:600 4.5px Arial;opacity:.75
 }
+
+
+/* v0.7.12 — 40 zadań w czterech kategoriach */
+.task-catalog-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:12px 12px 3px}
+.task-catalog-tabs button{border:1px solid #315c72;background:#122a3b;color:#bcd9e9;border-radius:8px;padding:12px 5px;cursor:pointer;font:800 10px/1.3 Arial,sans-serif;letter-spacing:.02em}
+.task-catalog-tabs button:hover,.task-catalog-tabs button.active{border-color:#45baff;background:#15445d;color:#fff}
+.task-cards .task-card.rows-5{border-left:4px solid #35c6aa!important}
+.task-cards .task-card.rows-3[data-task-id="31"],.task-cards .task-card.rows-3[data-task-id="32"]{border-left:4px solid #35c6aa!important}
+.task-cards .task-card{height:178px!important}
+.task-cards .task-card strong{font-size:12px!important;min-height:33px}
+.task-cards .task-card small{font-size:8px!important}
+.task-card-top span{font-size:8px!important}
+.task-card-meta span{font-size:8px!important}
+.task-card em{font-size:8px!important}
+@media(max-width:740px){.task-catalog-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.task-catalog-tabs button{font-size:9px}.task-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
