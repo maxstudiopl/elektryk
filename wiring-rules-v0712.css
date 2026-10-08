@@ -1,0 +1,15 @@
+.wiring-rules-v0712{margin-top:13px;border:1px solid #47667f;background:#142739;border-radius:11px;color:#eaf4fb;overflow:hidden}
+.wiring-rules-v0712 summary{display:flex;flex-wrap:wrap;justify-content:space-between;gap:5px;align-items:center;cursor:pointer;padding:11px 12px;font-size:11px;font-weight:800;color:#e2f3ff;list-style:none}
+.wiring-rules-v0712 summary::-webkit-details-marker{display:none}
+.wiring-rules-v0712 summary span{color:#89baca;font-size:9px}
+.wiring-rules-content{padding:0 13px 12px;display:grid;gap:10px;font-size:11px;line-height:1.6}
+.wiring-rules-content section{background:#1e3447;padding:10px;border-radius:7px}
+.wiring-rules-content section>b{display:block;color:#e5f8ff;font-size:11px;margin-bottom:4px}
+.wiring-rules-content p{margin:5px 0 0;color:#cbdce9}
+.wiring-rules-warning{padding:10px;border:1px solid #a28648;background:#403627;border-radius:7px;color:#fff3cb}
+.wiring-rules-warning b{display:block}
+.wiring-rule-diagram{font-weight:800;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;color:#8eeac4!important;white-space:normal;overflow-wrap:anywhere}
+.wiring-rules-sources a{color:#94d9ff;text-decoration:underline;text-underline-offset:3px}
+.wiring-rules-sources{color:#aac5d7;font-size:10px}
+.bridge-actions #finishComb{background:#265345;color:#f0fff9;border:1px solid #4a9b80}
+.bridge-actions #finishComb:disabled{opacity:.48;cursor:not-allowed}
