@@ -1,0 +1,141 @@
+/* v0.7.11 — administracja kontami */
+.player-account{
+  display:grid!important;
+  grid-template-columns:1fr auto auto!important;
+}
+.player-account .player-license{
+  min-width:120px;
+  text-align:right;
+}
+.player-account .player-license b{
+  font-size:7px!important;
+}
+.player-account .player-license small{
+  font-size:5.8px!important;
+}
+.player-edit-btn{
+  min-width:62px;
+  height:28px;
+  border:1px solid #3a6b85;
+  border-radius:4px;
+  background:#0b2230;
+  color:#dcebf2;
+  font:bold 6px Arial;
+  cursor:pointer;
+}
+.player-edit-btn:hover{border-color:#4bbbf4;background:#103147}
+.player-account.license-off{
+  border-color:#80513f!important;
+  background:#24140f!important;
+}
+.player-account.license-off em{
+  border-color:#884739!important;
+  background:#32150f;
+  color:#ef9e8d;
+}
+.player-editor{
+  margin:0 14px 14px;
+  padding:12px;
+  border:1px solid #31596e;
+  border-radius:6px;
+  background:#071720;
+}
+.player-editor[hidden]{display:none!important}
+.player-editor-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+.player-editor-head b{font-size:9px}
+.player-editor-head span{
+  padding:3px 7px;
+  border:1px solid #3b6780;
+  border-radius:8px;
+  color:#8ec8e6;
+  font:bold 5.8px Arial;
+}
+.player-edit-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.player-edit-grid label{display:block}
+.player-edit-grid label.wide{grid-column:1/-1}
+.player-edit-grid label>span{
+  display:block;
+  margin-bottom:4px;
+  color:#7594a5;
+  font:bold 5.7px Arial;
+  letter-spacing:.35px;
+}
+.player-edit-grid input,
+.player-edit-grid select,
+.player-edit-grid textarea{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid #2d5368;
+  border-radius:4px;
+  outline:none;
+  background:#091923;
+  color:#e7f0f4;
+  font:7px Arial;
+}
+.player-edit-grid input,
+.player-edit-grid select{height:30px;padding:0 8px}
+.player-edit-grid textarea{padding:7px 8px;resize:vertical}
+.player-edit-grid input:focus,
+.player-edit-grid select:focus,
+.player-edit-grid textarea:focus{border-color:#3daee9}
+.player-editor-actions{
+  display:flex;
+  gap:7px;
+  margin-top:10px;
+}
+.player-editor-actions button{
+  min-height:30px;
+  padding:0 12px;
+  border:1px solid #315b70;
+  border-radius:4px;
+  background:#0b2230;
+  color:#dcebf2;
+  font:bold 6.5px Arial;
+  cursor:pointer;
+}
+.player-editor-actions #savePlayerAccount{
+  border-color:#2f7e62;
+  background:#0c2c22;
+}
+.player-editor-message{
+  min-height:16px;
+  margin-top:7px;
+  color:#7f9ba9;
+  font:6px Arial;
+}
+.player-editor-message.ok{color:#76d89b}
+.player-editor-message.error{color:#f09589}
+.license-warning{
+  margin-top:8px;
+  padding:9px 10px;
+  border:1px solid #81503c;
+  border-left:4px solid #d1794f;
+  border-radius:4px;
+  background:#24140e;
+  color:#efc0aa;
+  font:7px/1.45 Arial;
+}
+.license-warning[hidden]{display:none!important}
+.account-grid.payment-expanded{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+.mode-card.license-disabled{
+  opacity:.45;
+  cursor:not-allowed!important;
+  pointer-events:none;
+}
+@media(max-width:760px){
+  .player-edit-grid{grid-template-columns:1fr}
+  .player-edit-grid label.wide{grid-column:auto}
+  .player-account{grid-template-columns:1fr auto!important}
+  .player-account .player-license{display:none}
+}
