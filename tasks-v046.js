@@ -1032,6 +1032,7 @@ function render(){
     btn.addEventListener('click',()=>startTask(task,btn));cards.appendChild(btn);
   });
   window.ElektrykProgress?.refreshProfile?.();
+  window.ElektrykProgress?.refreshCards?.();
 }
 function applyCircuitLayout(task){
  const host=document.querySelector('.circuits');if(!host)return;
