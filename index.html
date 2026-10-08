@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="busbars-v047.css?v=0711">
   <link rel="stylesheet" href="enclosure-v078.css?v=0711">
   <link rel="stylesheet" href="help-v049.css?v=0711">
-  <link rel="stylesheet" href="auth-v050.css?v=0711users3">
+  <link rel="stylesheet" href="auth-v050.css?v=0711hub2">
   <link rel="stylesheet" href="progress-v060.css?v=0711">
   <style>
     /* v0.4.5 critical DIN layout hotfix — bypasses stale cached CSS */
@@ -41,10 +41,16 @@
     <div class="auth-card">
       <div class="auth-beta-edge">WERSJA BETA</div>
       <div class="auth-brand">
-        <span class="auth-bolt">⚡</span>
-        <div class="auth-brand-copy">
-          <div class="auth-brand-line"><b>ELEKTRYK — SYMULATOR</b></div>
-          <small>BUDOWA I ROZBUDOWA ROZDZIELNIC</small>
+        <div class="auth-brand-main">
+          <span class="auth-bolt">⚡</span>
+          <div class="auth-brand-copy">
+            <div class="auth-brand-line"><b>ELEKTRYK — SYMULATOR</b></div>
+            <small>BUDOWA I ROZBUDOWA ROZDZIELNIC</small>
+          </div>
+        </div>
+        <div class="auth-brand-actions">
+          <button class="hub-header-link" id="hubAbout" disabled><b>O GRZE</b><small>W BUDOWIE</small></button>
+          <button class="hub-header-link" id="hubUpdates" disabled><b>AKTUALIZACJE</b><small>W BUDOWIE</small></button>
         </div>
       </div>
       <div class="auth-login-view" id="authLoginView">
@@ -57,10 +63,13 @@
       </div>
 
       <div class="player-hub" id="playerHub" hidden>
-        <div class="player-welcome">
-          <small>WITAJ W SYMULATORZE</small>
-          <h1>Witaj, <span id="hubPlayerName">GRACZU</span></h1>
-          <p>Wybierz tryb pracy i przejdź do rozdzielnicy.</p>
+        <div class="player-welcome-row">
+          <div class="player-welcome">
+            <small>WITAJ W SYMULATORZE</small>
+            <h1>Witaj, <span id="hubPlayerName">GRACZU</span></h1>
+            <p>Wybierz tryb pracy i przejdź do rozdzielnicy.</p>
+          </div>
+          <button class="hub-logout" id="hubLogout"><span>↪</span><b>WYLOGUJ SIĘ</b></button>
         </div>
 
         <div class="player-modes">
@@ -95,8 +104,6 @@
         <section class="hub-tools">
           <button id="hubSettings"><b>USTAWIENIA GRY</b><small>Opcje interfejsu i działania symulatora.</small></button>
           <button id="hubPlayers" class="admin-only" hidden><b>PANEL GRACZY</b><small>Konta, role i dostęp do symulatora.</small></button>
-          <button class="hub-tool-building" id="hubAbout" disabled><b>O GRZE</b><small>Dział w przygotowaniu.</small><em>W BUDOWIE</em></button>
-          <button class="hub-tool-building" id="hubUpdates" disabled><b>AKTUALIZACJE GRY</b><small>Historia wersji i zmian.</small><em>W BUDOWIE</em></button>
         </section>
       </div>
 
@@ -277,7 +284,7 @@
   <div class="task-modal" id="taskModal" hidden><div class="task-window"><div class="task-window-head"><div><b>WYBIERZ ZADANIE</b><small>Wybierz zadanie treningowe</small></div><button id="closeTasks">×</button></div><div class="task-cards"><button><b>01</b><span>Podstawowa rozdzielnica</span><small>150 XP</small></button><button><b>02</b><span>Obwód gniazd</span><small>100 XP</small></button><button><b>03</b><span>Łazienka z RCD</span><small>180 XP</small></button></div></div></div>
   <script src="enclosure-v078.js?v=0711"></script>
   <script src="accounts-v0711.js?v=0711users6"></script>
-  <script src="auth-v050.js?v=0711users6"></script>
+  <script src="auth-v050.js?v=0711hub2"></script>
   <script src="admin-players-v0711.js?v=0711users6"></script>
 </body>
 </html>
