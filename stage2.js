@@ -355,7 +355,7 @@ function configureBoard(template){
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
   setHint(`<b>WOLNA BUDOWA:</b> ${template.name} • ${template.rows}×${template.modulesPerRow}M.`,'success');
   const version=document.querySelector('.cabinet-head .version');
-  if(version)version.textContent=`v0.7.9 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
+  if(version)version.textContent=`v0.7.10 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
   document.dispatchEvent(new CustomEvent('elektryk:board-changed',{detail:{template:{...template}}}));
   return true;
 }
