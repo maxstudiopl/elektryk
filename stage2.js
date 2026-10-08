@@ -193,16 +193,23 @@ function preview(row,start){
   if(!grid)return;
   for(let i=start;i<Math.min(modulesPerRow,start+p.modules);i++)grid.children[i]?.classList.add(ok?'preview-ok':'preview-bad');
 }
-function mount(row,start){
-  if(!selected){setHint('<b>MONTAŻ DIN:</b> najpierw wybierz aparat w katalogu.','error');return}
-  const p=PARTS[selected];
+function placePart(code,row,start,idOverride=null,quiet=false){
+  const p=PARTS[code];
+  if(!p)return false;
   if(!canPlace(row,start,p)){
-    errors++;updateStats();
-    setHint(`<b>BŁĄD:</b> ${p.name} potrzebuje ${p.modules} wolnych modułów obok siebie na tej samej listwie.`,'error');
-    return;
+    if(!quiet){
+      errors++;updateStats();
+      setHint(`<b>BŁĄD:</b> ${p.name} potrzebuje ${p.modules} wolnych modułów obok siebie na tej samej listwie.`,'error');
+    }
+    return false;
   }
   const grid=rowsHost.querySelector(`.mount-grid[data-row="${row}"]`);
-  const id='M'+seq++;
+  if(!grid)return false;
+  const id=idOverride||('M'+seq++);
+  if(idOverride){
+    const n=Number(String(idOverride).replace(/\D/g,''))||0;
+    seq=Math.max(seq,n+1);
+  }
   for(let i=start;i<start+p.modules;i++){occupied[row][i]=id;grid.children[i].classList.add('occupied')}
   const wrap=document.createElement('div');
   wrap.className='mounted-device';wrap.dataset.mountId=id;wrap.dataset.code=p.code;wrap.dataset.row=row;wrap.dataset.modules=String(p.modules);wrap.dataset.deviceLabel=p.name;
@@ -212,8 +219,35 @@ function mount(row,start){
   mounted.push({id,code:p.code,row,start,modules:p.modules,el:wrap});
   wrap.querySelector('.remove-device').onclick=e=>{e.stopPropagation();removeMount(id)};
   wrap.onclick=e=>{e.stopPropagation();rowsHost.querySelectorAll('.mounted-device').forEach(x=>x.classList.remove('selected-mounted'));wrap.classList.add('selected-mounted')};
+  if(!quiet){
+    updateStats();
+    setHint(`<b>ZAMONTOWANO:</b> ${p.name} • listwa ${row+1}, moduły ${start+1}–${start+p.modules}`,'success');
+  }
+  return wrap;
+}
+function mount(row,start){
+  if(!selected){setHint('<b>MONTAŻ DIN:</b> najpierw wybierz aparat w katalogu.','error');return}
+  placePart(selected,row,start);
+}
+function restoreMounted(records=[]){
+  mounted.slice().forEach(m=>m.el.remove());
+  mounted=[];seq=1;
+  occupied=Array.from({length:rowCount},()=>Array(modulesPerRow).fill(null));
+  rowsHost.querySelectorAll('.din-slot').forEach(s=>s.classList.remove('occupied','preview-ok','preview-bad'));
+  const restored=[];
+  [...records].sort((a,b)=>(Number(a.row)-Number(b.row))||(Number(a.start)-Number(b.start))).forEach(rec=>{
+    const wrap=placePart(String(rec.code||''),Number(rec.row)||0,Number(rec.start)||0,String(rec.id||'' )||null,true);
+    if(wrap){
+      if(rec.switchState)wrap.dataset.switchState=rec.switchState;
+      restored.push(rec.id);
+    }
+  });
   updateStats();
-  setHint(`<b>ZAMONTOWANO:</b> ${p.name} • listwa ${row+1}, moduły ${start+1}–${start+p.modules}`,'success');
+  requestAnimationFrame(()=>{
+    window.ElektrykStage3?.refreshMounted?.();
+    window.ElektrykPower?.analyze?.();
+  });
+  return restored.length;
 }
 function removeMount(id){
   const m=mounted.find(x=>x.id===id);if(!m)return;
@@ -390,7 +424,8 @@ renderTaskGoals(currentTask);updateStats();
 window.ElektrykStage2={
   configureTask,
   reset:resetAll,
-  getMounted:()=>mounted.map(({id,code,row,start,modules})=>({id,code,row,start,modules})),
+  getMounted:()=>mounted.map(({id,code,row,start,modules,el})=>({id,code,row,start,modules,switchState:el?.dataset.switchState||'on'})),
+  restoreMounted,
   getTask:()=>currentTask,
   getRows:()=>rowCount,
   getModulesPerRow:()=>modulesPerRow,
