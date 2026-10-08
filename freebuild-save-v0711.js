@@ -15,6 +15,12 @@ let activeSlot=Number(localStorage.getItem(ACTIVE_KEY)||0);
 let lastSavedSignature='';
 let lastObservedSignature='';
 let initializing=true;
+let restoreSavedOnBoot=(()=>{
+  try{
+    const app=JSON.parse(localStorage.getItem('elektryk_app_state_v0710')||'{}');
+    return app?.view==='game'&&app?.mode==='free'&&!!activeSlot;
+  }catch{return false}
+})();
 
 function readStore(){
   try{
@@ -215,6 +221,11 @@ function onMode(mode){
       lastSavedSignature=savedSig;
     }else lastSavedSignature='';
     setState(lastSavedSignature&&lastObservedSignature===lastSavedSignature?'ZAPISANO':'NIE ZAPISANO',lastSavedSignature&&lastObservedSignature===lastSavedSignature?'saved':'dirty');
+
+    if(restoreSavedOnBoot&&p){
+      restoreSavedOnBoot=false;
+      setTimeout(()=>loadProject(),0);
+    }
   }
 }
 
