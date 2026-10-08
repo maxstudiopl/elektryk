@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="busbars-v047.css?v=0711">
   <link rel="stylesheet" href="enclosure-v078.css?v=0711">
   <link rel="stylesheet" href="help-v049.css?v=0711">
-  <link rel="stylesheet" href="auth-v050.css?v=0711">
+  <link rel="stylesheet" href="auth-v050.css?v=0711users1">
   <link rel="stylesheet" href="progress-v060.css?v=0711">
   <style>
     /* v0.4.5 critical DIN layout hotfix — bypasses stale cached CSS */
@@ -94,6 +94,7 @@
 
         <section class="hub-tools">
           <button id="hubSettings"><b>USTAWIENIA GRY</b><small>Opcje interfejsu i działania symulatora.</small></button>
+          <button id="hubPlayers" class="admin-only" hidden><b>PANEL GRACZY</b><small>Konta, role i dostęp do symulatora.</small></button>
           <button class="hub-tool-building" id="hubAbout" disabled><b>O GRZE</b><small>Dział w przygotowaniu.</small><em>W BUDOWIE</em></button>
           <button class="hub-tool-building" id="hubUpdates" disabled><b>AKTUALIZACJE GRY</b><small>Historia wersji i zmian.</small><em>W BUDOWIE</em></button>
         </section>
@@ -235,6 +236,30 @@
     </div>
   </div>
 
+  <div class="players-modal" id="playersModal" hidden>
+    <div class="players-window">
+      <div class="players-head">
+        <div><b>PANEL GRACZY</b><small>Zarządzanie kontami testowymi symulatora</small></div>
+        <button id="closePlayersPanel">×</button>
+      </div>
+      <div class="players-list" id="playersList">
+        <article class="player-account admin">
+          <div><span>ADMINISTRATOR</span><b>Admin</b><small>Pełny dostęp • Panel Graczy</small></div>
+          <em>AKTYWNE</em>
+        </article>
+        <article class="player-account">
+          <div><span>GRACZ</span><b>Demo</b><small>Login: demo • konto testowe</small></div>
+          <em>AKTYWNE</em>
+        </article>
+        <article class="player-account">
+          <div><span>GRACZ</span><b>Kamil</b><small>Login: kamil • konto gracza</small></div>
+          <em>AKTYWNE</em>
+        </article>
+      </div>
+      <div class="players-note">Hasła nie są wyświetlane w panelu. Konta są przeznaczone do testowej wersji GitHub Pages.</div>
+    </div>
+  </div>
+
   <div class="game-settings-modal" id="gameSettingsModal" hidden>
     <div class="game-settings-window">
       <div class="game-settings-head">
@@ -251,6 +276,6 @@
 
   <div class="task-modal" id="taskModal" hidden><div class="task-window"><div class="task-window-head"><div><b>WYBIERZ ZADANIE</b><small>Wybierz zadanie treningowe</small></div><button id="closeTasks">×</button></div><div class="task-cards"><button><b>01</b><span>Podstawowa rozdzielnica</span><small>150 XP</small></button><button><b>02</b><span>Obwód gniazd</span><small>100 XP</small></button><button><b>03</b><span>Łazienka z RCD</span><small>180 XP</small></button></div></div></div>
   <script src="enclosure-v078.js?v=0711"></script>
-  <script src="auth-v050.js?v=0711"></script>
+  <script src="auth-v050.js?v=0711users1"></script>
 </body>
 </html>
