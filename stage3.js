@@ -337,7 +337,15 @@ function smartRoute(A,B,a,b,type,connection,index){
 
   return roundedPath(pts,9);
 }
-function addPath(d,type,cls){const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);p.setAttribute('class',cls);p.dataset.wire=type;if(cls==='wire-path')p.setAttribute('stroke',COLORS[type]||'#d06a25');svg.appendChild(p)}
+function addPath(d,type,cls,cable=''){
+  const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',d);
+  p.setAttribute('class',cls);
+  p.dataset.wire=type;
+  p.dataset.gauge=/2(?:[,.])5/.test(String(cable))?'2.5':'1.5';
+  if(cls==='wire-path')p.setAttribute('stroke',COLORS[type]||'#d06a25');
+  svg.appendChild(p);
+}
 function addFerrule(P,Q,type){
   const dx=Q.x-P.x,dy=Q.y-P.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len;
   const sx=P.x+ux*2,sy=P.y+uy*2;
@@ -355,7 +363,7 @@ function draw(){
     const a=document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`),b=document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`);
     if(!a||!b)return;
     const A=terminalCenter(a),B=terminalCenter(b),d=smartRoute(A,B,a,b,c.type,c,connections.indexOf(c));
-    addPath(d,c.type,'wire-shadow');addPath(d,c.type,'wire-path');
+    addPath(d,c.type,'wire-shadow',c.cable);addPath(d,c.type,'wire-path',c.cable);
     addFerrule(A,B,c.type);addFerrule(B,A,c.type);
   })
 }
