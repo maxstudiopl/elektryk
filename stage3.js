@@ -23,9 +23,10 @@ function setWire(type){
 }
 document.querySelectorAll('.wire').forEach(w=>w.addEventListener('click',()=>setWire(w.textContent.trim().toUpperCase())));setWire('L1');
 
-function roleAccepts(role,type){if(role==='L')return ['L1','L2','L3'].includes(type);if(role==='L1'||role==='L2'||role==='L3')return role===type;if(role==='N')return type==='N';if(role==='PE')return type==='PE';return true}
+function roleAccepts(role,type){if(role==='L')return ['L1','L2','L3'].includes(type);if(role==='L1'||role==='L2'||role==='L3')return role===type;if(role==='N')return type==='N';if(role==='PE')return type==='PE';return false}
 function wireAtEndpoint(id){return connections.find(c=>c.a===id||c.b===id)||null}
-function bridgeAtEndpoint(id){return window.ElektrykBridges?.getBridges?.().find(b=>b.a===id||b.b===id)||null}
+function bridgeAtEndpoint(id){return (window.ElektrykBridges?.getBridges?.()||[]).find(b=>b.a===id||b.b===id)||null}
+function bridgePhaseConflict(id,phase){return (window.ElektrykBridges?.getBridges?.()||[]).some(b=>(b.a===id||b.b===id)&&b.phase!==phase)}
 function endpointUsed(id){return !!wireAtEndpoint(id)}
 function markBad(el,msg){wiringErrors++;el.classList.add('bad-terminal');setTimeout(()=>el.classList.remove('bad-terminal'),650);status('<b>BŁĄD:</b> '+msg,'error');updateCounters()}
 function clearGuidance(){
@@ -37,7 +38,7 @@ function isWireFree(el){return !endpointUsed(el.dataset.terminal)}
 function refreshGuidance(){
   clearGuidance();
   document.querySelectorAll('.wire-terminal').forEach(t=>{
-    const compatible=roleAccepts(t.dataset.role,selectedWire);
+    const compatible=roleAccepts(t.dataset.role,selectedWire)&&!bridgePhaseConflict(t.dataset.terminal,selectedWire);
     const free=isWireFree(t);
     if(startTerminal){
       if(t===startTerminal.el){t.classList.add('guide-source');return}
@@ -387,7 +388,7 @@ function refreshUsed(){
   refreshGuidance();
 }
 function pruneConnections(){const before=connections.length;connections=connections.filter(c=>document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`)&&document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`));if(before!==connections.length){cancelStart();refreshUsed();updateCounters()}}
-function connectClick(el){const role=el.dataset.role,id=el.dataset.terminal;if(!roleAccepts(role,selectedWire)){markBad(el,`żyła ${selectedWire} nie pasuje do zacisku ${role}.`);return}if(endpointUsed(id)){markBad(el,'ten zacisk jest już zajęty. Usuń przewód lub wybierz inny zacisk.');return}if(!startTerminal){
+function connectClick(el){const role=el.dataset.role,id=el.dataset.terminal;if(!roleAccepts(role,selectedWire)){markBad(el,`żyła ${selectedWire} nie pasuje do zacisku ${role}.`);return}if(bridgePhaseConflict(id,selectedWire)){markBad(el,'zacisk jest używany przez mostek lub grzebień innego toru.');return}if(endpointUsed(id)){markBad(el,'ten zacisk jest już zajęty. Usuń przewód lub wybierz inny zacisk.');return}if(!startTerminal){
   startTerminal={id,el,role};
   el.classList.add('start-terminal');
   refreshGuidance();
