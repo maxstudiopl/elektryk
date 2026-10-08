@@ -1,0 +1,96 @@
+{
+  "version": "1.0.0",
+  "fictional_brand": "XYZ",
+  "design_goal": "Create a coherent fictional DIN product family inspired by real European modular apparatus without copying a real manufacturer's trade dress 1:1.",
+  "catalog_reference": {
+    "label": "Legrand — aparatura zabezpieczająca",
+    "url": "https://www.legrand.pl/pl/produkty/aparatura-modulowa-i-pomiarowa/aparatura-zabezpieczajaca",
+    "status": "reference_only"
+  },
+  "families": [
+    {
+      "family": "MCB",
+      "poles": [
+        "1P",
+        "2P",
+        "3P"
+      ],
+      "characteristics": [
+        "B",
+        "C"
+      ],
+      "current_examples": [
+        "6A",
+        "10A",
+        "13A",
+        "16A",
+        "20A",
+        "25A"
+      ],
+      "visual_focus": [
+        "module proportions",
+        "lever geometry",
+        "terminal screw layout",
+        "technical markings"
+      ]
+    },
+    {
+      "family": "RCCB/RCD",
+      "poles": [
+        "2P",
+        "4P"
+      ],
+      "visual_focus": [
+        "test button",
+        "linked lever",
+        "pole separation",
+        "terminal numbering"
+      ]
+    },
+    {
+      "family": "RCBO",
+      "poles": [
+        "1P+N",
+        "2P"
+      ],
+      "visual_focus": [
+        "test button",
+        "combined protection markings",
+        "linked terminals"
+      ]
+    },
+    {
+      "family": "SPD",
+      "poles": [
+        "1P+N",
+        "3P+N"
+      ],
+      "visual_focus": [
+        "replaceable cartridges",
+        "status window",
+        "PE connection",
+        "module segmentation"
+      ]
+    },
+    {
+      "family": "FR",
+      "poles": [
+        "2P",
+        "4P"
+      ],
+      "visual_focus": [
+        "main isolator lever",
+        "wide linked handle",
+        "clear I/O markings"
+      ]
+    }
+  ],
+  "visual_rules": [
+    "One consistent XYZ logo position and typography across the family.",
+    "Realistic 18 mm module rhythm and clear pole segmentation.",
+    "Terminal screws must visually align with logical connection points.",
+    "No floating labels above mounted apparatus.",
+    "Device state should be shown by the lever and a subtle indicator only.",
+    "Avoid copying Legrand/Schneider/Hager branding, logos, exact label layouts or protected trade dress."
+  ]
+}
