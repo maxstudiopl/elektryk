@@ -139,3 +139,48 @@
   .player-account{grid-template-columns:1fr auto!important}
   .player-account .player-license{display:none}
 }
+
+.players-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 14px 0;
+}
+.players-toolbar span{
+  color:#7897a8;
+  font:bold 6px Arial;
+  letter-spacing:.45px;
+}
+.players-toolbar button{
+  height:30px;
+  padding:0 12px;
+  border:1px solid #2f7c60;
+  border-radius:4px;
+  background:#0c2c22;
+  color:#d9efe6;
+  font:bold 6.5px Arial;
+  cursor:pointer;
+}
+.players-toolbar button:hover{
+  border-color:#57c99e;
+  background:#10392d;
+}
+.player-contact{
+  margin-top:3px!important;
+  color:#688491!important;
+}
+.player-edit-section-title{
+  margin:12px 0 7px;
+  padding-bottom:5px;
+  border-bottom:1px solid #29485a;
+  color:#86b9d4;
+  font:bold 6px Arial;
+  letter-spacing:.55px;
+}
+.player-edit-section-title:first-of-type{margin-top:0}
+.player-edit-grid label>span i{
+  color:#6e8998;
+  font:500 5px Arial;
+  font-style:normal;
+}
