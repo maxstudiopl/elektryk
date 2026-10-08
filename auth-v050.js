@@ -98,15 +98,21 @@ function readSettings(){
 function applySettings(settings=readSettings()){
   document.body.classList.toggle('no-ui-animations',!settings.animations);
   document.body.classList.toggle('no-terminal-guidance',!settings.guidance);
+  document.body.classList.remove('panel-text-normal','panel-text-large','panel-text-xlarge');
+  const size=['normal','large','xlarge'].includes(settings.panelText)?settings.panelText:'large';
+  document.body.classList.add('panel-text-'+size);
   const a=document.getElementById('settingAnimations');
   const g=document.getElementById('settingGuidance');
+  const p=document.getElementById('settingPanelText');
   if(a)a.checked=!!settings.animations;
   if(g)g.checked=!!settings.guidance;
+  if(p)p.value=size;
 }
 function saveSettings(){
   const settings={
     animations:!!document.getElementById('settingAnimations')?.checked,
-    guidance:!!document.getElementById('settingGuidance')?.checked
+    guidance:!!document.getElementById('settingGuidance')?.checked,
+    panelText:document.getElementById('settingPanelText')?.value||'large'
   };
   localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
   applySettings(settings);
