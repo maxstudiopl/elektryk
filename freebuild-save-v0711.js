@@ -2,11 +2,11 @@
 const STORE_KEY='elektryk_freebuild_saves_v0711';
 const ACTIVE_KEY='elektryk_freebuild_active_slot_v0711';
 function userKey(base){
-  const user=window.ElektrykAuth?.currentUser?.()||'admin';
+  const user=window.ElektrykAuth?.currentAccountId?.()||'admin';
   return user==='admin'?base:(base+':'+user);
 }
 function appStateKey(){
-  const user=window.ElektrykAuth?.currentUser?.()||'admin';
+  const user=window.ElektrykAuth?.currentAccountId?.()||'admin';
   const base='elektryk_app_state_v0710';
   return user==='admin'?base:(base+':'+user);
 }
