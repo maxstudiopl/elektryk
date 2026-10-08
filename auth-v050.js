@@ -10,17 +10,17 @@ const LICENSE_EXPIRY=null;
 const scripts=[
   'ui.js?v=0711',
   'switchboard-db.js?v=0711',
-  'stage2.js?v=0712ref',
+  'stage2.js?v=0712tasks40',
   'stage3.js?v=0712wire',
   'bridges-v031.js?v=0712wire5',
   'electrical-audit-v0712.js?v=0712wire4',
   'stage4.js?v=0712wire3',
-  'tasks-v046.js?v=0712ref',
+  'tasks-v046.js?v=0712tasks40',
   'busbars-v047.js?v=0711',
   'wiring-rules-v0712.js?v=0712wire3',
-  'help-v049.js?v=0712ref',
-  'learning-board-v0712.js?v=0712ref',
-  'progress-v060.js?v=0712ref',
+  'help-v049.js?v=0712tasks40',
+  'learning-board-v0712.js?v=0712tasks40',
+  'progress-v060.js?v=0712tasks40',
   'freebuild-save-v0711.js?v=0711admin2'
 ];
 
