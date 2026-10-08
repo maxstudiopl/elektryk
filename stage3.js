@@ -274,8 +274,8 @@ function serviceSideX(EA,EB,connection,index){
   if(z){
     const zoneLeft=z.left-c.left-cabinet.clientLeft;
     const zoneRight=z.right-c.left-cabinet.clientLeft;
-    left=Math.max(8,zoneLeft-14+spread);
-    right=Math.min(cabinet.clientWidth-8,zoneRight+14-spread);
+    left=Math.max(8,zoneLeft-8-spread);
+    right=Math.min(cabinet.clientWidth-8,zoneRight+8+spread);
   }
 
   const leftCost=Math.abs(EA.x-left)+Math.abs(EB.x-left);
