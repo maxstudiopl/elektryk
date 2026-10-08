@@ -4,54 +4,113 @@ const SALT='elektryk-v050-single-2026';
 const PASS_HASH='3dee654f9d15a95ed45332ec703f94258cb70f86cf2cdaaeb7d3240b399d354e';
 const SESSION_KEY='elektryk_auth_v050';
 const SESSION_MS=8*60*60*1000;
+const LICENSE_TYPE='BETA / TESTOWA';
+const LICENSE_EXPIRY=null;
+
 const scripts=[
-  'ui.js?v=0704',
-  'switchboard-db.js?v=0704',
-  'stage2.js?v=0704',
-  'stage3.js?v=0704',
-  'bridges-v031.js?v=0704',
-  'stage4.js?v=0704',
-  'tasks-v046.js?v=0704',
-  'busbars-v047.js?v=0704',
-  'help-v049.js?v=0704',
-  'progress-v060.js?v=0704'
+  'ui.js?v=0705',
+  'switchboard-db.js?v=0705',
+  'stage2.js?v=0705',
+  'stage3.js?v=0705',
+  'bridges-v031.js?v=0705',
+  'stage4.js?v=0705',
+  'tasks-v046.js?v=0705',
+  'busbars-v047.js?v=0705',
+  'help-v049.js?v=0705',
+  'progress-v060.js?v=0705'
 ];
+
 let gameLoaded=false;
+let gameReadyPromise=null;
 
 function hex(buffer){return [...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,'0')).join('')}
 async function digest(text){
   const data=new TextEncoder().encode(text);
   return hex(await crypto.subtle.digest('SHA-256',data));
 }
-function sessionValid(){
-  try{
-    const s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
-    return !!(s&&s.user===USER&&Number(s.expires)>Date.now());
-  }catch{return false}
+function sessionData(){
+  try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch{return null}
 }
-function saveSession(){localStorage.setItem(SESSION_KEY,JSON.stringify({user:USER,expires:Date.now()+SESSION_MS}))}
+function sessionValid(){
+  const s=sessionData();
+  return !!(s&&s.user===USER&&Number(s.expires)>Date.now());
+}
+function saveSession(){
+  localStorage.setItem(SESSION_KEY,JSON.stringify({user:USER,expires:Date.now()+SESSION_MS}));
+}
 function clearSession(){localStorage.removeItem(SESSION_KEY)}
+function formatDate(ts){
+  if(!ts)return 'NIE USTAWIONO';
+  try{return new Date(Number(ts)).toLocaleString('pl-PL',{dateStyle:'short',timeStyle:'short'})}
+  catch{return '—'}
+}
 function loadScripts(){
-  if(gameLoaded)return;
+  if(gameReadyPromise)return gameReadyPromise;
   gameLoaded=true;
   let chain=Promise.resolve();
   scripts.forEach(src=>{
     chain=chain.then(()=>new Promise((resolve,reject)=>{
       const el=document.createElement('script');
-      el.src=src;el.defer=false;el.onload=resolve;el.onerror=reject;
+      el.src=src;
+      el.defer=false;
+      el.onload=resolve;
+      el.onerror=reject;
       document.body.appendChild(el);
     }));
   });
-  chain.catch(()=>showMessage('Nie udało się uruchomić plików gry. Odśwież stronę.','error'));
+  gameReadyPromise=chain.catch(err=>{
+    gameLoaded=false;
+    gameReadyPromise=null;
+    showMessage('Nie udało się uruchomić plików gry. Odśwież stronę.','error');
+    throw err;
+  });
+  return gameReadyPromise;
 }
-function unlock(){
+function populateHub(){
+  const s=sessionData();
+  const name=String(s?.user||USER).toUpperCase();
+  const map={
+    hubPlayerName:name,
+    hubAccountUser:name,
+    hubLicense:LICENSE_TYPE,
+    hubLicenseExpiry:LICENSE_EXPIRY?formatDate(LICENSE_EXPIRY):'NIE USTAWIONO',
+    hubSessionExpiry:formatDate(s?.expires)
+  };
+  Object.entries(map).forEach(([id,value])=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=value;
+  });
+}
+function showHub(){
+  if(!sessionValid())return;
+  const card=document.querySelector('.auth-card');
+  const loginView=document.getElementById('authLoginView');
+  const hub=document.getElementById('playerHub');
+  if(card)card.classList.add('hub-open');
+  if(loginView)loginView.hidden=true;
+  if(hub)hub.hidden=false;
+  populateHub();
+  loadScripts().catch(()=>{});
+}
+async function enterGame(mode='learn'){
+  if(!sessionValid()){location.reload();return}
+  try{await loadScripts()}catch{return}
   document.body.classList.remove('auth-locked');
   document.body.classList.add('auth-ready');
   const overlay=document.getElementById('authGate');
   if(overlay)overlay.hidden=true;
   const userLabel=document.getElementById('authUserLabel');
   if(userLabel)userLabel.textContent=USER.toUpperCase();
-  loadScripts();
+
+  if(mode==='free'){
+    const db=window.ElektrykSwitchboardDB;
+    const template=db?.get?.('REF-3X12-FLUSH-SURFACE')||db?.supported?.()?.[0]||null;
+    if(template)window.ElektrykStage2?.configureBoard?.(template);
+    const panelTitle=document.querySelector('.active-task .panel-title');
+    if(panelTitle)panelTitle.textContent='WOLNA BUDOWA';
+  }
+
+  document.dispatchEvent(new CustomEvent('elektryk:mode-selected',{detail:{mode}}));
 }
 function lock(){
   clearSession();
@@ -70,13 +129,17 @@ async function login(){
   const user=(loginEl?.value||'').trim();
   const pass=passEl?.value||'';
   if(!user||!pass){showMessage('Wpisz login i hasło.','error');return}
-  btn.disabled=true;showMessage('Sprawdzanie danych…');
+  btn.disabled=true;
+  showMessage('Sprawdzanie danych…');
   const hash=await digest(SALT+pass);
   if(user===USER&&hash===PASS_HASH){
-    saveSession();showMessage('Dostęp przyznany.','ok');setTimeout(unlock,180);
+    saveSession();
+    showMessage('Dostęp przyznany.','ok');
+    setTimeout(showHub,150);
   }else{
     showMessage('Nieprawidłowy login lub hasło.','error');
-    passEl.value='';passEl.focus();
+    passEl.value='';
+    passEl.focus();
   }
   btn.disabled=false;
 }
@@ -85,8 +148,17 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('authPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter')login()});
   document.getElementById('authLogin')?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('authPassword')?.focus()});
   document.getElementById('authLogout')?.addEventListener('click',lock);
-  if(sessionValid())unlock();
+  document.getElementById('modeLearn')?.addEventListener('click',()=>enterGame('learn'));
+  document.getElementById('modeFree')?.addEventListener('click',()=>enterGame('free'));
+
+  if(sessionValid())showHub();
   else document.getElementById('authLogin')?.focus();
 });
-window.ElektrykAuth={logout:lock,isAuthenticated:sessionValid};
+
+window.ElektrykAuth={
+  logout:lock,
+  isAuthenticated:sessionValid,
+  openHub:showHub,
+  enterGame
+};
 })();
