@@ -16,7 +16,7 @@ const scripts=[
   'stage4.js?v=0711',
   'tasks-v046.js?v=0711',
   'busbars-v047.js?v=0711',
-  'help-v049.js?v=0711',
+  'help-v049.js?v=0712',
   'progress-v060.js?v=0711admin2',
   'freebuild-save-v0711.js?v=0711admin2'
 ];
