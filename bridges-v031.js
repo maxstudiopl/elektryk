@@ -12,14 +12,15 @@ if(consoleBox){
   const box=document.createElement('div');box.className='bridge-console';box.innerHTML=
     '<div class="bridge-console-head"><b>MOSTKI / GRZEBIEŃ ZASILAJĄCY</b><span id="bridgePhase">L1</span></div>'+
     '<div class="bridge-mode-grid"><button id="bridgeModeBtn" class="bridge-mode-btn">⛓ MOSTEK — WYŁĄCZONY</button><button id="combModeBtn" class="bridge-mode-btn comb-mode-btn">▰ GRZEBIEŃ — WYŁĄCZONY</button></div>'+
-    '<div class="bridge-help">MOSTEK: L1/L2/L3 oraz N/PE, w tym listwy zaciskowe N i PE. GRZEBIEŃ: zasila ciąg sąsiednich MCB/RCBO.</div>'+
-    '<div class="bridge-actions"><button id="undoBridge">↩ COFNIJ OSTATNI</button><button id="clearBridges" class="danger">× USUŃ ZASILANIE</button></div>'+
+    '<div class="bridge-help">MOSTEK: L1/L2/L3 oraz N/PE — sprawdzaj zgodność zacisków. GRZEBIEŃ 1P: wyłącznie sąsiednie wyłączniki MCB 1P w jednym rzędzie. Po montażu załóż osłony końcowe; nie łącz różnych sekcji RCD.</div>'+
+    '<div class="bridge-actions"><button id="undoBridge">↩ COFNIJ OSTATNI</button><button id="finishComb">▣ ZAŁÓŻ OSŁONY GRZEBIENI</button><button id="clearBridges" class="danger">× USUŃ ZASILANIE</button></div>'+
     '<div class="bridge-counter"><span>Mostki / grzebienie</span><b id="bridgeCount">0</b></div>';
   consoleBox.appendChild(box);
   bridgeCount=box.querySelector('#bridgeCount');
   box.querySelector('#bridgeModeBtn').onclick=()=>toggleBridgeMode(!bridgeMode);
   box.querySelector('#combModeBtn').onclick=()=>toggleCombMode(!combMode);
   box.querySelector('#undoBridge').onclick=undoLast;
+  box.querySelector('#finishComb').onclick=installCombCaps;
   box.querySelector('#clearBridges').onclick=clearBridges;
 }
 
@@ -41,6 +42,7 @@ document.querySelectorAll('.wire').forEach(w=>w.addEventListener('click',()=>{
 function mountedOf(t){return t.closest('.mounted-device')}
 function codeOf(t){return mountedOf(t)?.dataset.code||''}
 function isBreakerCode(code){return code.startsWith('RCBO')||/^[BC]\d+(?:_(?:2P|3P))?$/.test(code)}
+function isSinglePoleMcb(code){return /^[BC]\d+$/.test(code)}
 function isFrCode(code){return code==='FR'||code==='FR40'||code==='FR100'||code.startsWith('FR')}
 function isFeedTargetCode(code){return code.startsWith('SPD')||code.startsWith('RCD')||code.startsWith('RCBO')||isBreakerCode(code)}
 function roleMatchesConductor(role,type){
@@ -67,7 +69,7 @@ function eligibleBridge(t){
 }
 function eligibleComb(t){
   if(!t?.classList.contains('wire-terminal')||t.dataset.zone!=='top')return false;
-  return isBreakerCode(codeOf(t))&&['L','L1','L2','L3'].includes(t.dataset.role);
+  return isSinglePoleMcb(codeOf(t))&&['L','L1','L2','L3'].includes(t.dataset.role);
 }
 function eligible(t){return bridgeMode?eligibleBridge(t):combMode?eligibleComb(t):false}
 function terminalForDevice(m,phase){
@@ -79,7 +81,7 @@ function toggleBridgeMode(on){
 }
 function toggleCombMode(on){
   combMode=on;bridgeMode=false;clearStart();refreshButtons();highlightEligible();refreshPhase();
-  setStatus(on?'Tryb GRZEBIEŃ: kliknij pierwszy i ostatni wyłącznik w jednym rzędzie DIN.':'Tryb grzebienia wyłączony.');
+  setStatus(on?'Tryb GRZEBIEŃ 1P: wskaż pierwszy i ostatni MCB 1P w jednym rzędzie, a później załóż osłony końców.':'Tryb grzebienia wyłączony.');
 }
 function refreshButtons(){
   const b=document.getElementById('bridgeModeBtn'),c=document.getElementById('combModeBtn');
@@ -155,7 +157,10 @@ function addBadge(x,y,phase,label,onRemove,isComb=false,isFeed=false){
 }
 function updateStat(){
   const singles=bridges.filter(b=>b.kind!=='comb').length;
-  const combs=new Set(bridges.filter(b=>b.kind==='comb').map(b=>b.groupId)).size;
+  const groups=bridges.filter(b=>b.kind==='comb');
+  const combs=new Set(groups.map(b=>b.groupId)).size;
+  const exposed=new Set(groups.filter(b=>!b.endCaps).map(b=>b.groupId)).size;
+  const capBtn=document.getElementById('finishComb');if(capBtn){capBtn.disabled=!exposed;capBtn.title=exposed?'Brak osłon końcowych: '+exposed+' grzebieni':'Wszystkie zamontowane grzebienie mają osłony';}
   if(bridgeCount)bridgeCount.textContent=singles+' / '+combs;
   const p=document.querySelector('#wiringProgress span');
   if(p){let base=p.textContent.replace(/ • zasilanie: .*$/,'');p.textContent=base+' • zasilanie: '+singles+'M + '+combs+'G'}
@@ -243,7 +248,7 @@ function createComb(t){
   if(start.id===t.dataset.terminal){clearStart();setStatus('Anulowano wybór grzebienia.');return}
   const devices=sameRowRange(start.el,t);
   if(!devices||devices.length<2){flash(t);clearStart();setStatus('Grzebień musi obejmować co najmniej dwa aparaty w tym samym rzędzie.');return}
-  if(devices.some(m=>!isBreakerCode(m.dataset.code))){flash(t);clearStart();setStatus('Grzebień nie może przechodzić przez FR, RCD, SPD ani pustą sekcję.');return}
+  if(devices.some(m=>!isSinglePoleMcb(m.dataset.code))){flash(t);clearStart();setStatus('Grzebień 1P obsługuje tylko jednopolowe MCB. RCBO oraz aparaty 2P/3P wymagają kompatybilnego systemu producenta.');return}
   for(let i=1;i<devices.length;i++){
     const ra=devices[i-1].getBoundingClientRect(),rb=devices[i].getBoundingClientRect();
     if(Math.abs(ra.right-rb.left)>=12){flash(t);clearStart();setStatus('Aparaty pod grzebieniem muszą stać bezpośrednio obok siebie.');return}
@@ -255,9 +260,15 @@ function createComb(t){
   }
   const groupId='G'+groupSeq++;
   for(let i=1;i<terms.length;i++){
-    bridges.push({id:'BR'+seq++,a:terms[i-1].dataset.terminal,b:terms[i].dataset.terminal,phase,kind:'comb',groupId});
+    bridges.push({id:'BR'+seq++,a:terms[i-1].dataset.terminal,b:terms[i].dataset.terminal,phase,kind:'comb',groupId,endCaps:false});
   }
-  clearStart();redraw();setStatus('Założono grzebień '+phase+' na '+devices.length+' aparatach.');
+  clearStart();redraw();setStatus('Założono grzebień 1P '+phase+' na '+devices.length+' aparatach. Załóż osłony końcowe przyciskiem w panelu.');
+}
+function installCombCaps(){
+  const uncovered=bridges.filter(b=>b.kind==='comb'&&!b.endCaps);
+  if(!uncovered.length){setStatus('Nie ma grzebieni wymagających osłon.');return}
+  uncovered.forEach(b=>b.endCaps=true);
+  redraw();setStatus('Założono osłony końcowe na '+new Set(uncovered.map(b=>b.groupId)).size+' grzebieniach.');
 }
 function removeBridge(id){const b=bridges.find(x=>x.id===id);bridges=bridges.filter(x=>x.id!==id);redraw();if(b)setStatus('Usunięto mostek '+b.phase+'.')}
 function removeGroup(groupId){const n=bridges.filter(x=>x.groupId===groupId).length;bridges=bridges.filter(x=>x.groupId!==groupId);redraw();if(n)setStatus('Usunięto grzebień zasilający.')}
@@ -273,7 +284,8 @@ function setBridges(records=[]){
     a:String(b.a||''),
     b:String(b.b||''),
     phase:String(b.phase||'L1'),
-    kind:b.kind==='comb'?'comb':'bridge',
+    kind:b.kind==='comb'?'comb':b.kind==='feed'?'feed':'bridge',
+    endCaps:b.endCaps===true,
     groupId:b.groupId?String(b.groupId):undefined
   })).filter(b=>b.a&&b.b&&['L1','L2','L3','N','PE'].includes(b.phase));
   seq=bridges.reduce((m,b)=>Math.max(m,Number(String(b.id).replace(/\D/g,''))||0),0)+1;
@@ -298,6 +310,7 @@ refreshPhase();refreshButtons();redraw();
 window.ElektrykBridges={
   getBridges:()=>bridges.map(b=>({...b})),
   setBridges,
+  installCombCaps,
   clear:clearBridges,
   redraw,
   remove:removeBridge,
