@@ -1,10 +1,11 @@
 (()=> {
-const KEY='elektryk_progress_v060';
+// Nowy katalog zadań: nie przypisuj zaliczeń poprzednich 20 zadań do nowych ID.
+const KEY='elektryk_progress_v072';
 function storageKey(){
   const user=window.ElektrykAuth?.currentAccountId?.()||'admin';
   return user==='admin'?KEY:(KEY+':'+user);
 }
-const TOTAL_TASKS=20;
+const TOTAL_TASKS=window.ElektrykTasks?.all?.length||40;
 let taskStartedAt=Date.now();
 let currentTaskId=window.ElektrykStage2?.getTask?.()?.id||1;
 let failedChecks=0;
@@ -53,7 +54,7 @@ function ensureStats(){
   const box=document.createElement('div');
   box.id='playerProgress';
   box.className='player-progress';
-  box.innerHTML='<div class="player-progress-head"><b>POSTĘP GRACZA</b><span id="progressTimer">0:00</span></div><div class="player-progress-grid"><div><span>UKOŃCZONE</span><b id="progressCompleted">0/20</b></div><div><span>GWIAZDKI</span><b id="progressStars">0/60</b></div><div><span>XP</span><b id="progressXp">0</b></div><div><span>POZIOM</span><b id="progressLevel">1</b></div></div><div class="player-progress-current" id="progressCurrent">Zadanie 01 • jeszcze nieukończone</div>';
+  box.innerHTML='<div class="player-progress-head"><b>POSTĘP GRACZA</b><span id="progressTimer">0:00</span></div><div class="player-progress-grid"><div><span>UKOŃCZONE</span><b id="progressCompleted">0/'+TOTAL_TASKS+'</b></div><div><span>GWIAZDKI</span><b id="progressStars">0/'+(TOTAL_TASKS*3)+'</b></div><div><span>XP</span><b id="progressXp">0</b></div><div><span>POZIOM</span><b id="progressLevel">1</b></div></div><div class="player-progress-current" id="progressCurrent">Zadanie 01 • jeszcze nieukończone</div>';
   const reward=host.querySelector('.reward');
   if(reward)reward.insertAdjacentElement('afterend',box); else host.appendChild(box);
 }
@@ -163,6 +164,7 @@ window.ElektrykProgress={
   get:()=>JSON.parse(JSON.stringify(data)),
   level:()=>levelForXp(data.xp),
   refreshProfile:profile,
+  refreshCards:decorateCards,
   reset:()=>{localStorage.removeItem(storageKey());data=fresh();taskStartedAt=Date.now();failedChecks=0;renderStats()}
 };
 })();
