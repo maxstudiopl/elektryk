@@ -165,6 +165,7 @@ function populateHub(){
   });
   const playersBtn=document.getElementById('hubPlayers');
   if(playersBtn)playersBtn.hidden=!isAdmin();
+  window.ElektrykAdminPlayers?.refreshAccountSummary?.();
 }
 function showHub(){
   if(!sessionValid())return;
@@ -418,6 +419,7 @@ window.ElektrykAuth={
   logout:lock,
   isAuthenticated:sessionValid,
   openHub:showHub,
+  refreshHub:populateHub,
   openSettings,
   openPlayersPanel,
   currentUser,
