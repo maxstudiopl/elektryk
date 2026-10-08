@@ -212,7 +212,8 @@ function updateGoals(){
     el.classList.toggle('done',done);el.classList.toggle('pending',!done);
     el.innerHTML=`${done?'✓':'○'} ${requirementLabel(code)} <b>${Math.min(have,need)}/${need}</b>`;
   });
-  const done=Object.entries(req).every(([code,n])=>(counts[code]||0)>=n);
+  const isFree=String(currentTask?.id||'')==='FREE';
+  const done=!isFree&&Object.entries(req).every(([code,n])=>(counts[code]||0)>=n);
   document.getElementById('taskComplete')?.classList.toggle('show',done);
   const stars=document.querySelector('.reward em');if(stars)stars.textContent=done?'★★★':'☆☆☆';
 }
@@ -232,6 +233,8 @@ function configureTask(task){
   const rewardBox=document.querySelector('.reward'),reward=rewardBox?.querySelector('b');
   if(title)title.textContent=task.title;
   if(desc)desc.textContent=task.description;
+  const cabinetTitle=document.querySelector('.cabinet-head b');
+  if(cabinetTitle)cabinetTitle.textContent='ROZDZIELNICA TRENINGOWA';
   if(rewardBox)rewardBox.style.display='';
   if(reward)reward.textContent=`${task.xp} XP`;
   renderTaskGoals(task);
@@ -275,6 +278,8 @@ function configureBoard(template){
   const goals=document.querySelector('.task-goals');
   if(title)title.textContent=template.name||'Wolna budowa';
   if(desc)desc.textContent='Tryb nauki bez narzuconego zadania. Samodzielnie dobierz aparaturę, rozmieść ją i wykonaj połączenia.';
+  const cabinetTitle=document.querySelector('.cabinet-head b');
+  if(cabinetTitle)cabinetTitle.textContent=String(template.name||'ROZDZIELNICA').toUpperCase();
   if(reward)reward.style.display='none';
   if(goals){goals.innerHTML='<span>WOLNA BUDOWA • brak wymaganej listy aparatów</span>'}
   document.getElementById('taskComplete')?.classList.remove('show');
@@ -282,7 +287,7 @@ function configureBoard(template){
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
   setHint(`<b>WOLNA BUDOWA:</b> ${template.name} • ${template.rows}×${template.modulesPerRow}M.`,'success');
   const version=document.querySelector('.cabinet-head .version');
-  if(version)version.textContent=`v0.7.4 • WOLNA BUDOWA • ${template.rows}×${template.modulesPerRow}M`;
+  if(version)version.textContent=`v0.7.7 • WOLNA BUDOWA • ${template.rows}×${template.modulesPerRow}M`;
   document.dispatchEvent(new CustomEvent('elektryk:board-changed',{detail:{template:{...template}}}));
   return true;
 }
