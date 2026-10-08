@@ -371,6 +371,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('authPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter')login()});
   document.getElementById('authLogin')?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('authPassword')?.focus()});
   document.getElementById('authLogout')?.addEventListener('click',lock);
+  document.getElementById('hubLogout')?.addEventListener('click',lock);
 
   document.getElementById('modeLearn')?.addEventListener('click',()=>enterGame('learn'));
   document.getElementById('modeFree')?.addEventListener('click',openBoardSelector);
