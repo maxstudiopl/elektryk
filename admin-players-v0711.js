@@ -272,14 +272,24 @@ async function saveEditor(){
   auth()?.refreshHub?.();
 }
 
+function ensureProjectTime(){
+  const host=document.querySelector('.auth-brand-actions');
+  if(!host||document.getElementById('hubProjectTime'))return;
+  const box=document.createElement('div');
+  box.id='hubProjectTime';
+  box.className='hub-project-time';
+  box.innerHTML='<span>CZAS ROZWOJU</span><b>~12 H</b><small>PRACY NAD PROJEKTEM</small>';
+  host.appendChild(box);
+}
 function attach(){
   if(!document.querySelector('link[data-admin-players-style]')){
     const link=document.createElement('link');
     link.rel='stylesheet';
-    link.href='admin-players-v0711.css?v=0711users5';
+    link.href='admin-players-v0711.css?v=0711users7';
     link.dataset.adminPlayersStyle='1';
     document.head.appendChild(link);
   }
+  ensureProjectTime();
   ensureSummary();
   document.getElementById('hubPlayers')?.addEventListener('click',()=>setTimeout(render,0));
   refreshAccountSummary();
