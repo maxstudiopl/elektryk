@@ -359,3 +359,27 @@
 /* nie zasłaniaj śrub i oznaczeń przez elementy robocze */
 .supply-box,.duct,.din-zone,.circuits{z-index:4}
 .wire-layer{z-index:7!important}
+
+
+/* v0.7.8 — miniatury wyboru odpowiadają typowi obudowy */
+.board-choice-card[data-board-id="REF-3X12-FLUSH-SURFACE"] .board-preview{
+  border-color:#aeb5b1!important;
+  background:linear-gradient(135deg,#dde0dc,#f1f2ef 48%,#c8cdc9)!important;
+  box-shadow:inset 0 0 0 2px #878f8b,0 2px 5px #0004!important;
+}
+.board-choice-card[data-board-id="REF-3X12-SURFACE"] .board-preview{
+  border-width:10px!important;
+  border-color:#717a76!important;
+  background:linear-gradient(135deg,#c2c7c3,#e7e9e5 48%,#adb4b0)!important;
+  box-shadow:inset 0 0 0 2px #dfe2de,0 5px 8px #0007!important;
+}
+.board-choice-card[data-board-id="REF-5X12"] .board-preview{
+  border-color:#8e9692!important;
+  background:linear-gradient(135deg,#d2d6d2,#f0f1ee 45%,#b9c0bc)!important;
+}
+.board-choice-card[data-board-id="REF-5X24"] .board-preview{
+  border-width:8px!important;
+  border-color:#7e8783!important;
+  background:linear-gradient(135deg,#cbd0cc,#f2f3ef 45%,#b4bbb7)!important;
+  box-shadow:inset 0 0 0 2px #e1e4e0,0 4px 8px #0006!important;
+}
