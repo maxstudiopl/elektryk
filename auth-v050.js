@@ -1,7 +1,21 @@
 (()=>{
-const USER='admin';
-const SALT='elektryk-v050-single-2026';
-const PASS_HASH='3dee654f9d15a95ed45332ec703f94258cb70f86cf2cdaaeb7d3240b399d354e';
+const ACCOUNTS={
+  admin:{
+    login:'admin',display:'Admin',role:'admin',
+    salt:'elektryk-v050-single-2026',
+    passHash:'3dee654f9d15a95ed45332ec703f94258cb70f86cf2cdaaeb7d3240b399d354e'
+  },
+  demo:{
+    login:'demo',display:'Demo',role:'player',
+    salt:'elektryk-v0711-player-2026',
+    passHash:'06e5c32716fe194884663e2b1ca32644591c7e87916fdb61d0cce7eb7ba5596b'
+  },
+  kamil:{
+    login:'kamil',display:'Kamil',role:'player',
+    salt:'elektryk-v0711-player-2026',
+    passHash:'06e5c32716fe194884663e2b1ca32644591c7e87916fdb61d0cce7eb7ba5596b'
+  }
+};
 const SESSION_KEY='elektryk_auth_v050';
 const SETTINGS_KEY='elektryk_settings_v076';
 const APP_STATE_KEY='elektryk_app_state_v0710';
@@ -36,27 +50,40 @@ async function digest(text){
 function sessionData(){
   try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch{return null}
 }
+function currentAccount(){
+  const s=sessionData();
+  return s?.user?ACCOUNTS[String(s.user).toLowerCase()]||null:null;
+}
+function currentUser(){
+  return currentAccount()?.login||null;
+}
+function isAdmin(){
+  return currentAccount()?.role==='admin';
+}
 function sessionValid(){
   const s=sessionData();
-  return !!(s&&s.user===USER&&Number(s.expires)>Date.now());
+  return !!(s&&ACCOUNTS[String(s.user||'').toLowerCase()]&&Number(s.expires)>Date.now());
 }
-function saveSession(){
-  localStorage.setItem(SESSION_KEY,JSON.stringify({user:USER,expires:Date.now()+SESSION_MS}));
+function saveSession(user){
+  localStorage.setItem(SESSION_KEY,JSON.stringify({user,expires:Date.now()+SESSION_MS}));
 }
 function clearSession(){localStorage.removeItem(SESSION_KEY)}
+function appStateStorageKey(){
+  return APP_STATE_KEY+':'+(currentUser()||'guest');
+}
 function readAppState(){
   try{
-    return Object.assign({view:'hub',mode:'learn',taskId:1,freeTemplateId:null},JSON.parse(localStorage.getItem(APP_STATE_KEY)||'{}'));
+    return Object.assign({view:'hub',mode:'learn',taskId:1,freeTemplateId:null},JSON.parse(localStorage.getItem(appStateStorageKey())||'{}'));
   }catch{
     return {view:'hub',mode:'learn',taskId:1,freeTemplateId:null};
   }
 }
 function saveAppState(patch={}){
   const next=Object.assign(readAppState(),patch);
-  localStorage.setItem(APP_STATE_KEY,JSON.stringify(next));
+  localStorage.setItem(appStateStorageKey(),JSON.stringify(next));
   return next;
 }
-function clearAppState(){localStorage.removeItem(APP_STATE_KEY)}
+function clearAppState(){localStorage.removeItem(appStateStorageKey())}
 function formatDate(ts){
   if(!ts)return 'NIE USTAWIONO';
   try{return new Date(Number(ts)).toLocaleString('pl-PL',{dateStyle:'short',timeStyle:'short'})}
@@ -92,6 +119,15 @@ function closeSettings(){
   const modal=document.getElementById('gameSettingsModal');
   if(modal)modal.hidden=true;
 }
+function openPlayersPanel(){
+  if(!sessionValid()||!isAdmin())return;
+  const modal=document.getElementById('playersModal');
+  if(modal)modal.hidden=false;
+}
+function closePlayersPanel(){
+  const modal=document.getElementById('playersModal');
+  if(modal)modal.hidden=true;
+}
 function loadScripts(){
   if(gameReadyPromise)return gameReadyPromise;
   gameLoaded=true;
@@ -116,7 +152,8 @@ function loadScripts(){
 }
 function populateHub(){
   const s=sessionData();
-  const name=String(s?.user||USER).toUpperCase();
+  const account=currentAccount();
+  const name=String(account?.display||s?.user||'GRACZ').toUpperCase();
   const map={
     hubPlayerName:name,
     hubAccountUser:name,
@@ -128,6 +165,8 @@ function populateHub(){
     const el=document.getElementById(id);
     if(el)el.textContent=value;
   });
+  const playersBtn=document.getElementById('hubPlayers');
+  if(playersBtn)playersBtn.hidden=!isAdmin();
 }
 function showHub(){
   if(!sessionValid())return;
@@ -260,7 +299,7 @@ async function enterGame(mode='learn',freeTemplate=null,taskId=null){
   const overlay=document.getElementById('authGate');
   if(overlay)overlay.hidden=true;
   const userLabel=document.getElementById('authUserLabel');
-  if(userLabel)userLabel.textContent=USER.toUpperCase();
+  if(userLabel)userLabel.textContent=String(currentAccount()?.display||currentUser()||'GRACZ').toUpperCase();
 
   updateModeHeader(mode);
 
@@ -303,14 +342,15 @@ async function login(){
   const loginEl=document.getElementById('authLogin');
   const passEl=document.getElementById('authPassword');
   const btn=document.getElementById('authSubmit');
-  const user=(loginEl?.value||'').trim();
+  const user=(loginEl?.value||'').trim().toLowerCase();
   const pass=passEl?.value||'';
   if(!user||!pass){showMessage('Wpisz login i hasło.','error');return}
   btn.disabled=true;
   showMessage('Sprawdzanie danych…');
-  const hash=await digest(SALT+pass);
-  if(user===USER&&hash===PASS_HASH){
-    saveSession();
+  const account=ACCOUNTS[user]||null;
+  const hash=account?await digest(account.salt+pass):'';
+  if(account&&hash===account.passHash){
+    saveSession(account.login);
     saveAppState({view:'hub',mode:'learn',taskId:1,freeTemplateId:null});
     showMessage('Dostęp przyznany.','ok');
     setTimeout(showHub,150);
@@ -337,6 +377,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('openPlayerHub')?.addEventListener('click',showHub);
   document.getElementById('openGameSettings')?.addEventListener('click',openSettings);
   document.getElementById('hubSettings')?.addEventListener('click',openSettings);
+  document.getElementById('hubPlayers')?.addEventListener('click',openPlayersPanel);
+  document.getElementById('closePlayersPanel')?.addEventListener('click',closePlayersPanel);
+  document.getElementById('playersModal')?.addEventListener('click',e=>{if(e.target.id==='playersModal')closePlayersPanel()});
   document.getElementById('closeGameSettings')?.addEventListener('click',closeSettings);
   document.getElementById('gameSettingsModal')?.addEventListener('click',e=>{if(e.target.id==='gameSettingsModal')closeSettings()});
   document.getElementById('settingAnimations')?.addEventListener('change',saveSettings);
@@ -376,6 +419,9 @@ window.ElektrykAuth={
   isAuthenticated:sessionValid,
   openHub:showHub,
   openSettings,
+  openPlayersPanel,
+  currentUser,
+  isAdmin,
   openBoardSelector,
   enterGame
 };
