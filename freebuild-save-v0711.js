@@ -1,6 +1,15 @@
 (()=>{
 const STORE_KEY='elektryk_freebuild_saves_v0711';
 const ACTIVE_KEY='elektryk_freebuild_active_slot_v0711';
+function userKey(base){
+  const user=window.ElektrykAuth?.currentUser?.()||'admin';
+  return user==='admin'?base:(base+':'+user);
+}
+function appStateKey(){
+  const user=window.ElektrykAuth?.currentUser?.()||'admin';
+  const base='elektryk_app_state_v0710';
+  return user==='admin'?base:(base+':'+user);
+}
 const panel=document.getElementById('freeSavePanel');
 const nameInput=document.getElementById('freeProjectName');
 const stateEl=document.getElementById('freeSaveState');
@@ -11,25 +20,25 @@ const newBtn=document.getElementById('newFreeProject');
 const slotButtons=[...document.querySelectorAll('[data-save-slot]')];
 if(!panel||!nameInput||!stateEl||!metaEl)return;
 
-let activeSlot=Number(localStorage.getItem(ACTIVE_KEY)||0);
+let activeSlot=Number(localStorage.getItem(userKey(ACTIVE_KEY))||0);
 let lastSavedSignature='';
 let lastObservedSignature='';
 let initializing=true;
 let restoreSavedOnBoot=(()=>{
   try{
-    const app=JSON.parse(localStorage.getItem('elektryk_app_state_v0710')||'{}');
+    const app=JSON.parse(localStorage.getItem(appStateKey())||'{}');
     return app?.view==='game'&&app?.mode==='free'&&!!activeSlot;
   }catch{return false}
 })();
 
 function readStore(){
   try{
-    const data=JSON.parse(localStorage.getItem(STORE_KEY)||'{}');
+    const data=JSON.parse(localStorage.getItem(userKey(STORE_KEY))||'{}');
     return data&&typeof data==='object'?data:{};
   }catch{return {}}
 }
 function writeStore(data){
-  localStorage.setItem(STORE_KEY,JSON.stringify(data));
+  localStorage.setItem(userKey(STORE_KEY),JSON.stringify(data));
 }
 function isFree(){
   return document.body.dataset.gameMode==='free';
@@ -106,8 +115,8 @@ function renderSlots(){
 }
 function chooseSlot(n){
   activeSlot=Number(n)||0;
-  if(activeSlot)localStorage.setItem(ACTIVE_KEY,String(activeSlot));
-  else localStorage.removeItem(ACTIVE_KEY);
+  if(activeSlot)localStorage.setItem(userKey(ACTIVE_KEY),String(activeSlot));
+  else localStorage.removeItem(userKey(ACTIVE_KEY));
   const p=readStore()[activeSlot];
   if(p?.name)nameInput.value=p.name;
   renderSlots();
@@ -195,7 +204,7 @@ function newProject(){
   window.ElektrykStage2?.reset?.();
   nameInput.value='Nowy projekt';
   activeSlot=0;
-  localStorage.removeItem(ACTIVE_KEY);
+  localStorage.removeItem(userKey(ACTIVE_KEY));
   lastSavedSignature='';
   lastObservedSignature=signature();
   setState('NIE ZAPISANO','dirty');
