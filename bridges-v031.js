@@ -163,7 +163,7 @@ function addBadge(x,y,phase,label,onRemove,isComb=false,isFeed=false){
   badge.title='Kliknij, aby usunąć '+label.toLowerCase();badge.onclick=e=>{e.stopPropagation();onRemove()};labelLayer.appendChild(badge);
 }
 function updateStat(){
-  const singles=bridges.filter(b=>b.kind!=='comb').length;
+  const singles=bridges.filter(b=>b.kind!=='comb'&&b.kind!=='comb3').length;
   const groups=bridges.filter(b=>b.kind==='comb'||b.kind==='comb3');
   const combs=new Set(groups.map(b=>b.groupId)).size;
   const exposed=new Set(groups.filter(b=>!b.endCaps).map(b=>b.groupId)).size;
@@ -229,16 +229,18 @@ function validBridgePair(a,b){
     return {ok:true,kind:'feed',source:'RCD'};
   }
 
-  if(isBreakerCode(ca)&&isBreakerCode(cb)&&za==='top'&&zb==='top')return {ok:true,kind:'bridge'};
+  if(isSinglePoleMcb(ca)&&isSinglePoleMcb(cb)&&za==='top'&&zb==='top')return {ok:true,kind:'bridge'};
   return {ok:false,msg:'Ten typ aparatów nie może być połączony tym mostkiem.'};
 }
 function createBridge(t){
   const type=selectedWireType();
+  if(bridges.some(b=>(b.a===t.dataset.terminal||b.b===t.dataset.terminal)&&b.phase!==type)){flash(t);clearStart();setStatus('Istniejący mostek na tym zacisku ma inny tor.');return}
   if(!roleMatchesConductor(t.dataset.role,type)){flash(t);setStatus('Zacisk '+t.dataset.role+' nie pasuje do wybranego toru '+type+'.');return}
   if(!start){start={id:t.dataset.terminal,el:t,phase:type};t.classList.add('bridge-start');setStatus(type+': wybierz sąsiedni aparat.');return}
   if(start.id===t.dataset.terminal){clearStart();setStatus('Anulowano wybór.');return}
   if(start.phase!==type){clearStart();flash(t);setStatus('Zmieniono tor podczas tworzenia mostka. Zacznij ponownie.');return}
   if(!roleMatchesConductor(start.el.dataset.role,type)){clearStart();flash(t);setStatus('Pierwszy zacisk nie pasuje do toru '+type+'.');return}
+  if(bridges.some(b=>(b.a===start.id||b.b===start.id)&&b.phase!==type)){clearStart();flash(t);setStatus('Pierwszy zacisk ma mostek innej fazy.');return}
   const pair=validBridgePair(start.el,t);
   if(!pair.ok){flash(t);clearStart();setStatus(pair.msg);return}
   if(bridgeExists(start.id,t.dataset.terminal)){flash(t);clearStart();setStatus('Takie połączenie już istnieje.');return}
@@ -271,8 +273,50 @@ function createComb(t){
   }
   clearStart();redraw();setStatus('Założono grzebień 1P '+phase+' na '+devices.length+' aparatach. Załóż osłony końcowe przyciskiem w panelu.');
 }
+function createComb3(t){
+  if(!start){
+    start={id:t.dataset.terminal,el:t,phase:'3F'};
+    t.classList.add('bridge-start');
+    setStatus('Grzebień 3F: wybierz ostatni MCB 1P w jednym rzędzie.');
+    return;
+  }
+  if(start.id===t.dataset.terminal){clearStart();setStatus('Anulowano grzebień 3F.');return}
+  const devices=sameRowRange(start.el,t);
+  if(!devices||devices.length<3||devices.some(m=>!isSinglePoleMcb(m.dataset.code))){
+    flash(t);clearStart();setStatus('Grzebień 3F wymaga co najmniej trzech sąsiednich MCB 1P w jednym rzędzie.');return;
+  }
+  for(let i=1;i<devices.length;i++){
+    const a=devices[i-1].getBoundingClientRect(),b=devices[i].getBoundingClientRect();
+    if(Math.abs(a.right-b.left)>=12){
+      flash(t);clearStart();setStatus('Aparaty pod grzebieniem 3F muszą stykać się na listwie DIN.');return;
+    }
+  }
+  const phases=['L1','L2','L3'];
+  const terminals=devices.map(m=>[...m.querySelectorAll('.device-topterm .wire-terminal')]
+    .find(el=>el.dataset.role==='L'));
+  if(terminals.some(el=>!el)){flash(t);clearStart();setStatus('Brak kompatybilnych zacisków MCB 1P.');return}
+  const existing=window.ElektrykStage3?.getConnections?.()||[];
+  for(let i=0;i<terminals.length;i++){
+    const id=terminals[i].dataset.terminal,phase=phases[i%3];
+    if(bridges.some(b=>b.a===id||b.b===id) ||
+        existing.some(w=>(w.a===id||w.b===id)&&w.type!==phase)){
+      flash(t);clearStart();setStatus('Wybrany zakres ma już mostek, grzebień lub przewód niewłaściwej fazy.');return;
+    }
+  }
+  const groupId='G'+groupSeq++;
+  terminals.forEach((el,i)=>{
+    const phase=phases[i%3],id=el.dataset.terminal;
+    // Każdy ząb ma własny tor. Samopętla oznacza kontakt bez zwierania faz.
+    bridges.push({id:'BR'+seq++,a:id,b:id,phase,kind:'comb3',groupId,position:i,endCaps:false});
+    if(i>=3){
+      bridges.push({id:'BR'+seq++,a:terminals[i-3].dataset.terminal,b:id,phase,kind:'comb3',groupId,position:i,endCaps:false});
+    }
+  });
+  clearStart();redraw();
+  setStatus('Dodano grzebień 3F: L1/L2/L3 naprzemiennie na '+devices.length+' MCB. Zasil fazy oddzielnie i załóż osłony końców.');
+}
 function installCombCaps(){
-  const uncovered=bridges.filter(b=>b.kind==='comb'&&!b.endCaps);
+  const uncovered=bridges.filter(b=>(b.kind==='comb'||b.kind==='comb3')&&!b.endCaps);
   if(!uncovered.length){setStatus('Nie ma grzebieni wymagających osłon.');return}
   uncovered.forEach(b=>b.endCaps=true);
   redraw();setStatus('Założono osłony końcowe na '+new Set(uncovered.map(b=>b.groupId)).size+' grzebieniach.');
