@@ -1,0 +1,268 @@
+{
+  "version": "1.0.0",
+  "created_from": "User-provided reference set",
+  "models": [
+    {
+      "id": "SW-001",
+      "name": "3x12 pod/nadtynkowa — SPD + 14 MCB + 2 RCCB",
+      "category": "residential",
+      "enclosure": {
+        "mounting": "flush_or_surface",
+        "rows": 3,
+        "modules_per_row": 12,
+        "total_modules": 36
+      },
+      "equipment": {
+        "mcb_count": 14,
+        "rccb_count": 2,
+        "rcbo_count": null,
+        "spd": true,
+        "raw_summary": "SPD • 14x MCB • 2x RCCB • VDE"
+      },
+      "source": {
+        "type": "auction",
+        "url": "https://allegro.pl/produkt/rozdzielnica-modulowa-podtynkowa-3x12-zabezpieczona-spd-14xmcb-2xrccb-vde-6a31a18c-b411-49e7-b604-4c12a56ecae2?offerId=18492671935",
+        "facts_origin": "title_and_user_description",
+        "verification": "pending"
+      },
+      "training": {
+        "recommended_level": "intermediate",
+        "free_build_template": true,
+        "reference_only": true
+      },
+      "notes": [
+        "Primary reference for medium domestic 3-row board.",
+        "Useful for SPD/RCCB/MCB grouping and cable routing study."
+      ]
+    },
+    {
+      "id": "SW-002",
+      "name": "Natynkowa — 10 MCB + 1 RCCB",
+      "category": "residential",
+      "enclosure": {
+        "mounting": "surface",
+        "rows": null,
+        "modules_per_row": null,
+        "total_modules": null
+      },
+      "equipment": {
+        "mcb_count": 10,
+        "rccb_count": 1,
+        "rcbo_count": null,
+        "spd": null,
+        "raw_summary": "10x MCB • 1x RCCB"
+      },
+      "source": {
+        "type": "auction",
+        "url": "https://allegro.pl/produkt/rozdzielnica-doktorvolt-400-v-ip30-40-a-05a5866e-95b9-4860-a470-11c70a5a31d0?offerId=18023289875",
+        "facts_origin": "title_and_user_description",
+        "verification": "pending"
+      },
+      "training": {
+        "recommended_level": "basic",
+        "free_build_template": true,
+        "reference_only": true
+      },
+      "notes": [
+        "Good starter reference for a compact surface-mounted board."
+      ]
+    },
+    {
+      "id": "SW-003",
+      "name": "Podtynkowa — 10 MCB + 1 RCCB",
+      "category": "residential",
+      "enclosure": {
+        "mounting": "flush",
+        "rows": null,
+        "modules_per_row": null,
+        "total_modules": null
+      },
+      "equipment": {
+        "mcb_count": 10,
+        "rccb_count": 1,
+        "rcbo_count": null,
+        "spd": null,
+        "raw_summary": "10x MCB • 1x RCCB"
+      },
+      "source": {
+        "type": "auction",
+        "url": "https://allegro.pl/produkt/rozdzielnica-doktorvolt-400-v-ip30-40-a-54ecdb7b-85c3-42e4-bf69-2acb43cfd5ba?offerId=18023072713",
+        "facts_origin": "title_and_user_description",
+        "verification": "pending"
+      },
+      "training": {
+        "recommended_level": "basic",
+        "free_build_template": true,
+        "reference_only": true
+      },
+      "notes": [
+        "Flush-mounted counterpart to SW-002.",
+        "Useful for comparing enclosure styles with similar apparatus count."
+      ]
+    },
+    {
+      "id": "SW-004",
+      "name": "Natynkowa 3x12 — 14 MCB + 2 RCCB",
+      "category": "residential",
+      "enclosure": {
+        "mounting": "surface",
+        "rows": 3,
+        "modules_per_row": 12,
+        "total_modules": 36
+      },
+      "equipment": {
+        "mcb_count": 14,
+        "rccb_count": 2,
+        "rcbo_count": null,
+        "spd": null,
+        "raw_summary": "14x MCB • 2x RCCB • VDE"
+      },
+      "source": {
+        "type": "auction",
+        "url": "https://allegro.pl/produkt/rozdzielnica-doktorvolt-400-v-ip30-40-a-b2322692-8cc9-4922-bc68-4f58d2db9886?offerId=18023294313",
+        "facts_origin": "title_and_user_description",
+        "verification": "pending"
+      },
+      "training": {
+        "recommended_level": "intermediate",
+        "free_build_template": true,
+        "reference_only": true
+      },
+      "notes": [
+        "Primary 3x12 surface-mounted reference without explicit SPD in title."
+      ]
+    },
+    {
+      "id": "SW-005",
+      "name": "Prefabrykowana 5x24 — model XL",
+      "category": "large_residential",
+      "enclosure": {
+        "mounting": "unknown",
+        "rows": 5,
+        "modules_per_row": 24,
+        "total_modules": 120
+      },
+      "equipment": {
+        "mcb_count": null,
+        "rccb_count": null,
+        "rcbo_count": null,
+        "spd": null,
+        "raw_summary": "Prefabrykowana 5x24 • Hager enclosure reference"
+      },
+      "source": {
+        "type": "auction",
+        "url": "https://allegro.pl/produkt/rozdzielnica-modulowa-gotowa-prefabrykowana-5x24-damika-model-xl-e216f142-6717-4e0d-8756-f05d921eb6d9?offerId=18425894752",
+        "facts_origin": "title_and_user_description",
+        "verification": "pending"
+      },
+      "training": {
+        "recommended_level": "advanced",
+        "free_build_template": true,
+        "reference_only": true
+      },
+      "notes": [
+        "Large-board reference for future 24M rows and five-row workspace.",
+        "Important for scaling cabinet geometry beyond current 18M layout."
+      ]
+    },
+    {
+      "id": "SW-006",
+      "name": "Rozdzielnica budowlana — 32A / 16A / 230V",
+      "category": "construction",
+      "enclosure": {
+        "mounting": "portable",
+        "rows": null,
+        "modules_per_row": null,
+        "total_modules": null
+      },
+      "equipment": {
+        "mcb_count": null,
+        "rccb_count": null,
+        "rcbo_count": null,
+        "spd": null,
+        "raw_summary": "Różnicówka • 32A • 16A • 3x230 • 5P"
+      },
+      "source": {
+        "type": "auction",
+        "url": "https://allegro.pl/oferta/rozdzielnica-budowlana-zabezpieczona-obudowa-roznicowka-32a-16a-3x230-5p-18115104020",
+        "facts_origin": "title_and_user_description",
+        "verification": "pending"
+      },
+      "training": {
+        "recommended_level": "special",
+        "free_build_template": false,
+        "reference_only": true
+      },
+      "notes": [
+        "Separate future category: portable/construction distribution boards.",
+        "Do not mix enclosure geometry with domestic modular boards."
+      ]
+    },
+    {
+      "id": "SW-007",
+      "name": "Uzbrojona 5x12 — Hager Volta / osprzęt Schneider",
+      "category": "large_residential",
+      "enclosure": {
+        "mounting": "unknown",
+        "rows": 5,
+        "modules_per_row": 12,
+        "total_modules": 60
+      },
+      "equipment": {
+        "mcb_count": null,
+        "rccb_count": null,
+        "rcbo_count": null,
+        "spd": null,
+        "raw_summary": "Uzbrojona 5x12 • Hager Volta enclosure • Schneider apparatus reference"
+      },
+      "source": {
+        "type": "auction",
+        "url": "https://allegro.pl/produkt/rozdzielnica-uzbrojona-5x12-hager-osprzet-schneider-55b14a96-555e-49b1-92f0-56529e25597b?offerId=18931573410",
+        "facts_origin": "title_and_user_description",
+        "verification": "pending"
+      },
+      "training": {
+        "recommended_level": "advanced",
+        "free_build_template": true,
+        "reference_only": true
+      },
+      "notes": [
+        "Key reference for five-row 12M layout.",
+        "Useful for real-world spacing and apparatus density."
+      ]
+    }
+  ],
+  "visual_references": [
+    {
+      "id": "VIS-001",
+      "name": "Rozdzielnica podtynkowa 4x24",
+      "source": {
+        "type": "image",
+        "url": "https://elektrykapradnietyka.com/wp-content/uploads/2017/03/Rozdzielnica-podtynkowa-4x24-modu%C5%82y.jpg",
+        "verification": "pending"
+      },
+      "intended_use": [
+        "cabinet proportions",
+        "DIN row spacing",
+        "cable routing",
+        "N/PE placement",
+        "overall visual realism"
+      ]
+    },
+    {
+      "id": "VIS-002",
+      "name": "Rozdzielnica — referencja układu",
+      "source": {
+        "type": "image",
+        "url": "https://obrazki.elektroda.pl/3962184000_1572030029.jpg",
+        "verification": "pending"
+      },
+      "intended_use": [
+        "apparatus arrangement",
+        "wire routing",
+        "realistic density",
+        "service loops"
+      ]
+    }
+  ]
+}
