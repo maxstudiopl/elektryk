@@ -35,3 +35,7 @@ body:not([data-game-mode="learn"]) .learning-v0712 {display:none!important}
 .learning-board-result.is-complete{background:#164636;border-color:#49ac86;color:#d5ffee}
 .learning-board-disclaimer{display:block;margin-top:9px;font-size:10px;line-height:1.45;color:#90abb9}
 @media(max-width:900px){.learning-board-v0712{padding:12px}.learning-board-v0712 h2{font-size:15px}.learning-board-actions button{font-size:10px}.learning-board-legend{gap:10px}}
+
+
+/* v0.7.12 — schematy dla 12/18/24 modułów na szynie DIN */
+.learning-reference-rail{grid-template-columns:repeat(var(--learning-columns,18),minmax(34px,1fr))!important}
