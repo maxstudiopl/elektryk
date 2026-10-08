@@ -273,6 +273,13 @@ async function saveEditor(){
 }
 
 function attach(){
+  if(!document.querySelector('link[data-admin-players-style]')){
+    const link=document.createElement('link');
+    link.rel='stylesheet';
+    link.href='admin-players-v0711.css?v=0711users5';
+    link.dataset.adminPlayersStyle='1';
+    document.head.appendChild(link);
+  }
   ensureSummary();
   document.getElementById('hubPlayers')?.addEventListener('click',()=>setTimeout(render,0));
   refreshAccountSummary();
