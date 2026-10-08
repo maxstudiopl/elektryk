@@ -590,3 +590,97 @@ body.no-terminal-guidance .wire-terminal.guide-source{
   .player-navbtn,.player-level-status{padding:0 10px!important;font-size:8px!important}
   .hub-tools{grid-template-columns:1fr}
 }
+
+/* v0.7.7 — wybór rozdzielnicy w Wolnej Budowie */
+.free-board-shortcut{padding:6px}
+.free-board-button{
+  width:100%;display:grid;grid-template-columns:32px 1fr 20px;align-items:center;text-align:left;
+  padding:9px;border:1px solid #2d7c65;background:#0d2d26;border-radius:5px;cursor:pointer
+}
+.free-board-button>span{font-size:20px;color:#6fe3bd}
+.free-board-button div b{display:block;font-size:11px}
+.free-board-button div small{display:block;font-size:8px;color:#9bbdb1;margin-top:3px}
+.free-board-button i{font-size:22px;color:#73d9b8}
+.free-board-button:hover{border-color:#53c7a1;background:#103a30}
+
+.board-selector-modal{
+  position:fixed;inset:0;z-index:10030;display:flex;align-items:center;justify-content:center;
+  padding:22px;background:#02070ddd;backdrop-filter:blur(5px)
+}
+.board-selector-modal[hidden]{display:none!important}
+.board-selector-window{
+  width:min(980px,95vw);max-height:90vh;display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid #326c8f;border-radius:9px;background:#081720;box-shadow:0 32px 90px #000e
+}
+.board-selector-head{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:15px 17px;background:linear-gradient(#113247,#0c2637);border-bottom:1px solid #2c5269
+}
+.board-selector-head b{display:block;font-size:12px;letter-spacing:.35px}
+.board-selector-head small{display:block;margin-top:4px;color:#91aab8;font-size:7.5px}
+.board-selector-head button{
+  width:34px;height:34px;border:1px solid #42657a;border-radius:4px;background:#0b1720;
+  font-size:22px;cursor:pointer
+}
+.board-selector-info{
+  display:flex;align-items:center;justify-content:space-between;padding:9px 16px;
+  border-bottom:1px solid #1d3949;background:#07131b
+}
+.board-selector-info span{color:#74caef;font:bold 7px Arial;letter-spacing:.65px}
+.board-selector-info b{color:#9bb2bf;font:bold 7px Arial}
+.board-selector-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
+  padding:14px;overflow:auto
+}
+.board-choice-card{
+  position:relative;min-height:245px;padding:12px;border:1px solid #2c5266;border-radius:7px;
+  background:linear-gradient(180deg,#0d2331,#08161f);color:#dce9ef;text-align:left;cursor:pointer;
+  transition:.14s ease
+}
+.board-choice-card:hover{
+  transform:translateY(-2px);border-color:#4abcf5;box-shadow:0 9px 22px #0008,0 0 0 1px #0b6797
+}
+.board-choice-card.recommended{border-color:#2f7d67}
+.board-choice-card .board-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
+.board-choice-card .board-card-top span{
+  padding:3px 6px;border:1px solid #325469;border-radius:8px;background:#0b1b25;color:#91b4c7;
+  font:bold 5.5px Arial;letter-spacing:.4px
+}
+.board-choice-card .board-card-top em{
+  color:#67d7b2;font:bold 5.5px Arial;font-style:normal;letter-spacing:.45px
+}
+.board-choice-card>strong{display:block;font-size:10px;line-height:1.3}
+.board-choice-card>small{display:block;margin-top:4px;color:#809aa8;font-size:6.5px}
+.board-preview{
+  height:105px;margin:12px 0 10px;padding:9px;border:7px solid #62696b;border-radius:3px;
+  background:linear-gradient(135deg,#c5c7c3,#ecece8 45%,#b9bcb8);box-shadow:inset 0 0 18px #26313633
+}
+.board-preview-row{
+  height:calc((100% - (var(--preview-rows,1) - 1)*5px)/var(--preview-rows,1));
+  display:grid;grid-template-columns:repeat(var(--preview-cols,12),1fr);gap:1px;margin-bottom:5px;
+  padding:4px 3px;background:#d8dad6;border:1px solid #878d89;box-shadow:inset 0 -3px #8a9290
+}
+.board-preview-row:last-child{margin-bottom:0}
+.board-preview-slot{
+  min-width:0;background:linear-gradient(#f4f5f2,#cdd1cd);border:1px solid #9aa19d;border-radius:1px
+}
+.board-card-meta{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:8px
+}
+.board-card-meta div{
+  padding:6px 5px;border:1px solid #203d4d;border-radius:3px;background:#07141c;text-align:center
+}
+.board-card-meta span{display:block;color:#6e8997;font:bold 5px Arial}
+.board-card-meta b{display:block;margin-top:2px;color:#dce9ef;font:bold 7px Arial}
+.board-choice-card .board-card-action{
+  display:block;margin-top:10px;color:#65d4ae;font:bold 7px Arial;letter-spacing:.4px
+}
+.board-selector-foot{
+  padding:10px 15px;border-top:1px solid #1f3b4a;background:#07131b;color:#718d9a;font-size:6.5px
+}
+@media(max-width:900px){
+  .board-selector-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:620px){
+  .board-selector-grid{grid-template-columns:1fr}
+}
