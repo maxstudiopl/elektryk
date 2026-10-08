@@ -150,7 +150,7 @@ function redraw(){
     });
     if(coords.length){
       const minX=Math.min(...coords.map(p=>p.x)),maxX=Math.max(...coords.map(p=>p.x)),top=Math.min(...coords.map(p=>p.y))-38-(gi%2)*4;
-      addBadge((minX+maxX)/2,top,items[0].kind==='comb3'?'3F':items[0].phase,items[0].kind==='comb3'?'GRZEBIEŃ 3F':'GRZEBIEŃ 1F',()=>removeGroup(groupId),true);
+      addBadge((minX+maxX)/2,top,items[0].kind==='comb3'?'3F':items[0].phase,(items[0].kind==='comb3'?'GRZEBIEŃ 3F':'GRZEBIEŃ 1F')+(items.every(b=>b.endCaps)?' • OSŁONY ✓':' • BRAK OSŁON'),()=>removeGroup(groupId),true);
     }
     gi++;
   });
