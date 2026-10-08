@@ -269,6 +269,9 @@ function createComb(t){
      bridges.some(b=>(b.a===term.dataset.terminal||b.b===term.dataset.terminal)&&b.phase!==phase))){
     flash(t);clearStart();setStatus('Zakres ma już przewód lub mostek innej fazy. Popraw połączenia przed dodaniem grzebienia.');return;
   }
+  if(terms.some(t=>bridges.some(b=>(b.kind==='comb'||b.kind==='comb3')&&(b.a===t.dataset.terminal||b.b===t.dataset.terminal)))){
+    flash(t);clearStart();setStatus('Wybrany zacisk jest już objęty innym grzebieniem. Usuń stary grzebień przed montażem nowego.');return;
+  }
   for(let i=1;i<terms.length;i++){
     if(bridgeExists(terms[i-1].dataset.terminal,terms[i].dataset.terminal)){flash(t);clearStart();setStatus('W tym zakresie istnieje już mostek lub grzebień.');return}
   }
