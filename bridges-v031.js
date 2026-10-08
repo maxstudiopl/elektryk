@@ -33,7 +33,7 @@ function selectedPhase(){
   const type=selectedWireType();
   return ['L1','L2','L3'].includes(type)?type:'L1';
 }
-function activeBridgeType(){return bridgeMode?selectedWireType():selectedPhase()}
+function activeBridgeType(){return comb3Mode?'3F':bridgeMode?selectedWireType():selectedPhase()}
 function refreshPhase(){const el=document.getElementById('bridgePhase');if(el)el.textContent=activeBridgeType()}
 document.querySelectorAll('.wire').forEach(w=>w.addEventListener('click',()=>{
   refreshPhase();
@@ -140,7 +140,7 @@ function redraw(){
     const coords=[];
     items.forEach(b=>{
       const a=document.querySelector('[data-terminal="'+CSS.escape(b.a)+'"]'),z=document.querySelector('[data-terminal="'+CSS.escape(b.b)+'"]');if(!a||!z)return;
-      const A=center(a),B=center(z),lift=Math.min(A.y,B.y)-21-(gi%2)*4,d=b.a===b.b?'':bridgePath(A,B,lift);
+      const A=center(a),B=center(z),phaseLift=b.kind==='comb3'?(['L1','L2','L3'].indexOf(b.phase)*5):0,lift=Math.min(A.y,B.y)-21-(gi%2)*4-phaseLift,d=b.a===b.b?'':bridgePath(A,B,lift);
       coords.push(A,B);
       if(!d){addEnd(A.x,A.y,b.phase,b.id,groupId);return}
       addPath(d,b.phase,'bridge-shadow comb-shadow',b.id,groupId);
@@ -264,6 +264,11 @@ function createComb(t){
   }
   const terms=devices.map(m=>terminalForDevice(m,phase));
   if(terms.some(x=>!x)){flash(t);clearStart();setStatus('Nie wszystkie aparaty mają zgodny zacisk fazowy.');return}
+  const otherWires=window.ElektrykStage3?.getConnections?.()||[];
+  if(terms.some(term=>otherWires.some(w=>(w.a===term.dataset.terminal||w.b===term.dataset.terminal)&&w.type!==phase) ||
+     bridges.some(b=>(b.a===term.dataset.terminal||b.b===term.dataset.terminal)&&b.phase!==phase))){
+    flash(t);clearStart();setStatus('Zakres ma już przewód lub mostek innej fazy. Popraw połączenia przed dodaniem grzebienia.');return;
+  }
   for(let i=1;i<terms.length;i++){
     if(bridgeExists(terms[i-1].dataset.terminal,terms[i].dataset.terminal)){flash(t);clearStart();setStatus('W tym zakresie istnieje już mostek lub grzebień.');return}
   }
