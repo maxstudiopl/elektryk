@@ -229,10 +229,11 @@ function configureTask(task){
   currentTask=task;selected=null;errors=0;
   document.querySelectorAll('.catalog-card').forEach(x=>x.classList.remove('install-selected'));
   const title=document.querySelector('.active-task h2'),desc=document.querySelector('.active-task p');
-  const reward=document.querySelector('.reward b');
+  const rewardBox=document.querySelector('.reward'),reward=rewardBox?.querySelector('b');
   if(title)title.textContent=task.title;
   if(desc)desc.textContent=task.description;
-  if(reward){reward.style.display='';reward.querySelector('b')?reward.querySelector('b').textContent=`${task.xp} XP`:reward.textContent=`${task.xp} XP`}
+  if(rewardBox)rewardBox.style.display='';
+  if(reward)reward.textContent=`${task.xp} XP`;
   renderTaskGoals(task);
   renderRows(task.rows,18);
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
