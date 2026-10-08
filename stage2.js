@@ -5,6 +5,7 @@ const PARTS={
   FR40:{code:'FR40',name:'FR 40A 2P',modules:2,category:'OCHRONA',className:'device-fr medium',top:'L • N',brand:'XYZ',brandClass:'red',type:'FR',rating:'40A',meta:'2P • 230V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L • N',kind:'fr'},
   FR100:{code:'FR100',name:'FR 100A 4P',modules:4,category:'OCHRONA',className:'device-fr wide',top:'L1 • L2 • L3 • N',brand:'XYZ',brandClass:'red',type:'FR',rating:'100A',meta:'4P • 400V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L1 • L2 • L3 • N',kind:'fr'},
   RCD:{code:'RCD',name:'RCD 40A / 30mA',modules:2,category:'RCD',className:'device-rcd medium',top:'L • N',brand:'XYZ',brandClass:'blue',type:'RCD',rating:'40A',meta:'30mA • Typ A • 2P',fn:'OCHRONA RÓŻNICOWA',bottom:'L • N',kind:'rcd',test:'T'},
+  RCD4:{code:'RCD4',name:'RCD 40A / 30mA 4P',modules:4,category:'RCD',className:'device-rcd device-rcd-4p wide',top:'L1 • L2 • L3 • N',brand:'XYZ',brandClass:'blue',type:'RCD',rating:'40A',meta:'30mA • Typ A • 4P',fn:'OCHRONA RÓŻNICOWA',bottom:'L1 • L2 • L3 • N',kind:'rcd',test:'T'},
   B6:{code:'B6',name:'B6 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'B6',rating:'6A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
   B10:{code:'B10',name:'B10 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'B10',rating:'10A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
   B13:{code:'B13',name:'B13 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'B13',rating:'13A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
@@ -36,7 +37,10 @@ const PARTS={
   C25_2P:{code:'C25_2P',name:'C25 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'C25',rating:'25A',meta:'2P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4',kind:'mcb'},
   C25_3P:{code:'C25_3P',name:'C25 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'C25',rating:'25A',meta:'3P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4 • 6',kind:'mcb'},
   RCBO:{code:'RCBO',name:'RCBO B16 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'XYZ',brandClass:'cyan',type:'RCBO',rating:'B16',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
+  RCBO10:{code:'RCBO10',name:'RCBO B10 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'XYZ',brandClass:'cyan',type:'RCBO',rating:'B10',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
+  RCBO20:{code:'RCBO20',name:'RCBO B20 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'XYZ',brandClass:'cyan',type:'RCBO',rating:'B20',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
   SPD:{code:'SPD',name:'SPD Typ 2',modules:2,category:'OCHRONA',className:'device-spd medium',top:'L • N',brand:'XYZ',brandClass:'orange',type:'SPD',rating:'T2',meta:'275V • 1P+N',fn:'PRZEPIĘCIA',bottom:'PE',kind:'spd',spd:true},
+  SPD4:{code:'SPD4',name:'SPD Typ 2 3P+N',modules:4,category:'OCHRONA',className:'device-spd device-spd-4p wide',top:'L1 • L2 • L3 • N',brand:'XYZ',brandClass:'orange',type:'SPD',rating:'T2',meta:'275V • 3P+N',fn:'OCHRONA PRZEPIĘCIOWA',bottom:'PE',kind:'spd',spd:true},
   NTB:{code:'NTB',name:'Listwa zaciskowa N',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-n medium',top:'N1 • N2 • N3 • N4',brand:'XYZ',brandClass:'blue',type:'N',rating:'8×N',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ NEUTRALNY N',bottom:'N5 • N6 • N7 • N8',kind:'terminal-n',passive:true},
   PETB:{code:'PETB',name:'Listwa zaciskowa PE',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-pe medium',top:'PE1 • PE2 • PE3 • PE4',brand:'XYZ',brandClass:'green',type:'PE',rating:'8×PE',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ OCHRONNY PE',bottom:'PE5 • PE6 • PE7 • PE8',kind:'terminal-pe',passive:true},
   NTB12:{code:'NTB12',name:'Listwa N kompakt 12',modules:1,category:'ZACISKI',className:'device-terminal device-terminal-n device-terminal-compact',top:'N1 • N2 • N3 • N4 • N5 • N6',brand:'XYZ',brandClass:'blue',type:'N',rating:'12×N',meta:'KOMPAKT • 1M',fn:'12 ZACISKÓW NEUTRALNYCH',bottom:'N7 • N8 • N9 • N10 • N11 • N12',kind:'terminal-n',passive:true,compact:true},
@@ -305,7 +309,24 @@ function ensureMcbVariantCards(){
     grid.appendChild(card);
   });
 }
+function ensureXyzProtectionCards(){
+  const grid=document.querySelector('.catalog-grid');if(!grid)return;
+  ['RCD4','RCBO10','RCBO20','SPD4'].forEach(code=>{
+    const p=PARTS[code];
+    if(!p||grid.querySelector(`[data-part="${code}"]`))return;
+    const card=document.createElement('button');
+    card.className='catalog-card xyz-variant-card xyz-protection-card';
+    card.dataset.part=code;
+    card.dataset.name=p.name;
+    card.dataset.spec=`${p.type} • ${p.rating} • ${p.meta}`;
+    card.dataset.desc=`Aparat modułowy serii XYZ do symulatora rozdzielnic.`;
+    const miniClass=p.kind==='spd'?'mini-spd':p.kind==='rcd'?'mini-rcd':'mini-rcbo';
+    card.innerHTML=`<span class="mini-device ${miniClass} mini-${p.modules}p"><strong>${p.type}</strong><em>${p.rating}</em><i></i></span><b>${p.name}</b><small>XYZ • ${p.meta}</small>`;
+    grid.appendChild(card);
+  });
+}
 ensureMcbVariantCards();
+ensureXyzProtectionCards();
 
 function configureBoard(template){
   if(!template||!template.rows||!template.modulesPerRow)return false;
