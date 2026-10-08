@@ -56,13 +56,13 @@ document.addEventListener('elektryk:board-changed',e=>{
   const v=document.querySelector('.cabinet-head .version');
   const rows=Number(template.rows||inner.dataset.rows||1);
   const modules=Number(template.modulesPerRow||inner.dataset.modulesPerRow||18);
-  if(v)v.textContent='v0.7.8 • WOLNA BUDOWA • '+rows+'×'+modules+'M';
+  if(v)v.textContent='v0.7.9 • WOLNA BUDOWA • '+rows+'×'+modules+'M';
 });
 document.addEventListener('elektryk:task-started',e=>{
   const task=e.detail?.task||{};
   apply({id:'TRAINING-TASK',rows:task.rows||1,modulesPerRow:18,mounting:'training',family:'training'});
   const v=document.querySelector('.cabinet-head .version');
-  if(v)v.textContent='v0.7.8 • ZADANIE '+String(task.id||1).padStart(2,'0')+' • '+Number(task.rows||1)+'×18M';
+  if(v)v.textContent='v0.7.9 • ZADANIE '+String(task.id||1).padStart(2,'0')+' • '+Number(task.rows||1)+'×18M';
 });
 document.addEventListener('elektryk:rails-changed',e=>{
   if(!inner.dataset.enclosureProfile){
