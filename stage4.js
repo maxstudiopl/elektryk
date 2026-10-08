@@ -246,7 +246,7 @@ function renderAnalyzer(states,collisions,issues,manual){
     else if(ok>0)main.textContent=`${ok} z ${states.length} odbiorników ma poprawne zasilanie. Pozostałe wymagają dokończenia.`;
     else main.textContent=manual?'Brak kompletnego toru zasilania. Sprawdź L, N, PE i kolejność aparatów.':'Analiza aktualizuje się automatycznie podczas budowy.';
   }
-  const list=document.getElementById('powerIssues');if(list){list.innerHTML='';issues.slice(0,5).forEach(i=>{const d=document.createElement('div');d.className='power-issue '+i.type;d.textContent=i.text;list.appendChild(d)})}
+  const list=document.getElementById('powerIssues');if(list){list.innerHTML='';issues.slice(0,8).forEach(i=>{const d=document.createElement('div');d.className='power-issue '+i.type;d.textContent=i.text;list.appendChild(d)});if(issues.length>8){const d=document.createElement('div');d.className='power-issue warn';d.textContent='Wykryto jeszcze '+(issues.length-8)+' komunikatów. Usuń wskazane błędy i sprawdź ponownie.';list.appendChild(d)}}
   const footerError=document.querySelectorAll('.workspace-footer b')[2];if(footerError)footerError.textContent=issues.filter(i=>i.type==='error').length;
   const footerMode=document.querySelectorAll('.workspace-footer b')[3];if(footerMode)footerMode.textContent='SYMULACJA ZASILANIA';
 }
@@ -263,7 +263,7 @@ function analyze(manual=false){
   const states=LOADS.map(l=>loadState(l,reaches));
   applyLiveVisuals(reaches,collisions);applyLoadVisuals(states);
   const issues=buildIssues(states,collisions);
-  issues.push(...(window.ElektrykElectricalAudit?.inspect?.()||[]));
+  issues.unshift(...(window.ElektrykElectricalAudit?.inspect?.()||[]));
   if(issues.some(i=>i.type==='error'))issues.splice(0,issues.length,...issues.filter(i=>i.type!=='ok'));
   renderAnalyzer(states,collisions,issues,manual);
   lastAnalysis={states,collisions,issues};lastSignature=signature();
