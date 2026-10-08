@@ -53,7 +53,8 @@ const dinZone=document.querySelector('.din-zone');
 const oldRow=document.querySelector('.devices-row');
 const oldRail=dinZone?.querySelector(':scope > .din-rail');
 const cabinetInner=document.querySelector('.cabinet-inner');
-if(!dinZone||!oldRow||!cabinetInner)return;
+const cabinet=document.querySelector('.cabinet');
+if(!dinZone||!oldRow||!cabinetInner||!cabinet)return;
 oldRow.innerHTML='';oldRow.style.display='none';
 if(oldRail)oldRail.style.display='none';
 
@@ -81,8 +82,33 @@ if(activeTask){
 const footerStats=document.querySelectorAll('.workspace-footer b');
 const moduleStat=footerStats[0]||null,errorStat=footerStats[2]||null;
 
+const enclosureRealism=document.createElement('div');
+enclosureRealism.className='enclosure-realism';
+enclosureRealism.innerHTML='<i class="case-screw tl"></i><i class="case-screw tr"></i><i class="case-screw bl"></i><i class="case-screw br"></i><span class="case-marking">XYZ • MODULAR ENCLOSURE</span>';
+cabinetInner.prepend(enclosureRealism);
+
 function totalModules(){return rowCount*modulesPerRow}
 function usedModules(){return occupied.reduce((n,row)=>n+row.filter(Boolean).length,0)}
+function taskEnclosureProfile(rows){
+  return Number(rows)>=3?'training-18-tall':'training-18';
+}
+function applyEnclosureProfile(template={}){
+  const profile=template.enclosureProfile||taskEnclosureProfile(template.rows||rowCount);
+  const mounting=template.mounting||'training';
+  const family=template.family||'training';
+  const boardId=template.id||'TRAINING-TASK';
+  [cabinet,cabinetInner].forEach(el=>{
+    el.dataset.enclosureProfile=profile;
+    el.dataset.mounting=mounting;
+    el.dataset.family=family;
+    el.dataset.boardId=boardId;
+  });
+  const look=template.enclosureLook||{};
+  cabinetInner.dataset.shell=look.shell||family;
+  cabinetInner.dataset.door=look.door||'none';
+  cabinetInner.dataset.depth=look.depth||'standard';
+  cabinetInner.dataset.rowSpacing=look.rowSpacing||'training';
+}
 function apparatusHtml(p){
   return `<article class="device ${p.className}" data-kind="${p.kind}">
     <div class="device-topterm">${p.top}</div><div class="brand-strip ${p.brandClass}">${p.brand}</div>
@@ -128,6 +154,8 @@ function renderRows(count,perRow=modulesPerRow){
   const innerHeight=700+(rowCount-1)*270;
   cabinetInner.style.height=innerHeight+'px';
   cabinetInner.dataset.rows=String(rowCount);
+  cabinet.dataset.rows=String(rowCount);
+  cabinet.dataset.modulesPerRow=String(modulesPerRow);
   dinZone.style.height=(rowCount*ROW_PITCH+DIN_ZONE_EXTRA)+'px';
   hint.style.top=(rowCount*ROW_PITCH+48)+'px';
 
@@ -237,6 +265,15 @@ function configureTask(task){
   if(cabinetTitle)cabinetTitle.textContent='ROZDZIELNICA TRENINGOWA';
   if(rewardBox)rewardBox.style.display='';
   if(reward)reward.textContent=`${task.xp} XP`;
+  applyEnclosureProfile({
+    id:'TRAINING-TASK',
+    family:'training',
+    mounting:'training',
+    rows:task.rows,
+    modulesPerRow:18,
+    enclosureProfile:taskEnclosureProfile(task.rows),
+    enclosureLook:{shell:'training',door:'none',depth:'standard',rowSpacing:'training'}
+  });
   renderTaskGoals(task);
   renderRows(task.rows,18);
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
@@ -283,11 +320,12 @@ function configureBoard(template){
   if(reward)reward.style.display='none';
   if(goals){goals.innerHTML='<span>WOLNA BUDOWA • brak wymaganej listy aparatów</span>'}
   document.getElementById('taskComplete')?.classList.remove('show');
+  applyEnclosureProfile(template);
   renderRows(template.rows,template.modulesPerRow);
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
   setHint(`<b>WOLNA BUDOWA:</b> ${template.name} • ${template.rows}×${template.modulesPerRow}M.`,'success');
   const version=document.querySelector('.cabinet-head .version');
-  if(version)version.textContent=`v0.7.7 • WOLNA BUDOWA • ${template.rows}×${template.modulesPerRow}M`;
+  if(version)version.textContent=`v0.7.8 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
   document.dispatchEvent(new CustomEvent('elektryk:board-changed',{detail:{template:{...template}}}));
   return true;
 }
@@ -327,7 +365,7 @@ window.ElektrykStage2={
   getRows:()=>rowCount,
   getModulesPerRow:()=>modulesPerRow,
   getTotalModules:totalModules,
-  getBoardConfig:()=>({rows:rowCount,modulesPerRow,totalModules:totalModules()}),
+  getBoardConfig:()=>({rows:rowCount,modulesPerRow,totalModules:totalModules(),enclosureProfile:cabinetInner.dataset.enclosureProfile,mounting:cabinetInner.dataset.mounting}),
   configureBoard,
   parts:PARTS
 };
