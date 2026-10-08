@@ -92,8 +92,8 @@ function formatDate(ts){
 }
 function readSettings(){
   try{
-    return Object.assign({animations:true,guidance:true},JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}'));
-  }catch{return {animations:true,guidance:true}}
+    return Object.assign({animations:true,guidance:true,panelText:'large'},JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}'));
+  }catch{return {animations:true,guidance:true,panelText:'large'}}
 }
 function applySettings(settings=readSettings()){
   document.body.classList.toggle('no-ui-animations',!settings.animations);
