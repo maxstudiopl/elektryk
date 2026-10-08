@@ -373,7 +373,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidd
 const title=document.querySelector('.active-task h2');
 if(title)new MutationObserver(function(){hintBox.hidden=true;hintIndex=0;lastTaskId=currentTask()?.id||null}).observe(title,{childList:true,subtree:true});
 
-window.ElektrykHelp={showHint:showHint,openSolution:openSolution};
+window.ElektrykHelp={showHint:showHint,openSolution:openSolution,getReferencePlan:function(task){return buildPlan(task||currentTask())}};
 
 /* v0.7.12 — Nauka 2.0: przewodnik postępu zadania */
 const learning=document.createElement('section');
@@ -386,13 +386,14 @@ function refreshLearning(){
   const task=currentTask();if(!task)return;
   const have=mountedCounts(), requirements=Object.entries(task.requirements||{});
   const completeMount=requirements.every(([code,count])=>(have[code]||0)>=count);
+  const layoutCheck=window.ElektrykLearningBoard?.evaluate?.();
   const wires=window.ElektrykStage3?.getConnections?.()||[];
   const bridge=window.ElektrykBridges?.getBridges?.()||[];
   const analysis=window.ElektrykPower?.getLast?.();
   const ready=!!analysis?.states?.length&&analysis.states.every(state=>state.complete)&&!(analysis.issues||[]).some(issue=>issue.type==='error');
   const steps=[
     {name:'Dobierz wymagane aparaty',ok:completeMount,detail:requirements.filter(([code,count])=>(have[code]||0)<count).map(([code,count])=>code+' '+(have[code]||0)+'/'+count).join(', ')},
-    {name:'Rozmieść aparaty na listwach DIN',ok:completeMount,detail:completeMount?'Wymagana liczba aparatów jest zamontowana':'Zamontuj brakujące aparaty'},
+    {name:'Odwzoruj rozmieszczenie ze schematu',ok:!!layoutCheck?.complete,detail:layoutCheck?'Pozycje zgodne: '+layoutCheck.matched+'/'+layoutCheck.total+(layoutCheck.extra.length?' • nadmiarowe: '+layoutCheck.extra.length:''):'Sprawdź rozmieszczenie na wzorcu rozdzielnicy'},
     {name:'Wykonaj połączenia przewodami lub mostkami',ok:wires.length>0||bridge.length>0,detail:'Przewody: '+wires.length+' • mostki: '+bridge.length},
     {name:'Sprawdź instalację analizatorem',ok:ready,detail:ready?'Wszystkie analizowane obwody poprawne':'Kliknij SPRAWDŹ INSTALACJĘ i usuń wskazane błędy'}
   ];
@@ -415,6 +416,7 @@ document.getElementById('checkPower')?.addEventListener('click',()=>setTimeout(r
 const learningObserver=new MutationObserver(()=>{if(!learning.isConnected)return;refreshLearning()});
 const din=document.querySelector('.din-zone');
 if(din)learningObserver.observe(din,{childList:true,subtree:false});
+window.ElektrykHelp.refreshLearning=refreshLearning;
 refreshLearning();
 
 })();
