@@ -684,3 +684,7 @@ body.no-terminal-guidance .wire-terminal.guide-source{
 @media(max-width:620px){
   .board-selector-grid{grid-template-columns:1fr}
 }
+
+/* v0.7.7b — stabilny układ miniatur rozdzielnic */
+.board-preview{display:flex!important;flex-direction:column!important;gap:5px!important}
+.board-preview-row{height:auto!important;flex:1 1 0!important;margin-bottom:0!important}
