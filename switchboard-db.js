@@ -23,7 +23,7 @@ const TEMPLATES=[
     totalModules:36,
     sourceRef:'SW-001',
     level:'intermediate',
-    engineStatus:'planned',
+    engineStatus:'supported',
     equipmentHint:{spd:true,rccb:2,mcb:14}
   },
   {
@@ -36,7 +36,7 @@ const TEMPLATES=[
     totalModules:36,
     sourceRef:'SW-004',
     level:'intermediate',
-    engineStatus:'planned',
+    engineStatus:'supported',
     equipmentHint:{spd:null,rccb:2,mcb:14}
   },
   {
@@ -49,7 +49,7 @@ const TEMPLATES=[
     totalModules:60,
     sourceRef:'SW-007',
     level:'advanced',
-    engineStatus:'planned',
+    engineStatus:'supported',
     equipmentHint:null
   },
   {
@@ -62,7 +62,7 @@ const TEMPLATES=[
     totalModules:120,
     sourceRef:'SW-005',
     level:'advanced',
-    engineStatus:'planned',
+    engineStatus:'supported',
     equipmentHint:null
   },
   {
@@ -93,7 +93,7 @@ function supported(){
 }
 
 window.ElektrykSwitchboardDB={
-  version:'0.1.0',
+  version:'0.2.0',
   all,
   get,
   byFamily,
