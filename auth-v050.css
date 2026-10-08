@@ -910,3 +910,113 @@ body.no-terminal-guidance .wire-terminal.guide-source{
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* v0.7.11 — regulowany rozmiar tekstu paneli */
+.setting-row-select select{
+  min-width:92px;
+  height:32px;
+  padding:0 9px;
+  border:1px solid #315b70;
+  border-radius:4px;
+  background:#091923;
+  color:#e7f0f4;
+  font:bold 9px Arial;
+  outline:none;
+  cursor:pointer;
+}
+.setting-row-select select:focus{border-color:#3daee9}
+
+/* 115% — domyślnie */
+body.panel-text-large .player-welcome>small{font-size:8.5px!important}
+body.panel-text-large .player-welcome h1{font-size:24px!important}
+body.panel-text-large .player-welcome p{font-size:10.5px!important}
+body.panel-text-large .mode-card b{font-size:12.5px!important}
+body.panel-text-large .mode-card small{font-size:9px!important}
+body.panel-text-large .mode-card.exam em{font-size:6.5px!important}
+body.panel-text-large .account-summary-head>b{font-size:8.5px!important}
+body.panel-text-large .account-active{font-size:7.5px!important}
+body.panel-text-large .account-grid span{font-size:7px!important}
+body.panel-text-large .account-grid b{font-size:9px!important}
+body.panel-text-large .hub-tools b{font-size:9px!important}
+body.panel-text-large .hub-tools small{font-size:8px!important}
+body.panel-text-large .hub-header-link b{font-size:9px!important}
+body.panel-text-large .hub-header-link small{font-size:6.5px!important}
+body.panel-text-large .hub-logout b{font-size:8.5px!important}
+body.panel-text-large .auth-card.hub-open .auth-footer{font-size:7.5px!important}
+
+body.panel-text-large .game-settings-head b{font-size:13px!important}
+body.panel-text-large .game-settings-head small{font-size:8.5px!important}
+body.panel-text-large .setting-row b{font-size:9.5px!important}
+body.panel-text-large .setting-row small{font-size:8px!important}
+body.panel-text-large .settings-note b{font-size:8.5px!important}
+body.panel-text-large .settings-note span{font-size:8px!important}
+body.panel-text-large .setting-row-select select{font-size:10px!important}
+
+body.panel-text-large .players-head b{font-size:14px!important}
+body.panel-text-large .players-head small{font-size:8.5px!important}
+body.panel-text-large .players-toolbar span{font-size:7px!important}
+body.panel-text-large .players-toolbar button{font-size:8px!important}
+body.panel-text-large .player-account span{font-size:7px!important}
+body.panel-text-large .player-account b{font-size:13px!important}
+body.panel-text-large .player-account small{font-size:8px!important}
+body.panel-text-large .player-edit-btn{font-size:7.5px!important}
+body.panel-text-large .player-account .player-license b{font-size:8.5px!important}
+body.panel-text-large .player-account .player-license small{font-size:7px!important}
+body.panel-text-large .player-editor-head b{font-size:10.5px!important}
+body.panel-text-large .player-editor-head span{font-size:7px!important}
+body.panel-text-large .player-edit-section-title{font-size:7.5px!important}
+body.panel-text-large .player-edit-grid label>span{font-size:7px!important}
+body.panel-text-large .player-edit-grid input,
+body.panel-text-large .player-edit-grid select,
+body.panel-text-large .player-edit-grid textarea{font-size:9px!important}
+body.panel-text-large .player-editor-actions button{font-size:8px!important}
+body.panel-text-large .player-editor-message{font-size:7.5px!important}
+body.panel-text-large .players-note{font-size:8px!important}
+
+/* 130% — duży */
+body.panel-text-xlarge .player-welcome>small{font-size:9.5px!important}
+body.panel-text-xlarge .player-welcome h1{font-size:27px!important}
+body.panel-text-xlarge .player-welcome p{font-size:12px!important}
+body.panel-text-xlarge .mode-card b{font-size:14px!important}
+body.panel-text-xlarge .mode-card small{font-size:10px!important}
+body.panel-text-xlarge .mode-card.exam em{font-size:7.5px!important}
+body.panel-text-xlarge .account-summary-head>b{font-size:9.5px!important}
+body.panel-text-xlarge .account-active{font-size:8.5px!important}
+body.panel-text-xlarge .account-grid span{font-size:8px!important}
+body.panel-text-xlarge .account-grid b{font-size:10px!important}
+body.panel-text-xlarge .hub-tools b{font-size:10px!important}
+body.panel-text-xlarge .hub-tools small{font-size:9px!important}
+body.panel-text-xlarge .hub-header-link b{font-size:10px!important}
+body.panel-text-xlarge .hub-header-link small{font-size:7.5px!important}
+body.panel-text-xlarge .hub-logout b{font-size:9.5px!important}
+body.panel-text-xlarge .auth-card.hub-open .auth-footer{font-size:8.5px!important}
+
+body.panel-text-xlarge .game-settings-head b{font-size:14px!important}
+body.panel-text-xlarge .game-settings-head small{font-size:9.5px!important}
+body.panel-text-xlarge .setting-row b{font-size:11px!important}
+body.panel-text-xlarge .setting-row small{font-size:9px!important}
+body.panel-text-xlarge .settings-note b{font-size:9.5px!important}
+body.panel-text-xlarge .settings-note span{font-size:9px!important}
+body.panel-text-xlarge .setting-row-select select{font-size:11px!important}
+
+body.panel-text-xlarge .players-head b{font-size:15px!important}
+body.panel-text-xlarge .players-head small{font-size:9.5px!important}
+body.panel-text-xlarge .players-toolbar span{font-size:8px!important}
+body.panel-text-xlarge .players-toolbar button{font-size:9px!important}
+body.panel-text-xlarge .player-account span{font-size:8px!important}
+body.panel-text-xlarge .player-account b{font-size:14px!important}
+body.panel-text-xlarge .player-account small{font-size:9px!important}
+body.panel-text-xlarge .player-edit-btn{font-size:8.5px!important}
+body.panel-text-xlarge .player-account .player-license b{font-size:9.5px!important}
+body.panel-text-xlarge .player-account .player-license small{font-size:8px!important}
+body.panel-text-xlarge .player-editor-head b{font-size:12px!important}
+body.panel-text-xlarge .player-editor-head span{font-size:8px!important}
+body.panel-text-xlarge .player-edit-section-title{font-size:8.5px!important}
+body.panel-text-xlarge .player-edit-grid label>span{font-size:8px!important}
+body.panel-text-xlarge .player-edit-grid input,
+body.panel-text-xlarge .player-edit-grid select,
+body.panel-text-xlarge .player-edit-grid textarea{font-size:10px!important}
+body.panel-text-xlarge .player-editor-actions button{font-size:9px!important}
+body.panel-text-xlarge .player-editor-message{font-size:8.5px!important}
+body.panel-text-xlarge .players-note{font-size:9px!important}
