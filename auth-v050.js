@@ -395,6 +395,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('gameSettingsModal')?.addEventListener('click',e=>{if(e.target.id==='gameSettingsModal')closeSettings()});
   document.getElementById('settingAnimations')?.addEventListener('change',saveSettings);
   document.getElementById('settingGuidance')?.addEventListener('change',saveSettings);
+  document.getElementById('settingPanelText')?.addEventListener('change',saveSettings);
 
   document.addEventListener('elektryk:task-started',e=>{
     if(restoringState)return;
