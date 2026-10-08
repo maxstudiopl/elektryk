@@ -1,7 +1,7 @@
 (()=> {
 const KEY='elektryk_progress_v060';
 function storageKey(){
-  const user=window.ElektrykAuth?.currentUser?.()||'admin';
+  const user=window.ElektrykAuth?.currentAccountId?.()||'admin';
   return user==='admin'?KEY:(KEY+':'+user);
 }
 const TOTAL_TASKS=20;
