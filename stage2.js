@@ -79,7 +79,7 @@ if(activeTask){
   activeTask.appendChild(toolbar);
   const complete=document.createElement('div');
   complete.className='task-complete';complete.id='taskComplete';
-  complete.textContent='✓ Wymagane aparaty zostały zamontowane. Możesz przejść do okablowania i sprawdzenia instalacji.';
+  complete.textContent='✓ Wymagane aparaty zamontowane. Porównaj ich rozmieszczenie ze schematem, a następnie wykonaj i sprawdź połączenia.';
   activeTask.appendChild(complete);
 }
 
@@ -388,7 +388,7 @@ function configureBoard(template){
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
   setHint(`<b>WOLNA BUDOWA:</b> ${template.name} • ${template.rows}×${template.modulesPerRow}M.`,'success');
   const version=document.querySelector('.cabinet-head .version');
-  if(version)version.textContent=`v0.7.11 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
+  if(version)version.textContent=`v0.7.12 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
   document.dispatchEvent(new CustomEvent('elektryk:board-changed',{detail:{template:{...template}}}));
   return true;
 }
