@@ -688,3 +688,111 @@ body.no-terminal-guidance .wire-terminal.guide-source{
 /* v0.7.7b — stabilny układ miniatur rozdzielnic */
 .board-preview{display:flex!important;flex-direction:column!important;gap:5px!important}
 .board-preview-row{height:auto!important;flex:1 1 0!important;margin-bottom:0!important}
+
+
+/* v0.7.11 — Panel Graczy dla administratora */
+.players-modal{
+  position:fixed;
+  inset:0;
+  z-index:10040;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#02070ddd;
+  backdrop-filter:blur(5px);
+}
+.players-modal[hidden]{display:none!important}
+.players-window{
+  width:min(620px,92vw);
+  overflow:hidden;
+  border:1px solid #326c8f;
+  border-radius:8px;
+  background:#091923;
+  box-shadow:0 30px 85px #000e;
+}
+.players-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 16px;
+  background:linear-gradient(#123247,#0c2637);
+  border-bottom:1px solid #2d5369;
+}
+.players-head b{
+  display:block;
+  font-size:12px;
+  letter-spacing:.45px;
+}
+.players-head small{
+  display:block;
+  margin-top:4px;
+  color:#8fa8b6;
+  font-size:7px;
+}
+.players-head button{
+  width:32px;
+  height:32px;
+  border:1px solid #42657a;
+  border-radius:4px;
+  background:#0b1720;
+  font-size:20px;
+  cursor:pointer;
+}
+.players-list{
+  display:grid;
+  gap:8px;
+  padding:14px;
+}
+.player-account{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:12px 13px;
+  border:1px solid #28495b;
+  border-radius:5px;
+  background:#071720;
+}
+.player-account.admin{
+  border-color:#3a6f8e;
+  background:#0a2030;
+}
+.player-account span{
+  display:block;
+  color:#6e9fba;
+  font:bold 5.7px Arial;
+  letter-spacing:.65px;
+}
+.player-account b{
+  display:block;
+  margin-top:3px;
+  color:#eef7fa;
+  font-size:11px;
+}
+.player-account small{
+  display:block;
+  margin-top:4px;
+  color:#7c96a3;
+  font-size:6.5px;
+}
+.player-account em{
+  flex:none;
+  padding:4px 7px;
+  border:1px solid #367956;
+  border-radius:9px;
+  background:#0e2c20;
+  color:#72db96;
+  font:900 5.7px Arial;
+  font-style:normal;
+  letter-spacing:.5px;
+}
+.players-note{
+  margin:0 14px 14px;
+  padding:9px 10px;
+  border-left:3px solid #b88a32;
+  background:#211b0e;
+  color:#cbb98d;
+  font-size:6.5px;
+  line-height:1.45;
+}
