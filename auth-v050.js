@@ -17,8 +17,8 @@ const scripts=[
   'tasks-v046.js?v=0711',
   'busbars-v047.js?v=0711',
   'help-v049.js?v=0711',
-  'progress-v060.js?v=0711',
-  'freebuild-save-v0711.js?v=0711'
+  'progress-v060.js?v=0711admin2',
+  'freebuild-save-v0711.js?v=0711admin2'
 ];
 
 let gameLoaded=false;
@@ -37,9 +37,12 @@ function sessionData(){
 function currentAccount(){
   const sess=sessionData();
   if(!sess)return null;
-  return sess.accountId
-    ?accountStore()?.byId?.(sess.accountId)||null
-    :accountStore()?.byLogin?.(sess.user)||null;
+  if(sess.accountId)return accountStore()?.byId?.(sess.accountId)||null;
+  const account=accountStore()?.byLogin?.(sess.user)||null;
+  if(account){
+    localStorage.setItem(SESSION_KEY,JSON.stringify({accountId:account.id,user:account.login,expires:sess.expires}));
+  }
+  return account;
 }
 function currentAccountId(){
   return currentAccount()?.id||null;
