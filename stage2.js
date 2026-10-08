@@ -82,10 +82,13 @@ if(activeTask){
 const footerStats=document.querySelectorAll('.workspace-footer b');
 const moduleStat=footerStats[0]||null,errorStat=footerStats[2]||null;
 
-const enclosureRealism=document.createElement('div');
-enclosureRealism.className='enclosure-realism';
-enclosureRealism.innerHTML='<i class="case-screw tl"></i><i class="case-screw tr"></i><i class="case-screw bl"></i><i class="case-screw br"></i><span class="case-marking">XYZ • MODULAR ENCLOSURE</span>';
-cabinetInner.prepend(enclosureRealism);
+let enclosureRealism=cabinetInner.querySelector(':scope > .enclosure-realism');
+if(!enclosureRealism){
+  enclosureRealism=document.createElement('div');
+  enclosureRealism.className='enclosure-realism';
+  enclosureRealism.innerHTML='<i class="case-screw tl"></i><i class="case-screw tr"></i><i class="case-screw bl"></i><i class="case-screw br"></i><span class="case-marking">XYZ • MODULAR ENCLOSURE</span>';
+  cabinetInner.prepend(enclosureRealism);
+}
 
 function totalModules(){return rowCount*modulesPerRow}
 function usedModules(){return occupied.reduce((n,row)=>n+row.filter(Boolean).length,0)}
