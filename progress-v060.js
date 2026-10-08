@@ -1,5 +1,9 @@
 (()=> {
 const KEY='elektryk_progress_v060';
+function storageKey(){
+  const user=window.ElektrykAuth?.currentUser?.()||'admin';
+  return user==='admin'?KEY:(KEY+':'+user);
+}
 const TOTAL_TASKS=20;
 let taskStartedAt=Date.now();
 let currentTaskId=window.ElektrykStage2?.getTask?.()?.id||1;
@@ -8,12 +12,12 @@ let failedChecks=0;
 function fresh(){return {xp:0,completed:{},bestStars:{},bestTime:{},attempts:{},updatedAt:Date.now()}}
 function load(){
   try{
-    const raw=JSON.parse(localStorage.getItem(KEY)||'null');
+    const raw=JSON.parse(localStorage.getItem(storageKey())||'null');
     return raw&&typeof raw==='object'?Object.assign(fresh(),raw):fresh();
   }catch{return fresh()}
 }
 let data=load();
-function save(){data.updatedAt=Date.now();localStorage.setItem(KEY,JSON.stringify(data))}
+function save(){data.updatedAt=Date.now();localStorage.setItem(storageKey(),JSON.stringify(data))}
 function levelForXp(xp){return Math.max(1,Math.floor(Number(xp||0)/500)+1)}
 function fmt(sec){
   sec=Math.max(0,Math.floor(sec||0));
@@ -157,6 +161,6 @@ window.ElektrykProgress={
   get:()=>JSON.parse(JSON.stringify(data)),
   level:()=>levelForXp(data.xp),
   refreshProfile:profile,
-  reset:()=>{localStorage.removeItem(KEY);data=fresh();taskStartedAt=Date.now();failedChecks=0;renderStats()}
+  reset:()=>{localStorage.removeItem(storageKey());data=fresh();taskStartedAt=Date.now();failedChecks=0;renderStats()}
 };
 })();
