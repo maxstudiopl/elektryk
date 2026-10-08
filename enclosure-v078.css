@@ -1,0 +1,361 @@
+/* v0.7.8 — REALISTYCZNE OBUDOWY ROZDZIELNIC */
+
+.cabinet{
+  position:relative;
+  padding:15px!important;
+  border:1px solid #5d6668!important;
+  background:
+    linear-gradient(180deg,#4b5355 0,#343c3f 13px,#262d30 14px,#343b3e 100%)!important;
+  box-shadow:
+    inset 0 1px #ffffff32,
+    inset 0 -1px #0008,
+    0 14px 30px #0009!important;
+}
+
+.cabinet-inner{
+  isolation:isolate;
+  border:13px solid #747b79!important;
+  border-radius:3px!important;
+  background:
+    radial-gradient(circle at 17px 17px,#49504e 0 3px,#c8cbc7 3.5px 7px,transparent 7.5px),
+    radial-gradient(circle at calc(100% - 17px) 17px,#49504e 0 3px,#c8cbc7 3.5px 7px,transparent 7.5px),
+    radial-gradient(circle at 17px calc(100% - 17px),#49504e 0 3px,#c8cbc7 3.5px 7px,transparent 7.5px),
+    radial-gradient(circle at calc(100% - 17px) calc(100% - 17px),#49504e 0 3px,#c8cbc7 3.5px 7px,transparent 7.5px),
+    linear-gradient(90deg,#c5c8c4 0,#e8e9e5 5%,#f2f2ee 50%,#e1e3df 95%,#b5bab6 100%)!important;
+  box-shadow:
+    inset 0 0 0 2px #8f9592,
+    inset 0 0 0 4px #dfe1de,
+    inset 0 0 45px #30393828,
+    0 5px 12px #0008!important;
+}
+
+.enclosure-realism{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+}
+
+.case-screw{
+  position:absolute;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  border:1px solid #6e7572;
+  background:
+    linear-gradient(45deg,transparent 43%,#676e6b 44% 56%,transparent 57%),
+    radial-gradient(circle,#f0f1ee 0 35%,#a7ada9 36% 67%,#5f6663 68%);
+  box-shadow:0 1px 2px #0005,inset 0 1px #fff;
+}
+.case-screw.tl{left:8px;top:8px}
+.case-screw.tr{right:8px;top:8px}
+.case-screw.bl{left:8px;bottom:8px}
+.case-screw.br{right:8px;bottom:8px}
+
+.case-marking{
+  position:absolute;
+  right:22px;
+  top:9px;
+  padding:2px 5px;
+  border:1px solid #9ca29f99;
+  border-radius:2px;
+  background:#eceeea88;
+  color:#69716f;
+  font:700 5px Arial;
+  letter-spacing:.45px;
+}
+
+/* płyta robocza i rzędowa konstrukcja */
+.din-zone{
+  z-index:3;
+}
+
+.din-rows-host{
+  z-index:8!important;
+}
+
+.din-row{
+  position:relative!important;
+  height:252px!important;
+  padding:10px 12px 0!important;
+  border-top:0!important;
+  background:
+    linear-gradient(90deg,transparent 0 10px,#9ea5a134 10px 11px,transparent 11px calc(100% - 11px),#9ea5a134 calc(100% - 11px) calc(100% - 10px),transparent calc(100% - 10px)),
+    linear-gradient(180deg,#e8e9e5 0,#dfe1dd 72%,#c7cbc7 100%)!important;
+  box-shadow:
+    inset 0 1px #fff,
+    inset 0 -1px #a6adaa,
+    0 1px #ffffff88!important;
+}
+.din-row+.din-row{
+  border-top:5px solid #b1b6b2!important;
+}
+
+.din-row-label{
+  left:13px!important;
+  right:13px!important;
+  top:3px!important;
+  color:#697573!important;
+  z-index:7!important;
+}
+.din-row-label span{
+  color:#596866!important;
+  font-weight:800!important;
+}
+.din-row-label b{
+  color:#7b8582!important;
+}
+
+/* realniejsza metalowa szyna TH35 */
+.din-row .din-rail{
+  left:14px!important;
+  right:14px!important;
+  top:113px!important;
+  height:47px!important;
+  border:1px solid #646d6a!important;
+  border-radius:1px!important;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 24px,#60696672 24px 26px,transparent 26px 49px),
+    linear-gradient(180deg,
+      #7c8582 0 7%,
+      #d9ddda 8% 19%,
+      #f7f8f6 20% 32%,
+      #929a97 33% 43%,
+      #e8ebe8 44% 62%,
+      #747d7a 63% 75%,
+      #cdd2ce 76% 91%,
+      #6a7370 92% 100%)!important;
+  box-shadow:
+    inset 0 1px #ffffff,
+    inset 0 -1px #4e5754,
+    0 4px 5px #0005!important;
+}
+.din-row .din-rail:before{
+  left:18px!important;
+  right:18px!important;
+  top:17px!important;
+  height:10px!important;
+  background:repeating-linear-gradient(90deg,#515a57 0 15px,transparent 15px 32px)!important;
+  opacity:.65!important;
+}
+
+/* pole modułowe — delikatne oznaczenia, bez „kratki gry” */
+.din-row .mount-grid{
+  top:17px!important;
+  height:194px!important;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 calc((100% / var(--modules-per-row,18)) - 1px),
+      #7d898538 calc((100% / var(--modules-per-row,18)) - 1px) calc(100% / var(--modules-per-row,18))
+    )!important;
+}
+.din-slot{
+  border-left:0!important;
+}
+.din-slot:last-child{
+  border-right:0!important;
+}
+.din-slot:before{
+  top:-12px!important;
+  color:#7a8581!important;
+  opacity:.85;
+}
+
+/* kanały kablowe z PVC zamiast czarnych „belek” */
+.duct{
+  height:34px!important;
+  border:1px solid #858d89!important;
+  border-radius:2px!important;
+  background:
+    repeating-linear-gradient(90deg,#c9cdca 0 7px,#7f8985 7px 9px,#e5e7e3 9px 14px)!important;
+  box-shadow:
+    inset 0 2px #f7f8f5,
+    inset 0 -2px #858d89,
+    0 2px 5px #0004!important;
+  color:#596361!important;
+  line-height:32px!important;
+  text-shadow:0 1px #fff!important;
+}
+.duct:before,
+.duct:after{
+  content:'';
+  position:absolute;
+  top:4px;
+  bottom:4px;
+  width:5px;
+  border-radius:1px;
+  background:#6f7975;
+  box-shadow:inset 0 1px #bfc4c1;
+}
+.duct:before{left:5px}
+.duct:after{right:5px}
+
+/* przestrzeń między rzędami jako kanał serwisowy */
+.din-row:after{
+  content:''!important;
+  left:14px!important;
+  right:14px!important;
+  bottom:5px!important;
+  height:27px!important;
+  border:1px solid #929995!important;
+  border-radius:2px!important;
+  background:
+    repeating-linear-gradient(90deg,#c7cbc8 0 9px,#929a96 9px 11px,#dedfdb 11px 17px)!important;
+  box-shadow:inset 0 1px #f4f5f2,0 1px 2px #0002!important;
+  opacity:.9!important;
+}
+
+/* listwy N/PE — metalowa listwa w kolorowym uchwycie, a nie pełny pasek koloru */
+.din-zone>.bars .bar{
+  height:30px!important;
+  grid-template-columns:118px 1fr!important;
+  border:1px solid #767d79!important;
+  background:linear-gradient(180deg,#e9ebe7 0,#c8ccc8 55%,#aeb4af 100%)!important;
+  box-shadow:
+    inset 0 1px #fff,
+    inset 0 -2px #8a918d,
+    0 3px 5px #0004!important;
+}
+.din-zone>.bars .bar:before{
+  left:-4px!important;
+  right:-4px!important;
+  top:-4px!important;
+  bottom:-4px!important;
+  border:1px solid #8f969255!important;
+  background:#d9dcda22!important;
+}
+.din-zone>.bars .bar>b{
+  color:#313a39!important;
+  border-right:1px solid #8d9591!important;
+  text-shadow:0 1px #fff!important;
+}
+.din-zone>.bars .bar>b small{
+  color:#53605e!important;
+}
+.din-zone>.bars .nbar{
+  border-left:8px solid #1484c8!important;
+}
+.din-zone>.bars .pebar{
+  border-left:8px solid #6fa13d!important;
+}
+.din-zone>.bars .bar-screws{
+  position:relative;
+}
+.din-zone>.bars .bar-screws:before{
+  content:'';
+  position:absolute;
+  left:5px;
+  right:5px;
+  top:50%;
+  height:6px;
+  transform:translateY(-50%);
+  border:1px solid #8a8170;
+  background:linear-gradient(180deg,#d9c79e,#a98e5e 55%,#806b49);
+  box-shadow:inset 0 1px #f4e8ca;
+  z-index:-1;
+}
+
+/* profile obudów */
+.cabinet[data-enclosure-profile="training-18"],
+.cabinet[data-enclosure-profile="training-18-tall"]{
+  background:linear-gradient(180deg,#485153,#333b3d 14px,#272e30 15px,#353d3f)!important;
+}
+
+.cabinet[data-enclosure-profile="residential-3x12-flush"]{
+  padding:11px!important;
+  border-color:#939a96!important;
+  background:linear-gradient(180deg,#d5d8d4,#aeb4b0 8px,#8f9692 9px,#bcc1bd)!important;
+  box-shadow:0 8px 18px #0007,inset 0 1px #fff!important;
+}
+.cabinet-inner[data-enclosure-profile="residential-3x12-flush"]{
+  border-width:9px!important;
+  border-color:#babfbb!important;
+  box-shadow:inset 0 0 0 2px #858d89,inset 0 0 35px #3a444121,0 2px 5px #0005!important;
+}
+
+.cabinet[data-enclosure-profile="residential-3x12-surface"]{
+  padding:20px!important;
+  border:2px solid #4e5758!important;
+  border-radius:5px!important;
+  background:linear-gradient(145deg,#aeb4b0,#727b78 12%,#565f5d 86%,#31383a)!important;
+  box-shadow:0 20px 35px #000b,inset 2px 2px #d8dbd8,inset -3px -3px #303638!important;
+}
+.cabinet-inner[data-enclosure-profile="residential-3x12-surface"]{
+  border-width:15px!important;
+  border-color:#8b9390!important;
+  box-shadow:inset 0 0 0 2px #d9dcda,inset 0 0 45px #222c2a33,0 6px 12px #0008!important;
+}
+
+.cabinet[data-enclosure-profile="residential-5x12"]{
+  padding:15px!important;
+  background:linear-gradient(180deg,#c1c5c1,#89918e 11px,#69716f 12px,#989e9a)!important;
+}
+.cabinet-inner[data-enclosure-profile="residential-5x12"]{
+  border-width:12px!important;
+  border-color:#aeb4b0!important;
+}
+
+.cabinet[data-enclosure-profile="residential-5x24-xl"]{
+  padding:17px!important;
+  border-color:#7b8380!important;
+  background:linear-gradient(180deg,#bdc1bd,#7f8784 12px,#616966 13px,#8e9591)!important;
+  box-shadow:0 18px 34px #000b,inset 0 1px #e4e6e3!important;
+}
+.cabinet-inner[data-enclosure-profile="residential-5x24-xl"]{
+  border-width:13px!important;
+  border-color:#a9afab!important;
+}
+.cabinet-inner[data-enclosure-profile="residential-5x24-xl"] .din-row{
+  padding-left:5px!important;
+  padding-right:5px!important;
+}
+.cabinet-inner[data-enclosure-profile="residential-5x24-xl"] .din-row .din-rail{
+  left:6px!important;
+  right:6px!important;
+}
+
+/* szerokość pola aparatury zależna od fizycznej liczby modułów */
+.cabinet-inner[data-modules-per-row="12"] .mount-grid{
+  left:38px!important;
+  right:38px!important;
+}
+.cabinet-inner[data-modules-per-row="18"] .mount-grid{
+  left:24px!important;
+  right:24px!important;
+}
+.cabinet-inner[data-modules-per-row="24"] .mount-grid{
+  left:12px!important;
+  right:12px!important;
+}
+
+/* duże obudowy: więcej wolnej przestrzeni serwisowej przy krawędziach */
+.cabinet-inner[data-rows="5"] .supply-box{
+  box-shadow:inset 0 1px #ffffff18,0 4px 7px #0007!important;
+}
+.cabinet-inner[data-rows="5"] .case-marking{
+  color:#596361;
+  background:#f0f1eeaa;
+}
+
+/* delikatne pionowe kanały boczne w dużych rozdzielnicach */
+.cabinet-inner[data-rows="5"]:before,
+.cabinet-inner[data-rows="5"]:after{
+  content:'';
+  position:absolute;
+  top:118px;
+  bottom:88px;
+  width:18px;
+  z-index:3;
+  pointer-events:none;
+  border:1px solid #969e99;
+  background:repeating-linear-gradient(180deg,#c6cbc7 0 8px,#828b87 8px 10px,#dedfdb 10px 15px);
+  box-shadow:inset 0 1px #fff;
+  opacity:.72;
+}
+.cabinet-inner[data-rows="5"]:before{left:7px}
+.cabinet-inner[data-rows="5"]:after{right:7px}
+
+/* nie zasłaniaj śrub i oznaczeń przez elementy robocze */
+.supply-box,.duct,.din-zone,.circuits{z-index:4}
+.wire-layer{z-index:7!important}
