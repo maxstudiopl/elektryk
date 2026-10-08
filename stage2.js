@@ -429,7 +429,15 @@ window.ElektrykStage2={
   getRows:()=>rowCount,
   getModulesPerRow:()=>modulesPerRow,
   getTotalModules:totalModules,
-  getBoardConfig:()=>({rows:rowCount,modulesPerRow,totalModules:totalModules(),enclosureProfile:cabinetInner.dataset.enclosureProfile,mounting:cabinetInner.dataset.mounting}),
+  getBoardConfig:()=>({
+    boardId:cabinetInner.dataset.boardId||'',
+    rows:rowCount,
+    modulesPerRow,
+    totalModules:totalModules(),
+    enclosureProfile:cabinetInner.dataset.enclosureProfile||'',
+    mounting:cabinetInner.dataset.mounting||'',
+    family:cabinetInner.dataset.family||''
+  }),
   configureBoard,
   parts:PARTS
 };
