@@ -796,3 +796,117 @@ body.no-terminal-guidance .wire-terminal.guide-source{
   font-size:6.5px;
   line-height:1.45;
 }
+
+
+/* v0.7.11 — dopracowanie nagłówka Panelu Gracza */
+.auth-card.hub-open .auth-brand{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:18px!important;
+}
+.auth-brand-main{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+.auth-brand-actions{
+  display:none;
+  align-items:center;
+  justify-content:flex-end;
+  gap:7px;
+  margin-left:auto;
+}
+.auth-card.hub-open .auth-brand-actions{
+  display:flex;
+}
+.hub-header-link{
+  position:relative;
+  min-width:98px;
+  height:42px;
+  padding:6px 10px;
+  border:1px solid #294d61;
+  border-radius:5px;
+  background:#081923;
+  color:#dceaf1;
+  text-align:left;
+  opacity:.72;
+  cursor:default;
+}
+.hub-header-link b{
+  display:block;
+  font:bold 7.5px Arial;
+  letter-spacing:.35px;
+}
+.hub-header-link small{
+  display:block;
+  margin-top:3px;
+  color:#c9a955;
+  font:bold 5.2px Arial;
+  letter-spacing:.5px;
+}
+
+.player-welcome-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:16px;
+}
+.player-welcome-row .player-welcome{
+  margin-bottom:0!important;
+}
+.hub-logout{
+  flex:none;
+  height:38px;
+  min-width:126px;
+  padding:0 13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border:1px solid #6c3a3a;
+  border-radius:5px;
+  background:linear-gradient(#2e1719,#211012);
+  color:#f0d9d9;
+  cursor:pointer;
+}
+.hub-logout:hover{
+  border-color:#b75d5d;
+  background:linear-gradient(#422024,#2a1316);
+  color:#fff;
+}
+.hub-logout span{
+  font-size:13px;
+  line-height:1;
+}
+.hub-logout b{
+  font:bold 7px Arial;
+  letter-spacing:.55px;
+}
+
+.auth-card.hub-open .hub-tools{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+
+@media(max-width:760px){
+  .auth-card.hub-open .auth-brand{
+    align-items:flex-start!important;
+    flex-direction:column!important;
+  }
+  .auth-card.hub-open .auth-brand-actions{
+    width:100%;
+    justify-content:flex-start;
+  }
+  .player-welcome-row{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .hub-logout{
+    width:100%;
+  }
+  .auth-card.hub-open .hub-tools{
+    grid-template-columns:1fr!important;
+  }
+}
