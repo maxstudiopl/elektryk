@@ -245,7 +245,6 @@ function restoreMounted(records=[]){
   updateStats();
   requestAnimationFrame(()=>{
     window.ElektrykStage3?.refreshMounted?.();
-    window.ElektrykPower?.analyze?.();
   });
   return restored.length;
 }
