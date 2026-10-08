@@ -108,6 +108,12 @@ function applyEnclosureProfile(template={}){
   cabinetInner.dataset.door=look.door||'none';
   cabinetInner.dataset.depth=look.depth||'standard';
   cabinetInner.dataset.rowSpacing=look.rowSpacing||'training';
+  const mark=enclosureRealism.querySelector('.case-marking');
+  if(mark){
+    const rows=Number(template.rows||rowCount)||1;
+    const perRow=Number(template.modulesPerRow||modulesPerRow)||18;
+    mark.textContent='XYZ • '+rows+'×'+perRow+'M • '+String(mounting).replaceAll('_',' ').toUpperCase();
+  }
 }
 function apparatusHtml(p){
   return `<article class="device ${p.className}" data-kind="${p.kind}">
