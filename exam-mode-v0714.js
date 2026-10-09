@@ -131,7 +131,7 @@ function open(){if(window.ElektrykAuth?.isDemo?.())return false;intro();return t
 function close(){
  stop();state.active=false;mode('intro');panel.hidden=true;
  document.body.classList.remove('exam-active','exam-theory');
- window.ElektrykAuth?.showHub?.();
+ window.ElektrykAuth?.openHub?.();
 }
 primary.addEventListener('click',()=>{if(state.step==='intro'||state.step==='result')start();else if(state.step==='practice')evaluatePractical()});
 el('examExit').addEventListener('click',close);
