@@ -27,8 +27,9 @@ const term=(m,side,role)=>{
   return m+':'+side+':'+role+':'+idx;
 };
 function builtWiring(){
-  const w=[];let seq=1;
+  const w=[],bridges=[];let seq=1,bridgeSeq=1;
   const add=(a,b,type,cable='H07V-K 1×2,5')=>w.push({id:'W'+seq++,a,b,type,cable});
+  const jumper=(a,b,phase)=>bridges.push({id:'BR'+bridgeSeq++,a,b,phase,kind:'bridge'});
   // FR 4P and downstream RCD 4P (4 pole paths, no shared neutral outputs).
   for(const p of ['L1','L2','L3','N']){
     const source='SUPPLY:'+p;
@@ -43,7 +44,8 @@ function builtWiring(){
     ['M106','WASH','L1','YDYp 3×2,5']
   ];
   for(const [m,load,p,cable] of loads){
-    add(term('M102','BOTTOM',p),term(m,'TOP','L'),p);
+    if(m==='M106')jumper(term('M103','TOP','L'),term(m,'TOP','L'),p);
+    else add(term('M102','BOTTOM',p),term(m,'TOP','L'),p);
     add(term(m,'BOTTOM','L'),'LOAD:'+load+':L',p,cable);
   }
   // Separate neutral after RCD and common protective bar (never bridge N and PE).
@@ -54,14 +56,15 @@ function builtWiring(){
     add('BAR:N:'+(i+2),'LOAD:'+load+':N','N',cable);
     add('BAR:PE:'+(i+2),'LOAD:'+load+':PE','PE',cable);
   }
-  // SPD4 is modeled as parallel protection, RCBO as a spare equipped module.
-  for(const p of ['L1','L2','L3','N'])add(term('M101','BOTTOM',p),term('M108','TOP',p),p);
+  // SPD is connected in parallel via educational terminal jumpers,
+  // not by attaching several separate wires to a single contact.
+  for(const p of ['L1','L2','L3','N'])jumper(term('M101','BOTTOM',p),term('M108','TOP',p),p);
   add('BAR:PE:6',term('M108','BOTTOM','PE'),'PE');
-  add(term('M101','BOTTOM','L1'),term('M107','TOP','L'),'L1');
-  add(term('M101','BOTTOM','N'),term('M107','TOP','N'),'N');
-  return w;
+  jumper(term('M108','TOP','L1'),term('M107','TOP','L'),'L1');
+  jumper(term('M108','TOP','N'),term('M107','TOP','N'),'N');
+  return {w,bridges};
 }
-const WIRES=builtWiring();
+const {w:WIRES,bridges:BRIDGES}=builtWiring();
 function isDemo(){return window.ElektrykAuth?.currentAccountId?.()===DEMO_ID}
 function setText(sel,value){const e=document.querySelector(sel);if(e)e.textContent=value}
 function getControls(){
@@ -83,7 +86,7 @@ function markReady(mode,template){
   document.body.dataset.demoView=mode;
   getControls();
   setText('#demoBoardStatus',mode==='training'?
-    'Rozdzielnica treningowa 1×18 • 8 aparatów • gotowe przewody • tylko reset':
+    'Rozdzielnica treningowa 1×18 • 8 aparatów • gotowe przewody i mostki • tylko reset':
     'PODGLĄD: '+(template?.name||'rozdzielnica')+' • brak możliwości montażu');
   setText('.cabinet-head .version','v0.7.13.3 • DEMO / TYLKO ODCZYT');
   setText('.active-task .panel-title',mode==='training'?'PREZENTACJA • ROZDZIELNICA 01':'PODGLĄD INNEJ ROZDZIELNICY');
@@ -112,8 +115,8 @@ function training(){
   if(installed!==MOUNTS.length)throw new Error('DEMO: oczekiwano 8 aparatów, zamontowano '+installed);
   wiring.refreshMounted?.();
   validateWiring(WIRES);
-  window.ElektrykBridges?.setBridges?.([]);
   const connected=wiring.setConnections?.(WIRES);
+  window.ElektrykBridges?.setBridges?.(BRIDGES);
   if(connected!==WIRES.length)throw new Error('DEMO: błąd wczytania połączeń');
   setText('.active-task h2','01 • Gotowa rozdzielnica treningowa');
   setText('.active-task p','W pełni uzbrojona rozdzielnica pokazowa. Oglądaj aparaturę i przewody. Nie można jej edytować; przycisk RESET przywraca stan wzorcowy.');
@@ -154,5 +157,5 @@ function gate(event){
 }
 document.addEventListener('click',gate,true);
 document.addEventListener('keydown',gate,true);
-window.ElektrykDemo={isDemo,training,preview,reset,wireCount:WIRES.length,layout:()=>MOUNTS.map(m=>({...m})),wires:()=>WIRES.map(w=>({...w}))};
+window.ElektrykDemo={isDemo,training,preview,reset,wireCount:WIRES.length,bridgeCount:BRIDGES.length,layout:()=>MOUNTS.map(m=>({...m})),wires:()=>WIRES.map(w=>({...w})),bridges:()=>BRIDGES.map(b=>({...b}))};
 })();
