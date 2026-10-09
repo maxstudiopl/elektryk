@@ -20,12 +20,14 @@ const scripts=[
   'rcd-diagnostic-v07131.js?v=07131',
   'stage4.js?v=07131rcd',
   'rcd-diagnostic-ui-v07131.js?v=07131',
-  'tasks-v046.js?v=07133',
+  'curriculum-v0714.js?v=07140',
+  'tasks-v046.js?v=07140',
   'busbars-v047.js?v=0711',
   'wiring-rules-v0712.js?v=0712wire3',
   'help-v049.js?v=0712tasks40',
   'learning-board-v0712.js?v=0712tasks40',
-  'progress-v060.js?v=0712tasks40',
+  'progress-v060.js?v=07140',
+  'exam-mode-v0714.js?v=07140b',
   'freebuild-save-v0711.js?v=0711admin2',
   'demo-mode-v07133.js?v=07133c'
 ];
@@ -208,7 +210,7 @@ function updateModeHeader(mode){
   document.body.dataset.gameMode=mode;
   const level=document.getElementById('topPlayerLevel');
   if(level){
-    if(mode==='free')level.textContent='BEZ PUNKTACJI';
+    if(mode==='free'||mode==='exam')level.textContent=mode==='exam'?'EGZAMIN • BEZ PODPOWIEDZI':'BEZ PUNKTACJI';
     else{
       const xp=Number(window.ElektrykProgress?.get?.()?.xp||0);
       const lvl=Math.max(1,Math.floor(xp/500)+1);
@@ -345,6 +347,14 @@ async function enterGame(mode='learn',freeTemplate=null,taskId=null){
     return;
   }
 
+  if(mode==='exam'){
+    activeFreeTemplate=null;
+    saveAppState({view:'game',mode:'exam',freeTemplateId:null});
+    document.dispatchEvent(new CustomEvent('elektryk:mode-selected',{detail:{mode:'exam'}}));
+    window.ElektrykExam?.open?.();
+    return;
+  }
+
   if(mode==='learn'){
     activeFreeTemplate=null;
     const targetTask=Math.max(1,Number(taskId||readAppState().taskId||1));
@@ -413,6 +423,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('hubLogout')?.addEventListener('click',lock);
 
   document.getElementById('modeLearn')?.addEventListener('click',()=>enterGame('learn'));
+  document.getElementById('modeExam')?.addEventListener('click',()=>enterGame('exam'));
   document.getElementById('modeFree')?.addEventListener('click',openBoardSelector);
   document.getElementById('changeFreeBoard')?.addEventListener('click',openBoardSelector);
   document.getElementById('closeBoardSelector')?.addEventListener('click',closeBoardSelector);
