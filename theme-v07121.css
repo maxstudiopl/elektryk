@@ -155,3 +155,21 @@ html[data-theme] .theme-setting-row{background:var(--ui-panel-raised)!important;
 html[data-theme] .theme-setting-row select{width:145px;max-width:100%;min-height:36px;padding:5px 9px}
 @media(max-width:960px){.theme-nav-holder .theme-quick-label{display:none}.theme-option{padding:7px 8px}.theme-nav-holder{margin-left:4px}}
 @media(max-width:580px){.theme-auth-holder{margin-top:10px}.theme-option{min-height:30px}}
+
+/* Czytelność i aktywne stany w obu wariantach */
+html[data-theme] .player-level-status{
+  background:var(--ui-panel-raised)!important;color:var(--ui-primary)!important;
+  border-color:var(--ui-border)!important
+}
+html[data-theme] .auth-footer{color:var(--ui-muted)!important;border-color:var(--ui-border)!important}
+html[data-theme] .auth-footer a{color:var(--ui-primary)!important}
+html[data-theme] .catalog-card small{color:var(--ui-muted)!important}
+html[data-theme] .catalog-card.install-selected{
+  background:var(--ui-hover)!important;
+  border:2px solid var(--ui-primary)!important
+}
+html[data-theme] .details-content small{color:var(--ui-primary)!important}
+html[data-theme] .cable-buttons button{background:var(--ui-panel-raised)!important;color:var(--ui-text)!important;border-color:var(--ui-border)!important}
+html[data-theme] .cable-buttons button.active{border-color:var(--ui-primary)!important}
+html[data-theme] .task-window-head small,html[data-theme] .solution-head small{color:var(--ui-muted)!important}
+html[data-theme] .game-settings-window .settings-note{background:var(--ui-panel-soft)!important;color:var(--ui-muted)!important;border-color:var(--ui-border)!important}
