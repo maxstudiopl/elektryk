@@ -51,6 +51,7 @@ function contextHint(task){
 
 let hintIndex=0,lastTaskId=null;
 function showHint(){
+  if(document.body.dataset.gameMode==='exam')return;
   const task=currentTask();if(!task)return;
   if(lastTaskId!==task.id){hintIndex=0;lastTaskId=task.id}
   const specific=SPECIFIC[task.id]||[];
@@ -314,6 +315,7 @@ function layoutSummary(plan){
 }
 
 function openSolution(){
+  if(document.body.dataset.gameMode==='exam')return;
   const task=currentTask();if(!task)return;
   const plan=buildPlan(task),schema=buildSchematic(plan),tips=SPECIFIC[task.id]||[];
   document.getElementById('solutionTitle').textContent='ROZWIĄZANIE • '+String(task.id).padStart(2,'0')+' • '+task.title;
