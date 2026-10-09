@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic | v0.7.13.2</title>
+  <title>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic | v0.7.13.3</title>
   <meta name="description" content="RozdzielnicaPRO.pl — symulator budowy rozdzielnic elektrycznych. Nauka montażu aparatów DIN, okablowania i diagnostyki instalacji.">
   <meta name="theme-color" content="#0B1F3A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,6 +41,7 @@
   <link rel="stylesheet" href="electrical-engine-v0713.css?v=07130">
   <link rel="stylesheet" href="rcd-diagnostic-v07131.css?v=07131">
   <link rel="stylesheet" href="brand-pro-v07132.css?v=07132">
+  <link rel="stylesheet" href="demo-mode-v07133.css?v=07133">
   <style>
     /* v0.4.5 critical DIN layout hotfix — bypasses stale cached CSS */
     .mount-grid .mounted-device{position:absolute!important;top:0!important;height:194px!important;margin:0!important;padding:0!important;transform:none!important;box-sizing:border-box!important;z-index:12!important}
@@ -87,6 +88,7 @@
         <label class="auth-field"><span>HASŁO</span><input id="authPassword" type="password" autocomplete="current-password" placeholder="Wpisz hasło"></label>
         <button class="auth-submit" id="authSubmit">ZALOGUJ SIĘ</button>
         <div class="auth-message" id="authMessage"></div>
+        <div class="auth-demo-hint" aria-label="Dane demonstracyjne"><span>KONTO DEMO</span><code>demo / demo123</code><small>Podgląd gotowej rozdzielnicy. Montaż i pozostałe tryby są zablokowane.</small></div>
       </div>
 
       <div class="player-hub" id="playerHub" hidden>
@@ -317,9 +319,9 @@
   </div>
 
   <div class="task-modal" id="taskModal" hidden><div class="task-window"><div class="task-window-head"><div><b>WYBIERZ ZADANIE</b><small>Wybierz zadanie treningowe</small></div><button id="closeTasks">×</button></div><div class="task-cards"><button><b>01</b><span>Podstawowa rozdzielnica</span><small>150 XP</small></button><button><b>02</b><span>Obwód gniazd</span><small>100 XP</small></button><button><b>03</b><span>Łazienka z RCD</span><small>180 XP</small></button></div></div></div>
-  <script src="enclosure-v078.js?v=07132"></script>
-  <script src="accounts-v0711.js?v=0711users6"></script>
-  <script src="auth-v050.js?v=07132"></script>
+  <script src="enclosure-v078.js?v=07133"></script>
+  <script src="accounts-v0711.js?v=07133demo"></script>
+  <script src="auth-v050.js?v=07133"></script>
   <script src="admin-players-v0711.js?v=0711users6"></script>
   <script src="ui-pro-v07122.js?v=07123b"></script>
   <script src="brand-pro-v07132.js?v=07132"></script>
