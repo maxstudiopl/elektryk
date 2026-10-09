@@ -442,11 +442,13 @@ function addFerrule(P,terminal,other,type,cable=''){
 function draw(){
   svg.replaceChildren();
   fittingsSvg.replaceChildren();
+  const trunks=[];
   connections.forEach((c,index)=>{
     const a=document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`);
     const b=document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`);
     if(!a||!b)return;
-    const A=terminalCenter(a),B=terminalCenter(b),d=smartRoute(A,B,a,b,c.type,c,index);
+    const A=terminalCenter(a),B=terminalCenter(b),routeMeta={};
+    const d=smartRoute(A,B,a,b,c.type,c,index,routeMeta);
     if(!d)return;
     addPath(d,c.type,'wire-shadow',c.cable);
     addPath(d,c.type,'wire-jacket',c.cable);
@@ -454,7 +456,9 @@ function draw(){
     addPath(d,c.type,'wire-gloss',c.cable);
     addFerrule(A,a,B,c.type,c.cable);
     addFerrule(B,b,A,c.type,c.cable);
+    if(routeMeta.kind==='side-trunk')trunks.push(routeMeta);
   });
+  drawBundleBands(trunks);
 }
 function refreshUsed(){
   document.querySelectorAll('.wire-terminal').forEach(t=>{
