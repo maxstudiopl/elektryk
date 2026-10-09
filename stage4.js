@@ -26,6 +26,11 @@ if(activeTask){
       <div class="partial"><span>NIEPEŁNE</span><b id="powerLoadsPartial">0</b></div>
       <div class="good"><span>KOLIZJE FAZ</span><b id="powerConflicts">0</b></div>
     </div>
+    <div class="power-engine-v2" id="powerEngineV2">
+      <div class="power-engine-title"><b>DIAGNOSTYKA WSZYSTKICH APARATÓW</b><span id="powerEngineCount">0/0 sprawdzonych</span></div>
+      <div class="power-engine-circuits" id="powerEngineCircuits"></div>
+      <small>Model szkoleniowy — wynik nie jest odbiorem technicznym instalacji.</small>
+    </div>
     <button class="power-check-btn" id="checkPower">⚡ SPRAWDŹ INSTALACJĘ</button>
     <div class="power-issues" id="powerIssues"></div>`;
   activeTask.appendChild(analyzer);
@@ -233,7 +238,43 @@ function buildIssues(states,collisions){
   if(!issues.length&&states.some(s=>s.complete))issues.push({type:'ok',text:'Nie wykryto błędów w aktywnych, kompletnych obwodach.'});
   return issues;
 }
-function renderAnalyzer(states,collisions,issues,manual){
+function renderEngine(engine){
+  const target=document.getElementById('powerEngineCircuits');
+  const total=document.getElementById('powerEngineCount');
+  if(!engine)return;
+  if(total)total.textContent=engine.stats.ready+' / '+engine.stats.total+' gotowych';
+  if(!target)return;
+  target.replaceChildren();
+  if(!engine.circuits.length){
+    const empty=document.createElement('div');
+    empty.className='power-engine-empty';
+    empty.textContent='Zamontuj MCB lub RCBO, aby sprawdzić zasilanie każdego aparatu.';
+    target.appendChild(empty);
+    return;
+  }
+  for(const circuit of engine.circuits){
+    const row=document.createElement('div');
+    row.className='power-engine-circuit state-'+circuit.status;
+    const header=document.createElement('div');header.className='power-engine-circuit-head';
+    const name=document.createElement('b');
+    name.textContent=circuit.code+' • DIN '+(Number(circuit.row)+1)+' / '+(Number(circuit.start)+1);
+    const status=document.createElement('span');
+    status.textContent=({ready:'GOTOWY',off:'WYŁĄCZONY',unfed:'BRAK ZASILANIA',
+      warning:'DO SPRAWDZENIA',error:'BŁĄD'})[circuit.status]||'NIEZNANY';
+    header.append(name,status);
+    const info=document.createElement('small');
+    info.textContent='WE: '+(circuit.inputPhases.join(', ')||'—')+' • WY: '+(circuit.outputPhases.join(', ')||'—');
+    row.append(header,info);
+    const notes=[...circuit.errors,...circuit.warnings];
+    if(notes.length){
+      const detail=document.createElement('small');detail.className='power-engine-reason';
+      detail.textContent=notes.join(' • ');row.appendChild(detail);
+    }
+    target.appendChild(row);
+  }
+}
+function renderAnalyzer(states,collisions,issues,manual,engine=null){
+  renderEngine(engine);
   const ok=states.filter(s=>s.complete).length,partial=states.filter(s=>s.any&&!s.complete).length;
   const okEl=document.getElementById('powerLoadsOk'),partEl=document.getElementById('powerLoadsPartial'),confEl=document.getElementById('powerConflicts');
   if(okEl)okEl.textContent=`${ok}/${states.length}`;if(partEl)partEl.textContent=partial;if(confEl)confEl.textContent=collisions.length;
@@ -263,18 +304,24 @@ function analyze(manual=false){
   const states=LOADS.map(l=>loadState(l,reaches));
   applyLiveVisuals(reaches,collisions);applyLoadVisuals(states);
   const issues=buildIssues(states,collisions);
+  const engine=window.ElektrykElectricalEngine?.analyze?.()||null;
+  if(engine){
+    issues.unshift(...engine.issues);
+  }
   issues.unshift(...(window.ElektrykElectricalAudit?.inspect?.()||[]));
   if(issues.some(i=>i.type==='error'))issues.splice(0,issues.length,...issues.filter(i=>i.type!=='ok'));
-  renderAnalyzer(states,collisions,issues,manual);
-  lastAnalysis={states,collisions,issues};lastSignature=signature();
+  renderAnalyzer(states,collisions,issues,manual,engine);
+  lastAnalysis={states,collisions,issues,engine};lastSignature=signature();
   if(manual){
     document.dispatchEvent(new CustomEvent('elektryk:power-check',{
       detail:{
-        complete:states.length>0&&states.every(x=>x.complete)&&collisions.length===0&&!issues.some(i=>i.type==='error'),
+        complete:states.length>0&&states.every(x=>x.complete)&&collisions.length===0&&!issues.some(i=>i.type==='error')&&!(engine?.circuits||[]).some(c=>c.outputPhases.length>0&&c.status!=='ready'),
         completeLoads:states.filter(x=>x.complete).length,
         totalLoads:states.length,
         collisions:collisions.length,
-        errors:issues.filter(i=>i.type==='error').length
+        errors:issues.filter(i=>i.type==='error').length,
+        mountedCircuits:engine?.stats.total||0,
+        readyCircuits:engine?.stats.ready||0
       }
     }));
   }
