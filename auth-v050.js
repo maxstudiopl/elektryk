@@ -21,15 +21,15 @@ const scripts=[
   'stage4.js?v=07131rcd',
   'rcd-diagnostic-ui-v07131.js?v=07131',
   'curriculum-v0714.js?v=07140',
-  'tasks-v046.js?v=07140',
+  'tasks-v046.js?v=07140b',
   'busbars-v047.js?v=0711',
   'wiring-rules-v0712.js?v=0712wire3',
-  'help-v049.js?v=0712tasks40',
+  'help-v049.js?v=07140',
   'learning-board-v0712.js?v=0712tasks40',
   'progress-v060.js?v=07140',
-  'exam-mode-v0714.js?v=07140b',
+  'exam-mode-v0714.js?v=07140c',
   'freebuild-save-v0711.js?v=0711admin2',
-  'demo-mode-v07133.js?v=07133c'
+  'demo-mode-v07133.js?v=07140'
 ];
 
 let gameLoaded=false;
