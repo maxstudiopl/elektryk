@@ -1,0 +1,203 @@
+/* v0.7.12.4 — Jednopoziomowy układ aplikacji na komputerze
+   Zamiast przewijać stronę, przewijamy wnętrze sekcji.
+   Kolejność paneli: ZADANIA | ROZDZIELNICA | NARZĘDZIA. */
+@media (min-width:900px){
+  html[data-theme="dark"], html[data-theme="dark"] body{
+    height:100%!important;
+    min-height:100%!important;
+    max-height:100dvh!important;
+    overflow-x:hidden!important;
+    overflow-y:hidden!important;
+  }
+
+  html[data-theme="dark"] .topbar{
+    position:relative!important;
+    z-index:50!important;
+    display:grid!important;
+    grid-template-columns:minmax(185px,245px) minmax(0,1fr) max-content!important;
+    grid-template-areas:"brand navigation profile"!important;
+    align-items:center!important;
+    gap:8px!important;
+    width:100%!important;
+    min-width:0!important;
+    height:70px!important;
+    min-height:70px!important;
+    max-height:70px!important;
+    padding:5px 10px!important;
+    overflow:hidden!important;
+  }
+  html[data-theme="dark"] .topbar>.brand{
+    grid-area:brand!important;min-width:0!important;padding:0 8px!important;
+  }
+  html[data-theme="dark"] .topbar>.player-mainnav{
+    grid-area:navigation!important;
+    display:flex!important;
+    justify-content:center!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:auto!important;
+    padding:0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:thin;
+  }
+  html[data-theme="dark"] .topbar .player-navbtn,
+  html[data-theme="dark"] .topbar .player-level-status{
+    flex:0 0 auto!important;
+    min-width:0!important;
+    height:34px!important;
+    padding:0 9px!important;
+    font-size:9px!important;
+  }
+  html[data-theme="dark"] .topbar>.profile{
+    grid-area:profile!important;min-width:0!important;
+    max-width:none!important;
+    height:auto!important;
+    border-left:0!important;
+    padding:0 6px!important;
+  }
+  html[data-theme="dark"] .topbar .brand b{font-size:17px!important}
+  html[data-theme="dark"] .topbar .brand small{font-size:9px!important}
+
+  html[data-theme="dark"] body .game-shell{
+    display:grid!important;
+    grid-template-columns:clamp(188px,18vw,278px) minmax(0,1fr) clamp(235px,22vw,360px)!important;
+    grid-template-areas:"left center right"!important;
+    grid-template-rows:minmax(0,1fr)!important;
+    align-content:stretch!important;
+    align-items:stretch!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:calc(100dvh - 70px)!important;
+    min-height:0!important;
+    max-height:calc(100dvh - 70px)!important;
+    padding:9px!important;
+    gap:9px!important;
+    overflow:hidden!important;
+  }
+  html[data-theme="dark"] body .game-shell>.leftbar{
+    grid-area:left!important;
+    display:flex;min-width:0!important;
+    min-height:0!important;max-height:none!important;
+    height:100%!important;
+    position:static!important;top:auto!important;
+    overflow-x:hidden!important;overflow-y:auto!important;
+  }
+  html[data-theme="dark"] body .game-shell>.rightbar{
+    grid-area:right!important;
+    display:flex;min-width:0!important;
+    min-height:0!important;max-height:none!important;
+    height:100%!important;
+    position:static!important;top:auto!important;
+    overflow-x:hidden!important;overflow-y:auto!important;
+  }
+  html[data-theme="dark"] body .game-shell>.workspace{
+    grid-area:center!important;
+    display:flex!important;
+    flex-direction:column!important;
+    min-width:0!important;min-height:0!important;
+    height:100%!important;max-height:100%!important;
+    position:relative;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+  }
+  html[data-theme="dark"] .workspace>.pro-workspace-toolbar{
+    position:sticky!important;top:0!important;z-index:25!important;
+    flex:0 0 auto!important;
+    margin-bottom:8px!important;
+    gap:6px!important;
+    padding:9px 12px!important;
+    background:#212a33!important;
+  }
+  html[data-theme="dark"] .pro-workspace-logo{
+    width:31px!important;height:31px!important;font-size:16px!important;
+  }
+  html[data-theme="dark"] .pro-workspace-title b{font-size:11px!important}
+  html[data-theme="dark"] .pro-workspace-title small{font-size:9px!important}
+  html[data-theme="dark"] .pro-workspace-actions{gap:5px!important}
+  html[data-theme="dark"] .pro-layout-toggle{
+    min-height:31px!important;padding:5px 8px!important;font-size:9px!important;
+  }
+  html[data-theme="dark"] .workspace>.cabinet-head{
+    flex:0 0 auto!important;
+    min-height:48px!important;
+    padding:8px 12px!important;
+  }
+  html[data-theme="dark"] .workspace>.cabinet{
+    flex:0 0 auto!important;
+    min-width:0!important;max-width:100%!important;
+    overflow-x:auto!important;overflow-y:hidden!important;
+  }
+  /* Nie zmniejszamy zacisków sztucznym transform:scale, aby
+     współrzędne SVG przewodów i mostków pozostały prawidłowe. */
+  html[data-theme="dark"] .workspace>.cabinet .cabinet-inner[data-modules-per-row="12"]{
+    --din-board-min:530px;
+  }
+  html[data-theme="dark"] .workspace>.cabinet .cabinet-inner[data-modules-per-row="18"]{
+    --din-board-min:655px;
+  }
+  html[data-theme="dark"] .workspace>.cabinet .cabinet-inner[data-modules-per-row="24"]{
+    --din-board-min:850px;
+  }
+  html[data-theme="dark"] .workspace>.workspace-footer{
+    flex:0 0 auto!important;
+    margin-bottom:8px!important;
+  }
+  html[data-theme="dark"] .game-shell>.leftbar,
+  html[data-theme="dark"] .game-shell>.rightbar,
+  html[data-theme="dark"] .game-shell>.workspace{
+    overscroll-behavior:contain!important;
+    scrollbar-width:thin;
+    scrollbar-color:#667786 #202832;
+  }
+  html[data-theme="dark"] body.pro-left-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr) clamp(235px,22vw,360px)!important;
+    grid-template-areas:"center right"!important;
+  }
+  html[data-theme="dark"] body.pro-right-collapsed .game-shell{
+    grid-template-columns:clamp(188px,18vw,278px) minmax(0,1fr)!important;
+    grid-template-areas:"left center"!important;
+  }
+  html[data-theme="dark"] body.pro-left-collapsed.pro-right-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center"!important;
+  }
+  /* Początkowo istniejące ukrywanie sidebarów miało tylko display:none.
+     Pozostaje aktywne również w jednym rzędzie. */
+  html[data-theme="dark"] body.pro-left-collapsed .game-shell>.leftbar{
+    display:none!important;
+  }
+  html[data-theme="dark"] body.pro-right-collapsed .game-shell>.rightbar{
+    display:none!important;
+  }
+}
+/* Wysokość i liczba modułów mogą być znaczne (3–5 listew DIN).
+   Na komputerze utrzymujemy trzy panele, a wysoką zawartość
+   rozdzielnicy przewijamy wewnątrz środkowej sekcji. */
+
+/* Ekrany tabletowe/pionowe: brak miejsca na 3 kolumny —
+   zachowujemy układ w jednej kolumnie bez poziomego scrolla całej strony. */
+@media(max-width:899px){
+  html[data-theme="dark"],html[data-theme="dark"] body{
+    overflow-y:auto!important;
+    height:auto!important;max-height:none!important;
+    min-height:100dvh!important;
+  }
+  html[data-theme="dark"] body .game-shell{
+    height:auto!important;min-height:0!important;max-height:none!important;
+    grid-template-rows:auto!important;
+    overflow:visible!important;
+  }
+  html[data-theme="dark"] body .game-shell>.leftbar,
+  html[data-theme="dark"] body .game-shell>.rightbar,
+  html[data-theme="dark"] body .game-shell>.workspace{
+    height:auto!important;max-height:none!important;
+    overflow-y:visible!important;position:static!important;
+  }
+  html[data-theme="dark"] .topbar{position:sticky!important;top:0!important}
+}
