@@ -1,0 +1,276 @@
+/* ELEKTRYK SIMULATOR — HARDWARE PRO 0.7.16 (etap 1)
+   Render 2D inspirowany aparaturą modułową.
+   Ważne: nie przesuwamy zacisków .wire-terminal ani geometrii kabli SVG.
+   Dodatki ozdobne mają pointer-events:none. */
+:root{
+  --pro-porcelain:#f5f6f2;
+  --pro-seam:#9da4a0;
+  --pro-steel:#6b7775;
+  --pro-shadow:#1c242b6d;
+}
+.cabinet{
+  box-shadow:0 12px 34px #0008,inset 0 2px 2px #e7eee83b!important;
+}
+.cabinet-inner{
+  background:
+    radial-gradient(circle at 18px 18px,#58625c 0 3px,#d3d6d0 3.5px 7px,transparent 7.5px),
+    radial-gradient(circle at calc(100% - 18px) 18px,#58625c 0 3px,#d3d6d0 3.5px 7px,transparent 7.5px),
+    radial-gradient(circle at 18px calc(100% - 18px),#58625c 0 3px,#d3d6d0 3.5px 7px,transparent 7.5px),
+    radial-gradient(circle at calc(100% - 18px) calc(100% - 18px),#58625c 0 3px,#d3d6d0 3.5px 7px,transparent 7.5px),
+    linear-gradient(100deg,#afb6b1 0%,#eceeea 3%,#f7f8f4 23%,#edf0eb 72%,#c6cec8 98%,#8d9690 100%)!important;
+  box-shadow:
+    inset 0 0 0 2px #727e79,
+    inset 0 0 0 5px #f9fcf6,
+    inset 0 0 46px #50605934,
+    0 4px 15px #0008!important;
+}
+.case-screw{
+  width:12px!important;height:12px!important;
+  border:1px solid #777e7a!important;
+  background:
+    linear-gradient(46deg,transparent 42%,#4b5551 43% 55%,transparent 56%),
+    linear-gradient(-44deg,transparent 43%,#5e6761 44% 53%,transparent 54%),
+    radial-gradient(circle at 35% 28%,#fafcfa 0 20%,#b9c2bd 32% 64%,#4c5751 82%)!important;
+  box-shadow:0 2px 3px #0004,inset 0 1px #fff!important;
+}
+.case-marking{
+  background:#f5f7f1d9!important;
+  color:#4d5c58!important;
+  border:1px solid #87938c99!important;
+  font-weight:800!important;
+  letter-spacing:.55px!important;
+  box-shadow:0 1px 2px #0002!important;
+}
+/* Górna i dolna pokrywa perforowanych korytek */
+.duct{
+  background:
+    repeating-linear-gradient(90deg,
+      #e7eae4 0 6px,
+      #8d9690 6px 7px,
+      #b6c0b7 7px 10px,
+      #718078 10px 12px,
+      #e0e5dd 12px 18px
+    )!important;
+  border:1px solid #7c8882!important;
+  border-radius:3px!important;
+  box-shadow:inset 0 2px #fff, inset 0 -3px #7f8b8280,
+    0 3px 6px #333c374a!important;
+  text-shadow:0 1px #fff8!important;
+}
+.din-row{
+  background:
+    linear-gradient(90deg,transparent 0 10px,#707b7733 10px 12px,
+      transparent 12px calc(100% - 12px),#707b7733 calc(100% - 12px) calc(100% - 10px),transparent calc(100% - 10px)),
+    linear-gradient(180deg,#e7ece6 0%,#f2f5ee 17%,#d9dfd8 73%,#c7cec6 100%)!important;
+}
+/* Wizualny TH35: profil, wklęsła strefa chwytu, szczeliny montażowe.
+   Element nadal znajduje się w tym samym miejscu geometrycznym. */
+.din-row .din-rail{
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0 20px,#48524f66 20px 22px,
+      transparent 22px 39px),
+    linear-gradient(180deg,
+      #424d49 0 4%,#aebcb5 5% 9%,#eff2ec 10% 17%,
+      #818e86 18% 26%,#e3e9e2 28% 40%,
+      #56625c 42% 50%,#e2e8e1 51% 61%,
+      #7e8a83 62% 76%,#e3e9e3 77% 87%,#535e57 89% 100%)!important;
+  border:1px solid #6c7971!important;
+  box-shadow:inset 0 1px #e9f0e7,inset 0 -2px #55615a,
+    0 4px 7px #0005!important;
+}
+.din-row .din-rail:before{
+  background:
+    repeating-linear-gradient(90deg,
+      #404a45 0 12px,#626b66 12px 16px,transparent 16px 34px)!important;
+  opacity:.65!important;
+}
+.din-row-label{
+  font-size:8px!important;
+  font-weight:900!important;
+  text-shadow:0 1px #fff9!important;
+}
+.din-row-label span{color:#515f57!important;letter-spacing:.35px!important}
+.din-row-label b{color:#69746c!important}
+.din-row .mount-grid{
+  --hardware-slot-rule:rgba(56,71,64,.16);
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0 calc((100% / var(--modules-per-row,18)) - 1px),
+      var(--hardware-slot-rule) calc((100% / var(--modules-per-row,18)) - 1px)
+      calc(100% / var(--modules-per-row,18)))!important;
+}
+.din-slot:not(.occupied){
+  background:linear-gradient(90deg,#fff1 0%,#f5f8f126 48%,#7f8a8040 100%);
+  transition:background-color .12s,box-shadow .12s;
+}
+.din-slot:not(.occupied):hover{
+  background:#a9d3bd62!important;
+  box-shadow:inset 0 0 0 2px #3e9270ba!important;
+}
+.din-slot.preview-ok{background:#8fe0a19c!important}
+.din-slot.preview-bad{background:#eb858599!important}
+/* Obudowy aparatów — matowe tworzywo formowane, boczne dylatacje */
+.mount-grid .mounted-device>.device{
+  background:
+    linear-gradient(90deg,
+      #9ca6a0 0%,#c1c9c2 2%,#e5e9e3 5%,
+      #fafcf8 12%,#f9faf7 46%,#eef2ec 72%,
+      #d2dad1 94%,#9ba6a0 100%)!important;
+  border:1px solid #65726d!important;
+  border-radius:3px!important;
+  box-shadow:
+    inset 2px 0 1px #fff,inset -2px 0 2px #68766e99,
+    inset 0 2px 1px #fff,
+    1px 2px 1px #404a4670,3px 6px 9px #16231b66!important;
+}
+.mount-grid .mounted-device[data-modules="2"]>.device{
+  background-image:
+    linear-gradient(90deg,transparent 49.4%,#8e9a9155 49.8%,#f9fcf5aa 50.2%,transparent 50.6%),
+    linear-gradient(90deg,#9ca6a0 0%,#edf1eb 5%,#fafcf8 18%,#e9eee8 86%,#9ba6a0 100%)!important;
+}
+.mount-grid .mounted-device[data-modules="3"]>.device{
+  background-image:
+    linear-gradient(90deg,transparent 32.8%,#8e9a9155 33.1%,transparent 33.4%,transparent 66.1%,#8e9a9155 66.4%,transparent 66.7%),
+    linear-gradient(90deg,#9ca6a0 0%,#edf1eb 5%,#fafcf8 18%,#e9eee8 86%,#9ba6a0 100%)!important;
+}
+.mount-grid .mounted-device[data-modules="4"]>.device{
+  background-image:
+    linear-gradient(90deg,transparent 24.7%,#8e9a9155 25%,transparent 25.3%,transparent 49.7%,#8e9a9155 50%,transparent 50.3%,transparent 74.7%,#8e9a9155 75%,transparent 75.3%),
+    linear-gradient(90deg,#9ca6a0 0%,#edf1eb 3%,#fafcf8 10%,#e9eee8 91%,#9ba6a0 100%)!important;
+}
+.mount-grid .mounted-device .brand-strip{
+  background:linear-gradient(180deg,#fff 0%,#e7ece6 92%,#c4ccc2 100%)!important;
+  border:1px solid #aebdb4!important;
+  border-top:3px solid #2997c1!important;
+  color:#1d2927!important;
+  box-shadow:inset 0 1px #fff,0 1px 1px #777e7244!important;
+}
+.mount-grid .mounted-device .brand-strip:after{
+  color:#63716d!important;
+}
+.mount-grid .mounted-device .device-type{
+  color:#121e1b!important;
+  text-shadow:0 1px #fff!important;
+  font-weight:900!important
+}
+.mount-grid .mounted-device .device-rating{color:#26332d!important}
+.mount-grid .mounted-device .device-meta{color:#536059!important}
+.mount-grid .mounted-device .device-function{
+  background:linear-gradient(#f6f8f2,#dfe6dd)!important;
+  border-top:1px solid #b8c4b9!important;
+  border-bottom:1px solid #9ba99f!important;
+  color:#37443e!important;
+  box-shadow:inset 0 1px #fff!important;
+}
+/* Zagłębiona wnęka zacisków, bez ruszania aktywnych punktów połączeń */
+.mount-grid .mounted-device .device-topterm,
+.mount-grid .mounted-device .device-bottomterm{
+  border-radius:3px!important;
+  border:1px solid #7c8880!important;
+  background:linear-gradient(180deg,#e3e8e0 0%,#b5c0b7 39%,#e6eae4 57%,#acb8ae 100%)!important;
+  box-shadow:inset 0 2px 2px #4d5a4d4c,
+    inset 0 -1px #fff9,0 1px #fff!important;
+}
+.mount-grid .mounted-device .wire-terminal:not(.used-terminal){
+  background:
+    radial-gradient(circle at 45% 44%,#38413c 0 17%,#7b8880 19% 33%,#f1f3ee 35% 52%,#58635d 54% 100%)!important;
+  border-color:#5c6860!important;
+  box-shadow:inset 0 0 0 1px #bdc7ba,0 1px 2px #0004!important;
+}
+/* Zostaw aktywne kolory terminali N/PE/L i efekty najechania */
+.mount-grid .mounted-device .wire-terminal.start-terminal,
+.mount-grid .mounted-device .wire-terminal.bad-terminal{
+  outline-offset:2px!important;
+}
+/* Wnęka dźwigni, profil chwytu, subtelne wytłoczenie */
+.mount-grid .mounted-device .lever{
+  border:1px solid #18201c!important;
+  border-radius:3px!important;
+  box-shadow:
+    inset 0 3px 2px #fff7,inset 0 -4px 4px #0008,
+    0 0 0 2px #70807745,0 4px 6px #1c252070!important;
+}
+.mount-grid .mounted-device .lever:before{
+  content:'';
+  pointer-events:none;
+  position:absolute;inset:3px 4px auto;
+  height:3px;
+  border-radius:2px;
+  background:#ffffff41;
+  border-bottom:1px solid #0005;
+}
+.mount-grid .mounted-device .lever:after{
+  content:'';
+  pointer-events:none;
+  position:absolute;left:5px;right:5px;bottom:5px;
+  height:4px;
+  border-radius:1px;
+  background:linear-gradient(#ffffff33,#0004);
+  box-shadow:0 1px #1116;
+}
+.mount-grid .mounted-device .test-btn{
+  border-radius:50%!important;
+  box-shadow:inset 0 1px #fff,0 1px 2px #0005,0 0 0 2px #8f9d9155!important;
+}
+.mount-grid .mounted-device .spd-window{
+  border-radius:3px!important;
+  box-shadow:inset 0 2px 1px #ffffffa0,inset 0 -3px 1px #1e3a2855,
+    0 2px 3px #0004!important;
+}
+.mount-grid .mounted-device .terminal-strip-visual{
+  border-radius:3px!important;
+  box-shadow:inset 0 2px 2px #313d3677,0 1px #fff!important
+}
+/* Fizyczny zatrzask TH35 i cztery drobne punkty mocowania.
+   Elementy dekoracyjne pojawiają się w JS przy montażu i wczytywaniu. */
+.mount-grid .mounted-device .pro-din-latch{
+  pointer-events:none!important;
+  position:absolute;
+  left:50%;bottom:0;width:min(44px,68%);height:5px;
+  transform:translateX(-50%);
+  border:1px solid #626e66;
+  border-bottom:0;
+  border-radius:2px 2px 0 0;
+  background:linear-gradient(180deg,#ccd6cc,#7c8c7e);
+  box-shadow:inset 0 1px #fff,0 -1px #3d4b42;
+  z-index:1;
+}
+.mount-grid .mounted-device .pro-face-mold{
+  pointer-events:none!important;
+  position:absolute;
+  left:2px;right:2px;top:87px;height:57px;
+  border-left:1px solid #9ba7a050;
+  border-right:1px solid #a5ada665;
+  border-radius:3px;
+  box-shadow:inset 1px 0 #fff7,inset -1px 0 #56625838;
+  z-index:0;
+}
+.mount-grid .mounted-device .pro-rivet{
+  pointer-events:none!important;
+  position:absolute;
+  width:4px;height:4px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff 0 12%,#9aa69e 25% 60%,#556058 75% 100%);
+  border:1px solid #849087;
+  z-index:0;
+}
+.mount-grid .mounted-device .pro-rivet.top-left{left:3px;top:80px}
+.mount-grid .mounted-device .pro-rivet.top-right{right:3px;top:80px}
+.mount-grid .mounted-device .pro-rivet.bottom-left{left:3px;top:145px}
+.mount-grid .mounted-device .pro-rivet.bottom-right{right:3px;top:145px}
+/* Mocniejszy stan wybranego aparatu, nie zmienia geometrii kliknięć */
+.mount-grid .mounted-device.selected-mounted>.device{
+  outline:2px solid #c68f46!important;
+  outline-offset:2px!important;
+  box-shadow:inset 2px 0 #fff,inset -2px 0 #89988c,
+    2px 4px 10px #0006,0 0 0 3px #f0b95770!important;
+}
+@media(prefers-reduced-motion:no-preference){
+  .mount-grid .mounted-device.hardware-pro-new>.device{
+    animation:proHardwareSnap .18s ease-out 1 both;
+  }
+}
+@keyframes proHardwareSnap{
+  from{filter:brightness(1.13);box-shadow:inset 0 0 0 2px #d6e0d5,0 3px 7px #202b2555}
+  to{filter:brightness(1);box-shadow:inset 2px 0 1px #fff,inset -2px 0 2px #68766e99,1px 2px 1px #404a4670,3px 6px 9px #16231b66}
+}
