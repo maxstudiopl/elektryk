@@ -380,11 +380,12 @@ function drawBundleBands(trunks){
     }
   }
 }
-function addPath(d,type,cls,cable=''){
+function addPath(d,type,cls,cable='',connectionId=''){
   const p=document.createElementNS('http://www.w3.org/2000/svg','path');
   p.setAttribute('d',d);
   p.setAttribute('class',cls);
   p.dataset.wire=type;
+  if(connectionId)p.dataset.connectionId=String(connectionId);
   p.dataset.gauge=/2(?:[,.])5/.test(String(cable))?'2.5':'1.5';
   if(cls==='wire-path')p.setAttribute('stroke',COLORS[type]||'#d06a25');
   svg.appendChild(p);
@@ -451,15 +452,16 @@ function draw(){
     const A=terminalCenter(a),B=terminalCenter(b),routeMeta={};
     const d=smartRoute(A,B,a,b,c.type,c,index,routeMeta);
     if(!d)return;
-    addPath(d,c.type,'wire-shadow',c.cable);
-    addPath(d,c.type,'wire-jacket',c.cable);
-    addPath(d,c.type,'wire-path',c.cable);
-    addPath(d,c.type,'wire-gloss',c.cable);
+    addPath(d,c.type,'wire-shadow',c.cable,c.id);
+    addPath(d,c.type,'wire-jacket',c.cable,c.id);
+    addPath(d,c.type,'wire-path',c.cable,c.id);
+    addPath(d,c.type,'wire-gloss',c.cable,c.id);
     addFerrule(A,a,B,c.type,c.cable);
     addFerrule(B,b,A,c.type,c.cable);
     if(routeMeta.kind==='side-trunk')trunks.push(routeMeta);
   });
   drawBundleBands(trunks);
+  window.ElektrykRcdDiagnostic?.refreshHighlights?.();
 }
 function refreshUsed(){
   document.querySelectorAll('.wire-terminal').forEach(t=>{
