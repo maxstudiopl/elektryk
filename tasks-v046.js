@@ -1048,7 +1048,7 @@ function startTask(task,btn){
  tool.querySelectorAll('button').forEach(b=>b.classList.toggle('selected-task',b.dataset.group===task.group));
  if(modal)modal.hidden=true;
  const title=document.querySelector('.active-task .panel-title');if(title)title.textContent='AKTYWNE ZADANIE • '+String(task.id).padStart(2,'0')+'/40';
- const ver=document.querySelector('.cabinet-head .version');if(ver)ver.textContent='v0.7.13.2 • ROZDZIELNICAPRO.PL • ZADANIE '+String(task.id).padStart(2,'0')+' • '+task.rows+'×'+task.modulesPerRow+'M';
+ const ver=document.querySelector('.cabinet-head .version');if(ver)ver.textContent='v0.7.13.3 • ROZDZIELNICAPRO.PL • ZADANIE '+String(task.id).padStart(2,'0')+' • '+task.rows+'×'+task.modulesPerRow+'M';
 }
 render();
 startTask(TASKS[0],cards.querySelector('[data-task-id="1"]'));
