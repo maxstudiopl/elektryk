@@ -49,6 +49,20 @@ function evaluate({terminals=[],mounted=[],connections=[],bridges=[]}={}){
     const bar=terminals.filter(t=>String(t.id).startsWith('BAR:'+p+':'));
     for(let i=1;i<bar.length;i++)edge(bar[0].id,bar[i].id,p,'bar');
   });
+  // Educational section-specific neutral rails are NOT connected to one another.
+  const nGroups=new Map();
+  for(const t of terminals){
+    const m=String(t.id).match(/^AUTO:N:([^:]+):\d+$/);
+    if(!m)continue;
+    if(!nGroups.has(m[1]))nGroups.set(m[1],[]);
+    nGroups.get(m[1]).push(t.id);
+  }
+  for(const [section,ports] of nGroups){
+    for(let i=1;i<ports.length;i++)edge(ports[0],ports[i],'N','section-bus',section);
+  }
+  const extraPE=terminals.filter(t=>String(t.id).startsWith('AUTO:PE:'));
+  for(let i=1;i<extraPE.length;i++)edge(extraPE[0].id,extraPE[i].id,'PE','output-bus','AUTO-PE');
+
   function walk(p){
     const source='SUPPLY:'+p,seen=new Set(),parent=new Map(),queue=[];
     if(graph.has(source)){seen.add(source);queue.push(source)}
