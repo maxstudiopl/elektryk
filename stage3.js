@@ -525,6 +525,7 @@ window.ElektrykStage3={
   refreshMounted:()=>{decorateMounted();refreshUsed();refreshGuidance();draw()},
   refreshTerminals:()=>{refreshUsed();refreshGuidance()},
   refreshGuidance,
-  refreshBars:()=>{decorateBars();refreshUsed();refreshGuidance();draw()}
+  refreshBars:()=>{decorateBars();refreshUsed();refreshGuidance();draw()},
+  createTerminal:wireTerminal
 };
 })();
