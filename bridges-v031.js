@@ -155,6 +155,7 @@ function redraw(){
     gi++;
   });
   updateStat();highlightEligible();window.ElektrykStage3?.refreshTerminals?.();
+  window.ElektrykRcdDiagnostic?.refreshHighlights?.();
 }
 function addBadge(x,y,phase,label,onRemove,isComb=false,isFeed=false){
   const badge=document.createElement('button');badge.className='bridge-badge'+(isComb?' comb-badge':'')+(isFeed?' feed-badge':'');
