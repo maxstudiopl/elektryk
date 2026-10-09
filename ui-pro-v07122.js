@@ -91,6 +91,16 @@ function init(){
   const cabinetHead=workspace.querySelector('.cabinet-head');
   if(cabinetHead)workspace.insertBefore(toolbar,cabinetHead);
   else workspace.prepend(toolbar);
+  const boardScrollHint=document.createElement('div');
+  boardScrollHint.className='pro-board-scroll-hint';
+  boardScrollHint.textContent='↔ Rozdzielnica jest szersza niż okno — przesuń ją poziomo wewnątrz pola roboczego.';
+  boardScrollHint.hidden=true;
+  toolbar.insertAdjacentElement('afterend',boardScrollHint);
+  function updateBoardOverflow(){
+    const cabinet=workspace.querySelector('.cabinet');
+    if(!cabinet)return;
+    boardScrollHint.hidden=!(cabinet.scrollWidth>cabinet.clientWidth+8);
+  }
   const clsLeft='pro-left-collapsed',clsRight='pro-right-collapsed';
   function updateButtons(){
     const l=document.body.classList.contains(clsLeft);
@@ -112,7 +122,7 @@ function init(){
     });
   }
   function change(){
-    updateButtons();redrawWiring();
+    updateButtons();redrawWiring();requestAnimationFrame(updateBoardOverflow);
   }
   taskBtn.addEventListener('click',()=>{document.body.classList.toggle(clsLeft);change()});
   toolBtn.addEventListener('click',()=>{document.body.classList.toggle(clsRight);change()});
@@ -132,6 +142,7 @@ function init(){
       if(!surface)return;
       const rect=surface.getBoundingClientRect();
       const size=Math.round(rect.width)+'x'+Math.round(rect.height);
+      updateBoardOverflow();
       if(lastSize===size)return;
       lastSize=size;
       redrawWiring();
@@ -140,7 +151,11 @@ function init(){
     if(surface)resizeObserver.observe(surface);
     const shell=document.querySelector('.workspace');
     if(shell)resizeObserver.observe(shell);
+    const cabinet=workspace.querySelector('.cabinet');
+    if(cabinet)resizeObserver.observe(cabinet);
   }
+  document.addEventListener('elektryk:rails-changed',()=>requestAnimationFrame(updateBoardOverflow));
+  requestAnimationFrame(updateBoardOverflow);
   updateButtons();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
