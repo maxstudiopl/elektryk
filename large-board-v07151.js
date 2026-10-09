@@ -5,7 +5,7 @@
 'use strict';
 const cabinet=document.querySelector('.cabinet-inner');
 if(!cabinet)return;
-let rack=null,active=[];
+let rack=null,active=[],baseHeight=null,expandedHeight=null;
 function createTerm(role,id,label){
  const maker=window.ElektrykStage3?.createTerminal;
  if(maker)return maker(label||role,role,id,'bar');
@@ -21,7 +21,13 @@ function addStrip(host,label,role,ids,klass){
  strip.appendChild(row);host.appendChild(strip);return strip;
 }
 function teardown(){
- rack?.remove();rack=null;active=[];
+ if(!rack)return;
+ rack.remove();rack=null;active=[];
+ // Task selection may have already applied a NEW board height; preserve it.
+ if(expandedHeight!==null&&Math.abs(parseFloat(cabinet.style.height||0)-expandedHeight)<2){
+   if(baseHeight!==null)cabinet.style.height=baseHeight+'px';
+ }
+ baseHeight=null;expandedHeight=null;
  cabinet.classList.remove('large-board-shell');
  cabinet.style.removeProperty('--extra-rack-height');
  cabinet.style.removeProperty('padding-bottom');
@@ -65,8 +71,10 @@ function prepare(board){
  cabinet.classList.add('large-board-shell');
  // Keep all terminals physically inside the cabinet's SVG drawing area.
  const height=Math.max(125,frame.scrollHeight||frame.offsetHeight||0);
+ baseHeight=parseFloat(cabinet.style.height)||cabinet.offsetHeight||700;
+ expandedHeight=baseHeight+height+155;
  cabinet.style.setProperty('--extra-rack-height',height+'px');
- cabinet.style.paddingBottom='calc(var(--extra-rack-height) + 145px)';
+ cabinet.style.height=expandedHeight+'px';
  requestAnimationFrame(()=>window.ElektrykStage3?.redraw?.());
  return true;
 }
