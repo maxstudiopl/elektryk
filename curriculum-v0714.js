@@ -107,7 +107,7 @@ for(const conf of CONFIGS){
  }
 }
 const API={extraTasks:()=>catalogue.map(t=>({...t,requirements:{...t.requirements},tips:[...t.tips],topics:[...t.topics]})),
-  validate:()=>({count:catalogue.length,unique:new Set(catalogue.map(x=>key(x.requirements,x))).size,
+  validate:()=>({count:catalogue.length,unique:new Set(catalogue.map(x=>key(x.requirements,{rows:x.rows,cols:x.modulesPerRow}))).size,
     fits:catalogue.every(x=>feasible(x.requirements,x.rows,x.modulesPerRow)),
     ids:catalogue.map(x=>x.id),min:41,max:300}),
   feasible};
