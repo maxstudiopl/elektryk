@@ -1,6 +1,7 @@
 /* RozdzielnicaPRO.pl v0.7.15.1 — scalable output wiring in large training cabinets. */
 html[data-theme="dark"] .cabinet-inner.large-board-shell{
-  padding-bottom:calc(var(--extra-rack-height,220px) + 145px)!important;
+  /* The cabinet height is expanded in JavaScript; avoid double-counting the rack. */
+  padding-bottom:0!important;
 }
 html[data-theme="dark"] .large-board-rack{
   position:absolute;left:15px;right:15px;bottom:135px;
