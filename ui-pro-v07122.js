@@ -123,6 +123,24 @@ function init(){
     change();
   });
   window.addEventListener('resize',redrawWiring,{passive:true});
+  // Zmiana liczby kolumn lub szerokości rozdzielnicy wymaga odświeżenia
+  // rysowanych SVG przewodów / mostków. Reagujemy również na ResizeObserver.
+  if(typeof ResizeObserver!=='undefined'){
+    let lastSize='';
+    const resizeObserver=new ResizeObserver(()=>{
+      const surface=document.querySelector('.cabinet-inner');
+      if(!surface)return;
+      const rect=surface.getBoundingClientRect();
+      const size=Math.round(rect.width)+'x'+Math.round(rect.height);
+      if(lastSize===size)return;
+      lastSize=size;
+      redrawWiring();
+    });
+    const surface=document.querySelector('.cabinet-inner');
+    if(surface)resizeObserver.observe(surface);
+    const shell=document.querySelector('.workspace');
+    if(shell)resizeObserver.observe(shell);
+  }
   updateButtons();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
