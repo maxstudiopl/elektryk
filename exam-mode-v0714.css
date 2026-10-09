@@ -1,0 +1,144 @@
+/* RozdzielnicaPRO.pl v0.7.14 — catalogue & no-hints exam */
+html[data-theme="dark"] .task-search{
+  display:flex;gap:9px;justify-content:space-between;align-items:center;flex-wrap:wrap;
+  margin:9px 0;padding:7px 10px;border:1px solid #315a80;border-radius:9px;
+  background:#142b43;
+}
+html[data-theme="dark"] .task-search input{
+  flex:1 1 220px;min-width:0;
+  border:1px solid #477499;background:#0d2034;
+  padding:9px 12px;border-radius:7px;color:#eef6ff;font-size:12px
+}
+html[data-theme="dark"] .task-search-counter{
+  font-size:10px;font-weight:800;color:#9acaf3
+}
+html[data-theme="dark"] .task-pagination{
+  display:flex;gap:9px;justify-content:center;align-items:center;
+  flex-wrap:wrap;margin:10px 0 2px
+}
+html[data-theme="dark"] .task-pagination button{
+  border:1px solid #4376a5;border-radius:8px;
+  padding:8px 11px;min-height:33px;
+  background:#1e3c5b;color:#f0f7ff;
+  font-size:10px;font-weight:800;cursor:pointer
+}
+html[data-theme="dark"] .task-pagination button:disabled{opacity:.35;cursor:not-allowed}
+html[data-theme="dark"] .task-pagination span{
+  color:#b5d3ea;font-size:10px;font-weight:800
+}
+html[data-theme="dark"] .task-catalog-tabs{flex-wrap:wrap!important}
+html[data-theme="dark"] .task-catalog-tabs button{white-space:nowrap!important}
+html[data-theme="dark"] .task-cards{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:9px!important
+}
+@media(max-width:950px){
+ html[data-theme="dark"] .task-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:600px){
+ html[data-theme="dark"] .task-cards{grid-template-columns:minmax(0,1fr)!important}
+}
+/* Exam: hidden solutions/reference board, but electrical rendering unchanged. */
+body.exam-active .task-shortcut,
+body.exam-active .free-board-shortcut,
+body.exam-active .free-save-panel,
+body.exam-active .reward,
+body.exam-active .learning-board-v0712,
+body.exam-active .learning-v0712,
+body.exam-active .task-goals,
+body.exam-active #taskComplete,
+body.exam-active .power-analyzer,
+body.exam-active .panel .help-button,
+body.exam-active .panel button[id*="Hint"],
+body.exam-active .panel button[id*="Solution"]{
+ display:none!important
+}
+body.exam-active .leftbar .task-shortcut{display:none!important}
+body.exam-active #openPlayerHub,body.exam-active #openGameSettings{
+ opacity:.3;pointer-events:none!important
+}
+body.exam-theory .game-shell>.rightbar{
+ opacity:.25!important;pointer-events:none!important
+}
+body.exam-theory .workspace>.cabinet,
+body.exam-theory .workspace>.cabinet-head{
+ opacity:.35!important;pointer-events:none!important
+}
+body.exam-active .game-shell>.leftbar .active-task{
+ display:none!important
+}
+html[data-theme="dark"] .exam-panel{
+ position:sticky;top:0;z-index:48;
+ margin:0 0 12px;padding:13px 15px;
+ border:1px solid #3983c0;border-radius:12px;
+ background:linear-gradient(140deg,#1c3d5c,#132c44)!important;
+ box-shadow:0 6px 22px #0007;
+ flex:0 0 auto;min-width:0;
+}
+html[data-theme="dark"] .exam-head,
+html[data-theme="dark"] .exam-status,
+html[data-theme="dark"] .exam-buttons{
+ display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap;
+}
+html[data-theme="dark"] .exam-head{margin-bottom:10px}
+html[data-theme="dark"] .exam-head small{font-size:9px;letter-spacing:.7px;color:#95c8ef}
+html[data-theme="dark"] .exam-head h2{
+ margin:2px 0 0;font-size:16px;font-weight:900;letter-spacing:.45px;color:#f2f8ff
+}
+html[data-theme="dark"] #examClock{
+ color:#ffe1a5;font:bold 17px ui-monospace,monospace;
+ padding:7px;border:1px solid #ad8545;border-radius:7px;background:#253140
+}
+html[data-theme="dark"] .exam-status{
+ margin-bottom:10px;padding:8px 9px;
+ border:1px solid #315878;border-radius:8px;background:#14273b;
+ color:#accfeb;font-size:10px;font-weight:800
+}
+html[data-theme="dark"] .exam-intro,
+html[data-theme="dark"] .exam-report{
+ padding:9px 11px;border:1px solid #3f6686;border-radius:8px;
+ background:#10243a;max-height:36dvh;overflow-y:auto;
+}
+html[data-theme="dark"] .exam-intro h3,
+html[data-theme="dark"] #examBody>h3,
+html[data-theme="dark"] .exam-report h3{
+ margin:0 0 8px;color:#eaf5ff;font-size:14px;
+}
+html[data-theme="dark"] .exam-intro p,
+html[data-theme="dark"] .exam-report p{
+ font-size:11px;color:#ceddea;line-height:1.6;margin:7px 0
+}
+html[data-theme="dark"] .exam-answer{
+ display:block;width:100%;text-align:left;
+ padding:10px 13px;margin:5px 0;
+ border:1px solid #426c95;border-radius:8px;
+ background:#173653;color:#eff7ff;
+ font-size:11px;font-weight:700;cursor:pointer
+}
+html[data-theme="dark"] .exam-answer:hover,
+html[data-theme="dark"] .exam-answer:focus-visible{
+ background:#205588;border-color:#67b8ff;
+ outline:2px solid #4eacfa;outline-offset:1px
+}
+html[data-theme="dark"] .exam-buttons{margin-top:11px}
+html[data-theme="dark"] .exam-buttons button{
+ padding:10px 13px;border:1px solid #418fde;border-radius:8px;
+ background:#1e7bdb;color:#fff;font-size:10px;font-weight:900;cursor:pointer
+}
+html[data-theme="dark"] .exam-buttons #examExit{
+ background:#1a2939;border-color:#587088;color:#d6e7f5
+}
+html[data-theme="dark"] .exam-disclaimer{
+ color:#99b6cb;font-size:9px;line-height:1.4;margin:9px 0 0
+}
+html[data-theme="dark"] .exam-report.passed{border-color:#43b57e}
+html[data-theme="dark"] .exam-report.failed{border-color:#cf7566}
+html[data-theme="dark"] .mode-card.exam em{
+ color:#78d6aa!important;border-color:#2ca974!important;
+ background:#133c31!important
+}
+@media(max-width:660px){
+ html[data-theme="dark"] .exam-panel{padding:9px!important}
+ html[data-theme="dark"] .exam-head h2{font-size:12px}
+ html[data-theme="dark"] .exam-intro{max-height:42dvh}
+}
