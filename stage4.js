@@ -89,8 +89,13 @@ function internalDeviceEdges(graph){
   });
 }
 function busEdges(graph,role){
-  const ts=[...document.querySelectorAll(`[data-terminal^="BAR:${role}:"]`)];
+  const ts=[...document.querySelectorAll('[data-terminal^="BAR:'+role+':"]')];
   for(let i=1;i<ts.length;i++)addEdge(graph,ts[i-1].dataset.terminal,ts[i].dataset.terminal,role,{kind:'bus',code:role});
+  const selector=role==='N'?'.large-n-section':'.large-pe-section';
+  document.querySelectorAll(selector).forEach(section=>{
+    const ports=[...section.querySelectorAll('.wire-terminal')];
+    for(let i=1;i<ports.length;i++)addEdge(graph,ports[0].dataset.terminal,ports[i].dataset.terminal,role,{kind:'bus',code:'AUTO-'+role});
+  });
 }
 function buildGraph(){
   const graph=new Map();
@@ -159,7 +164,7 @@ function decorateSwitches(){
 function clearVisualStates(){
   document.querySelectorAll('.mounted-device').forEach(m=>m.classList.remove('input-live','output-live','phase-conflict'));
   document.querySelectorAll('.wire-terminal').forEach(t=>t.classList.remove('electrically-live','phase-collision'));
-  document.querySelectorAll('.circuits>div').forEach(c=>c.classList.remove('load-powered','load-partial','load-error'));
+  document.querySelectorAll('.circuits>div,.large-load-card').forEach(c=>c.classList.remove('load-powered','load-partial','load-error'));
 }
 function pathHasProtection(codes){return codes.some(c=>c.startsWith('RCBO')||/^[BC]\\d+(?:_(?:2P|3P))?$/.test(c))}
 function pathHasResidual(codes){return codes.some(c=>c.startsWith('RCD')||c.startsWith('RCBO'))}
@@ -209,7 +214,7 @@ function applyLiveVisuals(reaches,collisions){
   });
 }
 function applyLoadVisuals(states){
-  const cards=[...document.querySelectorAll('.circuits>div')];
+  const cards=[...document.querySelectorAll('.circuits>div'),...document.querySelectorAll('.large-load-card')];
   states.forEach((s,i)=>{
     const card=cards[i];if(!card)return;
     card.querySelector('.circuit-power-state')?.remove();card.querySelector('.circuit-status-label')?.remove();
@@ -304,7 +309,8 @@ function analyze(manual=false){
   const {graph}=buildGraph();
   const reaches={};PHASES.forEach(p=>reaches[p]=bfs(graph,`SUPPLY:${p}`,p));reaches.N=bfs(graph,'SUPPLY:N','N');reaches.PE=bfs(graph,'SUPPLY:PE','PE');
   const collisions=detectPhaseCollisions(reaches);
-  const states=LOADS.map(l=>loadState(l,reaches));
+  const expandedLoads=LOADS.concat(window.ElektrykLargeBoard?.loads?.()||[]);
+  const states=expandedLoads.map(l=>loadState(l,reaches));
   applyLiveVisuals(reaches,collisions);applyLoadVisuals(states);
   const issues=buildIssues(states,collisions);
   const engine=window.ElektrykElectricalEngine?.analyze?.()||null;
