@@ -1,0 +1,74 @@
+/* Elektryk v0.7.13 • Electrical Engine 2.0 diagnostic list */
+html[data-theme="dark"] .power-engine-v2{
+  margin:9px 0 10px;
+  border:1px solid #485765;border-radius:11px;
+  background:linear-gradient(155deg,#25313a,#1d252d);
+  padding:11px 10px 9px;
+  min-width:0;
+}
+html[data-theme="dark"] .power-engine-title{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;flex-wrap:wrap;margin-bottom:8px;
+}
+html[data-theme="dark"] .power-engine-title b{
+  font-size:10px;letter-spacing:.55px;color:#eaf2f7;
+}
+html[data-theme="dark"] .power-engine-title span{
+  font:bold 9px Arial,sans-serif;color:#f4c47c;
+}
+html[data-theme="dark"] .power-engine-circuits{
+  max-height:222px;overflow-y:auto;overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  display:grid;gap:6px;
+}
+html[data-theme="dark"] .power-engine-circuit{
+  border:1px solid #4a5760;border-left:3px solid #6d8394;
+  background:#1b252d;border-radius:7px;
+  padding:8px 9px;min-width:0;
+}
+html[data-theme="dark"] .power-engine-circuit-head{
+  display:flex;justify-content:space-between;gap:8px;align-items:center;
+  flex-wrap:wrap;margin-bottom:5px
+}
+html[data-theme="dark"] .power-engine-circuit-head b{
+  font-size:10px;color:#eaf1f4
+}
+html[data-theme="dark"] .power-engine-circuit-head span{
+  font-size:8px;font-weight:800;color:#c3d0d9;letter-spacing:.2px
+}
+html[data-theme="dark"] .power-engine-circuit>small{
+  display:block;font-size:9px;line-height:1.55;color:#b7c8d3;
+  overflow-wrap:anywhere
+}
+html[data-theme="dark"] .power-engine-circuit .power-engine-reason{
+  padding-top:5px;color:#f0c58f
+}
+html[data-theme="dark"] .power-engine-circuit.state-ready{
+  border-left-color:#55c88e;background:#1b302c
+}
+html[data-theme="dark"] .power-engine-circuit.state-ready .power-engine-circuit-head span{
+  color:#89e4b0
+}
+html[data-theme="dark"] .power-engine-circuit.state-warning{
+  border-left-color:#e6ad4e
+}
+html[data-theme="dark"] .power-engine-circuit.state-warning .power-engine-circuit-head span{
+  color:#f2bf69
+}
+html[data-theme="dark"] .power-engine-circuit.state-error{
+  border-left-color:#e46e62;background:#342725
+}
+html[data-theme="dark"] .power-engine-circuit.state-error .power-engine-circuit-head span{
+  color:#ff9f95
+}
+html[data-theme="dark"] .power-engine-circuit.state-off{
+  border-left-color:#8795aa
+}
+html[data-theme="dark"] .power-engine-v2>small{
+  display:block;margin-top:9px;font-size:9px;line-height:1.45;color:#9caeba
+}
+html[data-theme="dark"] .power-engine-empty{
+  padding:10px;color:#b3c4d1;font-size:10px;line-height:1.5;
+  background:#1c2730;border-radius:7px
+}
