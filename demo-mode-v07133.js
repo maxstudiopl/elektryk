@@ -15,7 +15,16 @@ const MOUNTS=[
   {id:'M107',code:'RCBO10',row:0,start:12,modules:2,switchState:'on'},
   {id:'M108',code:'SPD4',row:0,start:14,modules:4,switchState:'on'}
 ];
-const term=(m,side,role,i=0)=>m+':'+side+':'+role+':'+i;
+const DEVICE_POLES={
+  M101:['L1','L2','L3','N'],M102:['L1','L2','L3','N'],
+  M107:['L','N'],M108:['L1','L2','L3','N']
+};
+const term=(m,side,role)=>{
+  const poles=DEVICE_POLES[m]||[role];
+  const idx=poles.indexOf(role);
+  if(idx<0)throw new Error('DEMO: zacisk '+role+' nie należy do '+m);
+  return m+':'+side+':'+role+':'+(side==='BOTTOM'&&m==='M108'?0:idx);
+};
 function builtWiring(){
   const w=[];let seq=1;
   const add=(a,b,type,cable='H07V-K 1×2,5')=>w.push({id:'W'+seq++,a,b,type,cable});
