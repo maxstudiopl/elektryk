@@ -308,13 +308,15 @@ function analyze(manual=false){
   applyLiveVisuals(reaches,collisions);applyLoadVisuals(states);
   const issues=buildIssues(states,collisions);
   const engine=window.ElektrykElectricalEngine?.analyze?.()||null;
+  const rcd=window.ElektrykRcdDiagnostic?.analyze?.(states)||null;
+  if(rcd)issues.unshift(...rcd.issues.map(e=>({type:e.type,text:e.text,code:e.code})));
   if(engine){
     issues.unshift(...engine.issues);
   }
-  issues.unshift(...(window.ElektrykElectricalAudit?.inspect?.()||[]));
+  issues.unshift(...(window.ElektrykElectricalAudit?.inspect?.()||[]).filter(e=>!rcd||!String(e.text).startsWith('Tory neutralne:')));
   if(issues.some(i=>i.type==='error'))issues.splice(0,issues.length,...issues.filter(i=>i.type!=='ok'));
   renderAnalyzer(states,collisions,issues,manual,engine);
-  lastAnalysis={states,collisions,issues,engine};lastSignature=signature();
+  lastAnalysis={states,collisions,issues,engine,rcd};lastSignature=signature();
   if(manual){
     document.dispatchEvent(new CustomEvent('elektryk:power-check',{
       detail:{
@@ -334,5 +336,5 @@ function analyze(manual=false){
 const observer=new MutationObserver(()=>requestAnimationFrame(()=>{decorateSwitches();analyze(false)}));observer.observe(mountRoot,{childList:true,subtree:true});
 setInterval(()=>{const s=signature();if(s!==lastSignature)analyze(false)},350);
 decorateSwitches();analyze(false);
-window.ElektrykPower={analyze:()=>analyze(true),getLast:()=>lastAnalysis};
+window.ElektrykPower={analyze:()=>analyze(true),refresh:()=>analyze(false),getLast:()=>lastAnalysis};
 })();
