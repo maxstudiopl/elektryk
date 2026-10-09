@@ -1,0 +1,251 @@
+/* Elektryk Symulator • v0.7.12.2 • Dark PRO
+   Odświeżony układ interfejsu. Aparaty, zaciski, szyny DIN i barwy przewodów pozostają nietknięte. */
+html[data-theme="dark"]{
+  --pro-radius:14px;--pro-border:#44515e;--pro-highlight:#efb456;--pro-bg:#15191e;
+  --pro-card:#232b34;--pro-card-2:#2b3540;--pro-dim:#a7b6c4;
+}
+/* START / PANEL GRACZA */
+html[data-theme="dark"] .auth-card:not(.hub-open){
+  width:min(520px,95vw)!important;padding:30px 32px 24px!important;
+  border-radius:19px!important;background:linear-gradient(155deg,#28323e,#1c232b 65%)!important;
+}
+html[data-theme="dark"] .auth-card.hub-open{
+  width:min(1120px,96vw)!important;max-height:calc(100dvh - 42px)!important;
+  overflow-y:auto!important;padding:30px 34px 24px!important;
+  border-radius:22px!important;
+  background:linear-gradient(160deg,#28313b 0%,#202831 34%,#1b222a 100%)!important;
+  border:1px solid #505e69!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .auth-brand{
+  align-items:center!important;padding-bottom:22px!important;margin-bottom:22px!important;
+  border-bottom:1px solid #3e4b57!important
+}
+html[data-theme="dark"] .auth-card.hub-open .auth-brand-line b{font-size:21px!important;letter-spacing:.8px!important}
+html[data-theme="dark"] .auth-brand small{color:#b3c0ca!important;font-size:10px!important}
+html[data-theme="dark"] .auth-beta-edge{color:#ffd08a!important}
+html[data-theme="dark"] .player-welcome-row{
+  position:relative;overflow:hidden;align-items:center!important;gap:24px!important;
+  padding:26px 28px!important;margin-bottom:18px!important;
+  border:1px solid #4c5763!important;border-radius:16px!important;
+  background:radial-gradient(circle at right top,#62431e67,transparent 48%),
+             linear-gradient(115deg,#303b46,#222a33)!important
+}
+html[data-theme="dark"] .player-welcome>small{
+  color:#f4bf69!important;letter-spacing:1.8px!important;font-weight:800!important;
+  font-size:10px!important
+}
+html[data-theme="dark"] .player-welcome h1{
+  font-size:clamp(26px,3.2vw,37px)!important;line-height:1.2!important;
+  margin:7px 0!important;font-weight:850!important
+}
+html[data-theme="dark"] .player-welcome h1 span{color:#ffcc75!important}
+html[data-theme="dark"] .player-welcome p{font-size:13px!important;line-height:1.65!important;color:#c6d1d9!important}
+html[data-theme="dark"] .hub-logout{
+  border-radius:10px!important;min-height:42px!important;background:#25252b!important;
+  border-color:#795452!important;font-size:11px!important
+}
+html[data-theme="dark"] .hub-logout b{font-size:10px!important}
+html[data-theme="dark"] .pro-hub-stats{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px
+}
+html[data-theme="dark"] .pro-hub-stat{
+  background:#1d252d;border:1px solid #3d4a56;border-radius:12px;padding:17px 18px;
+  display:flex;flex-direction:column;gap:8px
+}
+html[data-theme="dark"] .pro-hub-stat span{
+  color:#aab9c5;font-size:10px;letter-spacing:.9px;font-weight:800
+}
+html[data-theme="dark"] .pro-hub-stat strong{
+  color:#f4f7fa;font-size:clamp(20px,2.3vw,29px);line-height:1.05;
+  font-variant-numeric:tabular-nums
+}
+html[data-theme="dark"] .pro-hub-stat strong em{font-style:normal;color:#f0ae4a}
+html[data-theme="dark"] .pro-hub-stat small{color:#aab9c5;font-size:11px}
+html[data-theme="dark"] .pro-modes-title{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  margin:8px 0 11px;color:#eaf1f7;font-size:13px;letter-spacing:.6px;font-weight:900
+}
+html[data-theme="dark"] .pro-modes-title small{color:#aab9c5;font-size:10px;font-weight:500;letter-spacing:0}
+html[data-theme="dark"] .player-modes{gap:12px!important}
+html[data-theme="dark"] .mode-card{
+  min-height:194px!important;padding:23px 21px!important;border-radius:15px!important;
+  border:1px solid #4a5765!important;
+  background:linear-gradient(155deg,#303b46,#222b35)!important;
+  box-shadow:0 8px 20px #090d1233!important;
+}
+html[data-theme="dark"] .mode-card::before{
+  content:'';position:absolute;top:0;left:18px;right:18px;height:3px;
+  border-radius:0 0 5px 5px;background:#e2a24e;opacity:.8
+}
+html[data-theme="dark"] .mode-card.free::before{background:#54cda9}
+html[data-theme="dark"] .mode-card.exam::before{background:#697685}
+html[data-theme="dark"] .mode-card:hover:not(:disabled):not(.exam){
+  background:#333f4c!important;border-color:#edb761!important;
+  transform:translateY(-3px)!important
+}
+html[data-theme="dark"] .mode-card .mode-icon{
+  width:52px!important;height:52px!important;border-radius:13px!important;
+  border:1px solid #756044!important;background:#473b2b!important;
+  color:#ffcf82!important;font-size:25px!important;margin-bottom:20px!important
+}
+html[data-theme="dark"] .mode-card.free .mode-icon{
+  border-color:#3a806b!important;background:#254a40!important;color:#7ff6c6!important
+}
+html[data-theme="dark"] .mode-card b{font-size:15px!important;letter-spacing:.45px!important;margin-bottom:10px!important}
+html[data-theme="dark"] .mode-card small{font-size:11px!important;line-height:1.7!important;color:#b8c7d4!important}
+html[data-theme="dark"] .mode-card.exam{opacity:.7;cursor:default!important}
+html[data-theme="dark"] .mode-card.exam em{
+  color:#ffe6b7!important;background:#4e402c!important;border-color:#8b744e!important;
+  border-radius:8px!important;font-size:9px!important;padding:5px 7px!important
+}
+html[data-theme="dark"] .account-summary{
+  margin-top:20px!important;padding:20px!important;background:#222a33!important;
+  border:1px solid #3e4d59!important;border-radius:14px!important
+}
+html[data-theme="dark"] .account-summary-head>b{font-size:12px!important;letter-spacing:.5px!important}
+html[data-theme="dark"] .account-active{font-size:10px!important;color:#84e8b3!important}
+html[data-theme="dark"] .account-grid{gap:10px!important}
+html[data-theme="dark"] .account-grid>div{
+  background:#1b232b!important;border:1px solid #384652!important;
+  border-radius:10px!important;padding:14px!important
+}
+html[data-theme="dark"] .account-grid span{font-size:9px!important;color:#a7b6c5!important}
+html[data-theme="dark"] .account-grid b{font-size:12px!important;line-height:1.5!important;color:#eaf3fa!important}
+html[data-theme="dark"] .auth-card.hub-open .hub-tools{gap:12px!important;margin-top:15px!important}
+html[data-theme="dark"] .hub-tools button{
+  min-height:85px!important;border-radius:12px!important;
+  border:1px solid #43525e!important;background:#2a333c!important;
+  padding:18px!important
+}
+html[data-theme="dark"] .hub-tools b{font-size:12px!important}
+html[data-theme="dark"] .hub-tools small{font-size:10px!important;line-height:1.5!important;color:#aab9c6!important}
+/* GŁÓWNA PRZESTRZEŃ SYMULATORA */
+html[data-theme="dark"] .topbar{
+  min-height:72px!important;padding:0 10px!important;
+  border-bottom:1px solid #4a5560!important;background:#1d252d!important
+}
+html[data-theme="dark"] .brand b{font-size:20px!important;font-style:normal!important;letter-spacing:.45px!important}
+html[data-theme="dark"] .brand small{font-size:10px!important}
+html[data-theme="dark"] .brand-bolt{font-size:30px!important}
+html[data-theme="dark"] .profile-compact{padding:0 12px!important}
+html[data-theme="dark"] .auth-profile span{color:#f2c781!important;font-size:11px!important}
+html[data-theme="dark"] .player-mainnav{gap:8px!important}
+html[data-theme="dark"] .player-navbtn{
+  height:38px!important;padding:0 15px!important;border-radius:9px!important;
+  font-size:10px!important;font-weight:800!important;
+  background:#29333e!important;color:#edf4fa!important;border:1px solid #465462!important
+}
+html[data-theme="dark"] .player-level-status{
+  border-radius:9px!important;height:38px!important;padding:0 12px!important;min-width:138px!important;
+  background:#282d31!important;font-size:10px!important
+}
+html[data-theme="dark"] .game-shell{
+  display:grid!important;grid-template-columns:290px minmax(610px,1fr) minmax(330px,382px)!important;
+  min-width:1230px!important;gap:12px!important;padding:15px!important;
+  align-items:start!important;background:#15191e!important
+}
+html[data-theme="dark"] .panel-stack{gap:12px!important;min-width:0}
+html[data-theme="dark"] .panel{
+  border-radius:12px!important;border:1px solid #45515d!important;overflow:hidden
+}
+html[data-theme="dark"] .panel-title{
+  display:flex;align-items:center;min-height:43px;padding:13px 15px!important;
+  font-size:12px!important;line-height:1.3!important;letter-spacing:.5px!important;
+  color:#f2f5f7!important;border-bottom:1px solid #46525d!important
+}
+html[data-theme="dark"] .active-task h2{
+  font-size:17px!important;line-height:1.4!important;padding:0 3px
+}
+html[data-theme="dark"] .active-task>p{font-size:11px!important;line-height:1.75!important}
+html[data-theme="dark"] .task-goals{font-size:11px!important;padding:13px!important;border-radius:9px!important}
+html[data-theme="dark"] .task-goals span{font-size:10px!important;gap:8px!important}
+html[data-theme="dark"] .catalog-grid{gap:8px!important;padding:11px!important}
+html[data-theme="dark"] .catalog-card{
+  min-height:116px!important;border-radius:9px!important;border:1px solid #485664!important;
+  padding:9px 5px!important;background:#2a343e!important
+}
+html[data-theme="dark"] .catalog-card b{font-size:10px!important;line-height:1.3!important}
+html[data-theme="dark"] .catalog-card small{font-size:8px!important}
+html[data-theme="dark"] .category-tabs{gap:5px!important;padding:10px!important}
+html[data-theme="dark"] .category-tabs button{font-size:9px!important;border-radius:7px!important}
+html[data-theme="dark"] .workspace{
+  min-width:0!important;display:flex;flex-direction:column;gap:0
+}
+html[data-theme="dark"] .pro-workspace-toolbar{
+  position:relative;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;padding:13px 16px;margin-bottom:10px;
+  border-radius:12px;background:#212a33;border:1px solid #43515d
+}
+html[data-theme="dark"] .pro-workspace-title{display:flex;align-items:center;gap:11px}
+html[data-theme="dark"] .pro-workspace-logo{
+  display:grid;place-items:center;width:39px;height:39px;flex:none;
+  border-radius:10px;background:#4c3a24;color:#f6c777;font-size:19px
+}
+html[data-theme="dark"] .pro-workspace-title b{display:block;font-size:12px!important;letter-spacing:.4px}
+html[data-theme="dark"] .pro-workspace-title small{display:block;font-size:10px;color:#a9b8c5;margin-top:3px}
+html[data-theme="dark"] .pro-workspace-actions{display:flex;gap:8px;flex-wrap:wrap}
+html[data-theme="dark"] .pro-layout-toggle{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:35px;padding:7px 12px;border-radius:8px;border:1px solid #526070;
+  background:#2c3743;color:#eaf2f7;font-size:10px;font-weight:800;cursor:pointer
+}
+html[data-theme="dark"] .pro-layout-toggle:hover,
+html[data-theme="dark"] .pro-layout-toggle[aria-pressed="true"]{
+  background:#51422e;color:#ffe0a4;border-color:#bd9153
+}
+html[data-theme="dark"] .pro-layout-toggle:focus-visible{
+  outline:2px solid #f3bd68;outline-offset:2px
+}
+html[data-theme="dark"] .cabinet-head{
+  min-height:60px!important;padding:13px 16px!important;border-radius:12px 12px 0 0!important
+}
+html[data-theme="dark"] .cabinet-head b{font-size:15px!important}
+html[data-theme="dark"] .cabinet-head small{font-size:10px!important;line-height:1.5!important}
+html[data-theme="dark"] .version{font-size:10px!important;border-radius:7px!important;padding:6px 9px!important}
+html[data-theme="dark"] .cabinet{border-radius:0 0 10px 10px!important;overflow-x:auto}
+html[data-theme="dark"] .workspace-footer{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important;margin-top:10px}
+html[data-theme="dark"] .workspace-footer>div{
+  background:#242d36!important;border:1px solid #45515c!important;border-radius:11px!important;
+  padding:13px 11px!important;min-width:0!important
+}
+html[data-theme="dark"] .workspace-footer span{font-size:9px!important;color:#aab9c6!important}
+html[data-theme="dark"] .workspace-footer b{font-size:13px!important;color:#f4d099!important}
+/* Rozszerzanie pola roboczego przy zwijaniu paneli */
+html[data-theme="dark"] body.pro-left-collapsed .game-shell{
+  grid-template-columns:minmax(650px,1fr) minmax(330px,382px)!important
+}
+html[data-theme="dark"] body.pro-left-collapsed .game-shell>.leftbar{display:none!important}
+html[data-theme="dark"] body.pro-right-collapsed .game-shell{
+  grid-template-columns:290px minmax(650px,1fr)!important
+}
+html[data-theme="dark"] body.pro-right-collapsed .game-shell>.rightbar{display:none!important}
+html[data-theme="dark"] body.pro-left-collapsed.pro-right-collapsed .game-shell{
+  grid-template-columns:minmax(650px,1fr)!important;min-width:760px!important
+}
+/* Wąskie widoki: zachowujemy skalę aparatów i opcję poziomego przewijania */
+@media(max-width:1450px){
+  html[data-theme="dark"] .game-shell{
+    grid-template-columns:255px minmax(600px,1fr) 320px!important;gap:10px!important;min-width:1190px!important
+  }
+  html[data-theme="dark"] body.pro-right-collapsed .game-shell{grid-template-columns:255px minmax(650px,1fr)!important}
+  html[data-theme="dark"] body.pro-left-collapsed .game-shell{grid-template-columns:minmax(650px,1fr) 320px!important}
+}
+@media(max-width:780px){
+  html[data-theme="dark"] .auth-card.hub-open{width:min(530px,96vw)!important;padding:20px!important}
+  html[data-theme="dark"] .player-welcome-row{padding:18px!important;flex-direction:column!important;align-items:flex-start!important}
+  html[data-theme="dark"] .pro-hub-stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  html[data-theme="dark"] .pro-hub-stat{padding:11px!important}
+  html[data-theme="dark"] .pro-hub-stat span{font-size:8px!important}
+  html[data-theme="dark"] .pro-hub-stat strong{font-size:17px!important}
+  html[data-theme="dark"] .pro-hub-stat small{font-size:9px!important}
+  html[data-theme="dark"] .player-modes{grid-template-columns:1fr!important}
+  html[data-theme="dark"] .mode-card{min-height:126px!important;padding:16px 18px!important}
+  html[data-theme="dark"] .mode-card .mode-icon{width:36px!important;height:36px!important;font-size:18px!important;margin-bottom:10px!important}
+  html[data-theme="dark"] .mode-card b{font-size:13px!important}
+  html[data-theme="dark"] .mode-card small{font-size:10px!important}
+  html[data-theme="dark"] .account-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  html[data-theme="dark"] .game-shell{min-width:1190px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme="dark"] .mode-card{transition:none!important}
+}
