@@ -222,6 +222,11 @@ function placePart(code,row,start,idOverride=null,quiet=false){
   if(!quiet){
     updateStats();
     setHint(`<b>ZAMONTOWANO:</b> ${p.name} • listwa ${row+1}, moduły ${start+1}–${start+p.modules}`,'success');
+    // Assembly PRO: wyłącznie sygnał do animacji wizualnej.
+    // Odtwarzanie zapisów (quiet=true) nie wywołuje animacji.
+    document.dispatchEvent(new CustomEvent('elektryk:apparatus-mounted',{
+      detail:{element:wrap,id,code:p.code,row,start,modules:p.modules}
+    }));
   }
   return wrap;
 }
