@@ -3,7 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Elektryk Symulator Damian Górny — v0.7.13.1 RCD / N PRO</title>
+  <title>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic | v0.7.13.2</title>
+  <meta name="description" content="RozdzielnicaPRO.pl — symulator budowy rozdzielnic elektrycznych. Nauka montażu aparatów DIN, okablowania i diagnostyki instalacji.">
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="icon" href="brand-icon.svg?v=07132" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest?v=07132">
   <script src="theme-v07121.js?v=07122dark"></script>
   <link rel="stylesheet" href="style.css?v=0711">
   <link rel="stylesheet" href="apparatus.css?v=0711">
@@ -33,6 +37,7 @@
   <link rel="stylesheet" href="assembly-pro-v07129.css?v=07129">
   <link rel="stylesheet" href="electrical-engine-v0713.css?v=07130">
   <link rel="stylesheet" href="rcd-diagnostic-v07131.css?v=07131">
+  <link rel="stylesheet" href="brand-pro-v07132.css?v=07132">
   <style>
     /* v0.4.5 critical DIN layout hotfix — bypasses stale cached CSS */
     .mount-grid .mounted-device{position:absolute!important;top:0!important;height:194px!important;margin:0!important;padding:0!important;transform:none!important;box-sizing:border-box!important;z-index:12!important}
@@ -51,15 +56,20 @@
   </style>
 </head>
 <body class="auth-locked">
+  <div class="brand-splash" id="brandSplash" aria-label="Ładowanie RozdzielnicaPRO.pl">
+    <div class="brand-splash-card">
+      <img src="rozdzielnicapro-logo.svg?v=07132" alt="RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic" width="640" height="215">
+      <strong>ŁADOWANIE SYMULATORA...</strong>
+      <div class="brand-loading-track" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
   <div class="auth-gate" id="authGate">
     <div class="auth-card">
       <div class="auth-beta-edge">WERSJA BETA</div>
       <div class="auth-brand">
         <div class="auth-brand-main">
-          <span class="auth-bolt">⚡</span>
-          <div class="auth-brand-copy">
-            <div class="auth-brand-line"><b>ELEKTRYK — SYMULATOR</b></div>
-            <small>BUDOWA I ROZBUDOWA ROZDZIELNIC</small>
+          <div class="brand-art-frame">
+            <img src="rozdzielnicapro-logo.svg?v=07132" alt="RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic" width="640" height="215" fetchpriority="high">
           </div>
         </div>
         <div class="auth-brand-actions">
@@ -69,7 +79,7 @@
       </div>
       <div class="auth-login-view" id="authLoginView">
         <h1>LOGOWANIE</h1>
-        <p>Dostęp wyłącznie po zalogowaniu na aktywne konto.</p>
+        <p>Zaloguj się, aby rozpocząć naukę i budowę rozdzielnic w RozdzielnicaPRO.pl.</p>
         <label class="auth-field"><span>LOGIN</span><input id="authLogin" autocomplete="username" placeholder="Wpisz login"></label>
         <label class="auth-field"><span>HASŁO</span><input id="authPassword" type="password" autocomplete="current-password" placeholder="Wpisz hasło"></label>
         <button class="auth-submit" id="authSubmit">ZALOGUJ SIĘ</button>
@@ -79,7 +89,7 @@
       <div class="player-hub" id="playerHub" hidden>
         <div class="player-welcome-row">
           <div class="player-welcome">
-            <small>WITAJ W SYMULATORZE</small>
+            <small>WITAJ W ROZDZIELNICAPRO.PL</small>
             <h1>Witaj, <span id="hubPlayerName">GRACZU</span></h1>
             <p>Wybierz tryb pracy i przejdź do rozdzielnicy.</p>
           </div>
@@ -121,11 +131,11 @@
         </section>
       </div>
 
-      <footer class="auth-footer">PROJEKT WYKONAŁ DAMIAN GÓRNY — <a href="https://maxstudio.pl" target="_blank" rel="noopener noreferrer">MAXSTUDIO</a></footer>
+      <footer class="auth-footer">ROZDZIELNICAPRO.PL • PROJEKT I ROZWÓJ: DAMIAN GÓRNY — <a href="https://maxstudio.pl" target="_blank" rel="noopener noreferrer">MAXSTUDIO</a></footer>
     </div>
   </div>
   <header class="topbar">
-    <div class="brand"><span class="brand-bolt">⚡</span><div><b>ELEKTRYK</b><small>SYMULATOR • DAMIAN GÓRNY</small></div></div>
+    <div class="brand"><img class="brand-icon" src="brand-icon.svg?v=07132" width="34" height="34" alt=""><div><b>Rozdzielnica<span>PRO</span>.pl</b><small>SYMULATOR BUDOWY ROZDZIELNIC</small></div></div>
     <nav class="mainnav player-mainnav">
       <button class="player-navbtn" id="openPlayerHub">PANEL GRACZA</button>
       <button class="player-navbtn" id="openGameSettings">USTAWIENIA GRY</button>
@@ -170,7 +180,7 @@
     </aside>
 
     <section class="workspace">
-      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.7.12.2 • ELEKTRYK PRO</span></div>
+      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.7.13.2 • ROZDZIELNICAPRO.PL</span></div>
       <div class="cabinet">
         <div class="cabinet-inner">
           <div class="supply-box">
@@ -309,5 +319,6 @@
   <script src="auth-v050.js?v=07131"></script>
   <script src="admin-players-v0711.js?v=0711users6"></script>
   <script src="ui-pro-v07122.js?v=07123b"></script>
+  <script src="brand-pro-v07132.js?v=07132"></script>
 </body>
 </html>
