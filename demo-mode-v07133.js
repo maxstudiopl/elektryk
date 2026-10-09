@@ -20,10 +20,11 @@ const DEVICE_POLES={
   M107:['L','N'],M108:['L1','L2','L3','N']
 };
 const term=(m,side,role)=>{
+  if(m==='M108'&&side==='BOTTOM'&&role==='PE')return m+':BOTTOM:PE:0';
   const poles=DEVICE_POLES[m]||[role];
   const idx=poles.indexOf(role);
   if(idx<0)throw new Error('DEMO: zacisk '+role+' nie należy do '+m);
-  return m+':'+side+':'+role+':'+(side==='BOTTOM'&&m==='M108'?0:idx);
+  return m+':'+side+':'+role+':'+idx;
 };
 function builtWiring(){
   const w=[];let seq=1;
