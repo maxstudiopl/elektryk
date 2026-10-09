@@ -22,7 +22,7 @@ panel.innerHTML=
  '<p id="laInstruction">Kliknij DALEJ, aby rozpocząć.</p>'+
  '<div class="la-nav"><button type="button" id="laPrev">← POPRZEDNI</button><button type="button" id="laNext">WYKONAJ NASTĘPNY KROK →</button></div>'+
  '</div>'+
- '<small class="la-disclaimer">Demonstracja edukacyjna oparta na modelu gry: maksymalnie cztery odbiorniki testowe. Pozostałe aparaty mogą być rezerwowe. Nie jest to rzeczywisty projekt wykonawczy.</small>';
+ '<small class="la-disclaimer">Demonstracja edukacyjna oparta na modelu gry: cztery podstawowe odbiorniki oraz dodatkowe wyjścia L/N/PE dla każdego MCB i RCBO. Nie jest to rzeczywisty projekt wykonawczy.</small>';
 const learningBoard=document.querySelector('.learning-board-v0712');
 if(learningBoard)learningBoard.insertAdjacentElement('afterend',panel);
 else header.insertAdjacentElement('afterend',panel);
@@ -94,10 +94,11 @@ function doAuto(){
    current=blueprint();if(!current)return false;
    generation++;mode='auto';setAssisted('auto');
    stage.reset?.();
+   window.ElektrykLargeBoard?.prepare?.(current);
    apply(current.steps.length,generation);
    $('laStepper').hidden=true;
    stateLabel('UZBROJONO AUTOMATYCZNIE');
-   status('Zamontowano '+current.devices.length+' aparatów, wykonano '+current.wires.length+' przewodów i '+current.bridges.length+' mostków. Odbiorniki testowe: '+current.connectedLoads+'/4. '+current.unwiredNote+' Bez XP.');
+   status('Zamontowano '+current.devices.length+' aparatów, wykonano '+current.wires.length+' przewodów i '+current.bridges.length+' mostków. Obwody L/N/PE: '+current.connectedLoads+'. '+current.unwiredNote+' Bez XP.');
    clearTarget();return true;
  }catch(e){console.error('AUTO BOARD',e);status('Nie udało się uzbroić rozdzielnicy: '+e.message);return false}
 }
@@ -107,6 +108,7 @@ function doGuided(){
    current=blueprint();if(!current)return false;
    generation++;mode='guided';index=0;setAssisted('guided');
    stage.reset?.();
+   window.ElektrykLargeBoard?.prepare?.(current);
    stateLabel('POKAZ KROK PO KROKU');status('Pokaz zawiera '+current.devices.length+' montowań, '+current.wires.length+' przewodów i '+current.bridges.length+' mostków. Przechodź przez etapy przyciskiem DALEJ. Bez XP.');
    updatePreview();clearTarget();return true;
  }catch(e){console.error('GUIDED BOARD',e);status('Nie udało się rozpocząć nauki krokowej: '+e.message);return false}
@@ -119,14 +121,14 @@ function move(diff){
 }
 function doReset(){
  if(blocked())return false;
- generation++;stage.reset?.();clearTarget();
+ generation++;stage.reset?.();window.ElektrykLargeBoard?.clear?.();clearTarget();
  current=null;mode='idle';index=0;
  stateLabel('GOTOWY DO NAUKI');
  status('Rozdzielnica wyczyszczona. Możesz samodzielnie montować aparaty lub wybrać jeden z dwóch pokazów. Po użyciu pomocy XP w tym zadaniu pozostaje wyłączone.');
  $('laStepper').hidden=true;return true;
 }
 function newTask(){
- generation++;current=null;index=0;mode='idle';activeTaskId=null;
+ generation++;window.ElektrykLargeBoard?.clear?.();current=null;index=0;mode='idle';activeTaskId=null;
  delete document.body.dataset.learningAssist;clearTarget();
  $('laStepper').hidden=true;stateLabel('GOTOWY DO NAUKI');
  status('Scenariusz '+(currentTask()?.id||'')+' — wybierz automatyczne uzbrojenie, pokaz krokowy albo montuj samodzielnie.');
