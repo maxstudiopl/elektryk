@@ -35,7 +35,7 @@ function sample(items,n){const pool=items.slice(),out=[];while(pool.length&&out.
 function choices(){
  const catalog=window.ElektrykTasks?.all||[];
  function eligible(group){return catalog.filter(t=>t.group===group&&t.id>40&&t.requirements.RCD<=3&&(t.requirements.RCBO||0)<=2&&(t.requirements.B10||0)+(t.requirements.B16||0)<=7)}
- return ['one','two','three'].map(g=>sample(eligible(g),1)[0]).filter(Boolean);
+ return [...sample(eligible('one'),2),...sample(eligible('two'),1)];
 }
 const panel=document.createElement('section');
 panel.id='examPanel';panel.className='exam-panel';panel.hidden=true;
