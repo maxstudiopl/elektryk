@@ -44,6 +44,7 @@ function diagram(task,plan){
  if(!fr)return {devices,wires,bridges,steps,loads,nSections,connectedLoads:0,unwiredNote:'Brak FR.'};
  for(const role of ['L1','L2','L3','N'])wire('SUPPLY:'+role,t(fr,'top',role),role,'Podłącz zasilanie WLZ '+role+' do wejścia FR.');
  wire('SUPPLY:PE','BAR:PE:1','PE','Doprowadź przewód PE do głównej szyny ochronnej.');
+ wire('BAR:PE:3','AUTO:PE:0','PE','Połącz główną listwę PE z listwą zbiorczą obwodów wyjściowych.');
  const phaseFeeds=new Map(),neutralRoot=t(fr,'bottom','N');
  let upstreamN=null;
  function feed(d,phase){
