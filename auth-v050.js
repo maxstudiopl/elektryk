@@ -20,14 +20,14 @@ const scripts=[
   'rcd-diagnostic-v07131.js?v=07131',
   'stage4.js?v=07131rcd',
   'rcd-diagnostic-ui-v07131.js?v=07131',
-  'tasks-v046.js?v=07132',
+  'tasks-v046.js?v=07133',
   'busbars-v047.js?v=0711',
   'wiring-rules-v0712.js?v=0712wire3',
   'help-v049.js?v=0712tasks40',
   'learning-board-v0712.js?v=0712tasks40',
   'progress-v060.js?v=0712tasks40',
   'freebuild-save-v0711.js?v=0711admin2',
-  'demo-mode-v07133.js?v=07133'
+  'demo-mode-v07133.js?v=07133c'
 ];
 
 let gameLoaded=false;
