@@ -440,6 +440,7 @@ function addFerrule(P,terminal,other,type,cable=''){
   fittingsSvg.appendChild(g);
 }
 function draw(){
+  cabinet.classList.toggle('routing-pro-wired',connections.length>0);
   svg.replaceChildren();
   fittingsSvg.replaceChildren();
   const trunks=[];
