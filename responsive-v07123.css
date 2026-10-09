@@ -1,0 +1,259 @@
+/* Elektryk Symulator v0.7.12.3 — responsywny interfejs Dark
+   Bez skalowania zacisków i przewodów: rozdzielnica przewija się tylko we własnym oknie. */
+html[data-theme="dark"],html[data-theme="dark"] body{
+  width:100%;max-width:100%;min-width:0;
+  overflow-x:clip;
+}
+html[data-theme="dark"] body{min-height:100dvh}
+/* Nie dopuść do rozszerzenia siatki przez długie opisy i aparaturę */
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .game-shell,
+html[data-theme="dark"] .game-shell>*,
+html[data-theme="dark"] .workspace,
+html[data-theme="dark"] .panel-stack,
+html[data-theme="dark"] .rightbar,
+html[data-theme="dark"] .leftbar{
+  min-width:0!important;max-width:100%;
+}
+html[data-theme="dark"] .topbar{
+  width:100%;grid-template-columns:minmax(185px,260px) minmax(0,1fr) max-content!important;
+}
+html[data-theme="dark"] .topbar .brand{min-width:0;max-width:100%}
+html[data-theme="dark"] .topbar .brand>div{min-width:0}
+html[data-theme="dark"] .player-mainnav{min-width:0;max-width:100%}
+html[data-theme="dark"] .topbar .profile{min-width:0;max-width:100%}
+/* Domyślny widok szerokiego pulpitu */
+html[data-theme="dark"] body .game-shell{
+  display:grid!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  grid-template-columns:clamp(218px,18vw,300px) minmax(0,1fr) clamp(266px,22vw,388px)!important;
+  grid-template-areas:"left center right";
+  align-items:start!important;
+  gap:clamp(8px,0.8vw,16px)!important;
+  padding:clamp(8px,0.8vw,16px)!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar{grid-area:left}
+html[data-theme="dark"] body .game-shell>.workspace{grid-area:center}
+html[data-theme="dark"] body .game-shell>.rightbar{grid-area:right}
+html[data-theme="dark"] body.pro-left-collapsed .game-shell{
+  grid-template-columns:minmax(0,1fr) clamp(266px,22vw,388px)!important;
+  grid-template-areas:"center right";
+}
+html[data-theme="dark"] body.pro-right-collapsed .game-shell{
+  grid-template-columns:clamp(218px,18vw,300px) minmax(0,1fr)!important;
+  grid-template-areas:"left center";
+}
+html[data-theme="dark"] body.pro-left-collapsed.pro-right-collapsed .game-shell{
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-areas:"center";
+}
+html[data-theme="dark"] .workspace,
+html[data-theme="dark"] .workspace .cabinet-head,
+html[data-theme="dark"] .workspace .pro-workspace-toolbar,
+html[data-theme="dark"] .workspace .workspace-footer{
+  min-width:0!important;max-width:100%;
+}
+html[data-theme="dark"] .pro-workspace-toolbar{min-width:0}
+html[data-theme="dark"] .pro-workspace-actions{min-width:0}
+html[data-theme="dark"] .pro-workspace-title{min-width:0}
+html[data-theme="dark"] .pro-workspace-title>div:last-child{min-width:0}
+html[data-theme="dark"] .cabinet-head{gap:10px;flex-wrap:wrap!important}
+html[data-theme="dark"] .cabinet-head>div{min-width:0}
+html[data-theme="dark"] .cabinet-head .version{
+  max-width:100%;overflow-wrap:anywhere;text-align:right
+}
+/* Rozdzielnica musi być przewijana niezależnie od całej strony. */
+html[data-theme="dark"] .workspace>.cabinet{
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  overflow-x:auto!important;overflow-y:hidden;
+  overscroll-behavior-inline:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-gutter:stable;
+}
+html[data-theme="dark"] .workspace>.cabinet .cabinet-inner{
+  box-sizing:border-box!important;
+  width:100%!important;max-width:none!important;
+  min-width:var(--din-board-min,790px)!important;
+}
+html[data-theme="dark"] .workspace>.cabinet .cabinet-inner[data-modules-per-row="12"]{
+  --din-board-min:650px;
+}
+html[data-theme="dark"] .workspace>.cabinet .cabinet-inner[data-modules-per-row="18"]{
+  --din-board-min:790px;
+}
+html[data-theme="dark"] .workspace>.cabinet .cabinet-inner[data-modules-per-row="24"]{
+  --din-board-min:1060px;
+}
+/* Sprzęt i miniatury nie rozciągają sąsiednich paneli. */
+html[data-theme="dark"] .rightbar .panel{min-width:0}
+html[data-theme="dark"] .catalog-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(125px,100%),1fr))!important;
+}
+html[data-theme="dark"] .category-tabs{
+  display:flex!important;flex-wrap:wrap!important;gap:5px!important
+}
+html[data-theme="dark"] .category-tabs>button{
+  min-width:0;flex:1 1 76px
+}
+html[data-theme="dark"] .panel-title,
+html[data-theme="dark"] .task-button,
+html[data-theme="dark"] .details-content{
+  min-width:0;overflow-wrap:anywhere;
+}
+html[data-theme="dark"] .task-goals span{
+  min-width:0;overflow-wrap:anywhere;
+}
+html[data-theme="dark"] .workspace-footer>div b{
+  min-width:0;max-width:100%;overflow-wrap:anywhere;
+}
+/* Panele boczne przewijają się niezależnie od rozdzielnicy na wysokich ekranach */
+@media(min-width:1280px) and (min-height:650px){
+  html[data-theme="dark"] .game-shell>.leftbar,
+  html[data-theme="dark"] .game-shell>.rightbar{
+    position:sticky;top:84px;
+    max-height:calc(100dvh - 96px);
+    overflow-y:auto;overflow-x:hidden;
+    overscroll-behavior:contain;
+    scrollbar-width:thin;
+    scrollbar-color:#53616d transparent;
+  }
+}
+/* Laptop / średnia przeglądarka: rozdzielnica na całą szerokość.
+   Zadania i narzędzia pod nią w dwóch równych kolumnach. */
+@media(max-width:1279px){
+  html[data-theme="dark"] body .game-shell{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-areas:"center center" "left right";
+  }
+  html[data-theme="dark"] body.pro-left-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center" "right";
+  }
+  html[data-theme="dark"] body.pro-right-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center" "left";
+  }
+  html[data-theme="dark"] body.pro-left-collapsed.pro-right-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center";
+  }
+  html[data-theme="dark"] .game-shell>.leftbar,
+  html[data-theme="dark"] .game-shell>.rightbar{
+    position:static;overflow:visible;max-height:none
+  }
+  html[data-theme="dark"] .topbar{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) max-content!important;
+    grid-template-areas:"brand profile" "navigation navigation";
+    gap:8px 12px!important;
+    height:auto!important;padding:12px!important;
+  }
+  html[data-theme="dark"] .topbar>.brand{grid-area:brand;padding:0 2px}
+  html[data-theme="dark"] .topbar>.player-mainnav{
+    grid-area:navigation;
+    display:flex!important;
+    justify-content:flex-start!important;align-items:center!important;
+    width:100%;max-width:100%;overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    scrollbar-width:thin;
+    padding-bottom:2px;
+  }
+  html[data-theme="dark"] .topbar>.profile{
+    grid-area:profile;
+    height:auto;min-width:0!important;
+    padding:0!important;border-left:0!important;
+  }
+  html[data-theme="dark"] .player-mainnav .player-navbtn,
+  html[data-theme="dark"] .player-mainnav .player-level-status{
+    flex:0 0 auto;
+  }
+  html[data-theme="dark"] .rightbar .catalog-grid{
+    grid-template-columns:repeat(auto-fit,minmax(135px,1fr))!important;
+  }
+}
+/* Telefony i wąskie okna: jedno pole pod drugim, bez rozsuwania strony. */
+@media(max-width:719px){
+  html[data-theme="dark"] body .game-shell{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"left" "center" "right";
+    gap:10px!important;padding:8px!important
+  }
+  html[data-theme="dark"] body.pro-left-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center" "right";
+  }
+  html[data-theme="dark"] body.pro-right-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"left" "center";
+  }
+  html[data-theme="dark"] body.pro-left-collapsed.pro-right-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center";
+  }
+  html[data-theme="dark"] .topbar{gap:9px!important;padding:10px 8px!important}
+  html[data-theme="dark"] .brand b{font-size:16px!important}
+  html[data-theme="dark"] .brand small{font-size:8px!important}
+  html[data-theme="dark"] .brand-bolt{font-size:23px!important}
+  html[data-theme="dark"] .profile-compact .auth-profile{gap:4px!important}
+  html[data-theme="dark"] .profile-compact .auth-profile span{font-size:10px!important}
+  html[data-theme="dark"] .auth-logout{padding:6px!important;font-size:9px!important}
+  html[data-theme="dark"] .pro-workspace-toolbar{
+    padding:11px!important;align-items:flex-start!important
+  }
+  html[data-theme="dark"] .pro-workspace-actions{width:100%}
+  html[data-theme="dark"] .pro-layout-toggle{
+    flex:1 1 135px;min-height:40px;white-space:normal;line-height:1.2
+  }
+  html[data-theme="dark"] .workspace-footer{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html[data-theme="dark"] .cabinet-head b{font-size:13px!important}
+  html[data-theme="dark"] .catalog-grid{
+    grid-template-columns:repeat(auto-fit,minmax(130px,1fr))!important;
+  }
+  html[data-theme="dark"] .pro-modes-title{flex-wrap:wrap}
+  html[data-theme="dark"] .account-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+/* Wąskie ekrany i niski viewport — modale mieszczą się w dostępnym obszarze. */
+html[data-theme="dark"] .auth-gate,
+html[data-theme="dark"] .task-modal,
+html[data-theme="dark"] .game-settings-modal,
+html[data-theme="dark"] .board-selector-modal{
+  box-sizing:border-box;max-width:100vw;
+  padding:clamp(7px,2.5vw,22px)!important;
+}
+html[data-theme="dark"] .auth-card,
+html[data-theme="dark"] .auth-card.hub-open,
+html[data-theme="dark"] .task-window,
+html[data-theme="dark"] .game-settings-window,
+html[data-theme="dark"] .players-window,
+html[data-theme="dark"] .board-selector-window{
+  box-sizing:border-box;
+  max-width:min(100%,96vw)!important;
+  max-height:calc(100dvh - 24px)!important;
+  overflow-y:auto!important;
+}
+html[data-theme="dark"] .player-hub{min-width:0}
+html[data-theme="dark"] .auth-card.hub-open .auth-brand-actions{min-width:0;flex-wrap:wrap}
+html[data-theme="dark"] .auth-card.hub-open .auth-brand{min-width:0}
+html[data-theme="dark"] .account-grid>div{min-width:0}
+html[data-theme="dark"] .mode-card{min-width:0}
+html[data-theme="dark"] .task-window .task-cards{min-width:0}
+@media(max-width:520px){
+  html[data-theme="dark"] .auth-card.hub-open{
+    padding:15px!important;border-radius:14px!important
+  }
+  html[data-theme="dark"] .auth-card.hub-open .auth-brand-actions{width:100%;justify-content:flex-start}
+  html[data-theme="dark"] .pro-hub-stats{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important
+  }
+  html[data-theme="dark"] .pro-hub-stat:nth-child(3){grid-column:1/-1}
+  html[data-theme="dark"] .account-grid{grid-template-columns:minmax(0,1fr)!important}
+  html[data-theme="dark"] .task-cards{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  html[data-theme="dark"] .task-catalog-tabs{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
