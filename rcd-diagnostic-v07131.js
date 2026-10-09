@@ -45,6 +45,16 @@ function inspectRecords(input={}){
  // Physical N bus: all terminals share a node; similarly an NTB strip.
  const bus=neutral.filter(t=>String(t.id).startsWith('BAR:N:'));
  for(let i=1;i<bus.length;i++)edge(bus[0].id,bus[i].id,'internal','BUS:N');
+ const outgoingN=new Map();
+ for(const t of neutral){
+   const m=String(t.id).match(/^AUTO:N:([^:]+):\d+$/);
+   if(!m)continue;
+   if(!outgoingN.has(m[1]))outgoingN.set(m[1],[]);
+   outgoingN.get(m[1]).push(t.id);
+ }
+ for(const [section,ports] of outgoingN){
+   for(let i=1;i<ports.length;i++)edge(ports[0],ports[i],'internal','AUTO:N:'+section);
+ }
  for(const m of mounted.filter(m=>/^NTB/.test(String(m.code)))){
    const list=neutral.filter(t=>t.mountId===m.id);
    for(let i=1;i<list.length;i++)edge(list[0].id,list[i].id,'internal',m.id);
