@@ -1004,26 +1004,61 @@ const TASKS=[
       "Po rozmieszczeniu aparatów porównaj moduły ze schematem, po czym sprawdź cztery obwody testowe w analizatorze."
     ]
   }
-];
+ ];
+TASKS.push(...(window.ElektrykCurriculum?.extraTasks?.()||[]));
 const MODULES={FR:4,RCD:2,B10:1,B16:1,RCBO:2,SPD:2};
 const modal=document.getElementById('taskModal');
 const cards=document.querySelector('.task-cards');
 if(!cards||!window.ElektrykStage2)return;
 const headerSmall=modal?.querySelector('.task-window-head small');
-if(headerSmall)headerSmall.textContent='40 nowych zadań • 1–5 szyn DIN • 12/18/24 moduły na szynie';
+if(headerSmall)headerSmall.textContent=TASKS.length+' zadań • 1–5 szyn DIN • 12/18/24 moduły na szynie';
 const shortcut=document.querySelector('.task-button small');
-if(shortcut)shortcut.textContent='40 nowych zadań • układy i schematy';
+if(shortcut)shortcut.textContent=TASKS.length+' zadań • montaż, diagnostyka i schematy';
 function usedModules(task){return Object.entries(task.requirements).reduce((sum,[code,n])=>sum+(MODULES[code]||0)*n,0)}
 function reqSummary(task){return Object.entries(task.requirements).map(([code,n])=>code+'×'+n).join(' • ')}
 const tool=document.createElement('div');tool.className='task-catalog-tabs';tool.setAttribute('aria-label','Grupy zadań');
-const filters=[{key:'one',label:'1 SZYNA DIN',count:10},{key:'two',label:'2 SZYNY DIN',count:10},{key:'three',label:'3 SZYNY DIN',count:10},{key:'xl',label:'DUŻE ROZDZIELNICE',count:10}];
-let activeFilter='one';
-filters.forEach(f=>{const btn=document.createElement('button');btn.type='button';btn.dataset.group=f.key;btn.textContent=f.label+' ('+f.count+')';btn.addEventListener('click',()=>{activeFilter=f.key;render()});tool.appendChild(btn)});
+const filters=[
+ {key:'all',label:'WSZYSTKIE'},
+ {key:'one',label:'1 SZYNA DIN'},
+ {key:'two',label:'2 SZYNY DIN'},
+ {key:'three',label:'3 SZYNY DIN'},
+ {key:'xl',label:'DUŻE ROZDZIELNICE'}
+].map(f=>({...f,count:f.key==='all'?TASKS.length:TASKS.filter(t=>t.group===f.key).length}));
+let activeFilter='one',page=0,query='';
+filters.forEach(f=>{
+  const btn=document.createElement('button');btn.type='button';btn.dataset.group=f.key;
+  btn.textContent=f.label+' ('+f.count+')';
+  btn.addEventListener('click',()=>{activeFilter=f.key;page=0;render()});
+  tool.appendChild(btn)
+});
 cards.insertAdjacentElement('beforebegin',tool);
+const catalogSearch=document.createElement('div');catalogSearch.className='task-search';
+const input=document.createElement('input');input.type='search';
+input.placeholder='Szukaj zadania, aparatu, poziomu lub numeru…';
+input.setAttribute('aria-label','Szukaj spośród 300 zadań');
+input.addEventListener('input',()=>{query=input.value.trim().toLocaleLowerCase('pl-PL');page=0;render()});
+catalogSearch.appendChild(input);
+const counter=document.createElement('span');counter.className='task-search-counter';
+catalogSearch.appendChild(counter);cards.insertAdjacentElement('beforebegin',catalogSearch);
+const pagination=document.createElement('div');pagination.className='task-pagination';
+const prev=document.createElement('button');prev.type='button';prev.textContent='← POPRZEDNIE';
+const summary=document.createElement('span');summary.setAttribute('aria-live','polite');
+const next=document.createElement('button');next.type='button';next.textContent='NASTĘPNE →';
+prev.addEventListener('click',()=>{page=Math.max(0,page-1);render()});
+next.addEventListener('click',()=>{page++;render()});
+pagination.append(prev,summary,next);cards.insertAdjacentElement('afterend',pagination);
 function render(){
   cards.replaceChildren();
   tool.querySelectorAll('button').forEach(b=>{const on=b.dataset.group===activeFilter;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on))});
-  TASKS.filter(t=>t.group===activeFilter).forEach(task=>{
+  const eligible=TASKS.filter(t=>(query||activeFilter==='all'||t.group===activeFilter)&&
+    (!query||[t.id,t.title,t.description,t.level,t.section||'',
+      Object.keys(t.requirements||{}).join(' ')].join(' ').toLocaleLowerCase('pl-PL').includes(query)));
+  const size=12,totalPages=Math.max(1,Math.ceil(eligible.length/size));
+  page=Math.min(page,totalPages-1);
+  counter.textContent=eligible.length+' z '+TASKS.length+' zadań';
+  summary.textContent='Strona '+(page+1)+' / '+totalPages;
+  prev.disabled=page===0;next.disabled=page>=totalPages-1;
+  eligible.slice(page*size,(page+1)*size).forEach(task=>{
     const btn=document.createElement('button');btn.type='button';btn.className='task-card rows-'+task.rows;btn.dataset.taskId=String(task.id);
     btn.innerHTML='<div class="task-card-top"><b>'+String(task.id).padStart(2,'0')+'</b><span>'+task.level+'</span></div>'+
       '<strong>'+task.title+'</strong>'+
@@ -1047,10 +1082,17 @@ function startTask(task,btn){
  document.dispatchEvent(new CustomEvent('elektryk:task-started',{detail:{task}}));
  tool.querySelectorAll('button').forEach(b=>b.classList.toggle('selected-task',b.dataset.group===task.group));
  if(modal)modal.hidden=true;
- const title=document.querySelector('.active-task .panel-title');if(title)title.textContent='AKTYWNE ZADANIE • '+String(task.id).padStart(2,'0')+'/40';
+ const title=document.querySelector('.active-task .panel-title');if(title)title.textContent='AKTYWNE ZADANIE • '+String(task.id).padStart(3,'0')+'/'+TASKS.length;
  const ver=document.querySelector('.cabinet-head .version');if(ver)ver.textContent='v0.7.13.3 • ROZDZIELNICAPRO.PL • ZADANIE '+String(task.id).padStart(2,'0')+' • '+task.rows+'×'+task.modulesPerRow+'M';
 }
 render();
 startTask(TASKS[0],cards.querySelector('[data-task-id="1"]'));
-window.ElektrykTasks={all:TASKS,start:function(id){const t=TASKS.find(x=>x.id===Number(id));if(!t)return;activeFilter=t.group;render();startTask(t,cards.querySelector('[data-task-id="'+t.id+'"]'))},current:function(){return window.ElektrykStage2.getTask()},groups:filters};
+window.ElektrykTasks={all:TASKS,
+  start:function(id){const t=TASKS.find(x=>x.id===Number(id));if(!t)return false;
+    activeFilter=t.group;page=0;query='';input.value='';render();
+    startTask(t,cards.querySelector('[data-task-id="'+t.id+'"]'));return true
+  },
+  current:function(){return window.ElektrykStage2.getTask()},
+  groups:filters,filter:(group)=>{if(filters.some(f=>f.key===group)){activeFilter=group;page=0;render()}}
+};
 })();
