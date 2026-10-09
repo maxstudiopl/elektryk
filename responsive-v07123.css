@@ -257,3 +257,11 @@ html[data-theme="dark"] .task-window .task-cards{min-width:0}
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
 }
+
+/* Informacja tylko wtedy, gdy zawartość szyn rzeczywiście wymaga przewijania */
+html[data-theme="dark"] .pro-board-scroll-hint{
+  color:#f6d5a0;background:#443623;border:1px solid #806841;
+  border-radius:9px;padding:10px 13px;margin:-2px 0 10px;
+  font-size:11px;font-weight:700;line-height:1.5
+}
+html[data-theme="dark"] .pro-board-scroll-hint[hidden]{display:none!important}
