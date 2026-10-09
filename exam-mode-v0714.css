@@ -142,3 +142,16 @@ html[data-theme="dark"] .mode-card.exam em{
  html[data-theme="dark"] .exam-head h2{font-size:12px}
  html[data-theme="dark"] .exam-intro{max-height:42dvh}
 }
+
+/* Exam lockdown: neither the learning reference nor the help modal should leak answers. */
+body.exam-active .task-help-controls,
+body.exam-active .task-hint-box,
+body.exam-active .learning-board-v0712,
+body.exam-active #playerProgress,
+body.exam-active .solution-modal,
+body.exam-active #learningShowSchematic,
+body.exam-active #learningCheckBoard{
+  display:none!important
+}
+body.exam-active .power-analyzer{display:none!important}
+body.exam-active .task-modal{display:none!important}
