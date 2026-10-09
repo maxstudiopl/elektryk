@@ -289,14 +289,24 @@ function serviceSideX(EA,EB,connection,index){
   const rightCost=Math.abs(EA.x-right)+Math.abs(EB.x-right);
   return leftCost<=rightCost?left:right;
 }
+/* ROUTING PRO 0.7.12.8 — geometry-driven cable channels */
 function sameRowServiceY(row,side,lane){
   if(!row)return null;
-  const small=Math.max(-5,Math.min(5,lane*.35));
-  return side==='top'
-    ?row.top+4+small
-    :row.bottom-12+small;
+  const track=Math.max(-7,Math.min(7,lane*.55));
+  const count=Math.max(1,Number(cabinet.dataset.rows)||document.querySelectorAll('.din-row').length||1);
+  // Pierwsza / ostatnia listwa: istniejące fizyczne korytka zamiast umownych linii.
+  if(side==='top'&&row.index===0){
+    const y=ductCenter('top',lane*.48);
+    if(y!=null&&y<row.top-18)return y;
+  }
+  if(side==='bottom'&&row.index===count-1){
+    const y=ductCenter('bottom',lane*.48);
+    if(y!=null&&y>row.bottom+18)return y;
+  }
+  // Przestrzeń serwisowa poza frontem aparatu.
+  return side==='top'?row.top-8+track:row.bottom-12+track;
 }
-function smartRoute(A,B,a,b,type,connection,index){
+function smartRoute(A,B,a,b,type,connection,index,metadata=null){
   const az=a.dataset.zone||'',bz=b.dataset.zone||'';
   const aExit=a.closest?.('.circuit-node')?.dataset.exit||'';
   const bExit=b.closest?.('.circuit-node')?.dataset.exit||'';
@@ -312,37 +322,63 @@ function smartRoute(A,B,a,b,type,connection,index){
   const bMounted=!!b.closest?.('.mounted-device');
   const sameRow=!!(aRow&&bRow&&aRow.index===bRow.index);
 
-  // Dwa zaciski po tej samej stronie tego samego rzędu:
-  // trasa biegnie w wolnym pasie nad / pod aparaturą, nigdy po froncie aparatów.
   if(aMounted&&bMounted&&sameRow&&sideA===sideB){
     const y=sameRowServiceY(aRow,sideA,lane);
-    return roundedPath([
-      A,EA,
-      {x:EA.x,y},
-      {x:EB.x,y},
-      EB,B
-    ],7);
+    if(metadata){metadata.kind='horizontal';metadata.trackY=y;metadata.lane=lane}
+    return roundedPath([A,EA,{x:EA.x,y},{x:EB.x,y},EB,B],7);
   }
 
-  // Wszystkie połączenia zmieniające stronę aparatu, rząd DIN albo strefę
-  // zewnętrzną (WLZ, N/PE, odbiorniki) korzystają z pionowego korytarza
-  // serwisowego POZA aparaturą. Dzięki temu przewód nie przecina wyłączników.
+  // Wszystkie połączenia między rzędami / strefami przez piony
+  // serwisowe po LEWEJ lub PRAWEJ stronie aparatury.
   const sideX=serviceSideX(EA,EB,connection,index);
-
   let yA=EA.y,yB=EB.y;
   if(aMounted&&aRow)yA=sameRowServiceY(aRow,sideA,lane);
   if(bMounted&&bRow)yB=sameRowServiceY(bRow,sideB,lane);
-
+  if(metadata){
+    metadata.kind='side-trunk';
+    metadata.side=sideX<cabinet.clientWidth/2?'left':'right';
+    metadata.x=sideX;metadata.fromY=Math.min(yA,yB);metadata.toY=Math.max(yA,yB);
+    metadata.lane=lane;
+  }
   const pts=[A,EA];
-
   if(Math.abs(EA.y-yA)>.5)pts.push({x:EA.x,y:yA});
   pts.push({x:sideX,y:yA});
   if(Math.abs(yA-yB)>.5)pts.push({x:sideX,y:yB});
   pts.push({x:EB.x,y:yB});
   if(Math.abs(EB.y-yB)>.5)pts.push(EB);
   pts.push(B);
-
   return roundedPath(pts,9);
+}
+/* Obejmy zbiorcze wyłącznie wizualne; nie ingerują w model połączeń. */
+function drawBundleBands(trunks){
+  for(const side of ['left','right']){
+    const segments=trunks.filter(t=>t.kind==='side-trunk'&&t.side===side&&t.toY-t.fromY>=105);
+    if(segments.length<3)continue;
+    let count=0,lastY=-Infinity;
+    const maxY=cabinet.clientHeight-85;
+    for(let y=110;y<maxY&&count<4;y+=128){
+      if(y-lastY<95)continue;
+      const active=segments.filter(t=>t.fromY+17<y&&t.toY-17>y);
+      if(active.length<3)continue;
+      const xs=active.map(t=>t.x),minX=Math.min(...xs),maxX=Math.max(...xs);
+      if(maxX-minX>50)continue;
+      const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.setAttribute('class','wire-bundle-tie');
+      g.setAttribute('aria-hidden','true');
+      const strap=document.createElementNS('http://www.w3.org/2000/svg','rect');
+      strap.setAttribute('class','wire-bundle-band');
+      strap.setAttribute('x',String(minX-6));strap.setAttribute('y',String(y-5));
+      strap.setAttribute('width',String(Math.max(17,maxX-minX+12)));
+      strap.setAttribute('height','10');strap.setAttribute('rx','2');
+      const latch=document.createElementNS('http://www.w3.org/2000/svg','rect');
+      latch.setAttribute('class','wire-bundle-clip');
+      latch.setAttribute('x',String(maxX+2));latch.setAttribute('y',String(y-6));
+      latch.setAttribute('width','6');latch.setAttribute('height','12');
+      latch.setAttribute('rx','1.5');
+      g.appendChild(strap);g.appendChild(latch);svg.appendChild(g);
+      lastY=y;count++;
+    }
+  }
 }
 function addPath(d,type,cls,cable=''){
   const p=document.createElementNS('http://www.w3.org/2000/svg','path');
