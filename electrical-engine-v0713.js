@@ -103,10 +103,10 @@ function evaluate({terminals=[],mounted=[],connections=[],bridges=[]}={}){
     }
     const errors=[...new Set(faults)],warnings=[...new Set(notes)];
     if(errors.length)addIssue('BREAKER_BYPASS',m.code+' ('+m.id+'): '+errors.join('; ')+'.',m.id);
-    const status=errors.length?'error':m.switchState==='off'?'off':!incoming.length?'unfed':warnings.length?'warning':'ready';
+    const status=errors.length?'error':m.switchState==='off'?'off':!incoming.length?'unfed':warnings.length?'warning':lower.some(t=>connections.some(c=>c.a===t.id||c.b===t.id)||bridges.some(b=>b.a===t.id||b.b===t.id))?'ready':'available';
     circuits.push({id:m.id,code:m.code,row:m.row,start:m.start,status,
       inputPhases:[...new Set(incoming.flatMap(x=>live(x.id)))],
-      outputPhases:[...new Set(outgoing.flatMap(x=>live(x.id)))],errors,warnings});
+      outputPhases:[...new Set(outgoing.flatMap(x=>live(x.id)))],hasOutgoingConnection:lower.some(t=>connections.some(c=>c.a===t.id||c.b===t.id)||bridges.some(b=>b.a===t.id||b.b===t.id)),errors,warnings});
   }
   const stats={total:circuits.length,ready:circuits.filter(c=>c.status==='ready').length,
     incomplete:circuits.filter(c=>c.status!=='ready').length,errors:issues.length,collisions:collisions.length};
