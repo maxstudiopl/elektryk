@@ -106,7 +106,13 @@ function update(){
   });
   if(check.complete){
     result.className='learning-board-result is-complete';
-    result.textContent='✓ Rozdzielnica jest uzupełniona zgodnie ze wzorcem montażowym. Teraz wykonaj i sprawdź połączenia L, N oraz PE.';
+    const wireCount=window.ElektrykStage3?.getConnections?.()?.length||0;
+    const bridgeCount=window.ElektrykBridges?.getBridges?.()?.length||0;
+    if(wireCount||bridgeCount){
+      result.textContent='✓ Aparatura jest rozmieszczona zgodnie ze wzorcem. Połączenia: '+wireCount+' przewodów i '+bridgeCount+' mostków. Zweryfikuj działanie układu analizatorem.';
+    }else{
+      result.textContent='✓ Rozdzielnica jest uzupełniona zgodnie ze wzorcem montażowym. Teraz wykonaj i sprawdź połączenia L, N oraz PE.';
+    }
   }else{
     const first=check.missing[0];
     const instruction=first?'Następny aparat: '+moduleLabel(first)+'.':'Wszystkie aparaty ze wzorca są na miejscu.';
