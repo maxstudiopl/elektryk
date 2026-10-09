@@ -113,6 +113,7 @@ function showResult(task,seconds,stars,xpAward,attempts,newBest){
   el.hidden=false;
 }
 function completeTask(detail){
+  if(document.body.dataset.learningAssist||window.ElektrykAuth?.isDemo?.())return false;
   const task=window.ElektrykStage2?.getTask?.();
   if(!task||!detail?.complete||!requirementsDone())return false;
   const id=Number(task.id);
@@ -144,7 +145,7 @@ document.addEventListener('elektryk:mode-selected',e=>{
   renderStats();
 });
 document.addEventListener('elektryk:power-check',e=>{
-  if(currentMode()!=='learn')return;
+  if(currentMode()!=='learn'||document.body.dataset.learningAssist||window.ElektrykAuth?.isDemo?.())return;
   const id=Number(window.ElektrykStage2?.getTask?.()?.id||currentTaskId||1);
   if(!Number.isFinite(id))return;
   data.attempts[id]=(data.attempts[id]||0)+1;
