@@ -1,0 +1,18 @@
+{
+  "name": "RozdzielnicaPRO.pl",
+  "short_name": "RozdzielnicaPRO",
+  "description": "Symulator Budowy Rozdzielnic",
+  "lang": "pl",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0B1420",
+  "theme_color": "#0B1F3A",
+  "icons": [
+    {
+      "src": "brand-icon.svg?v=07132",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ]
+}
