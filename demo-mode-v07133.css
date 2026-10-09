@@ -1,0 +1,252 @@
+/* RozdzielnicaPRO.pl v0.7.13.3 — fixed login/player hub + read-only demo */
+/* Login card: the wide logo must not set a minimum content width. */
+html[data-theme="dark"] .auth-gate{
+  box-sizing:border-box!important;
+  overflow-x:hidden!important;overflow-y:auto!important;
+  padding:clamp(10px,2vh,20px)!important;
+  align-items:center!important;
+}
+html[data-theme="dark"] .auth-card{
+  box-sizing:border-box!important;
+  min-width:0!important;
+  width:min(470px,calc(100vw - 22px))!important;
+  max-width:calc(100vw - 22px)!important;
+  max-height:calc(100dvh - 22px)!important;
+  padding:17px 21px!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  margin:auto!important;
+  scrollbar-width:thin;
+}
+html[data-theme="dark"] .auth-card:not(.hub-open) .auth-brand{
+  margin:0 0 12px!important;
+  padding:0 0 11px!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+html[data-theme="dark"] .auth-card .auth-brand-main{
+  min-width:0!important;width:auto!important;
+  flex:1 1 auto!important;overflow:hidden!important;
+}
+html[data-theme="dark"] .auth-card .brand-art-frame{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:385px!important;
+  min-width:0!important;
+  padding:6px!important;
+}
+html[data-theme="dark"] .auth-card .brand-art-frame img{
+  max-width:100%!important;
+  aspect-ratio:640/215!important;
+  width:100%!important;height:auto!important;
+}
+html[data-theme="dark"] .auth-card .auth-brand-actions{
+  display:none!important; /* Inactive O GRZE / AKTUALIZACJE caused logo overflow */
+}
+html[data-theme="dark"] .auth-login-view{
+  min-width:0!important;width:100%!important;
+}
+html[data-theme="dark"] .auth-login-view h1{
+  margin:0 0 6px!important;
+  font-size:18px!important;
+}
+html[data-theme="dark"] .auth-login-view p{
+  margin:0 0 11px!important;
+  font-size:11px!important;
+  line-height:1.5!important;
+}
+html[data-theme="dark"] .auth-login-view .auth-field{
+  margin-top:9px!important;
+}
+html[data-theme="dark"] .auth-login-view .auth-field input{
+  box-sizing:border-box!important;
+  max-width:100%!important;
+  height:39px!important;
+  font-size:13px!important;
+}
+html[data-theme="dark"] .auth-login-view .auth-submit{
+  min-height:40px!important;
+  margin-top:13px!important;
+}
+html[data-theme="dark"] .auth-card:not(.hub-open) .auth-footer{
+  margin-top:10px!important;
+  padding-top:10px!important;
+  font-size:8.5px!important;
+}
+html[data-theme="dark"] .auth-demo-hint{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:6px;
+  margin-top:10px;padding:8px 10px;
+  border:1px solid #355b82;border-radius:8px;
+  background:#112b44;
+  color:#cce5fb;
+  font-size:10px;
+}
+html[data-theme="dark"] .auth-demo-hint b{color:#86c6ff}
+html[data-theme="dark"] .auth-demo-hint code{
+  background:#071a30;padding:4px 7px;border-radius:5px;
+  color:#fff;font-weight:750;font-size:10px
+}
+html[data-theme="dark"] .auth-demo-hint small{flex:1 0 100%;color:#9ab6d2;font-size:9px}
+/* Player hub always uses a bounded readable layout, no horizontal overflow. */
+html[data-theme="dark"] .auth-card.hub-open{
+  width:min(760px,calc(100vw - 22px))!important;
+  max-width:calc(100vw - 22px)!important;
+  max-height:calc(100dvh - 22px)!important;
+  padding:12px 17px!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .auth-brand{
+  margin:0 0 9px!important;
+  padding:0 0 8px!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .brand-art-frame{max-width:270px!important}
+html[data-theme="dark"] .player-hub,
+html[data-theme="dark"] .player-hub .player-modes{
+  min-width:0!important;
+}
+html[data-theme="dark"] .player-welcome-row{
+  min-width:0!important;
+  padding:9px 12px!important;
+  margin-bottom:8px!important;
+}
+html[data-theme="dark"] .player-welcome{min-width:0!important;margin:0!important}
+html[data-theme="dark"] .player-welcome h1{
+  font-size:19px!important;overflow-wrap:anywhere;
+}
+html[data-theme="dark"] .pro-hub-stats{gap:6px!important;margin-bottom:8px!important}
+html[data-theme="dark"] .pro-hub-stat{padding:8px!important;min-height:54px!important}
+html[data-theme="dark"] .mode-card{min-height:86px!important;padding:9px!important}
+html[data-theme="dark"] .account-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+}
+html[data-theme="dark"] .account-grid>div{min-width:0!important;overflow-wrap:anywhere}
+html[data-theme="dark"] .auth-card.hub-open .account-summary{padding:8px!important}
+html[data-theme="dark"] .auth-card.hub-open .hub-tools button{min-height:43px!important}
+html[data-theme="dark"] .auth-card.hub-open .auth-footer{margin-top:7px!important;padding-top:7px!important}
+@media(max-width:740px){
+  html[data-theme="dark"] .auth-card.hub-open .account-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important
+  }
+}
+@media(max-width:510px){
+  html[data-theme="dark"] .auth-card{
+    padding:12px!important
+  }
+  html[data-theme="dark"] .auth-card.hub-open{padding:11px!important}
+  html[data-theme="dark"] .auth-card.hub-open .brand-art-frame{max-width:235px!important}
+  html[data-theme="dark"] .auth-card.hub-open .player-modes{
+    grid-template-columns:minmax(0,1fr)!important;gap:6px!important
+  }
+  html[data-theme="dark"] .auth-card.hub-open .mode-card{
+    min-height:64px!important
+  }
+  html[data-theme="dark"] .auth-card.hub-open .pro-hub-stats{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important
+  }
+  html[data-theme="dark"] .auth-card.hub-open .pro-hub-stat{
+    min-height:48px!important;padding:6px!important
+  }
+}
+/* Demo mode: no tools, mounting, wiring or task switching, only visual board. */
+html[data-theme="dark"] body.demo-viewer .game-shell>.rightbar{
+  display:none!important
+}
+html[data-theme="dark"] body.demo-viewer .game-shell>.leftbar>.task-shortcut,
+html[data-theme="dark"] body.demo-viewer .game-shell>.leftbar>.free-board-shortcut,
+html[data-theme="dark"] body.demo-viewer .game-shell>.leftbar>.free-save-panel,
+html[data-theme="dark"] body.demo-viewer .reward,
+html[data-theme="dark"] body.demo-viewer #taskComplete{
+  display:none!important
+}
+@media(min-width:900px){
+  html[data-theme="dark"] body.demo-viewer .game-shell,
+  html[data-theme="dark"] body.demo-viewer.pro-left-collapsed .game-shell,
+  html[data-theme="dark"] body.demo-viewer.pro-right-collapsed .game-shell{
+    grid-template-columns:clamp(200px,21vw,286px) minmax(0,1fr)!important;
+    grid-template-areas:"left center"!important;
+  }
+}
+html[data-theme="dark"] body.demo-viewer .game-shell>.leftbar{
+  display:flex!important;
+}
+html[data-theme="dark"] body.demo-viewer #openPlayerHub,
+html[data-theme="dark"] body.demo-viewer #openGameSettings,
+html[data-theme="dark"] body.demo-viewer .pro-layout-toggle{
+  opacity:.35!important;pointer-events:none!important;
+}
+html[data-theme="dark"] body.demo-viewer .mounted-device .remove-device{
+  display:none!important
+}
+html[data-theme="dark"] body.demo-viewer .wire-terminal,
+html[data-theme="dark"] body.demo-viewer .mounted-device,
+html[data-theme="dark"] body.demo-viewer .din-slot{
+  cursor:default!important
+}
+html[data-theme="dark"] body.demo-viewer .demo-controls{
+  position:sticky;top:0;z-index:40;
+  flex:0 0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;flex-wrap:wrap;
+  margin-bottom:8px;
+  padding:10px 13px;
+  border:1px solid #2785dd;
+  border-radius:10px;
+  background:linear-gradient(110deg,#193c5e,#132a41);
+  box-shadow:0 4px 14px #0005;
+}
+html[data-theme="dark"] .demo-controls-copy{
+  display:flex;flex-direction:column;gap:4px;min-width:0
+}
+html[data-theme="dark"] .demo-controls-copy strong{
+  color:#82c9ff;font-size:11px;letter-spacing:.5px
+}
+html[data-theme="dark"] .demo-controls-copy span{
+  color:#d6e5f3;font-size:10px;line-height:1.4;overflow-wrap:anywhere
+}
+html[data-theme="dark"] .demo-controls-actions{
+  display:flex;gap:7px;flex-wrap:wrap
+}
+html[data-theme="dark"] .demo-controls-actions button{
+  min-height:34px;padding:7px 10px;
+  border:1px solid #388bd1;border-radius:7px;
+  background:#25507b;color:#f3faff;
+  font-size:10px;font-weight:850;cursor:pointer
+}
+html[data-theme="dark"] .demo-controls-actions button:last-child{
+  background:#1785ff;border-color:#69b7ff;color:#fff
+}
+html[data-theme="dark"] .demo-controls-actions button:hover{filter:brightness(1.16)}
+html[data-theme="dark"] .demo-controls-actions button:focus-visible{
+  outline:2px solid #b5e3ff;outline-offset:2px
+}
+html[data-theme="dark"] body.demo-viewer .cabinet{
+  cursor:default!important
+}
+html[data-theme="dark"] body.demo-viewer .active-task{
+  border-color:#2d719d!important
+}
+html[data-theme="dark"] body.demo-viewer .active-task h2{
+  color:#9bcfff!important
+}
+html[data-theme="dark"] body.demo-viewer .active-task p{
+  font-size:11px!important;line-height:1.5!important
+}
+html[data-theme="dark"] body.demo-viewer .board-selector-head b{
+  color:#9dd1ff
+}
+html[data-theme="dark"] body.demo-viewer .board-choice-card .board-card-action{
+  color:#77c4ff!important
+}
+@media(max-width:899px){
+  html[data-theme="dark"] body.demo-viewer .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center" "left"!important;
+    grid-template-rows:auto auto!important;
+  }
+  html[data-theme="dark"] body.demo-viewer .game-shell>.workspace{
+    grid-area:center!important
+  }
+  html[data-theme="dark"] body.demo-viewer .game-shell>.leftbar{
+    grid-area:left!important
+  }
+}
