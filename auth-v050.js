@@ -11,6 +11,7 @@ const scripts=[
   'ui.js?v=0711',
   'switchboard-db.js?v=0711',
   'stage2.js?v=0712tasks40',
+  'hardware-pro-v07126.js?v=07126',
   'stage3.js?v=0712wire',
   'bridges-v031.js?v=0712wire5',
   'electrical-audit-v0712.js?v=0712wire4',
