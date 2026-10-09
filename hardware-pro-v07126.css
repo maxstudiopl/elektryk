@@ -172,7 +172,7 @@
   box-shadow:inset 0 2px 2px #4d5a4d4c,
     inset 0 -1px #fff9,0 1px #fff!important;
 }
-.mount-grid .mounted-device .wire-terminal:not(.used-terminal){
+.mount-grid .mounted-device .wire-terminal:not(.used-terminal):not(.start-terminal):not(.bad-terminal):not(.guide-compatible):not(.guide-target):not(.guide-source):not(.bridge-eligible):not(.bridge-start){
   background:
     radial-gradient(circle at 45% 44%,#38413c 0 17%,#7b8880 19% 33%,#f1f3ee 35% 52%,#58635d 54% 100%)!important;
   border-color:#5c6860!important;
@@ -274,3 +274,48 @@
   from{filter:brightness(1.13);box-shadow:inset 0 0 0 2px #d6e0d5,0 3px 7px #202b2555}
   to{filter:brightness(1);box-shadow:inset 2px 0 1px #fff,inset -2px 0 2px #68766e99,1px 2px 1px #404a4670,3px 6px 9px #16231b66}
 }
+
+/* Mostki i grzebienie — izolowana powłoka, połysk toru i czytelna faza */
+.bridge-layer .bridge-shadow{
+  stroke-width:10!important;opacity:.48!important;
+}
+.bridge-layer .bridge-path{
+  stroke-width:6.5!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+  filter:drop-shadow(0 1.5px 1px #070b0bc9)!important;
+}
+.bridge-layer .bridge-path.feed-path{stroke-width:7!important}
+.bridge-layer .bridge-highlight{
+  stroke-width:1.6!important;opacity:.7!important;
+}
+.bridge-layer .comb-path{
+  stroke-width:9!important;
+  stroke-linecap:square!important;
+  filter:drop-shadow(0 2px 2px #000b)!important;
+}
+.bridge-layer .comb-shadow{stroke-width:12!important}
+.bridge-layer .comb-highlight{stroke-width:2!important;opacity:.78!important}
+.bridge-layer .bridge-end{
+  stroke-width:1.8!important;
+  filter:drop-shadow(0 1px 1px #0007);
+}
+.bridge-badge{
+  padding:4px 6px!important;
+  border-radius:6px!important;
+  background:linear-gradient(180deg,#39414a,#1f272e)!important;
+  border:1px solid #62727e!important;
+  box-shadow:inset 0 1px #ffffff25,0 3px 7px #0009!important;
+  color:#f2f7f7!important;
+  font-size:7px!important;
+}
+.bridge-badge b{font-size:7px!important;letter-spacing:.2px!important}
+.bridge-badge span{border-radius:3px!important;min-height:14px!important}
+.bridge-badge i{font-size:8px!important}
+.comb-badge{
+  background:linear-gradient(#615139,#31291d)!important;
+  border-color:#c99c60!important;
+  color:#fff0d4!important;
+}
+.feed-badge{border-color:#487e9d!important}
+/* zachowujemy fazowe kolory L1/L2/L3, N i PE z dotychczasowego silnika */
