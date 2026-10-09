@@ -125,19 +125,28 @@ function doReset(){
  current=null;mode='idle';index=0;
  stateLabel('GOTOWY DO NAUKI');
  status('Rozdzielnica wyczyszczona. Możesz samodzielnie montować aparaty lub wybrać jeden z dwóch pokazów. Po użyciu pomocy XP w tym zadaniu pozostaje wyłączone.');
- $('laStepper').hidden=true;return true;
+ $('laStepper').hidden=true;prepareManualOutlets();return true;
+}
+function prepareManualOutlets(){
+ if(blocked()||!document.body.classList.contains('auth-ready'))return false;
+ const task=currentTask();
+ if(!task||task.id==='FREE'||window.ElektrykLargeBoard?.existing?.())return false;
+ const plan=help.getReferencePlan(task),board=core.diagram(task,plan);
+ if(!board||!core.validate(board).ok)return false;
+ return !!window.ElektrykLargeBoard?.prepare?.(board);
 }
 function newTask(){
  generation++;window.ElektrykLargeBoard?.clear?.();current=null;index=0;mode='idle';activeTaskId=null;
  delete document.body.dataset.learningAssist;clearTarget();
  $('laStepper').hidden=true;stateLabel('GOTOWY DO NAUKI');
  status('Scenariusz '+(currentTask()?.id||'')+' — wybierz automatyczne uzbrojenie, pokaz krokowy albo montuj samodzielnie.');
+ prepareManualOutlets();
 }
 function visible(){panel.hidden=blocked()||!document.body.classList.contains('auth-ready')}
 auto.addEventListener('click',doAuto);guided.addEventListener('click',doGuided);
 reset.addEventListener('click',doReset);previous.addEventListener('click',()=>move(-1));next.addEventListener('click',()=>move(1));
 document.addEventListener('elektryk:task-started',()=>{newTask();visible()});
-document.addEventListener('elektryk:mode-selected',()=>{if(blocked()){delete document.body.dataset.learningAssist;window.ElektrykLargeBoard?.clear?.();current=null;mode='idle';index=0;}visible()});
+document.addEventListener('elektryk:mode-selected',()=>{if(blocked()){delete document.body.dataset.learningAssist;window.ElektrykLargeBoard?.clear?.();current=null;mode='idle';index=0;}else if(!current)prepareManualOutlets();visible()});
 visible();
 window.ElektrykAssemblyLearning={auto:doAuto,guide:doGuided,next:()=>move(1),previous:()=>move(-1),reset:doReset,
  get:()=>({mode,index,total:current?.steps.length||0,mounted:current?.devices.length||0,wires:current?.wires.length||0,bridges:current?.bridges.length||0,loads:current?.connectedLoads||0,taskId:activeTaskId})};
