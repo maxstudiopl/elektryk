@@ -1,0 +1,219 @@
+/* ELEKTRYK SIMULATOR — Wiring PRO / Okablowanie i Zaciski 2.0
+   v0.7.12.7. Tylko wygląd: zachowujemy trasy, rolę zacisków i logikę połączeń.
+   Geometria: brak transformacji lub zmiany wymiarów .wire-terminal. */
+
+/* Główna wiązka: cień, ciemna krawędź izolacji, kolor żyły i odbicie światła. */
+.cabinet-inner svg.wire-layer{
+  position:absolute!important;inset:0!important;
+  width:100%!important;height:100%!important;
+  z-index:7!important;overflow:visible!important;
+  pointer-events:none!important;
+  isolation:isolate;
+}
+svg.wire-layer .wire-shadow,
+svg.wire-layer .wire-jacket,
+svg.wire-layer .wire-path,
+svg.wire-layer .wire-gloss{
+  fill:none!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+  vector-effect:non-scaling-stroke!important;
+  pointer-events:none!important;
+}
+svg.wire-layer .wire-shadow{
+  stroke:#07100ecc!important;stroke-width:10!important;
+  opacity:.55!important;filter:drop-shadow(0 2px 2px #0008)!important
+}
+svg.wire-layer .wire-jacket{
+  stroke:#202724!important;stroke-width:7.8!important;
+  opacity:1!important
+}
+svg.wire-layer .wire-path{
+  stroke-width:4.7!important;
+  filter:drop-shadow(0 1px 1px #0008)!important
+}
+svg.wire-layer .wire-gloss{
+  stroke:#ffffff!important;stroke-width:1.05!important;opacity:.27!important
+}
+/* Żyły 2,5 mm² wizualnie grubsze niż 1,5 mm². Nie wpływa to na analizę instalacji. */
+svg.wire-layer .wire-shadow[data-gauge="2.5"]{stroke-width:12!important}
+svg.wire-layer .wire-jacket[data-gauge="2.5"]{stroke-width:9.4!important}
+svg.wire-layer .wire-path[data-gauge="2.5"]{stroke-width:6!important}
+svg.wire-layer .wire-gloss[data-gauge="2.5"]{stroke-width:1.35!important}
+/* Barwy żył z dotychczasowego silnika elektrycznego, bez zmian funkcjonalnych. */
+svg.wire-layer .wire-path[data-wire="L1"]{stroke:#8b4a17!important}
+svg.wire-layer .wire-path[data-wire="L2"]{stroke:#161819!important}
+svg.wire-layer .wire-path[data-wire="L3"]{stroke:#777f83!important}
+svg.wire-layer .wire-path[data-wire="N"]{stroke:#0989d8!important}
+svg.wire-layer .wire-path[data-wire="PE"]{
+  stroke:#5f9f38!important;
+  stroke-dasharray:none!important
+}
+svg.wire-layer .wire-jacket[data-wire="PE"]{stroke:#283e25!important}
+/* Dla PE naturalny żółto-zielony rysunek na całej, ciągłej izolacji. */
+svg.wire-layer .wire-gloss[data-wire="PE"]{
+  stroke:#f2de37!important;
+  stroke-width:2.4!important;
+  stroke-dasharray:10 10!important;
+  opacity:.95!important
+}
+svg.wire-layer .wire-gloss[data-wire="L2"]{opacity:.48!important}
+svg.wire-layer .wire-gloss[data-wire="L3"]{opacity:.37!important}
+
+/* Osobne SVG ponad obudowami aparatów: tulejka wygląda jak osadzona w zacisku.
+   W pełni transparentne dla myszy i klawiatury, dzięki czemu klikanie działa. */
+.cabinet-inner svg.wire-fittings-layer{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;height:100%!important;
+  z-index:18!important;
+  overflow:visible!important;
+  pointer-events:none!important;
+}
+svg.wire-fittings-layer *,
+svg.wire-fittings-layer{
+  pointer-events:none!important;
+}
+.wire-fitting .wire-entry-gasket{
+  fill:none!important;
+  stroke:#3c4841!important;
+  stroke-width:2!important;
+  opacity:.9!important;
+  filter:drop-shadow(0 1px 1px #121d15b3)
+}
+.wire-fitting .wire-ferrule-shadow{
+  stroke:#24302a!important;
+  stroke-width:7!important;
+  stroke-linecap:round!important;
+  opacity:.9!important;
+  filter:drop-shadow(0 1px 2px #0008)
+}
+.wire-fitting .wire-ferrule-metal{
+  stroke:#bbc4bb!important;
+  stroke-width:4.9!important;
+  stroke-linecap:round!important;
+  filter:drop-shadow(0 1px 1px #0007)
+}
+.wire-fitting .wire-ferrule-shine{
+  stroke:#f7fff7!important;
+  stroke-width:1.1!important;
+  stroke-linecap:round!important;
+  opacity:.8!important;
+}
+.wire-fitting .wire-ferrule-collar{
+  fill:#4d6672!important;
+  stroke:#ebf0ec!important;
+  stroke-width:1.25!important;
+  filter:drop-shadow(0 1px 1.5px #000b)
+}
+/* Opaski tulejek kodują przekrój, a nie fazę: rozmiar jest podawany w symulatorze. */
+.wire-fitting[data-gauge="1.5"] .wire-ferrule-collar{
+  fill:#b35b33!important;
+}
+.wire-fitting[data-gauge="2.5"] .wire-ferrule-collar{
+  fill:#1678a8!important;
+}
+.wire-fitting[data-gauge="2.5"] .wire-ferrule-shadow{stroke-width:8!important}
+.wire-fitting[data-gauge="2.5"] .wire-ferrule-metal{stroke-width:5.7!important}
+
+/* Zaciski: nie modyfikuj geometrii elementów interaktywnych. */
+.mount-grid .mounted-device .device-topterm,
+.mount-grid .mounted-device .device-bottomterm{
+  box-shadow:
+    inset 0 3px 3px #34423a5b,
+    inset 0 -1px #f9fff1,
+    0 1px #ffffff!important;
+}
+.mount-grid .mounted-device .device-topterm::before,
+.mount-grid .mounted-device .device-bottomterm::before{
+  content:'';
+  position:absolute;inset:1px;
+  border-radius:2px;
+  border-top:1px solid #5a6a5b49;
+  box-shadow:inset 0 1px #202f2740;
+  pointer-events:none!important;
+}
+/* Stany kontaktu: wolny / wybrany / zaciśnięta żyła / mostek.
+   Zachowujemy kolor żyły w data-used-wire i dotychczasowe podpowiedzi. */
+.wire-terminal{
+  transition:box-shadow .12s ease,outline-color .12s ease,filter .12s ease!important;
+}
+.wire-terminal.used-by-wire{
+  outline:2px solid #e0e8df!important;
+  outline-offset:2px!important;
+  box-shadow:inset 0 0 0 2px #ffffffa0,0 0 0 3px #323f36,0 1px 5px #0009!important
+}
+.wire-terminal.used-by-bridge{
+  outline:2px solid #e5bd6e!important;
+  outline-offset:2px!important;
+  box-shadow:inset 0 0 0 2px #ffffff94,0 0 0 3px #6d5734,0 1px 5px #0008!important
+}
+.wire-terminal.start-terminal,
+.wire-terminal.guide-source{
+  outline:3px solid #ffc966!important;
+  outline-offset:3px!important;
+  box-shadow:0 0 0 2px #402d16,0 0 12px #edba62b3!important
+}
+.wire-terminal.guide-compatible,
+.wire-terminal.guide-target{
+  outline:2px solid #79daa9!important;
+  outline-offset:3px!important;
+}
+.wire-terminal.guide-dim:not(.used-terminal){opacity:.46!important}
+.wire-terminal:focus-visible{
+  outline:3px solid #f8d58c!important;outline-offset:3px!important
+}
+/* Listwy N/PE i zasilanie — powierzchnie metalu, wloty podkładek. */
+.nbar .wire-terminal:not(.used-terminal),
+.pebar .wire-terminal:not(.used-terminal){
+  border-color:#55625a!important;
+  background:radial-gradient(circle at 35% 35%,#eff5ea 0 12%,#a0aba3 29%,#4f6056 72%,#36443b 100%)!important
+}
+.supply-terminals .wire-terminal:not(.used-terminal){
+  border-color:#728079!important;
+  box-shadow:inset 0 3px 3px #38443c88,inset 0 -1px #eff7ed!important
+}
+
+/* Mostki i grzebienie: izolacja, delikatna krawędź metaliczna. */
+svg.bridge-layer .bridge-path{
+  stroke-width:6.7!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+  filter:drop-shadow(0 1.8px 1.5px #000d)!important
+}
+svg.bridge-layer .bridge-shadow{
+  stroke-width:10.4!important;
+  opacity:.55!important
+}
+svg.bridge-layer .bridge-highlight{
+  stroke-width:1.5!important;stroke:#ffffff8a!important;opacity:.42!important
+}
+svg.bridge-layer .bridge-path.comb-path{
+  stroke-width:8.9!important;
+  stroke-linecap:square!important;
+  stroke-linejoin:miter!important;
+  filter:drop-shadow(0 2px 2px #000b)!important
+}
+svg.bridge-layer .bridge-shadow.comb-shadow{stroke-width:12.5!important}
+svg.bridge-layer .bridge-highlight.comb-highlight{
+  stroke-width:2!important;stroke:#f0f5ee!important;opacity:.55!important
+}
+svg.bridge-layer .bridge-end{
+  stroke:#303b33!important;
+  stroke-width:2.1!important;
+  filter:drop-shadow(0 1px 1px #0009)
+}
+/* Oznaczenie połączenia pozostaje interaktywne — użytkownik może je usunąć. */
+.bridge-badge{
+  border-radius:7px!important;
+  border:1px solid #6a7984!important;
+  box-shadow:inset 0 1px #fff3,0 3px 8px #0009!important
+}
+
+/* Małe wizualne sprzężenie kliknięcia zacisku, bez utrudniania pracy. */
+@media(prefers-reduced-motion:no-preference){
+  .wire-terminal.guide-target:hover,
+  .wire-terminal.guide-compatible:hover{
+    filter:brightness(1.13)!important
+  }
+}
