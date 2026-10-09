@@ -1,0 +1,166 @@
+/* ELEKTRYK SIMULATOR — ASSEMBLY PRO v0.7.12.9
+   Realistyczne mocowanie modularnych aparatów na szynie TH35.
+   Wszystkie nowe elementy są dekoracyjne i nie przechwytują kliknięć. */
+.mount-grid .mounted-device{
+  isolation:isolate;
+}
+/* Drobne profile osadzenia przy bocznych ściankach korpusu */
+.mount-grid .mounted-device .assembly-hook{
+  position:absolute!important;
+  top:125px;
+  width:4px;height:25px;
+  z-index:1;pointer-events:none!important;
+  background:linear-gradient(90deg,#4e5951,#d5ddd0 40%,#849286 80%,#4b5950);
+  border:1px solid #606e62;
+  border-radius:1px;
+  box-shadow:inset 0 1px #ffffff91,0 1px 2px #1b271ca3;
+}
+.mount-grid .mounted-device .assembly-hook-left{left:0}
+.mount-grid .mounted-device .assembly-hook-right{right:0}
+/* Widoczny ślad konstrukcji zaczepu — nie zasłania dźwigni. */
+.mount-grid .mounted-device .assembly-rear-rail{
+  pointer-events:none!important;
+  position:absolute;
+  bottom:1px;
+  left:4px;right:4px;
+  height:5px;
+  z-index:1;
+  border-top:1px solid #89958b;
+  background:linear-gradient(#d3dcd0,#8e9d8e);
+  box-shadow:inset 0 1px #f6fcf2,0 -1px #5c695d;
+}
+.mount-grid .mounted-device .assembly-lock-plate{
+  pointer-events:none!important;
+  position:absolute;
+  left:50%;bottom:0;
+  width:min(41px,70%);
+  height:8px;
+  transform:translateX(-50%);
+  z-index:2;
+  border:1px solid #58645b;
+  border-radius:2px 2px 0 0;
+  background:
+    linear-gradient(90deg,
+      #4c5a4d 0%,#b8c7b8 12%,#e6eee0 48%,#869584 90%,#536352 100%);
+  box-shadow:inset 0 1px #fbfff9,0 -2px #2e3c3166,0 -1px 2px #1c261b99;
+}
+.mount-grid .mounted-device .assembly-lock-plate::after{
+  content:'';
+  position:absolute;left:43%;top:1px;
+  width:14%;height:4px;
+  border:1px solid #5a6a60;
+  background:#6d8070;
+  border-radius:0 0 2px 2px;
+}
+/* Zatrzask z etapu Hardware PRO jest wizualnie połączony z klamrą. */
+.mount-grid .mounted-device .pro-din-latch{
+  background:linear-gradient(180deg,#edf2e8,#a9b9a7 35%,#687b6d 100%)!important;
+  border-color:#506053!important;
+  box-shadow:inset 0 1px #fff,0 -1px #3f5140,0 1px 1px #0005!important;
+}
+/* Zmniejszenie kontrastu pustych modułów: wygląd jak prawdziwa nieobsadzona szyna.
+   Nie wpływa na kliknięcie pustego modułu lub rozkład row/slot. */
+.din-row .din-slot:not(.occupied){
+  background:linear-gradient(90deg,#ffffff13,#f4f7f012 55%,#2f3e2d14 100%);
+}
+.din-row .din-slot:not(.occupied):hover{
+  outline:1px solid #4da67c90;
+  outline-offset:-1px;
+}
+/* Wizualny proces wpinalania. Sam aparat stoi nieruchomo,
+   porusza się jedynie lekka, nieinteraktywna nakładka. */
+.mount-grid .mounted-device > .assembly-snap-ghost{
+  display:block;
+  position:absolute;inset:2px 2px 2px;
+  z-index:15;
+  border:1px solid #9fa9a1;
+  border-radius:3px;
+  background:
+    linear-gradient(90deg,#a5b1a5 0%,#eef4e9 13%,#fff 45%,#d6e0d4 91%,#97a797 100%);
+  box-shadow:inset 0 2px #fff8,0 7px 11px #17221b60;
+  opacity:0;
+  pointer-events:none!important;
+}
+.mount-grid .mounted-device > .assembly-snap-ghost::after{
+  content:'XYZ';
+  position:absolute;
+  top:39px;left:4px;right:4px;
+  height:15px;
+  border-top:3px solid #c79c54;
+  background:#fff8;
+  color:#425348;
+  font:bold 7px/12px Arial,sans-serif;
+  text-align:center;
+  letter-spacing:.5px;
+}
+.mount-grid .mounted-device > .assembly-snap-indicator{
+  display:block;
+  position:absolute;
+  top:-35px;left:50%;
+  z-index:25;
+  width:max-content;
+  max-width:195px;
+  transform:translateX(-50%);
+  padding:5px 8px;
+  border:1px solid #bd9251;
+  border-radius:6px;
+  background:linear-gradient(#41382a,#27231c);
+  color:#ffdfa2;
+  font:bold 9px/1.25 Arial,sans-serif;
+  letter-spacing:.25px;
+  text-shadow:0 1px #000;
+  box-shadow:0 3px 7px #0008;
+  opacity:0;
+  pointer-events:none!important;
+}
+/* Wcześniejszy Hardware PRO animował pełną obudowę również po odczycie
+   projektu; teraz animację obsługuje tylko zdarzenie nowego montażu. */
+.mount-grid .mounted-device.hardware-pro-new > .device{
+  animation:none!important;
+}
+@media(prefers-reduced-motion:no-preference){
+  body:not(.no-ui-animations) .mount-grid .mounted-device.assembly-pro-snapping > .assembly-snap-ghost{
+    animation:assemblyOverlaySettle .46s cubic-bezier(.21,.82,.28,1) both;
+  }
+  body:not(.no-ui-animations) .mount-grid .mounted-device.assembly-pro-snapping .pro-din-latch{
+    animation:assemblyLatchCatch .43s cubic-bezier(.2,.7,.24,1) both!important;
+  }
+  body:not(.no-ui-animations) .mount-grid .mounted-device.assembly-pro-snapping .assembly-lock-plate{
+    animation:assemblyLockCatch .43s cubic-bezier(.2,.7,.24,1) both;
+  }
+  body:not(.no-ui-animations) .mount-grid .mounted-device.assembly-pro-snapping > .assembly-snap-indicator{
+    animation:assemblySnapLabel .57s ease both;
+  }
+}
+@keyframes assemblyOverlaySettle{
+  0%{transform:translateY(-13px) rotate(-1.8deg);opacity:.84}
+  43%{transform:translateY(2px) rotate(.2deg);opacity:.52}
+  72%{transform:translateY(0);opacity:.2}
+  100%{transform:translateY(0);opacity:0}
+}
+@keyframes assemblyLatchCatch{
+  0%{transform:translateX(-50%) translateY(5px);filter:brightness(1.4)}
+  58%{transform:translateX(-50%) translateY(-2px);filter:brightness(1.18)}
+  100%{transform:translateX(-50%) translateY(0);filter:brightness(1)}
+}
+@keyframes assemblyLockCatch{
+  0%{transform:translateX(-50%) translateY(5px)}
+  56%{transform:translateX(-50%) translateY(-2px)}
+  100%{transform:translateX(-50%) translateY(0)}
+}
+@keyframes assemblySnapLabel{
+  0%{opacity:0;transform:translateX(-50%) translateY(6px)}
+  24%{opacity:1;transform:translateX(-50%) translateY(-1px)}
+  72%{opacity:1;transform:translateX(-50%) translateY(0)}
+  100%{opacity:0;transform:translateX(-50%) translateY(-4px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .mount-grid .mounted-device .assembly-snap-ghost,
+  .mount-grid .mounted-device .assembly-snap-indicator{
+    animation:none!important;opacity:0!important
+  }
+}
+body.no-ui-animations .mount-grid .mounted-device .assembly-snap-ghost,
+body.no-ui-animations .mount-grid .mounted-device .assembly-snap-indicator{
+  animation:none!important;opacity:0!important
+}
