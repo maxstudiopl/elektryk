@@ -137,7 +137,7 @@ function visible(){panel.hidden=blocked()||!document.body.classList.contains('au
 auto.addEventListener('click',doAuto);guided.addEventListener('click',doGuided);
 reset.addEventListener('click',doReset);previous.addEventListener('click',()=>move(-1));next.addEventListener('click',()=>move(1));
 document.addEventListener('elektryk:task-started',()=>{newTask();visible()});
-document.addEventListener('elektryk:mode-selected',()=>{if(blocked())delete document.body.dataset.learningAssist;visible()});
+document.addEventListener('elektryk:mode-selected',()=>{if(blocked()){delete document.body.dataset.learningAssist;window.ElektrykLargeBoard?.clear?.();current=null;mode='idle';index=0;}visible()});
 visible();
 window.ElektrykAssemblyLearning={auto:doAuto,guide:doGuided,next:()=>move(1),previous:()=>move(-1),reset:doReset,
  get:()=>({mode,index,total:current?.steps.length||0,mounted:current?.devices.length||0,wires:current?.wires.length||0,bridges:current?.bridges.length||0,loads:current?.connectedLoads||0,taskId:activeTaskId})};
