@@ -1,0 +1,310 @@
+/* RozdzielnicaPRO.pl — Rebranding 1.0 / v0.7.13.2
+   Dark Tech PRO. Never recolor L1/L2/L3/N/PE physical conductor classes. */
+:root,html[data-theme="dark"]{
+  color-scheme:dark!important;
+  --bg:#0b1420!important;--panel:#162332!important;--panel2:#1d2d3e!important;
+  --line:#344b61!important;--accent:#1785ff!important;
+  --text:#f4f8fc!important;--muted:#a9bfd3!important;
+  --ui-page:#0b1420!important;--ui-panel:#162332!important;
+  --ui-panel-raised:#203248!important;--ui-panel-soft:#111d2c!important;
+  --ui-border:#39536c!important;--ui-text:#f4f8fc!important;
+  --ui-muted:#b1c1d1!important;--ui-primary:#1785ff!important;
+  --ui-primary-on:#ffffff!important;--ui-input:#101c2a!important;
+  --ui-hover:#254464!important;--ui-shadow:#0008!important;
+  --ui-success:#58d6a4!important;--ui-error:#ff827f!important;
+  --pro-brand-blue:#1785ff;--pro-brand-hover:#49a6ff;
+  --pro-brand-navy:#0b1f3a;--pro-brand-ink:#f4f8fc;
+}
+html[data-theme="dark"] body{
+  background:#0b1420!important;color:#f4f8fc!important;
+  font-family:Inter,"Segoe UI",Arial,sans-serif!important;
+}
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .cabinet-head,
+html[data-theme="dark"] .details-panel,
+html[data-theme="dark"] .wiring-console,
+html[data-theme="dark"] .bridge-console,
+html[data-theme="dark"] .power-analyzer,
+html[data-theme="dark"] .pro-workspace-toolbar,
+html[data-theme="dark"] .account-summary{
+  border-color:#39536c!important;
+  background:linear-gradient(155deg,#1a2a3b,#13202f)!important;
+}
+html[data-theme="dark"] .game-shell{
+  background:radial-gradient(ellipse at 55% 3%,#17335455,transparent 48%)!important;
+}
+/* Main navigation: icon plus short live text, not a giant banner. */
+html[data-theme="dark"] .topbar .brand{
+  min-width:0!important;gap:8px!important;
+}
+html[data-theme="dark"] .topbar .brand .brand-icon{
+  display:block!important;flex:0 0 auto;width:34px;height:34px;
+  object-fit:contain;background:#eaf3fa;
+  border:1px solid #4e7bae;border-radius:8px;padding:3px;
+  box-shadow:0 0 0 1px #ffffff15,0 2px 8px #0006;
+}
+html[data-theme="dark"] .topbar .brand .brand-bolt{display:none!important}
+html[data-theme="dark"] .topbar .brand b{
+  display:block;color:#f1f7ff!important;
+  font-family:"Rajdhani",Inter,"Segoe UI",sans-serif!important;
+  font-size:clamp(14px,1.25vw,19px)!important;
+  font-weight:800!important;letter-spacing:.15px!important;
+  white-space:nowrap;
+}
+html[data-theme="dark"] .topbar .brand b span{color:#1785ff!important}
+html[data-theme="dark"] .topbar .brand small{
+  font-size:8px!important;letter-spacing:.5px!important;
+  font-weight:750!important;color:#a8bfd4!important;
+  white-space:nowrap;
+}
+html[data-theme="dark"] .topbar .player-navbtn,
+html[data-theme="dark"] .pro-layout-toggle{
+  background:#1e3044!important;border:1px solid #45607b!important;
+  color:#e9f4ff!important;border-radius:8px!important;
+  font-weight:750!important;
+}
+html[data-theme="dark"] .topbar .player-navbtn:hover,
+html[data-theme="dark"] .pro-layout-toggle:hover{
+  border-color:#1785ff!important;background:#254565!important;
+  box-shadow:0 0 0 1px #1785ff48!important
+}
+/* Welcome/login and player hub: original brand artwork on clean white plaque. */
+html[data-theme="dark"] .auth-gate{
+  background:
+    linear-gradient(90deg,#3773a10a 1px,transparent 1px) 0 0/33px 33px,
+    linear-gradient(#3773a10a 1px,transparent 1px) 0 0/33px 33px,
+    radial-gradient(ellipse at 50% 1%,#1a4169,#0b1a2a 50%,#07121e 100%)!important;
+}
+html[data-theme="dark"] .auth-card{
+  border:1px solid #496b89!important;
+  border-radius:16px!important;
+  background:linear-gradient(145deg,#182e42,#101c2d 68%,#101a28)!important;
+  box-shadow:0 24px 80px #000b,inset 0 1px #ffffff16!important;
+}
+html[data-theme="dark"] .auth-card:not(.hub-open){
+  width:min(480px,calc(100vw - 24px))!important;
+  max-width:calc(100vw - 24px)!important;padding:21px 24px!important;
+}
+html[data-theme="dark"] .auth-card .auth-brand{
+  min-width:0;align-items:center!important;
+  border-color:#2f4a63!important;
+}
+html[data-theme="dark"] .auth-card:not(.hub-open) .auth-brand{
+  margin-bottom:16px!important;justify-content:center!important;
+}
+html[data-theme="dark"] .auth-card .auth-brand-main{
+  min-width:0!important;flex:1 1 auto;
+}
+html[data-theme="dark"] .brand-art-frame{
+  display:flex;align-items:center;justify-content:center;
+  min-width:0;width:100%;max-width:410px;
+  margin:0 auto;padding:5px 8px;
+  border:1px solid #d4e4ef;border-radius:10px;
+  background:#fff;
+  box-shadow:0 3px 16px #0005;
+}
+html[data-theme="dark"] .brand-art-frame img{
+  display:block;width:100%;max-width:100%;height:auto;
+  object-fit:contain;aspect-ratio:640/215;
+}
+html[data-theme="dark"] .auth-card.hub-open .brand-art-frame{
+  max-width:344px;margin:0;
+}
+html[data-theme="dark"] .auth-card .auth-brand-copy,
+html[data-theme="dark"] .auth-card .auth-bolt{
+  display:none!important;
+}
+html[data-theme="dark"] .auth-card .auth-beta-edge{
+  border-color:#3d6895!important;background:#153352!important;
+  color:#c2d9ef!important;letter-spacing:1px!important
+}
+html[data-theme="dark"] .auth-card h1,
+html[data-theme="dark"] .player-welcome h1{
+  color:#f4f8fc!important;
+}
+html[data-theme="dark"] .player-welcome>small{
+  color:#75b6ff!important;letter-spacing:1px!important
+}
+html[data-theme="dark"] .player-welcome h1 span{color:#64b2ff!important}
+html[data-theme="dark"] .player-welcome-row{
+  background:linear-gradient(100deg,#1f3b56,#182a3e)!important;
+  border:1px solid #40618a!important;
+}
+html[data-theme="dark"] .pro-hub-stat{
+  background:linear-gradient(155deg,#1f334c,#162839)!important;
+  border:1px solid #3d5b78!important;
+  border-radius:9px!important;
+  box-shadow:inset 0 1px #ffffff12,0 3px 8px #0003!important;
+}
+html[data-theme="dark"] .pro-hub-stat strong{color:#65b0ff!important}
+html[data-theme="dark"] .mode-card,
+html[data-theme="dark"] .hub-tools button,
+html[data-theme="dark"] .account-grid>div{
+  background:linear-gradient(155deg,#24394f,#182b3c)!important;
+  border:1px solid #3d5973!important;
+  color:#eff7ff!important;
+}
+html[data-theme="dark"] .mode-card:hover,
+html[data-theme="dark"] .hub-tools button:hover{
+  background:linear-gradient(155deg,#2b4b6a,#193650)!important;
+  border-color:#218cff!important;box-shadow:0 0 0 1px #1689ff33!important;
+}
+html[data-theme="dark"] .mode-icon{
+  background:#193e62!important;border:1px solid #2b80cb!important;
+  color:#8ccdff!important;
+}
+html[data-theme="dark"] .pro-modes-title>span,
+html[data-theme="dark"] .account-summary-head>b,
+html[data-theme="dark"] .panel-title>b,
+html[data-theme="dark"] .power-analyzer-head>b{
+  color:#eaf4ff!important;
+  letter-spacing:.45px!important;
+}
+html[data-theme="dark"] .account-active{color:#65e4ae!important}
+html[data-theme="dark"] .auth-submit,
+html[data-theme="dark"] .power-check-btn{
+  background:linear-gradient(135deg,#1278e5,#2797ff)!important;
+  color:#fff!important;border:1px solid #5eb3ff!important;
+  box-shadow:inset 0 1px #ffffff2e,0 5px 18px #0765be45!important;
+  font-weight:850!important;
+}
+html[data-theme="dark"] .auth-submit:hover,
+html[data-theme="dark"] .power-check-btn:hover{
+  background:linear-gradient(135deg,#218fff,#4bb4ff)!important;
+  box-shadow:0 0 0 2px #1281ff45,0 5px 16px #0868d65c!important;
+}
+html[data-theme="dark"] input:focus-visible,
+html[data-theme="dark"] button:focus-visible,
+html[data-theme="dark"] select:focus-visible{
+  outline:2px solid #51afff!important;outline-offset:2px!important;
+}
+html[data-theme="dark"] .auth-field input:focus{
+  border-color:#1785ff!important;box-shadow:0 0 0 2px #1785ff52!important;
+}
+html[data-theme="dark"] .auth-footer{
+  border-color:#344b64!important;color:#9ab5cf!important;font-size:9px!important;
+}
+/* Workspace and diagnostic panels: steel blue for chrome; status colors remain semantic. */
+html[data-theme="dark"] .pro-workspace-logo{
+  background:#173a60!important;border:1px solid #3189da!important;
+  box-shadow:0 0 0 2px #0b274d!important;overflow:hidden!important
+}
+html[data-theme="dark"] .pro-workspace-logo .brand-icon{
+  display:block;width:100%;height:100%;object-fit:contain;
+}
+html[data-theme="dark"] .pro-workspace-title b,
+html[data-theme="dark"] .cabinet-head b{
+  color:#f5faff!important
+}
+html[data-theme="dark"] .cabinet-head .version{
+  color:#86c6ff!important;border-color:#3c6488!important
+}
+html[data-theme="dark"] .catalog-card:hover,
+html[data-theme="dark"] .task-card:hover{
+  border-color:#1785ff!important
+}
+html[data-theme="dark"] .player-level-status,
+html[data-theme="dark"] .panel strong,
+html[data-theme="dark"] .catalog-card .catalog-price{
+  accent-color:#1785ff!important
+}
+html[data-theme="dark"] .power-engine-v2,
+html[data-theme="dark"] .rcd-diagnostic-panel{
+  background:linear-gradient(150deg,#1e344b,#132537)!important;
+  border-color:#416484!important;
+}
+html[data-theme="dark"] .power-analyzer-head,
+html[data-theme="dark"] .power-engine-title,
+html[data-theme="dark"] .rcd-panel-heading{
+  color:#eaf6ff!important;
+}
+html[data-theme="dark"] .power-engine-circuit.state-ready{border-left-color:#2fb36e!important}
+html[data-theme="dark"] .power-engine-circuit.state-warning{border-left-color:#f2b84b!important}
+html[data-theme="dark"] .power-engine-circuit.state-error{border-left-color:#e45c5c!important}
+html[data-theme="dark"] .rcd-issue-card button{
+  border-color:#378bd8!important;color:#c9e7ff!important;background:#183d64!important;
+}
+html[data-theme="dark"] .rcd-issue-card button:hover{
+  border-color:#69b5ff!important;background:#21578b!important;
+}
+/* Dialogs and save-load panels */
+html[data-theme="dark"] .task-window,
+html[data-theme="dark"] .players-window,
+html[data-theme="dark"] .board-selector-window,
+html[data-theme="dark"] .game-settings-window,
+html[data-theme="dark"] .solution-window{
+  border-color:#3e6180!important;background:#162536!important;
+}
+html[data-theme="dark"] .task-window-head,
+html[data-theme="dark"] .players-head,
+html[data-theme="dark"] .board-selector-head,
+html[data-theme="dark"] .game-settings-head{
+  border-color:#3c5670!important;background:#20344b!important;
+}
+html[data-theme="dark"] .player-navbtn[aria-current="page"],
+html[data-theme="dark"] button.selected-task,
+html[data-theme="dark"] .pro-layout-toggle[aria-pressed="true"]{
+  border-color:#258fff!important;background:#173c63!important;color:#e5f4ff!important
+}
+/* Discreet blueprint field, outside the physical cabinet and its conductor hit targets. */
+html[data-theme="dark"] .workspace{
+  background:
+    linear-gradient(90deg,#3578b00c 1px,transparent 1px) 0 0/24px 24px,
+    linear-gradient(#3578b00c 1px,transparent 1px) 0 0/24px 24px!important;
+}
+html[data-theme="dark"] .cabinet{background:transparent!important}
+/* Intro screen is a transparent overlay. Always dismissed by JS after load. */
+.brand-splash{
+  position:fixed;inset:0;z-index:12000;
+  background:
+    linear-gradient(90deg,#3b83bb10 1px,transparent 1px) 0 0/34px 34px,
+    linear-gradient(#3b83bb10 1px,transparent 1px) 0 0/34px 34px,
+    radial-gradient(ellipse at 50% 30%,#1a4770,#081729 70%);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:1;transition:opacity .34s ease;
+}
+.brand-splash.is-hidden{opacity:0;pointer-events:none}
+.brand-splash[hidden]{display:none!important}
+.brand-splash-card{
+  width:min(620px,100%);padding:23px;border-radius:16px;
+  border:1px solid #3e6387;background:#14273ae8;
+  text-align:center;box-shadow:0 22px 70px #000a
+}
+.brand-splash-card img{
+  display:block;width:100%;height:auto;aspect-ratio:640/215;object-fit:contain;
+  padding:10px;background:#fff;border-radius:11px
+}
+.brand-splash-card strong{
+  display:block;margin-top:15px;font-size:12px;
+  color:#c7e1f9;font-weight:800;letter-spacing:1.2px
+}
+.brand-loading-track{
+  width:100%;height:4px;margin-top:14px;overflow:hidden;border-radius:5px;background:#2b4d6d
+}
+.brand-loading-track>span{
+  display:block;width:38%;height:100%;
+  background:linear-gradient(90deg,#187df4,#8ad1ff);border-radius:5px;
+  animation:brandLoader 1s ease-in-out infinite alternate
+}
+@keyframes brandLoader{from{transform:translateX(-40%)}to{transform:translateX(250%)}}
+body.no-ui-animations .brand-loading-track>span{animation:none}
+@media(prefers-reduced-motion:reduce){
+  .brand-splash{transition:none}
+  .brand-loading-track>span{animation:none}
+}
+@media(max-width:899px){
+  html[data-theme="dark"] .brand-art-frame{max-width:365px}
+  html[data-theme="dark"] .auth-card.hub-open .auth-brand{
+    flex-wrap:wrap;gap:7px
+  }
+  html[data-theme="dark"] .auth-card.hub-open .brand-art-frame{max-width:300px}
+}
+@media(max-width:650px){
+ html[data-theme="dark"] .auth-card:not(.hub-open){padding:15px!important}
+ html[data-theme="dark"] .auth-card.hub-open .brand-art-frame{max-width:250px}
+ html[data-theme="dark"] .brand-splash-card{padding:12px}
+ html[data-theme="dark"] .topbar .brand b{font-size:14px!important}
+ html[data-theme="dark"] .topbar .brand small{font-size:7px!important}
+ html[data-theme="dark"] .topbar .brand .brand-icon{width:30px;height:30px}
+}
