@@ -26,7 +26,8 @@ const scripts=[
   'help-v049.js?v=0712tasks40',
   'learning-board-v0712.js?v=0712tasks40',
   'progress-v060.js?v=0712tasks40',
-  'freebuild-save-v0711.js?v=0711admin2'
+  'freebuild-save-v0711.js?v=0711admin2',
+  'demo-mode-v07133.js?v=07133'
 ];
 
 let gameLoaded=false;
@@ -61,6 +62,7 @@ function currentUser(){
 function isAdmin(){
   return currentAccount()?.role==='admin';
 }
+function isDemo(){return currentAccountId()==='demo'}
 function sessionValid(){
   const sess=sessionData();
   return !!(sess&&currentAccount()&&Number(sess.expires)>Date.now());
@@ -186,6 +188,7 @@ function populateHub(){
 }
 function showHub(){
   if(!sessionValid())return;
+  if(isDemo()){enterGame('learn',null,1);return;}
   saveAppState({view:'hub'});
   const overlay=document.getElementById('authGate');
   const card=document.querySelector('.auth-card');
@@ -289,7 +292,16 @@ function renderBoardSelector(){
     action.textContent='WYBIERZ I ROZPOCZNIJ ›';
 
     card.append(top,title,sub,preview,meta,action);
-    card.addEventListener('click',()=>enterGame('free',template));
+    if(isDemo()){
+      action.textContent='PODGLĄD • BEZ EDYCJI ›';
+      top.querySelector('em').textContent='TYLKO PODGLĄD';
+    }
+    card.addEventListener('click',()=>{
+      if(isDemo()){
+        window.ElektrykDemo?.preview?.(template);
+        closeBoardSelector();
+      }else enterGame('free',template);
+    });
     grid.appendChild(card);
   });
 }
@@ -319,7 +331,19 @@ async function enterGame(mode='learn',freeTemplate=null,taskId=null){
   const userLabel=document.getElementById('authUserLabel');
   if(userLabel)userLabel.textContent=String(currentAccount()?.display||currentUser()||'GRACZ').toUpperCase();
 
-  updateModeHeader(mode);
+  updateModeHeader(isDemo()?'learn':mode);
+  if(isDemo()){
+    try{
+      window.ElektrykDemo?.training?.();
+      saveAppState({view:'game',mode:'learn',taskId:1,freeTemplateId:null});
+    }catch(err){
+      console.error('DEMO:',err);
+      const desc=document.querySelector('.active-task p');
+      if(desc)desc.textContent='Nie udało się załadować gotowej rozdzielnicy demo. Odśwież stronę.';
+    }
+    document.dispatchEvent(new CustomEvent('elektryk:mode-selected',{detail:{mode:'learn',demo:true}}));
+    return;
+  }
 
   if(mode==='learn'){
     activeFreeTemplate=null;
@@ -369,9 +393,10 @@ async function login(){
   const hash=account?await digest(account.salt+pass):'';
   if(account&&hash===account.passHash){
     saveSession(account);
-    saveAppState({view:'hub',mode:'learn',taskId:1,freeTemplateId:null});
+    saveAppState({view:isDemo()?'game':'hub',mode:'learn',taskId:1,freeTemplateId:null});
     showMessage('Dostęp przyznany.','ok');
-    setTimeout(showHub,150);
+    if(isDemo())await enterGame('learn',null,1);
+    else setTimeout(showHub,150);
   }else{
     showMessage('Nieprawidłowy login lub hasło.','error');
     passEl.value='';
@@ -414,6 +439,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   applySettings();
 
   if(sessionValid()){
+    if(isDemo()){
+      loadScripts()
+        .then(()=>enterGame('learn',null,1))
+        .catch(()=>showMessage('Nie udało się uruchomić konta demo. Odśwież stronę.','error'));
+      return;
+    }
     const state=readAppState();
     if(state.view==='game'){
       restoringState=true;
@@ -445,6 +476,7 @@ window.ElektrykAuth={
   currentAccountId,
   currentAccount,
   isAdmin,
+  isDemo,
   licenseActive,
   digest,
   openBoardSelector,
