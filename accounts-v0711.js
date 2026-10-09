@@ -15,11 +15,11 @@ const DEFAULTS={
   demo:{
     id:'demo',login:'demo',display:'Demo',role:'player',
     firstName:'Demo',lastName:'',company:'',email:'',phone:'',
-    license:'BETA / TESTOWA',licenseExpiry:'',
+    license:'DEMO / PODGLĄD',licenseExpiry:'',
     paymentStatus:'NIE DOTYCZY',paymentInfo:'',
-    salt:'elektryk-v0711-player-2026',
-    passHash:'06e5c32716fe194884663e2b1ca32644591c7e87916fdb61d0cce7eb7ba5596b',
-    credentialVersion:2,createdAt:0
+    salt:'rozdzielnicapro-demo-v07133',
+    passHash:'cb567bcb2f7a98def5f55bac777fc1de44aa6cd6374ffb2973f547fe111da74e',
+    credentialVersion:3,createdAt:0
   },
   kamil:{
     id:'kamil',login:'kamil',display:'Kamil',role:'player',
@@ -88,6 +88,13 @@ function all(){
     if(DEFAULTS[id]&&Number(patch.credentialVersion||0)<2){
       delete patch.salt;
       delete patch.passHash;
+    }
+    // Demo is a built-in, always read-only showcase account. A stale browser
+    // account record may not replace its canonical login/password/license.
+    if(id==='demo'){
+      for(const key of ['login','role','license','licenseExpiry','salt','passHash','credentialVersion']){
+        patch[key]=base[key];
+      }
     }
     const merged=normalize(base,patch);
     merged.id=id;
