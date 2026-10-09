@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="RozdzielnicaPRO.pl">
+<defs><linearGradient id="back" x2="1" y2="1"><stop stop-color="#112B4C"/><stop offset="1" stop-color="#081425"/></linearGradient></defs>
+<rect width="64" height="64" rx="13" fill="url(#back)"/>
+<rect x="10" y="9" width="44" height="46" rx="6" fill="#E8EFF5" stroke="#258BFF" stroke-width="2"/>
+<path d="M15 17V12h34v5M15 47v5h34v-5" fill="none" stroke="#7894A7" stroke-width="2"/>
+<path d="M19 17V13h5v4M28 17v-4h5v4M37 17v-4h5v4M46 17v-4h4v4" fill="none" stroke="#197BFF" stroke-width="1.8"/>
+<path d="M20 18v7m9-7v7m9-7v7m9-7v7" stroke="#1C83EE" stroke-width="2" stroke-linecap="round"/>
+<path d="M22 42v7m9-7v7m9-7v7" stroke="#4B9F54" stroke-width="2" stroke-linecap="round"/>
+<rect x="16" y="25" width="32" height="21" rx="2" fill="#F8FCFF" stroke="#839BAC" stroke-width="1"/>
+<path d="M26 25v21M35 25v21M43 25v21" stroke="#92A2AF" stroke-width="1.2"/>
+<rect x="18" y="30" width="7" height="8" rx="1.5" fill="#1785FF"/>
+<rect x="28" y="30" width="5" height="8" rx="1.5" fill="#27364B"/>
+<rect x="37" y="30" width="5" height="8" rx="1.5" fill="#27364B"/>
+<circle cx="20" cy="13" r="1.2" fill="#F5FAFD"/><circle cx="46" cy="51" r="1.2" fill="#758795"/>
+</svg>
