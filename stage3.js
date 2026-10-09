@@ -6,6 +6,12 @@ const COLORS={L1:'#8b4a17',L2:'#161819',L3:'#777f83',N:'#0989d8',PE:'#76a52d'};
 let selectedWire='L1',startTerminal=null,connections=[],wireSeq=1,wiringErrors=0;
 
 const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('wire-layer');cabinet.appendChild(svg);
+// Wiring PRO: końcówki przewodów muszą znajdować się wizualnie NAD obudową aparatu.
+// Obie warstwy SVG pozostają nieinteraktywne i nie zmieniają pozycji zacisków.
+const fittingsSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+fittingsSvg.classList.add('wire-fittings-layer');
+fittingsSvg.setAttribute('aria-hidden','true');
+cabinet.appendChild(fittingsSvg);
 const cablePanel=document.querySelector('.cable-panel');
 const consoleBox=document.createElement('div');consoleBox.className='wiring-console';consoleBox.innerHTML='<div class="wiring-console-head"><b>OKABLOWANIE</b><span id="wireModeLabel">Wybrano L1</span></div><div class="wiring-status" id="wiringStatus"><b>ETAP 3:</b> wybierz żyłę, kliknij pierwszy zacisk, a potem drugi.</div><div class="wiring-actions"><button id="undoWire">↩ COFNIJ PRZEWÓD</button><button id="clearWires" class="danger">× USUŃ PRZEWODY</button></div>';if(cablePanel)cablePanel.appendChild(consoleBox);
 const activeTask=document.querySelector('.active-task');if(activeTask){const p=document.createElement('div');p.className='wiring-progress';p.id='wiringProgress';p.innerHTML='<b>ETAP 3 • OKABLOWANIE</b><span>0 połączeń</span>';activeTask.appendChild(p)}
@@ -347,26 +353,72 @@ function addPath(d,type,cls,cable=''){
   if(cls==='wire-path')p.setAttribute('stroke',COLORS[type]||'#d06a25');
   svg.appendChild(p);
 }
-function addFerrule(P,Q,type){
-  const dx=Q.x-P.x,dy=Q.y-P.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len;
-  const sx=P.x+ux*2,sy=P.y+uy*2;
-  const ex=P.x+ux*10,ey=P.y+uy*10;
-  const metal=document.createElementNS('http://www.w3.org/2000/svg','line');
-  metal.setAttribute('x1',sx);metal.setAttribute('y1',sy);metal.setAttribute('x2',ex);metal.setAttribute('y2',ey);
-  metal.setAttribute('class','wire-ferrule-metal');metal.dataset.wire=type;svg.appendChild(metal);
-  const collar=document.createElementNS('http://www.w3.org/2000/svg','circle');
-  collar.setAttribute('cx',P.x+ux*11.5);collar.setAttribute('cy',P.y+uy*11.5);collar.setAttribute('r','3.8');
-  collar.setAttribute('class','wire-ferrule-collar');collar.dataset.wire=type;svg.appendChild(collar);
+// Wizualne zakończenia przewodu. Model elektryczny i trasa smartRoute są bez zmian.
+function wireGauge(cable){
+  return /2(?:[,.])5/.test(String(cable))?'2.5':'1.5';
+}
+function ferruleDirection(el,P,other){
+  const zone=el.dataset.zone||'';
+  const exit=el.closest?.('.circuit-node')?.dataset.exit||'';
+  const routedZone=zone==='load'&&exit==='top-right'?'load-top':zone;
+  const outer=endpointEscape(P,el,routedZone,exit);
+  let dx=outer.x-P.x,dy=outer.y-P.y;
+  let len=Math.hypot(dx,dy);
+  if(len<.01){dx=other.x-P.x;dy=other.y-P.y;len=Math.hypot(dx,dy)}
+  if(len<.01)return {x:0,y:1};
+  return {x:dx/len,y:dy/len};
+}
+function addFerrule(P,terminal,other,type,cable=''){
+  const u=ferruleDirection(terminal,P,other),gauge=wireGauge(cable);
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('class','wire-fitting');
+  g.dataset.wire=type;g.dataset.gauge=gauge;
+  g.setAttribute('aria-hidden','true');
+  const add=(tag,cls,attrs)=>{
+    const item=document.createElementNS('http://www.w3.org/2000/svg',tag);
+    item.setAttribute('class',cls);
+    for(const [key,value] of Object.entries(attrs))item.setAttribute(key,String(value));
+    item.dataset.wire=type;item.dataset.gauge=gauge;
+    g.appendChild(item);
+    return item;
+  };
+  // Pierścień wlotowy na obwodzie zacisku, z widocznym pustym środkiem.
+  add('circle','wire-entry-gasket',{cx:P.x,cy:P.y,r:7.5});
+  // Metaliczna tulejka widoczna tuż przy izolacji żyły.
+  add('line','wire-ferrule-shadow',{
+    x1:P.x+u.x*2,y1:P.y+u.y*2,
+    x2:P.x+u.x*10,y2:P.y+u.y*10
+  });
+  add('line','wire-ferrule-metal',{
+    x1:P.x+u.x*2,y1:P.y+u.y*2,
+    x2:P.x+u.x*9,y2:P.y+u.y*9
+  });
+  add('line','wire-ferrule-shine',{
+    x1:P.x+u.x*3,y1:P.y+u.y*3,
+    x2:P.x+u.x*7.5,y2:P.y+u.y*7.5
+  });
+  // Kolorowa opaska jest tuż ZA metaliczną tulejką, przy początku izolacji.
+  add('circle','wire-ferrule-collar',{
+    cx:P.x+u.x*11,cy:P.y+u.y*11,r:gauge==='2.5'?4.15:3.55
+  });
+  fittingsSvg.appendChild(g);
 }
 function draw(){
-  svg.innerHTML='';
-  connections.forEach(c=>{
-    const a=document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`),b=document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`);
+  svg.replaceChildren();
+  fittingsSvg.replaceChildren();
+  connections.forEach((c,index)=>{
+    const a=document.querySelector(`[data-terminal="${CSS.escape(c.a)}"]`);
+    const b=document.querySelector(`[data-terminal="${CSS.escape(c.b)}"]`);
     if(!a||!b)return;
-    const A=terminalCenter(a),B=terminalCenter(b),d=smartRoute(A,B,a,b,c.type,c,connections.indexOf(c));
-    addPath(d,c.type,'wire-shadow',c.cable);addPath(d,c.type,'wire-path',c.cable);
-    addFerrule(A,B,c.type);addFerrule(B,A,c.type);
-  })
+    const A=terminalCenter(a),B=terminalCenter(b),d=smartRoute(A,B,a,b,c.type,c,index);
+    if(!d)return;
+    addPath(d,c.type,'wire-shadow',c.cable);
+    addPath(d,c.type,'wire-jacket',c.cable);
+    addPath(d,c.type,'wire-path',c.cable);
+    addPath(d,c.type,'wire-gloss',c.cable);
+    addFerrule(A,a,B,c.type,c.cable);
+    addFerrule(B,b,A,c.type,c.cable);
+  });
 }
 function refreshUsed(){
   document.querySelectorAll('.wire-terminal').forEach(t=>{
