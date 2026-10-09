@@ -6,12 +6,12 @@
 const cabinet=document.querySelector('.cabinet-inner');
 if(!cabinet)return;
 let rack=null,active=[],baseHeight=null,expandedHeight=null;
-function createTerm(role,id,label){
+function createTerm(role,id,label,zone='bar'){
  const maker=window.ElektrykStage3?.createTerminal;
- if(maker)return maker(label||role,role,id,'bar');
+ if(maker)return maker(label||role,role,id,zone);
  const btn=document.createElement('button');btn.type='button';
  btn.className='wire-terminal';btn.textContent=label||role;
- btn.dataset.role=role;btn.dataset.terminal=id;btn.dataset.zone='bar';return btn;
+ btn.dataset.role=role;btn.dataset.terminal=id;btn.dataset.zone=zone;return btn;
 }
 function addStrip(host,label,role,ids,klass){
  const strip=document.createElement('section');strip.className='large-strip '+klass;
@@ -61,7 +61,7 @@ function prepare(board){
      const title=document.createElement('b');title.textContent=load.number+'. '+load.code;
      const subtitle=document.createElement('small');subtitle.textContent='OBWÓD '+load.number+' • '+load.phase;
      const pins=document.createElement('div');pins.className='large-load-ports';
-     for(const p of ['L','N','PE'])pins.appendChild(createTerm(p,'LOAD:'+load.id+':'+p,p));
+     for(const p of ['L','N','PE'])pins.appendChild(createTerm(p,'LOAD:'+load.id+':'+p,p,'load'));
      card.append(title,subtitle,pins);grid.appendChild(card);
    }
    frame.appendChild(grid);
