@@ -237,8 +237,8 @@ function rectInCabinet(el){
   };
 }
 function endpointSide(el,zone,exit){
-  if(zone==='top'||zone==='supply'||zone==='load-top')return 'top';
-  if(zone==='bottom'||zone==='load')return 'bottom';
+  if(zone==='top'||zone==='supply'||zone==='load-top'||zone==='zug-top')return 'top';
+  if(zone==='bottom'||zone==='load'||zone==='zug-bottom')return 'bottom';
   if(zone==='bar')return barKind(el)==='PE'?'bottom':'top';
   return 'top';
 }
@@ -250,6 +250,10 @@ function endpointEscape(P,el,zone,exit){
     if(zone==='bottom')return {x:P.x,y:r.bottom+9};
   }
 
+  if(zone==='zug-top'||zone==='zug-bottom'){
+    const r=rectInCabinet(el.closest?.('.industrial-zug-rail'));
+    return {x:P.x,y:zone==='zug-top'?(r?.top??P.y)-7:(r?.bottom??P.y)+8};
+  }
   if(zone==='supply'){
     const r=rectInCabinet(el.closest?.('.supply-box'));
     return {x:P.x,y:(r?.bottom??P.y)+9};
@@ -513,7 +517,10 @@ function setConnections(records=[]){
   });
   return connections.length;
 }
-document.getElementById('undoWire')?.addEventListener('click',undoWire);document.getElementById('clearWires')?.addEventListener('click',clearWires);
+document.addEventListener('elektryk:industrial-zug-changed',()=>requestAnimationFrame(()=>{
+    pruneConnections();refreshUsed();refreshGuidance();draw();updateCounters();
+  }));
+ document.getElementById('undoWire')?.addEventListener('click',undoWire);document.getElementById('clearWires')?.addEventListener('click',clearWires);
 const observer=new MutationObserver(()=>requestAnimationFrame(decorateMounted));observer.observe(mountRoot,{childList:true,subtree:true});
 decorateSupply();decorateBars();decorateCircuits();decorateMounted();refreshUsed();refreshGuidance();updateCounters();
 window.addEventListener('resize',()=>requestAnimationFrame(draw));

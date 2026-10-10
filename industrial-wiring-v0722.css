@@ -1,0 +1,45 @@
+/* v0.7.22 — interaktywna listwa X1 w modelu dydaktycznym.
+   Nadpisania ograniczone do szafy przemysłowej. Zaciski DIN pozostają bez zmian. */
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot {
+  position:relative; overflow:visible!important;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot-select {
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:0;width:100%;height:100%;padding:11px 0 8px;
+  border:0!important;background:transparent!important;color:#193541!important;
+  cursor:pointer;z-index:2;font:700 7px/1 Arial,sans-serif;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot-select strong {
+  display:block;font-size:7px;max-width:100%;text-overflow:clip;white-space:nowrap;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot-select small {
+  display:block;font-size:7px;margin-top:3px;color:#244757;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot-select:focus-visible {
+  outline:2px solid #0479c7!important;outline-offset:0!important;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot .iz-screw {
+  position:absolute;left:50%;transform:translateX(-50%);width:11px;height:11px;
+  pointer-events:none;z-index:3;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot .iz-screw-top {top:2px}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot .iz-screw-bottom {bottom:2px}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot .wire-terminal.iz-wire-port {
+  position:absolute!important;left:50%!important;transform:translateX(-50%)!important;
+  width:15px!important;min-width:15px!important;max-width:15px!important;
+  height:15px!important;min-height:15px!important;padding:0!important;
+  border-radius:50%!important;border-width:1px!important;
+  z-index:35!important;opacity:1!important;cursor:crosshair!important;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot .iz-wire-port-top {top:0!important}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot .iz-wire-port-bottom {bottom:0!important}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot .iz-wire-port:before {
+  width:4px;height:4px;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot .iz-wire-port.guide-dim:not(.used-terminal) {
+  opacity:.48!important;filter:grayscale(.5)!important;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot .iz-wire-port.guide-target,
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .iz-slot .iz-wire-port:focus-visible {
+  outline:2px solid #00bfff!important;outline-offset:1px!important;
+}

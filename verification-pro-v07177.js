@@ -1,4 +1,4 @@
-/* RozdzielnicaPRO.pl v0.7.20.1 — szczegółowy raport edukacyjnej kontroli.
+/* RozdzielnicaPRO.pl v0.7.22 — szczegółowy raport edukacyjnej kontroli.
  * Dane pochodzą z funkcjonujących silników Stage4, Engine, Audit i RCD.
  * Nie modyfikuje silnika, połączeń ani naliczania XP. */
 (()=>{
@@ -20,15 +20,15 @@ function evaluate(a,detail,ctx={}){
  const layoutFailed=!!ctx.task&&(ctx.layout?.complete!==true);
  const complete=states.filter(s=>s.complete).length;
  const collisions=a?.collisions?.length||0;
- // X1/ZUG is still a layout-only model, not a validated electrical connection.
- const industrialUnverified=ctx.board?.family==='industrial';
+ // Only the simulated feedthrough continuity is evaluated, never field measurements.
+ const industrialUnverified=ctx.board?.family==='industrial'&&a?.engine?.zug?.complete!==true;
  const measured=!!detail&&states.length>0;
  const verified=measured&&detail.complete===true&&complete===states.length&&
    !errors.length&&!warnings.length&&!collisions&&!problemDevices.length&&
    !missingRequirements.length&&!layoutFailed&&!industrialUnverified;
  const status=!measured?'pending':verified?'ok':errors.length||collisions||problemDevices.length?'error':'warn';
  return {status,verified,states,issues,circuits,errors,warnings,monitored,problemDevices,
-   missingRequirements,layoutFailed,industrialUnverified,complete,total:states.length,collisions};
+   missingRequirements,layoutFailed,industrialUnverified,zug:a?.engine?.zug||null,complete,total:states.length,collisions};
 }
 function context(){
  const mode=document.body.dataset.gameMode||'learn';
@@ -142,6 +142,9 @@ function refresh(){
      s.complete?'ok':s.any?'error':'warn',s.load?.id);
  });
  if(!r.circuits.length)row(ui.devices,'Brak aparatów do oceny','Zamontuj MCB/RCBO i ponów test.');
+ if(r.zug)row(ui.devices,'X1 / ZUG • '+r.zug.ready+'/'+r.zug.total+' zacisków',
+   'Wpięte: '+r.zug.connected+' • zasilone: '+r.zug.ready+' • łącznie: '+r.zug.total,
+   r.zug.complete?'ok':'warn');
  r.circuits.forEach(c=>{
    const msg='WE: '+(c.inputPhases.join(', ')||'—')+' • WY: '+(c.outputPhases.join(', ')||'—')+
     ([...c.errors,...c.warnings].length?' • '+[...c.errors,...c.warnings].join(' • '):'');
@@ -159,8 +162,8 @@ function refresh(){
  r.missingRequirements.forEach(m=>add('warn','Brak aparatu wymagany przez zadanie',
    m.code+': '+m.have+' z '+m.need+' szt.',null));
  if(r.layoutFailed)add('warn','Układ aparatów DIN','Sprawdź rozmieszczenie względem wzorca zadania.');
- if(r.industrialUnverified)add('warn','Przemysłowa listwa X1 nie jest objęta testem',
-   'Zaciski X1/ZUG są obecnie tylko montażowe. Silnik nie sprawdza ich przewodów, więc pełne zaliczenie rozdzielnicy przemysłowej jest niedostępne.');
+ if(r.industrialUnverified)add('warn','Listwa X1/ZUG wymaga dokończenia',
+   'Podłącz wszystkie zamontowane zaciski i sprawdź ich ciągłość z WLZ w modelu. Separatory nie przewodzą; pusta listwa nie zalicza testu.');
  r.issues.filter(i=>i.type==='error'||i.type==='warning'||i.type==='warn')
    .forEach(i=>add(i.type==='error'?'error':'warn',i.code||'DIAGNOSTYKA',i.text,i.ref));
  r.problemDevices.forEach(c=>add('warn','Aparat wymaga sprawdzenia',
@@ -192,7 +195,7 @@ modal.addEventListener('keydown',e=>{
 document.addEventListener('elektryk:task-started',()=>{last=null});
 document.addEventListener('elektryk:mode-selected',()=>{last=null});
 window.ElektrykVerificationPRO={
- version:'0.7.20.1',evaluate,open,run,getLast:()=>last?.report||null,
+ version:'0.7.22',evaluate,open,run,getLast:()=>last?.report||null,
  isCurrent:()=>!!last&&last.stamp===stamp(),
  isPassed:()=>!!last&&last.stamp===stamp()&&last.report?.verified===true
 };

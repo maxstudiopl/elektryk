@@ -151,6 +151,17 @@ function validateProject(p){
        slots.some(code=>code!==null&&!['L1','L2','L3','N','PE','SEP'].includes(code)))
       return 'Nieprawidłowa lub niezgodna z obudową listwa X1/ZUG.';
   }
+  // X1 endpoints must refer to a fitted, matching terminal; never restore dangling wires.
+  for(const wire of p.connections){
+    for(const endpoint of [wire.a,wire.b]){
+      if(!endpoint.startsWith('X1:'))continue;
+      const match=endpoint.match(/^X1:(\d{2}):(L1|L2|L3|N|PE):(TOP|BOTTOM)$/);
+      const position=match?Number(match[1])-1:-1;
+      if(position<0||position>=30||p.industrialZug?.slots?.[position]!==match?.[2]||
+         wire.type!==match?.[2])
+        return 'Przewód X1 odnosi się do nieistniejącego lub niezgodnego zacisku.';
+    }
+  }
   return '';
 }
 
