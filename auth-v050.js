@@ -18,13 +18,13 @@ const scripts=[
   'electrical-audit-v0712.js?v=0712wire4',
   'electrical-engine-v0713.js?v=07151',
   'rcd-diagnostic-v07131.js?v=07151',
-  'stage4.js?v=07152',
+  'stage4.js?v=07177',
   'rcd-diagnostic-ui-v07131.js?v=07131',
   'curriculum-v0714.js?v=07140',
   'tasks-v046.js?v=07176',
   'busbars-v047.js?v=0711',
   'wiring-rules-v0712.js?v=0712wire3',
-  'help-v049.js?v=07140',
+  'help-v049.js?v=07177',
   'learning-board-v0712.js?v=07150',
   'progress-v060.js?v=07176',
   'learning-autoboard-core-v0715.js?v=071521',
@@ -36,7 +36,8 @@ const scripts=[
   'industrial-zug-v0716.js?v=0716',
   'industrial-view-v07161.js?v=07162',
   'demo-mode-v07133.js?v=07140',
-  'workspace-panels-v07173.js?v=07173'
+  'workspace-panels-v07173.js?v=07173',
+  'verification-pro-v07177.js?v=07177'
 ];
 
 let gameLoaded=false;
