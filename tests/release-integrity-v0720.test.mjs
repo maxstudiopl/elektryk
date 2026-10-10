@@ -106,3 +106,25 @@ test('Electrical APIs needed by integration are present',()=>{
   for(const fn of ['analyze','getLast','refresh'])
     assert.match(power,new RegExp('\\b'+fn+'\\b'));
 });
+
+test('Mounted terminal highlights never animate position or scale',()=>{
+  const css=read('quality-fixes-v0720.css');
+  assert.match(css,/\.wire-terminal\.guide-target:not\(\.used-terminal\)/);
+  assert.match(css,/animation:proStableGuideTarget/);
+  const body=css.slice(css.indexOf('@keyframes proStableGuideTarget'));
+  const last=body.indexOf('/* Przycisk usuwania');
+  const keyframes=last<0?body:body.slice(0,last);
+  assert.doesNotMatch(keyframes,/transform\s*:/);
+  assert.match(keyframes,/box-shadow/);
+});
+test('Apparatus removal is available when selected, focused or on touch',()=>{
+  const css=read('quality-fixes-v0720.css');
+  assert.match(css,/:focus-within/);
+  assert.match(css,/\.selected-mounted/);
+  assert.match(css,/@media\(hover:none\)/);
+});
+test('Searching a task number clears stale DIN category filtering',()=>{
+  const tasks=read('tasks-v046.js');
+  assert.match(tasks,/if\(query\)activeFilter='all'/);
+  assert.match(tasks,/const size=12,totalPages=/);
+});
