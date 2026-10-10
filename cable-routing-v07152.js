@@ -109,7 +109,8 @@ function prepare(board){
  bottom.setAttribute('aria-label','Kable wychodzące dołem rozdzielnicy');
  const internals=buildBusbars(board);
  const saved=new Map(bases.map(e=>[e.dataset.circuit,e]));
- const rows=Math.max(1,Number(board.devices.reduce((m,d)=>Math.max(m,Number(d.row)||0),0))+1);
+ const rows=Math.max(1,Number(cabinet.dataset.rows||board.rows||0)||
+   (board.devices.reduce((m,d)=>Math.max(m,Number(d.row)||0),0)+1));
  const counts={top:0,bottom:0};
  const used=new Set();
  for(const load of list){
