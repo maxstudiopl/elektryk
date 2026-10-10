@@ -82,7 +82,7 @@
   pointer-events:none!important;
 }
 .mount-grid .mounted-device > .assembly-snap-ghost::after{
-  content:'XYZ';
+  content:'PRO';
   position:absolute;
   top:39px;left:4px;right:4px;
   height:15px;
