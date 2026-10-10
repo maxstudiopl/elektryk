@@ -80,7 +80,7 @@ function snapshot(){
   const bridges=window.ElektrykBridges?.getBridges?.()||[];
   return {
     schema:2,
-    gameVersion:'0.7.20',
+    gameVersion:'0.7.21',
     name:(nameInput.value||'Mój projekt').trim().slice(0,32)||'Mój projekt',
     savedAt:Date.now(),
     templateId:board.boardId||null,
@@ -91,6 +91,69 @@ function snapshot(){
     industrialZug:window.ElektrykIndustrialZug?.getState?.()||null
   };
 }
+// Refuse malformed slot data BEFORE enterGame() resets the current board.
+function validateProject(p){
+  if(!p||!p.board||!Array.isArray(p.mounted)||!Array.isArray(p.connections)||!Array.isArray(p.bridges))
+    return 'Zapis jest niekompletny.';
+  const rows=Number(p.board.rows),cols=Number(p.board.modulesPerRow);
+  if(!Number.isInteger(rows)||rows<1||rows>5||![12,18,24].includes(cols)||
+     p.mounted.length>rows*cols)return 'Nieprawidłowe wymiary lub liczba aparatów.';
+  if(p.board.totalModules!=null&&Number(p.board.totalModules)!==rows*cols)
+    return 'Niezgodna pojemność modułowa obudowy.';
+  const known=window.ElektrykSwitchboardDB?.get?.(p.templateId||p.board.boardId);
+  if(known&&(Number(known.rows)!==rows||Number(known.modulesPerRow)!==cols||
+     (p.board.family&&p.board.family!==known.family)))
+    return 'Zapis nie odpowiada wybranemu modelowi obudowy.';
+  const used=new Set(),ids=new Set(),parts=window.ElektrykStage2?.parts;
+  for(const m of p.mounted){
+    if(!m||!/^M[1-9]\\d*$/.test(String(m.id||''))||ids.has(m.id))
+      return 'Aparaty mają nieprawidłowe lub powielone identyfikatory.';
+    const row=Number(m.row),start=Number(m.start),code=String(m.code||'');
+    const part=parts?.[code],width=Number(part?.modules??m.modules);
+    if(parts&&!part)return 'Zapis zawiera nieznany aparat '+code+'.';
+    if(!Number.isInteger(row)||row<0||row>=rows||
+       !Number.isInteger(start)||start<0||
+       !Number.isInteger(width)||width<1||start+width>cols||
+       (m.modules!=null&&Number(m.modules)!==width))
+      return 'Aparat znajduje się poza obudową lub ma błędną szerokość.';
+    if(m.switchState!=null&&!['on','off'].includes(m.switchState))
+      return 'Nieprawidłowy stan przełącznika.';
+    for(let slot=start;slot<start+width;slot++){
+      const pos=row+':'+slot;
+      if(used.has(pos))return 'Aparaty nakładają się na te same moduły DIN.';
+      used.add(pos);
+    }
+    ids.add(m.id);
+  }
+  const wireIds=new Set(),bridgeIds=new Set();
+  for(const [records,kind,seen] of [[p.connections,'przewód',wireIds],[p.bridges,'mostek',bridgeIds]]){
+    for(const record of records){
+      if(!record||typeof record.a!=='string'||typeof record.b!=='string'||
+         !record.a||!record.b||!['L1','L2','L3','N','PE'].includes(kind==='przewód'?record.type:record.phase)||
+         !record.id||seen.has(String(record.id)))
+        return 'Nieprawidłowy lub powtórzony '+kind+'.';
+      seen.add(String(record.id));
+      for(const endpoint of [record.a,record.b]){
+        const mount=endpoint.match(/^(M\\d+):/);
+        if(mount&&!ids.has(mount[1]))
+          return 'Połączenie wskazuje aparat, którego nie ma w zapisie.';
+      }
+      if(kind==='przewód'&&record.a===record.b)
+        return 'Przewód nie może łączyć zacisku z samym sobą.';
+    }
+  }
+  if(p.industrialZug!=null){
+    const industrial=(known?.family||p.board.family)==='industrial';
+    const slots=p.industrialZug.slots;
+    const expected=known?.zugSlots||(rows===5&&cols===24?30:24);
+    if(!industrial||!Array.isArray(slots)||slots.length!==expected||
+       Number(p.industrialZug.capacity)!==expected||
+       slots.some(code=>code!==null&&!['L1','L2','L3','N','PE','SEP'].includes(code)))
+      return 'Nieprawidłowa lub niezgodna z obudową listwa X1/ZUG.';
+  }
+  return '';
+}
+
 function summary(project){
   if(!project)return 'PUSTY';
   const a=project.mounted?.length||0;
@@ -177,14 +240,9 @@ async function loadProject(){
   if(!activeSlot){setMeta('Najpierw wybierz slot do wczytania.','warn');return}
   const p=readStore()[activeSlot];
   if(!p){setMeta('Wybrany slot jest pusty.','warn');return false}
-  if(!p.board||!Array.isArray(p.mounted)||!Array.isArray(p.connections)||!Array.isArray(p.bridges)){
-    setMeta('Zapis w tym slocie jest niekompletny. Nie zmieniono bieżącego projektu.','warn');
-    return false;
-  }
-  const rowCount=Number(p.board.rows),columns=Number(p.board.modulesPerRow);
-  if(!Number.isInteger(rowCount)||rowCount<1||rowCount>5||
-     ![12,18,24].includes(columns)||p.mounted.length>rowCount*columns){
-    setMeta('Zapis ma nieprawidłowy rozmiar rozdzielnicy. Nie rozpoczęto wczytywania.','warn');
+  const invalid=validateProject(p);
+  if(invalid){
+    setMeta('Nie można wczytać projektu: '+invalid+' Bieżąca rozdzielnica pozostaje bez zmian.','warn');
     return false;
   }
   // Do not silently discard unsaved work when switching projects.
