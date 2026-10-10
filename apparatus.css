@@ -169,7 +169,7 @@
   transform:translateX(-50%) translateY(7px)!important;
 }
 
-/* v0.7.0 — kompletna rodzina aparatury DIN fikcyjnej marki XYZ */
+/* v0.7.0 — kompletna rodzina aparatury DIN fikcyjnej marki PRO */
 .device{
   font-family:Arial,Helvetica,sans-serif!important;
 }
@@ -234,7 +234,7 @@
   letter-spacing:.15px!important;
 }
 .device[data-kind="mcb"]:after{
-  content:'XYZ • IEC 60898';
+  content:'PRO • IEC 60898';
   top:60px!important;
   left:5px!important;right:5px!important;
   color:#667073!important;
@@ -318,7 +318,7 @@
 }
 .mini-device:before,
 .detail-device:before{
-  content:'XYZ'!important;
+  content:'PRO'!important;
   background:linear-gradient(180deg,#0d4564,#082f47)!important;
   border-top:1px solid #31b4e6!important;
   color:#fff!important;
@@ -338,7 +338,7 @@
 }
 .xyz-variant-card small{color:#4d6978!important}
 
-/* v0.7.1 — realistyczny front aparatury XYZ + bez etykiet nad aparatami */
+/* v0.7.1 — realistyczny front aparatury PRO + bez etykiet nad aparatami */
 
 /* usuwamy nazwę/ramkę nad aparatem */
 .mount-grid .mounted-device:before{
@@ -362,7 +362,7 @@
     0 3px 6px #0005!important;
 }
 
-/* zamiast dużego kolorowego paska: jasna tabliczka z marką XYZ */
+/* zamiast dużego kolorowego paska: jasna tabliczka z marką PRO */
 .brand-strip,
 .brand-strip.dark,
 .brand-strip.red,
@@ -438,7 +438,7 @@
 
 /* front MCB */
 .device[data-kind="mcb"]:after{
-  content:'XYZ  •  IEC 60898-1'!important;
+  content:'PRO  •  IEC 60898-1'!important;
   position:absolute!important;
   left:5px!important;
   right:5px!important;
@@ -597,10 +597,10 @@
   min-width:8px!important;
 }
 
-/* miniatury katalogu też spójne z XYZ */
+/* miniatury katalogu też spójne z PRO */
 .mini-device:before,
 .detail-device:before{
-  content:'XYZ'!important;
+  content:'PRO'!important;
   background:linear-gradient(#f7f8f5,#e3e6e2)!important;
   color:#22292b!important;
   border-top:2px solid #1f95c5!important;
