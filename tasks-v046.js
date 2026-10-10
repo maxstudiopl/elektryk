@@ -1233,6 +1233,9 @@ function focusCatalog(){
   requestAnimationFrame(()=>input.focus());
 }
 document.querySelector('.task-button')?.addEventListener('click',focusCatalog);
+const closeCatalog=document.getElementById('closeTasks');
+closeCatalog?.addEventListener('click',()=>requestAnimationFrame(()=>document.querySelector('.task-button')?.focus()));
+modal?.addEventListener('click',event=>{if(event.target===modal)requestAnimationFrame(()=>document.querySelector('.task-button')?.focus())});
 modal?.addEventListener('keydown',event=>{
   if(modal.hidden)return;
   if(event.key==='Escape'){
@@ -1260,8 +1263,10 @@ function startTask(task,btn){
  window.ElektrykStage2.configureTask(task);
  applyCircuitLayout(task);
  document.dispatchEvent(new CustomEvent('elektryk:task-started',{detail:{task}}));
- tool.querySelectorAll('button').forEach(b=>b.classList.toggle('selected-task',b.dataset.group===task.group));
+ // Kategoria przeglądana w katalogu i aktywne zadanie to niezależne stany.
+ const wasDialogOpen=!!modal&&!modal.hidden;
  if(modal)modal.hidden=true;
+ if(wasDialogOpen)requestAnimationFrame(()=>document.querySelector('.task-button')?.focus());
  const title=document.querySelector('.active-task .panel-title');if(title)title.textContent='AKTYWNE ZADANIE • '+String(task.id).padStart(3,'0')+'/'+TASKS.length;
  const ver=document.querySelector('.cabinet-head .version');if(ver)ver.textContent='v0.7.17.6 • ROZDZIELNICAPRO.PL • ZADANIE '+String(task.id).padStart(2,'0')+' • '+task.rows+'×'+task.modulesPerRow+'M';
 }
