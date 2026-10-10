@@ -1,0 +1,344 @@
+/* RozdzielnicaPRO.pl v0.7.19 — responsywne stanowisko PRO
+ * Uporządkowanie kaskady po responsive-v07123 i desktop-layout-v07124.
+ * Zmiany dotyczą wyłącznie układu aplikacji, jej bocznych paneli,
+ * narzędzi i katalogów modalnych. Bez zmian .cabinet-inner, DIN, SVG,
+ * .wire-terminal, współrzędnych przewodów i Panelu Użytkownika.
+ */
+
+/* Wspólne: pozwól kolumnom i kontrolkom zmniejszać się bez
+ * rozsuwania całej strony; samą rozdzielnicę przewijaj wewnątrz .cabinet. */
+html[data-theme="dark"] body .game-shell,
+html[data-theme="dark"] body .game-shell>.workspace,
+html[data-theme="dark"] body .game-shell>.leftbar,
+html[data-theme="dark"] body .game-shell>.rightbar{
+  min-width:0!important;
+  box-sizing:border-box;
+}
+html[data-theme="dark"] body .game-shell>.workspace>.pro-workspace-toolbar{
+  min-width:0!important;
+}
+html[data-theme="dark"] body .game-shell .pro-workspace-actions{
+  min-width:0!important;
+  flex-wrap:wrap!important;
+}
+html[data-theme="dark"] body .game-shell .pro-workspace-title{
+  min-width:0!important;
+}
+/* Nawigacja szybkiego przeskoku, dodawana przez JS tylko do stanowiska. */
+html[data-theme="dark"] body .game-shell .pro-responsive-shortcuts{
+  display:none!important;
+  min-width:0;
+}
+html[data-theme="dark"] body .game-shell>.workspace>.cabinet{
+  max-width:100%!important;
+  min-width:0!important;
+  overflow-x:auto!important;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-x pan-y;
+  scrollbar-width:thin;
+  scrollbar-color:#6b9fc3 #14283b;
+}
+html[data-theme="dark"] body .game-shell .pro-layout-toggle:focus-visible,
+html[data-theme="dark"] body .game-shell .pro-mobile-jump:focus-visible{
+  outline:2px solid #86cdff!important;
+  outline-offset:2px!important;
+}
+
+/* Szeroki monitor i zwykły laptop (od 1200px): 3 niezależne strefy.
+ * Zachowaj poprawkę v0.7.17.7.1: karty paneli NIGDY się nie kurczą. */
+@media(min-width:1200px){
+  html[data-theme="dark"] body .game-shell{
+    grid-template-rows:minmax(0,1fr)!important;
+  }
+  html[data-theme="dark"] body .game-shell>.leftbar,
+  html[data-theme="dark"] body .game-shell>.rightbar{
+    min-height:0!important;
+    max-height:100%!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    overscroll-behavior-y:contain!important;
+    scrollbar-gutter:stable;
+  }
+  html[data-theme="dark"] body .game-shell>.leftbar>.panel,
+  html[data-theme="dark"] body .game-shell>.rightbar>.panel{
+    flex:0 0 auto!important;
+  }
+}
+
+/* Średni laptop / małe okno (900–1199px):
+ * starszy desktop-layout wymuszał 3 bardzo wąskie kolumny i 100dvh,
+ * nadpisując dwurzędową regułę z responsive-v07123. Odtwórz
+ * stanowisko na pełnej szerokości nad dwoma panelami. */
+@media(min-width:900px) and (max-width:1199px){
+  html[data-theme="dark"],
+  html[data-theme="dark"] body{
+    height:auto!important;
+    min-height:100dvh!important;
+    max-height:none!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+  }
+  html[data-theme="dark"] body .topbar{
+    position:sticky!important;
+    top:0!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding:9px 12px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) max-content!important;
+    grid-template-rows:auto auto!important;
+    grid-template-areas:"brand profile" "navigation navigation"!important;
+    align-items:center!important;
+    gap:6px 12px!important;
+  }
+  html[data-theme="dark"] body .topbar>.brand{
+    grid-area:brand!important;
+    min-width:0!important;
+  }
+  html[data-theme="dark"] body .topbar>.player-mainnav{
+    grid-area:navigation!important;
+    justify-content:flex-start!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+  }
+  html[data-theme="dark"] body .topbar>.profile{
+    grid-area:profile!important;
+    min-width:0!important;
+  }
+  html[data-theme="dark"] body .game-shell{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:auto auto!important;
+    grid-template-areas:"center center" "left right"!important;
+    align-items:start!important;
+    align-content:start!important;
+    gap:10px!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    padding:10px!important;
+  }
+  html[data-theme="dark"] body .game-shell>.workspace{
+    grid-area:center!important;
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    overflow:visible!important;
+    position:static!important;
+  }
+  html[data-theme="dark"] body .game-shell>.leftbar,
+  html[data-theme="dark"] body .game-shell>.rightbar{
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    overflow:visible!important;
+    position:static!important;
+    scrollbar-gutter:auto!important;
+    touch-action:auto!important;
+  }
+  html[data-theme="dark"] body .game-shell>.leftbar{grid-area:left!important}
+  html[data-theme="dark"] body .game-shell>.rightbar{grid-area:right!important}
+  html[data-theme="dark"] body.pro-left-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center" "right"!important;
+  }
+  html[data-theme="dark"] body.pro-right-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center" "left"!important;
+  }
+  html[data-theme="dark"] body.pro-left-collapsed.pro-right-collapsed .game-shell{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center"!important;
+  }
+  html[data-theme="dark"] body.pro-left-collapsed .game-shell>.leftbar,
+  html[data-theme="dark"] body.pro-right-collapsed .game-shell>.rightbar{
+    display:none!important;
+  }
+  html[data-theme="dark"] body .workspace>.pro-workspace-toolbar{
+    position:relative!important;
+    top:auto!important;
+  }
+}
+
+/* Tablet, węższe laptopy i telefon: pełne przewijanie strony. */
+@media(max-width:899px){
+  html[data-theme="dark"],html[data-theme="dark"] body{
+    height:auto!important;
+    max-height:none!important;
+    min-height:100dvh!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+  }
+  html[data-theme="dark"] body .game-shell{
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    grid-template-rows:auto!important;
+    align-content:start!important;
+    overflow:visible!important;
+  }
+  html[data-theme="dark"] body .game-shell>.workspace,
+  html[data-theme="dark"] body .game-shell>.leftbar,
+  html[data-theme="dark"] body .game-shell>.rightbar{
+    min-height:0!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow-y:visible!important;
+    position:static!important;
+  }
+}
+
+/* Uruchamianie skrótów na małym ekranie:
+ * skok do panelu nie jest związany z logiką elektryczną. */
+@media(max-width:1199px){
+  html[data-theme="dark"] body .game-shell .pro-responsive-shortcuts{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:7px;
+    width:100%;
+    flex:0 0 100%;
+    margin-top:5px;
+  }
+  html[data-theme="dark"] body .game-shell .pro-mobile-jump{
+    box-sizing:border-box;
+    min-width:0;
+    min-height:40px;
+    padding:8px 10px;
+    border:1px solid #5485ab;
+    border-radius:8px;
+    background:#173d58;
+    color:#d5edff;
+    font:800 10px/1.35 Inter,"Segoe UI",sans-serif;
+    cursor:pointer;
+  }
+  html[data-theme="dark"] body .game-shell .pro-mobile-jump:hover{
+    background:#245a7b;border-color:#75bded;
+  }
+  html[data-theme="dark"] body .workspace>.pro-workspace-toolbar{
+    position:relative!important;
+    top:auto!important;
+    z-index:4!important;
+    display:flex!important;
+    flex-wrap:wrap!important;
+  }
+  html[data-theme="dark"] body .workspace>.pro-workspace-toolbar>.pro-workspace-actions{
+    flex:1 1 100%;
+    display:flex!important;
+    flex-wrap:wrap!important;
+    justify-content:flex-start!important;
+  }
+  html[data-theme="dark"] body .workspace>.pro-workspace-toolbar .pro-layout-toggle{
+    flex:1 1 165px!important;
+    min-height:39px!important;
+    white-space:normal!important;
+  }
+  html[data-theme="dark"] body .game-shell>.workspace>.pro-focus-dock{
+    position:relative!important;
+    top:auto!important;
+  }
+  /* Na małym laptopie nie chowaj długiej listy aparatury poza
+   * stałym panelem: katalog wewnątrz doku zachowuje poziomy scroll. */
+  html[data-theme="dark"] body.pro-tools-docked .pro-focus-dock>.rightbar{
+    min-width:0!important;
+    height:auto!important;
+    overflow:visible!important;
+  }
+  html[data-theme="dark"] body .workspace>.workspace-footer{
+    min-width:0!important;
+  }
+}
+
+/* Telefon: najpierw stanowisko montażowe, niżej narzędzia,
+ * następnie zadania. Użytkownik nie musi przewijać całego katalogu
+ * zanim zobaczy rozdzielnicę. Skrót w toolbarze przywróci ukryty panel. */
+@media(max-width:719px){
+  html[data-theme="dark"] body .game-shell{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"center" "right" "left"!important;
+    grid-template-rows:auto auto auto!important;
+    align-items:start!important;
+    gap:9px!important;
+  }
+  html[data-theme="dark"] body.pro-left-collapsed .game-shell{
+    grid-template-areas:"center" "right"!important;
+    grid-template-rows:auto auto!important;
+  }
+  html[data-theme="dark"] body.pro-right-collapsed .game-shell{
+    grid-template-areas:"center" "left"!important;
+    grid-template-rows:auto auto!important;
+  }
+  html[data-theme="dark"] body.pro-left-collapsed.pro-right-collapsed .game-shell{
+    grid-template-areas:"center"!important;
+    grid-template-rows:auto!important;
+  }
+  html[data-theme="dark"] body .game-shell>.workspace{grid-area:center!important}
+  html[data-theme="dark"] body .game-shell>.leftbar{grid-area:left!important}
+  html[data-theme="dark"] body .game-shell>.rightbar{grid-area:right!important}
+  html[data-theme="dark"] body.pro-left-collapsed .game-shell>.leftbar,
+  html[data-theme="dark"] body.pro-right-collapsed .game-shell>.rightbar{
+    display:none!important;
+  }
+  html[data-theme="dark"] body .game-shell .pro-responsive-shortcuts{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html[data-theme="dark"] body .workspace>.cabinet{
+    overflow-x:auto!important;
+  }
+  html[data-theme="dark"] body.pro-tools-docked .pro-focus-dock>.rightbar{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  html[data-theme="dark"] body.pro-tools-docked .pro-focus-dock>.rightbar>.panel{
+    max-height:285px!important;
+  }
+  html[data-theme="dark"] body .workspace>.workspace-footer{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+
+/* Bardzo mały telefon — krótkie kontrolki, bez gubienia opisów. */
+@media(max-width:390px){
+  html[data-theme="dark"] body .game-shell .pro-mobile-jump{
+    font-size:9px!important;padding:8px 5px!important;
+  }
+  html[data-theme="dark"] body .workspace>.pro-workspace-toolbar .pro-layout-toggle{
+    flex-basis:100%!important;
+  }
+  html[data-theme="dark"] body .game-shell .category-tabs{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html[data-theme="dark"] body .game-shell .catalog-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+
+/* Niska wysokość wyświetlacza (np. telefon poziomo).
+ * W oknach selekcji nie blokuj zawartości zbyt wysokim zestawem
+ * filtrów: samo okno może przewijać się pionowo. Nie dotyka Hub. */
+@media(max-height:700px) and (max-width:899px){
+  html[data-theme="dark"] body .task-modal .task-window,
+  html[data-theme="dark"] body .board-selector-modal .board-selector-window{
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    max-height:calc(100dvh - 12px)!important;
+  }
+  html[data-theme="dark"] body .task-modal .task-cards{
+    flex:0 0 auto!important;
+    min-height:160px!important;
+    max-height:48dvh!important;
+    overflow-y:auto!important;
+  }
+  html[data-theme="dark"] body .board-selector-modal .board-selector-grid{
+    flex:0 0 auto!important;
+    min-height:160px!important;
+    max-height:48dvh!important;
+    overflow-y:auto!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme="dark"] body .game-shell .pro-mobile-jump{transition:none!important}
+}
