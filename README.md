@@ -2,6 +2,23 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.17.1 — ergonomia Nauki 2.0 na podstawie zrzutów użytkownika
+
+Po analizie rzeczywistego ekranu 1755 × 862 usunięto zbędne zajmowanie wysokości przez dwa panele instruktażowe nad rozdzielnicą.
+
+- Wprowadzone zostały zwarte odstępy, nagłówki, wzorzec DIN, legenda i komunikaty w Nauka 2.0.
+- Przycisk **ZWIŃ / POKAŻ WZORZEC** ukrywa wzorcowe rzędy i legendę, ale pozostawia wynik dopasowania oraz przyciski sprawdzania montażu i schematu.
+- Po uruchomieniu **UZBRÓJ AUTOMATYCZNIE** lub **KROK PO KROKU** wzorzec zwija się, a stanowisko przewija się do rozdzielnicy. Funkcja nie działa, jeżeli rozpoczęcie asysty się nie powiodło.
+- W panelu automatycznego uzbrajania dodano **PRZEJDŹ DO ROZDZIELNICY**; reset, nowe zadanie i powrót do nauki przywracają widoczność wzorca.
+- Zachowana pełna obsługa kroków asysty, komunikatów statusu oraz pouczeń edukacyjnych.
+- Zaktualizowano błędny numer wersji w module `tasks-v046.js` (pokazywał v0.7.15.3 mimo nowszej wersji symulatora).
+- Nowe pliki: `learning-layout-v07171.css` oraz `learning-layout-v07171.js`.
+- Nie zmieniono położenia zacisków, szyn DIN, przewodów, logiki sprawdzania układu ani Panelu Użytkownika.
+
+### Kontrola
+
+Sprawdź https://maxstudiopl.github.io/elektryk/ → Panel Użytkownika → Nauka. Rozpocznij zadanie, przełącz wzorzec, wybierz „Uzbrój automatycznie”, wróć do zadania, następnie uruchom „Krok po kroku”. W każdym przypadku rozdzielnica powinna być łatwo dostępna, a funkcje oceniania i schematów pozostać czynne. Przetestowano składnię i testową logikę przycisków, nie wykonano testu w rzeczywistej zalogowanej sesji przeglądarki.
+
 ## v0.7.17 — pierwszy etap odświeżenia całego stanowiska
 
 Nowa, odrębna warstwa `workspace-design-v0717.css` (za dotychczasowymi stylami) ujednolica **wyłącznie interfejs symulatora poza Panelem Użytkownika**:
