@@ -167,3 +167,64 @@ test('Unsaved mounted project cannot be replaced by LOAD without confirmation',a
   assert.equal(f.countEntries(),1);
   assert.equal(f.elems.freeProjectName.value,'Projekt A');
 });
+
+test('Malformed switchboard saves are rejected before touching the current DIN layout',async()=>{
+  const f=setup(),save=f.window.ElektrykFreeBuildSave.save;
+  assert.equal(save(),true);
+  const correct=f.saved()['1'],key='elektryk_freebuild_saves_v0711:test-user';
+  const baseline=JSON.stringify(f.state);
+  const clone=x=>JSON.parse(JSON.stringify(x));
+  const cases=[
+    ['duplicate apparatus ID',p=>p.mounted.push({...p.mounted[0],row:1})],
+    ['overlapping modules',p=>p.mounted.push({...p.mounted[0],id:'M2'})],
+    ['negative row',p=>p.mounted[0].row=-1],
+    ['fractional slot',p=>p.mounted[0].start=1.5],
+    ['outside DIN area',p=>p.mounted[0].start=12],
+    ['wrong module count',p=>p.board.totalModules=99],
+    ['invalid wire source',p=>p.connections[0].a='M999:TOP:L1:0'],
+    ['wrong conductor',p=>p.connections[0].type='WRONG'],
+    ['nonexistent apparatus',p=>p.mounted[0].code='FAKE']
+  ];
+  // Production has a catalogue. Keep the fixture strict about the known B10.
+  f.window.ElektrykStage2.parts={B10:{modules:1}};
+  for(const [description,change] of cases){
+    const p=clone(correct);change(p);
+    f.map.set(key,JSON.stringify({1:p}));
+    assert.equal(await f.window.ElektrykFreeBuildSave.load(),false,description);
+    assert.equal(f.countEntries(),0,'No destructive enterGame for '+description);
+    assert.equal(JSON.stringify(f.state),baseline,'Unchanged board for '+description);
+  }
+});
+
+test('Known model geometry mismatch cannot silently truncate a restored project',async()=>{
+  const f=setup();
+  assert.equal(f.window.ElektrykFreeBuildSave.save(),true);
+  f.window.ElektrykSwitchboardDB.get=id=>id==='REF-3X12-SURFACE'
+    ?{id,rows:3,modulesPerRow:12,family:'residential'}:null;
+  const key='elektryk_freebuild_saves_v0711:test-user',p=f.saved()['1'];
+  p.board.rows=5;p.board.totalModules=60;
+  f.map.set(key,JSON.stringify({1:p}));
+  const prior=JSON.stringify(f.state);
+  assert.equal(await f.window.ElektrykFreeBuildSave.load(),false);
+  assert.equal(f.countEntries(),0);
+  assert.equal(JSON.stringify(f.state),prior);
+});
+test('Industrial X1 payload must match both valid slot codes and capacity',async()=>{
+  const f=setup();
+  assert.equal(f.window.ElektrykFreeBuildSave.save(),true);
+  const key='elektryk_freebuild_saves_v0711:test-user',p=f.saved()['1'];
+  f.window.ElektrykSwitchboardDB.get=id=>id==='IND-PRO-5X24'
+    ?{id,rows:5,modulesPerRow:24,family:'industrial',zugSlots:30}:null;
+  const industrial={...p,templateId:'IND-PRO-5X24',
+    board:{...p.board,boardId:'IND-PRO-5X24',rows:5,modulesPerRow:24,totalModules:120,family:'industrial'},
+    industrialZug:{schema:1,capacity:30,slots:Array(30).fill(null)}};
+  for(const invalid of [
+    {...industrial,industrialZug:{...industrial.industrialZug,capacity:24}},
+    {...industrial,industrialZug:{...industrial.industrialZug,slots:Array(24).fill(null)}},
+    {...industrial,industrialZug:{...industrial.industrialZug,slots:['INVALID',...Array(29).fill(null)]}}
+  ]){
+    f.map.set(key,JSON.stringify({1:invalid}));
+    assert.equal(await f.window.ElektrykFreeBuildSave.load(),false);
+    assert.equal(f.countEntries(),0);
+  }
+});
