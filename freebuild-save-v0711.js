@@ -61,7 +61,8 @@ function compactState(){
     board:window.ElektrykStage2?.getBoardConfig?.()||null,
     mounted:window.ElektrykStage2?.getMounted?.()||[],
     connections:window.ElektrykStage3?.getConnections?.()||[],
-    bridges:window.ElektrykBridges?.getBridges?.()||[]
+    bridges:window.ElektrykBridges?.getBridges?.()||[],
+    industrialZug:window.ElektrykIndustrialZug?.getState?.()||null
   };
 }
 function signature(data=compactState()){
@@ -74,22 +75,24 @@ function snapshot(){
   const connections=window.ElektrykStage3?.getConnections?.()||[];
   const bridges=window.ElektrykBridges?.getBridges?.()||[];
   return {
-    schema:1,
-    gameVersion:'0.7.11',
+    schema:2,
+    gameVersion:'0.7.16',
     name:(nameInput.value||'Mój projekt').trim().slice(0,32)||'Mój projekt',
     savedAt:Date.now(),
     templateId:board.boardId||null,
     board:{...board},
     mounted:mounted.map(x=>({...x})),
     connections:connections.map(x=>({...x})),
-    bridges:bridges.map(x=>({...x}))
+    bridges:bridges.map(x=>({...x})),
+    industrialZug:window.ElektrykIndustrialZug?.getState?.()||null
   };
 }
 function summary(project){
   if(!project)return 'PUSTY';
   const a=project.mounted?.length||0;
   const w=(project.connections?.length||0)+(project.bridges?.length||0);
-  return (project.name||'Projekt')+' • '+a+' apar. • '+w+' poł.';
+  const z=project.industrialZug?.slots?.filter(x=>x&&x!=='SEP').length||0;
+  return (project.name||'Projekt')+' • '+a+' apar. • '+z+' ZUG • '+w+' poł.';
 }
 function renderSlots(){
   const store=readStore();
@@ -139,7 +142,8 @@ function saveProject(silent=false){
     board:data.board,
     mounted:data.mounted,
     connections:data.connections,
-    bridges:data.bridges
+    bridges:data.bridges,
+    industrialZug:data.industrialZug
   });
   lastObservedSignature=lastSavedSignature;
   setState('ZAPISANO','saved');
@@ -173,6 +177,7 @@ async function loadProject(){
 
   setState('WCZYTYWANIE','dirty');
   await window.ElektrykAuth?.enterGame?.('free',template);
+  window.ElektrykIndustrialZug?.restore?.(p.industrialZug||null);
   window.ElektrykStage2?.restoreMounted?.(p.mounted||[]);
   await waitFrame();
   await waitFrame();
@@ -190,7 +195,8 @@ async function loadProject(){
     board:window.ElektrykStage2?.getBoardConfig?.()||p.board,
     mounted:window.ElektrykStage2?.getMounted?.()||p.mounted||[],
     connections:window.ElektrykStage3?.getConnections?.()||p.connections||[],
-    bridges:window.ElektrykBridges?.getBridges?.()||p.bridges||[]
+    bridges:window.ElektrykBridges?.getBridges?.()||p.bridges||[],
+    industrialZug:window.ElektrykIndustrialZug?.getState?.()||null
   });
   lastObservedSignature=lastSavedSignature;
   setState('ZAPISANO','saved');
@@ -199,9 +205,11 @@ async function loadProject(){
 }
 function newProject(){
   if(!isFree())return;
-  const hasContent=(window.ElektrykStage2?.getMounted?.()?.length||0)+(window.ElektrykStage3?.getConnections?.()?.length||0)+(window.ElektrykBridges?.getBridges?.()?.length||0);
+  const zugUsed=window.ElektrykIndustrialZug?.getState?.()?.slots?.filter(Boolean).length||0;
+  const hasContent=(window.ElektrykStage2?.getMounted?.()?.length||0)+(window.ElektrykStage3?.getConnections?.()?.length||0)+(window.ElektrykBridges?.getBridges?.()?.length||0)+zugUsed;
   if(hasContent&&!confirm('Wyczyścić bieżący projekt Wolnej Budowy?'))return;
   window.ElektrykStage2?.reset?.();
+  window.ElektrykIndustrialZug?.reset?.();
   nameInput.value='Nowy projekt';
   activeSlot=0;
   localStorage.removeItem(userKey(ACTIVE_KEY));
@@ -226,7 +234,7 @@ function onMode(mode){
     lastObservedSignature=signature();
     const p=activeSlot?readStore()[activeSlot]:null;
     if(p){
-      const savedSig=signature({board:p.board,mounted:p.mounted||[],connections:p.connections||[],bridges:p.bridges||[]});
+      const savedSig=signature({board:p.board,mounted:p.mounted||[],connections:p.connections||[],bridges:p.bridges||[],industrialZug:p.industrialZug||null});
       lastSavedSignature=savedSig;
     }else lastSavedSignature='';
     setState(lastSavedSignature&&lastObservedSignature===lastSavedSignature?'ZAPISANO':'NIE ZAPISANO',lastSavedSignature&&lastObservedSignature===lastSavedSignature?'saved':'dirty');
