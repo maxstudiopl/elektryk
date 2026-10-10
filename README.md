@@ -2,6 +2,30 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.17 — pierwszy etap odświeżenia całego stanowiska
+
+Nowa, odrębna warstwa `workspace-design-v0717.css` (za dotychczasowymi stylami) ujednolica **wyłącznie interfejs symulatora poza Panelem Użytkownika**:
+
+- Pasek główny, przyciski nawigacji, profil i wskaźnik poziomu.
+- Panele boczne, nagłówki sekcji i wybór zadania.
+- Czytelność opisów, warunki zadania i sloty zapisu projektów.
+- Pasek narzędzi, nagłówek rozdzielnicy i liczniki stanowiska.
+- Wybór przewodów, filtry katalogu, karty aparatury PRO i szczegóły elementu.
+- Lepsze stany aktywne, podświetlenia klawiatury i wspólne kolory marki PRO.
+
+**Nie zmieniono** geometrii `.cabinet-inner`, szyn DIN, listw N/PE, zacisków, położenia WLZ, tras kablowych, algorytmów montażu ani Panelu Użytkownika. Układ trzech kolumn i przełączanie widoczności paneli pozostają bez zmian.
+
+### Wizualna weryfikacja
+
+Na https://maxstudiopl.github.io/elektryk/ sprawdź kolejno Wolną Budowę, Naukę, Egzamin i Przemysł. Zweryfikuj czytelność paneli, zaznaczanie aparatów, aktywny slot zapisu i skalowanie w węższych oknach. To etap spójności wizualnej; przed dalszą przebudową geometrii potrzebny jest test w prawdziwej przeglądarce z uruchomionym symulatorem.
+
+### Kolejne proponowane prace
+
+1. Projektowanie spójnych okien zadań, wyboru obudowy, pomocy i raportów diagnostycznych.
+2. Dokładne dopracowanie ikon, miniatur aparatów PRO, oznaczeń i odstępów.
+3. Praktyczne testy responsywności, przewijania i widoczności połączeń na desktopie / tablecie.
+4. Ograniczanie konfliktów nakładających się reguł CSS w ramach bezpiecznych, testowalnych kroków.
+
 ## v0.7.16.2 — hotfix widoczności listwy N
 
 - Zgłoszenie ze zrzutu ekranu: przemysłowy pasek „PRO • SZAFA PRODUKCYJNA / X1” przykrywał poziomą listwę neutralną N.
