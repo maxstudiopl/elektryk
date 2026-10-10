@@ -95,7 +95,11 @@ function diagram(task,plan){
  for(let i=0;i<receivers.length;i++){
    const a=receivers[i],load=i<BASE.length?BASE[i]:'AUTO'+String(i-3).padStart(3,'0');
    const label=LABELS[load]||'obwód '+String(i+1).padStart(2,'0');
-   loads.push({id:load,label,code:a.breaker.code,phase:a.phase,number:i+1,breakerId:a.breaker.id});
+   const sectionIndex=a.rcd?sections.findIndex(g=>g.items[0]?.id===a.rcd.id):-1;
+   const section=sectionIndex>=0?'RCD '+(sectionIndex+1):(a.kind==='rcbo'?'RCBO':'BEZ RCD');
+   const cable=a.breaker.code==='B10'||load==='LIGHT'?'YDYp 3×1,5':'YDYp 3×2,5';
+   loads.push({id:load,label,code:a.breaker.code,phase:a.phase,number:i+1,breakerId:a.breaker.id,
+     breakerRow:a.breaker.row,section,rcdId:a.rcd?.id||null,cable});
    wire(t(a.breaker,'bottom','L'),'LOAD:'+load+':L',a.phase,'Podłącz '+a.phase+' do '+label+' przez '+a.breaker.code+'.');
    if(a.kind==='rcbo')wire(t(a.breaker,'bottom','N'),'LOAD:'+load+':N','N','Podłącz własny N obwodu '+label+' przez RCBO.');
    else if(a.neutralId)wire(a.neutralId,'LOAD:'+load+':N','N','Podłącz N obwodu '+label+' do wyjściowej listwy tego RCD.');
