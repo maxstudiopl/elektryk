@@ -220,7 +220,19 @@ function placePart(code,row,start,idOverride=null,quiet=false){
   grid.appendChild(wrap);
   mounted.push({id,code:p.code,row,start,modules:p.modules,el:wrap});
   wrap.querySelector('.remove-device').onclick=e=>{e.stopPropagation();removeMount(id)};
-  wrap.onclick=e=>{e.stopPropagation();rowsHost.querySelectorAll('.mounted-device').forEach(x=>x.classList.remove('selected-mounted'));wrap.classList.add('selected-mounted')};
+  wrap.tabIndex=0;
+  wrap.setAttribute('role','group');
+  wrap.setAttribute('aria-label',p.name+', szyna DIN '+(row+1)+', moduły '+(start+1)+'–'+(start+p.modules));
+  function chooseMount(){
+    rowsHost.querySelectorAll('.mounted-device').forEach(x=>x.classList.remove('selected-mounted'));
+    wrap.classList.add('selected-mounted');
+    document.dispatchEvent(new CustomEvent('elektryk:apparatus-selected',{detail:{id,code:p.code,row,start}}));
+  }
+  wrap.onclick=e=>{e.stopPropagation();chooseMount()};
+  wrap.addEventListener('keydown',e=>{
+    if(e.target!==wrap||!['Enter',' '].includes(e.key))return;
+    e.preventDefault();e.stopPropagation();chooseMount();
+  });
   if(!quiet){
     updateStats();
     setHint(`<b>ZAMONTOWANO:</b> ${p.name} • listwa ${row+1}, moduły ${start+1}–${start+p.modules}`,'success');
@@ -261,6 +273,7 @@ function removeMount(id){
   const grid=rowsHost.querySelector(`.mount-grid[data-row="${m.row}"]`);
   for(let i=m.start;i<m.start+m.modules;i++){occupied[m.row][i]=null;grid?.children[i]?.classList.remove('occupied')}
   m.el.remove();mounted=mounted.filter(x=>x.id!==id);updateStats();
+  document.dispatchEvent(new CustomEvent('elektryk:apparatus-removed',{detail:{id,code:m.code}}));
   setHint(`<b>USUNIĘTO:</b> ${m.code} z listwy ${m.row+1}.`);
 }
 function resetAll(){
@@ -393,7 +406,7 @@ function configureBoard(template){
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
   setHint(`<b>WOLNA BUDOWA:</b> ${template.name} • ${template.rows}×${template.modulesPerRow}M.`,'success');
   const version=document.querySelector('.cabinet-head .version');
-  if(version)version.textContent=`v0.7.22 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
+  if(version)version.textContent=`v0.7.23 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
   document.dispatchEvent(new CustomEvent('elektryk:board-changed',{detail:{template:{...template}}}));
   return true;
 }
