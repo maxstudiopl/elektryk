@@ -2,6 +2,28 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## Panel Użytkownika — wariant B (w ramach v0.7.16)
+
+- Widoczna nazwa **Panel Użytkownika** zamiast dotychczasowego Panelu Gracza.
+- Biały nagłówek z oryginalnym logo bez osobnej ramki, a po prawej powitanie zalogowanego użytkownika.
+- Trzy kafelki w pierwszym rzędzie: **Wolna Budowa**, **Nauka** i **Rozdzielnice Przemysłowe**.
+- **Egzamin** w osobnym, pełnoszerokim rzędzie (10 pytań + 3 zadania praktyczne).
+- Statystyki postępów w oddzielnym oknie; zachowane identyfikatory liczników XP, poziomu i zadań.
+- **Ustawienia → Moje konto**: licencja, sesja, status płatności i dostęp; **Ustawienia gry**: dotychczasowe opcje interfejsu; **Informacje**: wersja i autor.
+- **O symulatorze** i działająca historia aktualizacji jako zakładki informacyjne.
+- Ostrzeżenia o niedostępnej licencji widoczne również w panelu użytkownika.
+- Responsywność: układ 3+1 na komputerze, 2+1+egzamin na tablecie i układ pionowy na telefonie.
+- Nowe pliki: `user-panel-v0716.css`, `user-panel-v0716.js`. Logika kont, zapisów, nauki i egzaminów pozostaje bez zmian.
+
+### Kontrola po aktualizacji
+
+1. Zaloguj się i sprawdź powitanie, biały nagłówek, cztery kafelki w układzie B.
+2. Otwórz **Statystyki**, zamknij przyciskiem X, kliknięciem tła oraz Escape.
+3. Otwórz **Ustawienia → Moje konto**. Zweryfikuj licencję, czas sesji i status płatności. Sprawdź zakładkę **Ustawienia gry** i zapis opcji.
+4. Otwórz **O symulatorze**, przełącz do **Aktualizacji** i wróć do panelu.
+5. Uruchom każdy z czterech trybów. Sprawdź działanie przycisku powrotu **Panel Użytkownika**.
+6. Sprawdź układ na telefonie, tablecie i desktopie oraz komunikat o wygasłej licencji.
+
 ## Wersja v0.7.16 — rozdzielnice przemysłowe PRO (etap 1)
 
 - Nowy przycisk **PRZEMYSŁ • PRO** w panelu gracza, prowadzący do Wolnej Budowy.
