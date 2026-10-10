@@ -2,6 +2,33 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.17.7 — pomoc, schematy i kontrola połączeń elektrycznych
+
+Modernizacja obejmuje **trzy istniejące mechanizmy diagnostyczne** (`stage4.js`, `electrical-engine-v0713.js`, `electrical-audit-v0712.js`) oraz analizę RCD/RCBO. Nowy raport **nie zastępuje** ich własną uproszczoną oceną: odczytuje rzeczywiste wyniki istniejącej symulacji.
+
+### Co zostało dodane
+
+- Spójna graficznie pomoc kontekstowa i okno **Pełne rozwiązanie / Schemat**: większe opisy, czytelne połączenia L1/L2/L3/N/PE, wygodniejsze filtrowanie kroków, przewijanie SVG oraz zamykanie ESC. Okno zachowuje swoje dotychczasowe generatory planu i schematu.
+- **Sprawdź instalację** uruchamia dotychczasowy silnik kontroli połączeń. Po teście otwiera nowy szczegółowy raport.
+- Raport pokazuje oddzielnie: stan odbiorników L/N/PE, drogę przez FR / MCB / RCD / RCBO, wyniki zabezpieczeń DIN, ostrzeżenia i błędy (również te z audytu neutralnych sekcji, mostków i grzebieni).
+- Przy wykrytej usterce raport podaje opis i — tam, gdzie istnieje identyfikator widocznego elementu — przycisk **Wskaż** do jego podświetlenia na rozdzielnicy.
+- W trybie **Nauka / Egzamin** raport uwzględnia również wymagane aparaty i wynik sprawdzenia zgodności rozmieszczenia z wzorcem zadania.
+- Wynik kontroli ma trzy rozróżnialne stany: zaliczenie aktualnych testów modelu, błędy oraz sytuację wymagającą dokończenia lub weryfikacji. **Stary raport nie jest uznawany za aktualny po zmianie aparatury, przewodów, mostków lub położenia przełączników.**
+- W pomocniczym postępie Nauka 2.0 punkt „Sprawdź instalację” jest zaliczany po **aktualnej kontroli ręcznej**, a nie tylko po automatycznym podglądzie silnika.
+- Zmodyfikowano prezentację podsumowania analizatora tak, aby ostrzeżenia nie powodowały zielonego komunikatu sukcesu.
+- Nowy arkusz `diagnostics-pro-v07177.css` dotyczy jedynie okien, paneli i podświetlenia wskazanych elementów — **bez zmiany geometrii DIN i współrzędnych elektrycznych**.
+
+### Ograniczenie symulacji — istotne
+
+**Zaliczony wynik dotyczy tylko zaimplementowanych testów modelu dydaktycznego**. Nie dowodzi, że rzeczywista rozdzielnica jest bezpieczna, prawidłowo dobrana ani zgodna z aktualnymi normami. Symulator nie wykonuje pomiarów izolacji, impedancji pętli zwarcia, wyzwalania RCD, obciążalności przewodów czy rzeczywistych testów ochronnych. Rzeczywista kontrola wymaga uprawnionej osoby, właściwych pomiarów oraz odpowiedniej dokumentacji.
+
+### Testy i weryfikacja
+
+- `node --test tests/verification-pro-v07177.test.mjs`: przypadki kompletnego modelu, brakującego odbiornika, kolizji faz, błędów aparatury, ostrzeżeń RCD, brakujących aparatów wymaganych zadaniem i błędów rozmieszczenia.
+- Sprawdź w podglądzie https://maxstudiopl.github.io/elektryk/ tryby Nauka / Wolna Budowa. Uruchom **Sprawdź instalację**, zobacz raport, wybierz **Wskaż**, wróć do rozdzielnicy, zmień przewód lub aparat i sprawdź, czy raport wymaga ponownej kontroli.
+- Potwierdź czytelność schematów na monitorze, laptopie i telefonie, obsługę ESC oraz niezależną diagnostykę RCD/N.
+- Sprawdzenie rzeczywistej zalogowanej sesji w przeglądarce pozostaje wymagane przed zatwierdzeniem wyglądu.
+
 ## v0.7.17.6 — nowy katalog 300 zadań PRO
 
 Przebudowano katalog zadań szkoleniowych na podstawie dotychczasowego silnika `tasks-v046.js`, `curriculum-v0714.js` i danych użytkownika z `progress-v060.js`. **Zachowano identyfikatory zadań 1–300, schematy, wymagania aparatury i przyznawanie XP**.
