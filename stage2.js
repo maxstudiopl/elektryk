@@ -1,50 +1,50 @@
 (()=>{
 
 const PARTS={
-  FR:{code:'FR',name:'FR 63A 4P',modules:4,category:'OCHRONA',className:'device-fr wide',top:'L1 • L2 • L3 • N',brand:'XYZ',brandClass:'red',type:'FR',rating:'63A',meta:'4P • 400V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L1 • L2 • L3 • N',kind:'fr'},
-  FR40:{code:'FR40',name:'FR 40A 2P',modules:2,category:'OCHRONA',className:'device-fr medium',top:'L • N',brand:'XYZ',brandClass:'red',type:'FR',rating:'40A',meta:'2P • 230V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L • N',kind:'fr'},
-  FR100:{code:'FR100',name:'FR 100A 4P',modules:4,category:'OCHRONA',className:'device-fr wide',top:'L1 • L2 • L3 • N',brand:'XYZ',brandClass:'red',type:'FR',rating:'100A',meta:'4P • 400V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L1 • L2 • L3 • N',kind:'fr'},
-  RCD:{code:'RCD',name:'RCD 40A / 30mA',modules:2,category:'RCD',className:'device-rcd medium',top:'L • N',brand:'XYZ',brandClass:'blue',type:'RCD',rating:'40A',meta:'30mA • Typ A • 2P',fn:'OCHRONA RÓŻNICOWA',bottom:'L • N',kind:'rcd',test:'T'},
-  RCD4:{code:'RCD4',name:'RCD 40A / 30mA 4P',modules:4,category:'RCD',className:'device-rcd device-rcd-4p wide',top:'L1 • L2 • L3 • N',brand:'XYZ',brandClass:'blue',type:'RCD',rating:'40A',meta:'30mA • Typ A • 4P',fn:'OCHRONA RÓŻNICOWA',bottom:'L1 • L2 • L3 • N',kind:'rcd',test:'T'},
-  B6:{code:'B6',name:'B6 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'B6',rating:'6A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
-  B10:{code:'B10',name:'B10 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'B10',rating:'10A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
-  B13:{code:'B13',name:'B13 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'B13',rating:'13A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
-  B16:{code:'B16',name:'B16 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'B16',rating:'16A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
-  B20:{code:'B20',name:'B20 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'B20',rating:'20A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
-  B25:{code:'B25',name:'B25 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'B25',rating:'25A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
-  C10:{code:'C10',name:'C10 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'C10',rating:'10A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
-  C16:{code:'C16',name:'C16 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'C16',rating:'16A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
-  C20:{code:'C20',name:'C20 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'C20',rating:'20A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
-  C25:{code:'C25',name:'C25 1P',modules:1,category:'MCB',className:'',top:'1',brand:'XYZ',brandClass:'dark',type:'C25',rating:'25A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
-  B6_2P:{code:'B6_2P',name:'B6 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'B6',rating:'6A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
-  B6_3P:{code:'B6_3P',name:'B6 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'B6',rating:'6A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
-  B10_2P:{code:'B10_2P',name:'B10 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'B10',rating:'10A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
-  B10_3P:{code:'B10_3P',name:'B10 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'B10',rating:'10A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
-  B13_2P:{code:'B13_2P',name:'B13 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'B13',rating:'13A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
-  B13_3P:{code:'B13_3P',name:'B13 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'B13',rating:'13A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
-  B16_2P:{code:'B16_2P',name:'B16 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'B16',rating:'16A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
-  B16_3P:{code:'B16_3P',name:'B16 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'B16',rating:'16A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
-  B20_2P:{code:'B20_2P',name:'B20 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'B20',rating:'20A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
-  B20_3P:{code:'B20_3P',name:'B20 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'B20',rating:'20A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
-  B25_2P:{code:'B25_2P',name:'B25 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'B25',rating:'25A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
-  B25_3P:{code:'B25_3P',name:'B25 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'B25',rating:'25A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
-  C10_2P:{code:'C10_2P',name:'C10 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'C10',rating:'10A',meta:'2P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4',kind:'mcb'},
-  C10_3P:{code:'C10_3P',name:'C10 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'C10',rating:'10A',meta:'3P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4 • 6',kind:'mcb'},
-  C16_2P:{code:'C16_2P',name:'C16 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'C16',rating:'16A',meta:'2P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4',kind:'mcb'},
-  C16_3P:{code:'C16_3P',name:'C16 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'C16',rating:'16A',meta:'3P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4 • 6',kind:'mcb'},
-  C20_2P:{code:'C20_2P',name:'C20 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'C20',rating:'20A',meta:'2P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4',kind:'mcb'},
-  C20_3P:{code:'C20_3P',name:'C20 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'C20',rating:'20A',meta:'3P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4 • 6',kind:'mcb'},
-  C25_2P:{code:'C25_2P',name:'C25 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'XYZ',brandClass:'dark',type:'C25',rating:'25A',meta:'2P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4',kind:'mcb'},
-  C25_3P:{code:'C25_3P',name:'C25 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'XYZ',brandClass:'dark',type:'C25',rating:'25A',meta:'3P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4 • 6',kind:'mcb'},
-  RCBO:{code:'RCBO',name:'RCBO B16 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'XYZ',brandClass:'cyan',type:'RCBO',rating:'B16',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
-  RCBO10:{code:'RCBO10',name:'RCBO B10 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'XYZ',brandClass:'cyan',type:'RCBO',rating:'B10',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
-  RCBO20:{code:'RCBO20',name:'RCBO B20 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'XYZ',brandClass:'cyan',type:'RCBO',rating:'B20',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
-  SPD:{code:'SPD',name:'SPD Typ 2',modules:2,category:'OCHRONA',className:'device-spd medium',top:'L • N',brand:'XYZ',brandClass:'orange',type:'SPD',rating:'T2',meta:'275V • 1P+N',fn:'PRZEPIĘCIA',bottom:'PE',kind:'spd',spd:true},
-  SPD4:{code:'SPD4',name:'SPD Typ 2 3P+N',modules:4,category:'OCHRONA',className:'device-spd device-spd-4p wide',top:'L1 • L2 • L3 • N',brand:'XYZ',brandClass:'orange',type:'SPD',rating:'T2',meta:'275V • 3P+N',fn:'OCHRONA PRZEPIĘCIOWA',bottom:'PE',kind:'spd',spd:true},
-  NTB:{code:'NTB',name:'Listwa zaciskowa N',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-n medium',top:'N1 • N2 • N3 • N4',brand:'XYZ',brandClass:'blue',type:'N',rating:'8×N',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ NEUTRALNY N',bottom:'N5 • N6 • N7 • N8',kind:'terminal-n',passive:true},
-  PETB:{code:'PETB',name:'Listwa zaciskowa PE',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-pe medium',top:'PE1 • PE2 • PE3 • PE4',brand:'XYZ',brandClass:'green',type:'PE',rating:'8×PE',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ OCHRONNY PE',bottom:'PE5 • PE6 • PE7 • PE8',kind:'terminal-pe',passive:true},
-  NTB12:{code:'NTB12',name:'Listwa N kompakt 12',modules:1,category:'ZACISKI',className:'device-terminal device-terminal-n device-terminal-compact',top:'N1 • N2 • N3 • N4 • N5 • N6',brand:'XYZ',brandClass:'blue',type:'N',rating:'12×N',meta:'KOMPAKT • 1M',fn:'12 ZACISKÓW NEUTRALNYCH',bottom:'N7 • N8 • N9 • N10 • N11 • N12',kind:'terminal-n',passive:true,compact:true},
-  PETB12:{code:'PETB12',name:'Listwa PE kompakt 12',modules:1,category:'ZACISKI',className:'device-terminal device-terminal-pe device-terminal-compact',top:'PE1 • PE2 • PE3 • PE4 • PE5 • PE6',brand:'XYZ',brandClass:'green',type:'PE',rating:'12×PE',meta:'KOMPAKT • 1M',fn:'12 ZACISKÓW OCHRONNYCH',bottom:'PE7 • PE8 • PE9 • PE10 • PE11 • PE12',kind:'terminal-pe',passive:true,compact:true}
+  FR:{code:'FR',name:'PRO FR 63A 4P',modules:4,category:'OCHRONA',className:'device-fr wide',top:'L1 • L2 • L3 • N',brand:'PRO',brandClass:'red',type:'FR',rating:'63A',meta:'4P • 400V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L1 • L2 • L3 • N',kind:'fr'},
+  FR40:{code:'FR40',name:'PRO FR 40A 2P',modules:2,category:'OCHRONA',className:'device-fr medium',top:'L • N',brand:'PRO',brandClass:'red',type:'FR',rating:'40A',meta:'2P • 230V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L • N',kind:'fr'},
+  FR100:{code:'FR100',name:'PRO FR 100A 4P',modules:4,category:'OCHRONA',className:'device-fr wide',top:'L1 • L2 • L3 • N',brand:'PRO',brandClass:'red',type:'FR',rating:'100A',meta:'4P • 400V',fn:'ROZŁĄCZNIK GŁÓWNY',bottom:'L1 • L2 • L3 • N',kind:'fr'},
+  RCD:{code:'RCD',name:'PRO RCD 40A / 30mA',modules:2,category:'RCD',className:'device-rcd medium',top:'L • N',brand:'PRO',brandClass:'blue',type:'RCD',rating:'40A',meta:'30mA • Typ A • 2P',fn:'OCHRONA RÓŻNICOWA',bottom:'L • N',kind:'rcd',test:'T'},
+  RCD4:{code:'RCD4',name:'PRO RCD 40A / 30mA 4P',modules:4,category:'RCD',className:'device-rcd device-rcd-4p wide',top:'L1 • L2 • L3 • N',brand:'PRO',brandClass:'blue',type:'RCD',rating:'40A',meta:'30mA • Typ A • 4P',fn:'OCHRONA RÓŻNICOWA',bottom:'L1 • L2 • L3 • N',kind:'rcd',test:'T'},
+  B6:{code:'B6',name:'PRO B6 1P',modules:1,category:'MCB',className:'',top:'1',brand:'PRO',brandClass:'dark',type:'B6',rating:'6A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  B10:{code:'B10',name:'PRO B10 1P',modules:1,category:'MCB',className:'',top:'1',brand:'PRO',brandClass:'dark',type:'B10',rating:'10A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  B13:{code:'B13',name:'PRO B13 1P',modules:1,category:'MCB',className:'',top:'1',brand:'PRO',brandClass:'dark',type:'B13',rating:'13A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  B16:{code:'B16',name:'PRO B16 1P',modules:1,category:'MCB',className:'',top:'1',brand:'PRO',brandClass:'dark',type:'B16',rating:'16A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  B20:{code:'B20',name:'PRO B20 1P',modules:1,category:'MCB',className:'',top:'1',brand:'PRO',brandClass:'dark',type:'B20',rating:'20A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  B25:{code:'B25',name:'PRO B25 1P',modules:1,category:'MCB',className:'',top:'1',brand:'PRO',brandClass:'dark',type:'B25',rating:'25A',meta:'1P • 230V',fn:'MCB • CHAR. B',bottom:'2',kind:'mcb'},
+  C10:{code:'C10',name:'PRO C10 1P',modules:1,category:'MCB',className:'',top:'1',brand:'PRO',brandClass:'dark',type:'C10',rating:'10A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
+  C16:{code:'C16',name:'PRO C16 1P',modules:1,category:'MCB',className:'',top:'1',brand:'PRO',brandClass:'dark',type:'C16',rating:'16A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
+  C20:{code:'C20',name:'PRO C20 1P',modules:1,category:'MCB',className:'',top:'1',brand:'PRO',brandClass:'dark',type:'C20',rating:'20A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
+  C25:{code:'C25',name:'PRO C25 1P',modules:1,category:'MCB',className:'',top:'1',brand:'PRO',brandClass:'dark',type:'C25',rating:'25A',meta:'1P • 230V',fn:'MCB • CHAR. C',bottom:'2',kind:'mcb'},
+  B6_2P:{code:'B6_2P',name:'PRO B6 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'PRO',brandClass:'dark',type:'B6',rating:'6A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
+  B6_3P:{code:'B6_3P',name:'PRO B6 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'PRO',brandClass:'dark',type:'B6',rating:'6A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
+  B10_2P:{code:'B10_2P',name:'PRO B10 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'PRO',brandClass:'dark',type:'B10',rating:'10A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
+  B10_3P:{code:'B10_3P',name:'PRO B10 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'PRO',brandClass:'dark',type:'B10',rating:'10A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
+  B13_2P:{code:'B13_2P',name:'PRO B13 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'PRO',brandClass:'dark',type:'B13',rating:'13A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
+  B13_3P:{code:'B13_3P',name:'PRO B13 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'PRO',brandClass:'dark',type:'B13',rating:'13A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
+  B16_2P:{code:'B16_2P',name:'PRO B16 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'PRO',brandClass:'dark',type:'B16',rating:'16A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
+  B16_3P:{code:'B16_3P',name:'PRO B16 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'PRO',brandClass:'dark',type:'B16',rating:'16A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
+  B20_2P:{code:'B20_2P',name:'PRO B20 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'PRO',brandClass:'dark',type:'B20',rating:'20A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
+  B20_3P:{code:'B20_3P',name:'PRO B20 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'PRO',brandClass:'dark',type:'B20',rating:'20A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
+  B25_2P:{code:'B25_2P',name:'PRO B25 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'PRO',brandClass:'dark',type:'B25',rating:'25A',meta:'2P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4',kind:'mcb'},
+  B25_3P:{code:'B25_3P',name:'PRO B25 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'PRO',brandClass:'dark',type:'B25',rating:'25A',meta:'3P • 400V',fn:'MCB • CHAR. B',bottom:'2 • 4 • 6',kind:'mcb'},
+  C10_2P:{code:'C10_2P',name:'PRO C10 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'PRO',brandClass:'dark',type:'C10',rating:'10A',meta:'2P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4',kind:'mcb'},
+  C10_3P:{code:'C10_3P',name:'PRO C10 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'PRO',brandClass:'dark',type:'C10',rating:'10A',meta:'3P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4 • 6',kind:'mcb'},
+  C16_2P:{code:'C16_2P',name:'PRO C16 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'PRO',brandClass:'dark',type:'C16',rating:'16A',meta:'2P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4',kind:'mcb'},
+  C16_3P:{code:'C16_3P',name:'PRO C16 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'PRO',brandClass:'dark',type:'C16',rating:'16A',meta:'3P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4 • 6',kind:'mcb'},
+  C20_2P:{code:'C20_2P',name:'PRO C20 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'PRO',brandClass:'dark',type:'C20',rating:'20A',meta:'2P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4',kind:'mcb'},
+  C20_3P:{code:'C20_3P',name:'PRO C20 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'PRO',brandClass:'dark',type:'C20',rating:'20A',meta:'3P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4 • 6',kind:'mcb'},
+  C25_2P:{code:'C25_2P',name:'PRO C25 2P',modules:2,category:'MCB',className:'device-mcb-2p',top:'1 • 3',brand:'PRO',brandClass:'dark',type:'C25',rating:'25A',meta:'2P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4',kind:'mcb'},
+  C25_3P:{code:'C25_3P',name:'PRO C25 3P',modules:3,category:'MCB',className:'device-mcb-3p',top:'1 • 3 • 5',brand:'PRO',brandClass:'dark',type:'C25',rating:'25A',meta:'3P • 400V',fn:'MCB • CHAR. C',bottom:'2 • 4 • 6',kind:'mcb'},
+  RCBO:{code:'RCBO',name:'PRO RCBO B16 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'PRO',brandClass:'cyan',type:'RCBO',rating:'B16',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
+  RCBO10:{code:'RCBO10',name:'PRO RCBO B10 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'PRO',brandClass:'cyan',type:'RCBO',rating:'B10',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
+  RCBO20:{code:'RCBO20',name:'PRO RCBO B20 / 30mA',modules:2,category:'RCD',className:'device-rcbo medium',top:'L • N',brand:'PRO',brandClass:'cyan',type:'RCBO',rating:'B20',meta:'30mA • 1P+N',fn:'MCB + RCD',bottom:'L • N',kind:'rcbo',test:'T',testClass:'yellow'},
+  SPD:{code:'SPD',name:'PRO SPD Typ 2',modules:2,category:'OCHRONA',className:'device-spd medium',top:'L • N',brand:'PRO',brandClass:'orange',type:'SPD',rating:'T2',meta:'275V • 1P+N',fn:'PRZEPIĘCIA',bottom:'PE',kind:'spd',spd:true},
+  SPD4:{code:'SPD4',name:'PRO SPD Typ 2 3P+N',modules:4,category:'OCHRONA',className:'device-spd device-spd-4p wide',top:'L1 • L2 • L3 • N',brand:'PRO',brandClass:'orange',type:'SPD',rating:'T2',meta:'275V • 3P+N',fn:'OCHRONA PRZEPIĘCIOWA',bottom:'PE',kind:'spd',spd:true},
+  NTB:{code:'NTB',name:'PRO Listwa zaciskowa N',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-n medium',top:'N1 • N2 • N3 • N4',brand:'PRO',brandClass:'blue',type:'N',rating:'8×N',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ NEUTRALNY N',bottom:'N5 • N6 • N7 • N8',kind:'terminal-n',passive:true},
+  PETB:{code:'PETB',name:'PRO Listwa zaciskowa PE',modules:2,category:'ZACISKI',className:'device-terminal device-terminal-pe medium',top:'PE1 • PE2 • PE3 • PE4',brand:'PRO',brandClass:'green',type:'PE',rating:'8×PE',meta:'LISTWA ZACISKOWA • 2M',fn:'ROZDZIAŁ OCHRONNY PE',bottom:'PE5 • PE6 • PE7 • PE8',kind:'terminal-pe',passive:true},
+  NTB12:{code:'NTB12',name:'PRO Listwa N kompakt 12',modules:1,category:'ZACISKI',className:'device-terminal device-terminal-n device-terminal-compact',top:'N1 • N2 • N3 • N4 • N5 • N6',brand:'PRO',brandClass:'blue',type:'N',rating:'12×N',meta:'KOMPAKT • 1M',fn:'12 ZACISKÓW NEUTRALNYCH',bottom:'N7 • N8 • N9 • N10 • N11 • N12',kind:'terminal-n',passive:true,compact:true},
+  PETB12:{code:'PETB12',name:'PRO Listwa PE kompakt 12',modules:1,category:'ZACISKI',className:'device-terminal device-terminal-pe device-terminal-compact',top:'PE1 • PE2 • PE3 • PE4 • PE5 • PE6',brand:'PRO',brandClass:'green',type:'PE',rating:'12×PE',meta:'KOMPAKT • 1M',fn:'12 ZACISKÓW OCHRONNYCH',bottom:'PE7 • PE8 • PE9 • PE10 • PE11 • PE12',kind:'terminal-pe',passive:true,compact:true}
 }
 
 let modulesPerRow=18;
@@ -90,7 +90,7 @@ let enclosureRealism=cabinetInner.querySelector(':scope > .enclosure-realism');
 if(!enclosureRealism){
   enclosureRealism=document.createElement('div');
   enclosureRealism.className='enclosure-realism';
-  enclosureRealism.innerHTML='<i class="case-screw tl"></i><i class="case-screw tr"></i><i class="case-screw bl"></i><i class="case-screw br"></i><span class="case-marking">XYZ • MODULAR ENCLOSURE</span>';
+  enclosureRealism.innerHTML='<i class="case-screw tl"></i><i class="case-screw tr"></i><i class="case-screw bl"></i><i class="case-screw br"></i><span class="case-marking">PRO • MODULAR ENCLOSURE</span>';
   cabinetInner.prepend(enclosureRealism);
 }
 
@@ -119,7 +119,7 @@ function applyEnclosureProfile(template={}){
   if(mark){
     const rows=Number(template.rows||rowCount)||1;
     const perRow=Number(template.modulesPerRow||modulesPerRow)||18;
-    mark.textContent='XYZ • '+rows+'×'+perRow+'M • '+String(mounting).replaceAll('_',' ').toUpperCase();
+    mark.textContent='PRO • '+rows+'×'+perRow+'M • '+String(mounting).replaceAll('_',' ').toUpperCase();
   }
 }
 function apparatusHtml(p){
@@ -339,8 +339,8 @@ function ensureMcbVariantCards(){
     card.dataset.part=p.code;
     card.dataset.name=`Wyłącznik nadprądowy ${p.name}`;
     card.dataset.spec=`${p.type} • ${p.rating} • ${p.meta}`;
-    card.dataset.desc=`Wyłącznik nadprądowy marki XYZ, ${p.modules}-polowy.`;
-    card.innerHTML=`<span class="mini-device mini-mcb-${p.modules}p"><strong>${p.type}</strong><em>${p.rating} • ${p.modules}P</em><i></i></span><b>${p.name}</b><small>XYZ • MCB • ${p.modules}P</small>`;
+    card.dataset.desc=`Wyłącznik nadprądowy marki PRO, ${p.modules}-polowy.`;
+    card.innerHTML=`<span class="mini-device mini-mcb-${p.modules}p"><strong>${p.type}</strong><em>${p.rating} • ${p.modules}P</em><i></i></span><b>${p.name}</b><small>PRO • MCB • ${p.modules}P</small>`;
     grid.appendChild(card);
   });
 }
@@ -354,9 +354,9 @@ function ensureXyzProtectionCards(){
     card.dataset.part=code;
     card.dataset.name=p.name;
     card.dataset.spec=`${p.type} • ${p.rating} • ${p.meta}`;
-    card.dataset.desc=`Aparat modułowy serii XYZ do symulatora rozdzielnic.`;
+    card.dataset.desc=`Aparat modułowy serii PRO do symulatora rozdzielnic.`;
     const miniClass=p.kind==='spd'?'mini-spd':p.kind==='rcd'?'mini-rcd':'mini-rcbo';
-    card.innerHTML=`<span class="mini-device ${miniClass} mini-${p.modules}p"><strong>${p.type}</strong><em>${p.rating}</em><i></i></span><b>${p.name}</b><small>XYZ • ${p.meta}</small>`;
+    card.innerHTML=`<span class="mini-device ${miniClass} mini-${p.modules}p"><strong>${p.type}</strong><em>${p.rating}</em><i></i></span><b>${p.name}</b><small>PRO • ${p.meta}</small>`;
     grid.appendChild(card);
   });
 }
