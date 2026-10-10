@@ -1,0 +1,84 @@
+/* RozdzielnicaPRO.pl v0.7.17.4 — wyjścia górne O1/O2
+ * Usuwamy dziedziczoną od dolnych kabli geometrię pochylenia żył.
+ *
+ * WAŻNE: górny kabel ma powłokę przy wejściu w górnej krawędzi,
+ * a poszczególne żyły prowadzą W DÓŁ do oryginalnych zacisków L/N/PE.
+ * Zaciski, ich identyfikatory i położenia pozostają NIENARUSZONE.
+ * Dolny bank, WLZ, szyny i kable użytkownika są poza zakresem.
+ */
+
+/* Nie obracaj całego modelu o 180 stopni.
+ * Stary stage3.css deklaruje rotate(180deg) dla data-exit=top-right. */
+html[data-theme="dark"] .cabinet-inner.cable-routing-shell
+.cable-bank.cable-bank-top .large-cable-outlet.circuit-node .circuit-cable-visual{
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  top:0!important;
+  bottom:auto!important;
+  width:54px!important;
+  height:106px!important;
+  transform:translateX(-50%)!important;
+  transform-origin:50% 50%!important;
+  pointer-events:none!important;
+}
+
+/* Powłoka schodzi od krawędzi GÓRNEJ do pierwszych 27 px.
+ * Koniec wyprowadzenia jest zaokrąglony w kierunku przewodów. */
+html[data-theme="dark"] .cabinet-inner.cable-routing-shell
+.cable-bank.cable-bank-top .large-cable-outlet.circuit-node .circuit-sheath{
+  top:0!important;
+  bottom:auto!important;
+  left:50%!important;
+  width:25px!important;
+  height:27px!important;
+  transform:translateX(-50%)!important;
+  border-radius:3px 3px 8px 8px!important;
+}
+
+/* Żyły zaczynają się w czarnej powłoce na wysokości 22 px.
+ * Obrót względem GÓRNEGO końca, nie dolnego, zachowuje ciągłość
+ * z płaszczem kabla i łagodne rozchylenie w kierunku zacisków. */
+html[data-theme="dark"] .cabinet-inner.cable-routing-shell
+.cable-bank.cable-bank-top .large-cable-outlet.circuit-node .circuit-core{
+  position:absolute!important;
+  top:22px!important;
+  bottom:auto!important;
+  height:36px!important;
+  width:5px!important;
+  transform-origin:50% 0%!important;
+  border-radius:2px 2px 3px 3px!important;
+}
+
+/* L/N/PE są w tej samej kolejności i mają te same funkcje.
+ * Nie odwracamy faz ani nie zamieniamy kolorów przewodów. */
+html[data-theme="dark"] .cabinet-inner.cable-routing-shell
+.cable-bank.cable-bank-top .large-cable-outlet.circuit-node .circuit-core.core-l{
+  left:15px!important;
+  transform:rotate(12deg)!important;
+  background:var(--cable-l,#8b4a17)!important;
+}
+html[data-theme="dark"] .cabinet-inner.cable-routing-shell
+.cable-bank.cable-bank-top .large-cable-outlet.circuit-node .circuit-core.core-n{
+  left:25px!important;
+  transform:none!important;
+  background:#0989d8!important;
+}
+html[data-theme="dark"] .cabinet-inner.cable-routing-shell
+.cable-bank.cable-bank-top .large-cable-outlet.circuit-node .circuit-core.core-pe{
+  left:35px!important;
+  transform:rotate(-12deg)!important;
+  background:repeating-linear-gradient(135deg,#e8df27 0 6px,#54a13b 6px 12px)!important;
+}
+
+/* Trzy klikalne zaciski pozostają na pierwotnym poziomie y=56.
+ * Żyły kończą się na ich górnej krawędzi; nie zmieniamy hitboxów. */
+html[data-theme="dark"] .cabinet-inner.cable-routing-shell
+.cable-bank.cable-bank-top .large-cable-outlet.circuit-node .circuit-terminals{
+  top:56px!important;
+  bottom:auto!important;
+  left:5px!important;
+  right:5px!important;
+}
+
+/* Dolne wyjścia mają nadal własny, niezmieniony układ. */
