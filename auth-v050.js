@@ -30,6 +30,7 @@ const scripts=[
   'learning-autoboard-core-v0715.js?v=071521',
   'cable-routing-v07152.js?v=071521b',
   'learning-assembly-v0715.js?v=07151b',
+  'learning-layout-v07171.js?v=07171',
   'exam-mode-v0714.js?v=07140c',
   'freebuild-save-v0711.js?v=0716',
   'industrial-zug-v0716.js?v=0716',
