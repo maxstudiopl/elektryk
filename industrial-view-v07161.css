@@ -60,10 +60,7 @@ html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .din-row{
     linear-gradient(0deg,#aebdb9 0,#e0e6e1 20px,transparent 22px),
     linear-gradient(90deg,#d0d7d2 0,#eff0ec 8%,#f6f7f3 50%,#e6e9e4 92%,#cbd3cf 100%)!important;
   box-shadow:inset 0 1px #fff,inset 0 -2px #9ca9a5!important;
-  border-top:4px solid #b5c0bb!important;
-}
-html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .din-row:first-child{
-  border-top:0!important;
+  /* Zachowujemy pierwotne obramowania rzędów, aby nie zmieniać pozycji zacisków. */
 }
 html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .din-row .din-rail{
   background:
