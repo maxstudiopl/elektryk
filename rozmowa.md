@@ -93,4 +93,4 @@ Gałąź robocza: `feat/v0.7.22-x1-electrical`. Zmiany: porty T/B złączek X1, 
 
 WYKONANO: połączono zaciski X1/ZUG (port górny i dolny) ze wspólnym grafem symulatora, dodano przewody, kontrolę podłączania i zasilenia zacisków, walidację zapisów, nieprzewodzące separatory oraz testy Node/Chromium. Zapis kompatybilny z dotychczasową listwą. Testy GitHub Actions na PR #5: zaliczone. Zmiany scalone do `main` jako commit `0a44203c472d1ea7851cee7ebeb55b694a6a364c`.
 
-Dodatkowy etap po publikacji: poprawa starych opisów interfejsu, które nadal informowały, że okablowanie X1 jest w przygotowaniu. Prace w gałęzi `chore/v0.7.22-x1-finish`. W razie kolejnego czatu zweryfikować aktualny status tej poprawki oraz ostatni wynik GitHub Actions.
+Dodatkowy etap po publikacji: poprawa starych opisów interfejsu, które nadal informowały, że okablowanie X1 jest w przygotowaniu. Poprawka zakończona: PR #6, oba zadania Quality Gate (Node.js i Chromium) zaliczone, scalona do `main` jako commit `3619f730673d9f19f87a13e47d53366eecff1732`. Następny czat powinien odczytać aktualny `main` i nowe wpisy przed zmianami.
