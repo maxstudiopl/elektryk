@@ -69,6 +69,12 @@ html[data-theme="dark"] .hub-user-actions button:last-child{border-color:#6b4b52
 html[data-theme="dark"] .hub-user-actions .hub-action-icon{
   font-size:19px;font-weight:700;color:#67b3ff;line-height:1;
 }
+html[data-theme="dark"] .hub-access-notice{
+  margin:0 0 12px;padding:10px 13px;
+  color:#ffe4d7;background:#573323;border:1px solid #db8355;
+  border-radius:9px;font:700 11px/1.5 Inter,Arial,sans-serif;
+}
+html[data-theme="dark"] .hub-access-notice[hidden]{display:none!important}
 html[data-theme="dark"] .pro-modes-title{
   margin:4px 0 10px!important;padding:0!important;
   display:flex!important;justify-content:space-between;align-items:end!important;gap:12px;
