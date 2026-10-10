@@ -149,8 +149,9 @@ function refresh(){
   const key=kind+'|'+msg;if(unique.has(key))return;unique.add(key);
   row(ui.issues,title,msg,kind,ref);
  };
- r.states.filter(s=>!s.any).forEach(s=>add('warn','Odbiornik niepodłączony',
-   (s.load?.label||s.load?.id||'Odbiornik')+': dokończ L/N/PE.',s.load?.id));
+ r.states.filter(s=>!s.complete).forEach(s=>add(s.any?'error':'warn',
+   s.any?'Odbiornik ma niepełny tor':'Odbiornik niepodłączony',
+   (s.load?.label||s.load?.id||'Odbiornik')+': dokończ i sprawdź L/N/PE.',s.load?.id));
  r.missingRequirements.forEach(m=>add('warn','Brak aparatu wymagany przez zadanie',
    m.code+': '+m.have+' z '+m.need+' szt.',null));
  if(r.layoutFailed)add('warn','Układ aparatów DIN','Sprawdź rozmieszczenie względem wzorca zadania.');
