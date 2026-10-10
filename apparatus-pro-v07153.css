@@ -1,0 +1,110 @@
+/* RozdzielnicaPRO.pl v0.7.15.3 • APARATURA PRO
+   Original fictional device brand. Technical model, IDs, terminals and
+   electrical validation remain unchanged. No real manufacturer trademarks.
+*/
+html[data-theme="dark"] .mount-grid .mounted-device>.device{
+  font-family:Inter,Arial,Helvetica,sans-serif!important;
+  --pro-family-accent:#227ec1;
+}
+html[data-theme="dark"] .mount-grid .mounted-device[data-code^="FR"]>.device{--pro-family-accent:#c74b48}
+html[data-theme="dark"] .mount-grid .mounted-device[data-code^="RCD"]>.device,
+html[data-theme="dark"] .mount-grid .mounted-device[data-code^="RCBO"]>.device{--pro-family-accent:#2588c9}
+html[data-theme="dark"] .mount-grid .mounted-device[data-code^="SPD"]>.device{--pro-family-accent:#d79b3f}
+html[data-theme="dark"] .mount-grid .mounted-device[data-code^="B"]>.device,
+html[data-theme="dark"] .mount-grid .mounted-device[data-code^="C"]>.device{--pro-family-accent:#3d6479}
+html[data-theme="dark"] .mount-grid .mounted-device[data-code^="NTB"]>.device{--pro-family-accent:#2384c7}
+html[data-theme="dark"] .mount-grid .mounted-device[data-code^="PETB"]>.device{--pro-family-accent:#679748}
+/* Printed logo: compact 1M breakers must show PRO without clipping. */
+html[data-theme="dark"] .mount-grid .mounted-device .brand-strip{
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:2px!important;
+  height:18px!important;
+  min-width:0!important;
+  padding:0 3px!important;
+  border:1px solid #a8b5bf!important;
+  border-top:3px solid var(--pro-family-accent,#1685d7)!important;
+  border-radius:2px!important;
+  background:linear-gradient(180deg,#f9fdff,#dae9f1)!important;
+  color:#11456c!important;
+  font:900 9px/1 'Rajdhani',Inter,Arial,sans-serif!important;
+  letter-spacing:.3px!important;
+  text-shadow:0 1px #fff!important;
+  box-shadow:inset 0 1px #ffffffbd!important;
+  white-space:nowrap!important;
+}
+html[data-theme="dark"] .mount-grid .mounted-device .brand-strip:after{
+  content:'P-LINE'!important;
+  margin-left:auto!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  color:#577588!important;
+  font:800 4px/1 Inter,Arial,sans-serif!important;
+  letter-spacing:0!important;
+}
+html[data-theme="dark"] .mount-grid .mounted-device[data-modules="1"] .brand-strip{
+  letter-spacing:0!important;
+  padding:0 2px!important;
+  font-size:8.5px!important;
+  justify-content:center!important;
+}
+html[data-theme="dark"] .mount-grid .mounted-device[data-modules="1"] .brand-strip:after,
+html[data-theme="dark"] .mount-grid .mounted-device .device-terminal-compact .brand-strip:after{
+  content:none!important;
+}
+/* Differentiate product families without recoloring electrical conductors. */
+html[data-theme="dark"] .mount-grid .mounted-device .device-type{
+  color:#132c3a!important;
+  letter-spacing:-.1px!important;
+}
+html[data-theme="dark"] .mount-grid .mounted-device .device-rating{
+  color:#172f43!important;
+}
+html[data-theme="dark"] .mount-grid .mounted-device .device-meta{
+  color:#4c6779!important;
+}
+html[data-theme="dark"] .mount-grid .mounted-device>.device:after{
+  color:#537486!important;
+}
+/* Catalogue: keep the native technical SKU inside <strong> for selection;
+   product titles, miniature badges and details are branded PRO. */
+html[data-theme="dark"] .catalog-card .mini-device:before{
+  content:'PRO'!important;
+  background:linear-gradient(180deg,#f7fbff,#dcebf4)!important;
+  border-top:2px solid #258de0!important;
+  color:#0c4a7c!important;
+  font:900 7px/1 'Rajdhani',Arial,sans-serif!important;
+  text-shadow:0 1px #fff!important;
+  letter-spacing:.1px!important;
+}
+html[data-theme="dark"] .catalog-card>b{
+  color:#e7f3ff!important;
+  font-weight:900!important;
+  letter-spacing:.05px!important;
+}
+html[data-theme="dark"] .catalog-card:hover,
+html[data-theme="dark"] .catalog-card.install-selected{
+  border-color:#349cf1!important;
+}
+html[data-theme="dark"] .catalog-card.install-selected .mini-device:before{
+  background:#d5f0ff!important;
+  border-top-color:#1da5ff!important;
+}
+/* PRO case badge, independent of cabinet size and cable-rack spacing. */
+html[data-theme="dark"] .cabinet-inner .case-marking{
+  color:#244b61!important;
+  font:900 9px/1.35 'Rajdhani',Inter,Arial,sans-serif!important;
+  letter-spacing:.35px!important;
+}
+/* Short descriptions in component details. */
+html[data-theme="dark"] .element-detail .detail-brand,
+html[data-theme="dark"] .element-details .detail-brand{
+  color:#70bfff!important;
+  font-weight:900!important;
+}
+@media(max-width:700px){
+ html[data-theme="dark"] .mount-grid .mounted-device .brand-strip{font-size:8px!important}
+ html[data-theme="dark"] .catalog-card>b{font-size:10px!important}
+}
