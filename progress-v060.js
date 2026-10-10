@@ -166,6 +166,6 @@ window.ElektrykProgress={
   level:()=>levelForXp(data.xp),
   refreshProfile:profile,
   refreshCards:decorateCards,
-  reset:()=>{localStorage.removeItem(storageKey());data=fresh();taskStartedAt=Date.now();failedChecks=0;renderStats()}
+  reset:()=>{localStorage.removeItem(storageKey());data=fresh();taskStartedAt=Date.now();failedChecks=0;renderStats();document.dispatchEvent(new CustomEvent('elektryk:progress-updated'))}
 };
 })();
