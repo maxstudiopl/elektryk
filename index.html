@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic | v0.7.17</title>
+  <title>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic | v0.7.17.1</title>
   <meta name="description" content="RozdzielnicaPRO.pl — symulator budowy rozdzielnic elektrycznych. Nauka montażu aparatów DIN, okablowania i diagnostyki instalacji.">
   <meta name="theme-color" content="#0B1F3A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,6 +51,7 @@
   <link rel="stylesheet" href="user-panel-v0716.css?v=0716b">
   <link rel="stylesheet" href="industrial-view-v07161.css?v=07162">
   <link rel="stylesheet" href="workspace-design-v0717.css?v=0717">
+  <link rel="stylesheet" href="learning-layout-v07171.css?v=07171">
   <style>
     /* v0.4.5 critical DIN layout hotfix — bypasses stale cached CSS */
     .mount-grid .mounted-device{position:absolute!important;top:0!important;height:194px!important;margin:0!important;padding:0!important;transform:none!important;box-sizing:border-box!important;z-index:12!important}
@@ -141,7 +142,7 @@
           <div>
             <h2>O PROJEKCIE</h2>
             <p>RozdzielnicaPRO.pl to rozwijany symulator edukacyjny montażu i okablowania rozdzielnic elektrycznych.</p>
-            <small>v0.7.17 • WERSJA BETA • PROJEKT W ROZWOJU</small>
+            <small>v0.7.17.1 • WERSJA BETA • PROJEKT W ROZWOJU</small>
           </div>
           <button type="button" id="hubUpdates">HISTORIA AKTUALIZACJI ↗</button>
         </section>
@@ -200,7 +201,7 @@
     </aside>
 
     <section class="workspace">
-      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.7.17 • ROZDZIELNICAPRO.PL • APARATURA PRO</span></div>
+      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.7.17.1 • ROZDZIELNICAPRO.PL • APARATURA PRO</span></div>
       <div class="cabinet">
         <div class="cabinet-inner">
           <div class="supply-box">
@@ -345,7 +346,7 @@
         </section>
         <section class="hub-settings-pane hub-settings-info" id="settingsPaneInfo" data-settings-pane="info" role="tabpanel" aria-labelledby="settingsTabInfo" hidden>
           <p><strong>RozdzielnicaPRO.pl</strong> — Symulator Budowy Rozdzielnic.</p>
-          <p>Wersja <strong>v0.7.17 (BETA)</strong>. Projekt ma charakter edukacyjny. Nie zastępuje projektu wykonawczego ani pomiarów elektrycznych.</p>
+          <p>Wersja <strong>v0.7.17.1 (BETA)</strong>. Projekt ma charakter edukacyjny. Nie zastępuje projektu wykonawczego ani pomiarów elektrycznych.</p>
           <p>Projekt i rozwój: <strong>Damian Górny — MaxStudio</strong>.</p>
         </section>
       </div>
@@ -370,11 +371,12 @@
           <h3>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic</h3>
           <p>Przeglądarkowy projekt edukacyjny do nauki montażu aparatury modułowej PRO, podstaw okablowania i samodzielnego budowania rozdzielnic.</p>
           <ul><li>Wolna Budowa — wybór obudowy, montaż i zapis projektów.</li><li>Nauka — zadania treningowe i schematy połączeń.</li><li>Rozdzielnice Przemysłowe — obudowy produkcyjne oraz montaż listwy X1 ZUG.</li><li>Egzamin szkoleniowy — 10 pytań i 3 zadania praktyczne.</li></ul>
-          <span class="hub-version">v0.7.17 • BETA / W ROZWOJU</span>
+          <span class="hub-version">v0.7.17.1 • BETA / W ROZWOJU</span>
           <p>Połączenia elektryczne górnej listwy ZUG X1 nie są jeszcze sprawdzane przez silnik symulatora. Projekt ma charakter szkoleniowy, nie zastępuje pomiarów ani projektu wykonawczego.</p>
           <p>Projekt i rozwój: Damian Górny — <a href="https://maxstudio.pl" target="_blank" rel="noopener noreferrer">MaxStudio</a>.</p>
         </section>
         <section class="hub-about-pane" id="aboutUpdates" role="tabpanel" aria-labelledby="aboutTabUpdates" data-about-pane="updates" hidden>
+          <div class="hub-update-item"><b>v0.7.17.1 — WIDOCZNA ROZDZIELNICA W NAUCE</b><p>Zmniejszono panele Nauki 2.0, dodano zwijany wzorzec oraz przycisk przewijający bezpośrednio do rozdzielnicy.</p></div>
           <div class="hub-update-item"><b>v0.7.17 — SPÓJNY WYGLĄD STANOWISKA</b><p>Ujednolicono górny pasek, panele boczne, katalog aparatury, przyciski i liczniki. Mechanika rozdzielnicy oraz Panel Użytkownika pozostają bez zmian.</p></div>
           <div class="hub-update-item"><b>v0.7.16.2 — HOTFIX LISTWY N</b><p>Przeniesiono pasek informacyjny rozdzielnicy poza obudowę, przywracając pełną widoczność szyny N i zacisków.</p></div>
           <div class="hub-update-item"><b>v0.7.16.1 — ROZDZIELNICE PRZEMYSŁOWE</b><p>Ulepszony wygląd stalowych obudów, szyn DIN, kanałów PVC i listwy X1; szybkie wstawianie zacisków i przykładowy układ.</p></div>
@@ -390,7 +392,7 @@
   <div class="task-modal" id="taskModal" hidden><div class="task-window"><div class="task-window-head"><div><b>WYBIERZ ZADANIE</b><small>Wybierz zadanie treningowe</small></div><button id="closeTasks">×</button></div><div class="task-cards"><button><b>01</b><span>Podstawowa rozdzielnica</span><small>150 XP</small></button><button><b>02</b><span>Obwód gniazd</span><small>100 XP</small></button><button><b>03</b><span>Łazienka z RCD</span><small>180 XP</small></button></div></div></div>
   <script src="enclosure-v078.js?v=0717"></script>
   <script src="accounts-v0711.js?v=07133demo"></script>
-  <script src="auth-v050.js?v=07162"></script>
+  <script src="auth-v050.js?v=07171"></script>
   <script src="admin-players-v0711.js?v=0711users6"></script>
   <script src="ui-pro-v07122.js?v=07123b"></script>
   <script src="user-panel-v0716.js?v=0716b"></script>
