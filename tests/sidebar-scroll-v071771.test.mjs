@@ -43,6 +43,7 @@ test('Newest CSS loaded after earlier desktop and dock styles',()=>{
  assert.ok(latest>html.indexOf('diagnostics-pro-v07177.css'));
 });
 test('No cabinet geometry or electrical logic are modified',()=>{
- assert.doesNotMatch(fix,/\.cabinet-inner|\.din-row|\.wire-terminal|\.supply-box|\.nbar|\.pebar/);
+ const cssRulesOnly=fix.replace(/\/\*[\s\S]*?\*\//g,'');
+ assert.doesNotMatch(cssRulesOnly,/\.cabinet-inner|\.din-row|\.wire-terminal|\.supply-box|\.nbar|\.pebar/);
  assert.equal((fix.match(/\{/g)||[]).length,(fix.match(/\}/g)||[]).length);
 });
