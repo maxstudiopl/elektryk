@@ -214,7 +214,7 @@ function placePart(code,row,start,idOverride=null,quiet=false){
   const wrap=document.createElement('div');
   wrap.className='mounted-device';wrap.dataset.mountId=id;wrap.dataset.code=p.code;wrap.dataset.row=row;wrap.dataset.modules=String(p.modules);wrap.dataset.deviceLabel=p.name;
   wrap.style.left=`${start/modulesPerRow*100}%`;wrap.style.width=`${p.modules/modulesPerRow*100}%`;
-  wrap.innerHTML=`<button class="remove-device" title="Usuń aparat">×</button>${apparatusHtml(p)}`;
+  wrap.innerHTML=`<button class="remove-device" type="button" title="Usuń aparat" aria-label="Usuń ${p.name}">×</button>${apparatusHtml(p)}`;
   grid.appendChild(wrap);
   mounted.push({id,code:p.code,row,start,modules:p.modules,el:wrap});
   wrap.querySelector('.remove-device').onclick=e=>{e.stopPropagation();removeMount(id)};
@@ -390,7 +390,7 @@ function configureBoard(template){
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
   setHint(`<b>WOLNA BUDOWA:</b> ${template.name} • ${template.rows}×${template.modulesPerRow}M.`,'success');
   const version=document.querySelector('.cabinet-head .version');
-  if(version)version.textContent=`v0.7.12 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
+  if(version)version.textContent=`v0.7.18 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
   document.dispatchEvent(new CustomEvent('elektryk:board-changed',{detail:{template:{...template}}}));
   return true;
 }
