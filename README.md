@@ -2,6 +2,22 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.16.1 — dopracowanie rozdzielnic przemysłowych (etap 2)
+
+- Stalowa obudowa PRO z czytelniejszą ramą, oznaczeniami i niezależnym stylem od rozdzielnic domowych.
+- Szyny DIN o metalicznym wyglądzie, oznaczenia R01–R05, kanały kablowe PVC między rzędami i po bokach.
+- Górna szyna zaciskowa X1 mieści 24 lub 30 indywidualnie oznaczonych miejsc, bez nakładania się na WLZ.
+- Lewy panel ZUG: **Wstaw w pierwsze wolne miejsce** oraz **Przykładowy układ X1** (L1, L2, L3, N, PE, separator); obecne zaciski pozostają na miejscu.
+- Zachowana fizyczna geometria istniejących zacisków DIN i silnik połączeń. Nie zmieniono mechaniki Wolnej Budowy ani zapisu projektów.
+- Dodatkowe pliki: `industrial-view-v07161.css`, `industrial-view-v07161.js`. Moduł uruchamia się tylko dla rozdzielnic przemysłowych.
+- **Uwaga:** X1 nadal jest montażową wizualizacją, nie elektrycznym węzłem do podłączania przewodów; przykładowy układ nie oznacza poprawności połączeń.
+
+### Podgląd i kontrola
+
+Otwórz https://maxstudiopl.github.io/elektryk/ i po zalogowaniu wybierz **Rozdzielnice Przemysłowe**.
+Sprawdź układ X1 4×24, dodawanie pojedynczego zacisku oraz przykładowego układu. Następnie zmień obudowę na 5×24 (X1: 30 miejsc), zapisz i wczytaj projekt, a potem przejdź do domowej Wolnej Budowy i sprawdź, czy nakładki przemysłowe zniknęły. Sprawdź także Egzamin i Naukę.
+Zmiany w repozytorium przeszły kontrolę składni i test logiki bez testu wizualnego produkcyjnej strony w przeglądarce.
+
 ## Panel Użytkownika — wariant B (w ramach v0.7.16)
 
 - Widoczna nazwa **Panel Użytkownika** zamiast dotychczasowego Panelu Gracza.
