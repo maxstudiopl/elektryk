@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic | v0.7.22</title>
+  <title>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic | v0.7.23</title>
   <meta name="description" content="RozdzielnicaPRO.pl — symulator budowy rozdzielnic elektrycznych. Nauka montażu aparatów DIN, okablowania i diagnostyki instalacji.">
   <meta name="theme-color" content="#0B1F3A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,6 +63,7 @@
   <link rel="stylesheet" href="responsive-workspace-v0719.css?v=0719">
   <link rel="stylesheet" href="quality-fixes-v0720.css?v=0720">
   <link rel="stylesheet" href="industrial-wiring-v0722.css?v=0722">
+  <link rel="stylesheet" href="residential-pro-v0723.css?v=0723">
   <style>
     /* v0.4.5 critical DIN layout hotfix — bypasses stale cached CSS */
     .mount-grid .mounted-device{position:absolute!important;top:0!important;height:194px!important;margin:0!important;padding:0!important;transform:none!important;box-sizing:border-box!important;z-index:12!important}
@@ -153,7 +154,7 @@
           <div>
             <h2>O PROJEKCIE</h2>
             <p>RozdzielnicaPRO.pl to rozwijany symulator edukacyjny montażu i okablowania rozdzielnic elektrycznych.</p>
-            <small>v0.7.22 • WERSJA BETA • PROJEKT W ROZWOJU</small>
+            <small>v0.7.23 • WERSJA BETA • PROJEKT W ROZWOJU</small>
           </div>
           <button type="button" id="hubUpdates">HISTORIA AKTUALIZACJI ↗</button>
         </section>
@@ -212,7 +213,7 @@
     </aside>
 
     <section class="workspace">
-      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.7.22 • ROZDZIELNICAPRO.PL • APARATURA PRO</span></div>
+      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.7.23 • ROZDZIELNICAPRO.PL • APARATURA PRO</span></div>
       <div class="cabinet">
         <div class="cabinet-inner">
           <div class="supply-box">
@@ -379,7 +380,7 @@
         </section>
         <section class="hub-settings-pane hub-settings-info" id="settingsPaneInfo" data-settings-pane="info" role="tabpanel" aria-labelledby="settingsTabInfo" hidden>
           <p><strong>RozdzielnicaPRO.pl</strong> — Symulator Budowy Rozdzielnic.</p>
-          <p>Wersja <strong>v0.7.22 (BETA)</strong>. Projekt ma charakter edukacyjny. Nie zastępuje projektu wykonawczego ani pomiarów elektrycznych.</p>
+          <p>Wersja <strong>v0.7.23 (BETA)</strong>. Projekt ma charakter edukacyjny. Nie zastępuje projektu wykonawczego ani pomiarów elektrycznych.</p>
           <p>Projekt i rozwój: <strong>Damian Górny — MaxStudio</strong>.</p>
         </section>
       </div>
@@ -404,11 +405,12 @@
           <h3>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic</h3>
           <p>Przeglądarkowy projekt edukacyjny do nauki montażu aparatury modułowej PRO, podstaw okablowania i samodzielnego budowania rozdzielnic.</p>
           <ul><li>Wolna Budowa — wybór obudowy, montaż i zapis projektów.</li><li>Nauka — zadania treningowe i schematy połączeń.</li><li>Rozdzielnice Przemysłowe — obudowy produkcyjne oraz montaż listwy X1 ZUG.</li><li>Egzamin szkoleniowy — 10 pytań i 3 zadania praktyczne.</li></ul>
-          <span class="hub-version">v0.7.22 • BETA / W ROZWOJU</span>
+          <span class="hub-version">v0.7.23 • BETA / W ROZWOJU</span>
           <p>Połączenia elektryczne zacisków X1/ZUG są sprawdzane przez edukacyjny silnik symulatora, ale nie zastępują rzeczywistych pomiarów i odbioru. Projekt ma charakter szkoleniowy, nie zastępuje pomiarów ani projektu wykonawczego.</p>
           <p>Projekt i rozwój: Damian Górny — <a href="https://maxstudio.pl" target="_blank" rel="noopener noreferrer">MaxStudio</a>.</p>
         </section>
         <section class="hub-about-pane" id="aboutUpdates" role="tabpanel" aria-labelledby="aboutTabUpdates" data-about-pane="updates" hidden>
+          <div class="hub-update-item"><b>v0.7.23 — ROZDZIELNICE DOMOWE / APARATURA PRO</b><p>Nowa karta zamontowanego aparatu z oznaczeniem DIN, zaciskami i liczbą przewodów; przegląd zajętości każdej szyny w czterech modelach domowych. Dźwignia aparatu obsługuje mysz, Enter i spację. Układ aparatury i przewodów nie zmienia położenia.</p></div>
           <div class="hub-update-item"><b>v0.7.22 — ELEKTRYCZNA LISTWA X1 / ZUG</b><p>W rozdzielnicach przemysłowych każdy zacisk X1 ma górny i dolny port do podpinania żył. Połączenia przechodzą przez wspólny silnik elektryczny. Diagnostyka wykrywa brak przewodu i zasilania, a projekty zapamiętują połączenia. Separator X1 pozostaje nieprzewodzący. Wszystkie wyniki dotyczą modelu szkoleniowego.</p></div>
           <div class="hub-update-item"><b>v0.7.21 — AUDYT ROZDZIELNIC I OCHRONA ZAPISÓW</b><p>Kontrola spójności obudów, modułów DIN i X1: niepoprawne lub nakładające się aparaty oraz uszkodzone połączenia nie zastępują projektu; czyszczenie rozdzielnicy obejmuje X1. Analizator przemysłowy nie pokazuje pełnego sukcesu przed wdrożeniem kontroli elektrycznej listwy.</p></div>
           <div class="hub-update-item"><b>v0.7.20.1 — DIAGNOSTYKA ROZDZIELNIC PRZEMYSŁOWYCH</b><p>Raport sprawdzenia nie zalicza pełnej instalacji przemysłowej, dopóki listwa X1/ZUG nie jest obsługiwana przez model elektryczny. Zmiana typu rozdzielnicy lub zacisków X1 unieważnia dotychczasowy raport i wymaga ponownej kontroli.</p></div>
@@ -450,7 +452,7 @@
   </div>
   <script src="enclosure-v078.js?v=0722"></script>
   <script src="accounts-v0711.js?v=07133demo"></script>
-  <script src="auth-v050.js?v=0722a"></script>
+  <script src="auth-v050.js?v=0723"></script>
   <script src="admin-players-v0711.js?v=0711users6"></script>
   <script src="ui-pro-v07122.js?v=0719"></script>
   <script src="user-panel-v0716.js?v=0716b"></script>
