@@ -181,7 +181,8 @@ function renderRows(count,perRow=modulesPerRow){
   updateStats();
 }
 function canPlace(row,start,p){
-  if(row<0||row>=rowCount||start<0||start+p.modules>modulesPerRow)return false;
+  if(!Number.isInteger(row)||!Number.isInteger(start)||row<0||row>=rowCount||
+     start<0||start+p.modules>modulesPerRow)return false;
   for(let i=start;i<start+p.modules;i++)if(occupied[row][i])return false;
   return true;
 }
@@ -205,6 +206,7 @@ function placePart(code,row,start,idOverride=null,quiet=false){
   }
   const grid=rowsHost.querySelector(`.mount-grid[data-row="${row}"]`);
   if(!grid)return false;
+  if(idOverride&&mounted.some(m=>m.id===String(idOverride)))return false;
   const id=idOverride||('M'+seq++);
   if(idOverride){
     const n=Number(String(idOverride).replace(/\D/g,''))||0;
@@ -240,7 +242,8 @@ function restoreMounted(records=[]){
   occupied=Array.from({length:rowCount},()=>Array(modulesPerRow).fill(null));
   rowsHost.querySelectorAll('.din-slot').forEach(s=>s.classList.remove('occupied','preview-ok','preview-bad'));
   const restored=[];
-  [...records].sort((a,b)=>(Number(a.row)-Number(b.row))||(Number(a.start)-Number(b.start))).forEach(rec=>{
+  [...records].filter(rec=>rec&&typeof rec==='object')
+    .sort((a,b)=>(Number(a.row)-Number(b.row))||(Number(a.start)-Number(b.start))).forEach(rec=>{
     const wrap=placePart(String(rec.code||''),Number(rec.row)||0,Number(rec.start)||0,String(rec.id||'' )||null,true);
     if(wrap){
       if(rec.switchState)wrap.dataset.switchState=rec.switchState;
@@ -390,7 +393,7 @@ function configureBoard(template){
   hint.querySelector('.selected-part').textContent='Brak wybranego aparatu';
   setHint(`<b>WOLNA BUDOWA:</b> ${template.name} • ${template.rows}×${template.modulesPerRow}M.`,'success');
   const version=document.querySelector('.cabinet-head .version');
-  if(version)version.textContent=`v0.7.20.1 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
+  if(version)version.textContent=`v0.7.21 • ${template.rows}×${template.modulesPerRow}M • ${String(template.mounting||'modułowa').toUpperCase()}`;
   document.dispatchEvent(new CustomEvent('elektryk:board-changed',{detail:{template:{...template}}}));
   return true;
 }
@@ -405,7 +408,11 @@ rowsHost.addEventListener('mouseleave',clearPreview);
 rowsHost.addEventListener('click',e=>{const slot=e.target.closest('.din-slot');if(slot)mount(+slot.dataset.row,+slot.dataset.slot)});
 
 document.getElementById('undoMount')?.addEventListener('click',()=>{const m=mounted[mounted.length-1];if(m)removeMount(m.id)});
-document.getElementById('resetMount')?.addEventListener('click',resetAll);
+document.getElementById('resetMount')?.addEventListener('click',()=>{
+  resetAll();
+  // The button clears the entire industrial cabinet, including mounting-only X1.
+  window.ElektrykIndustrialZug?.reset?.();
+});
 
 [...document.querySelectorAll('.category-tabs button')].forEach(btn=>btn.addEventListener('click',()=>{
   const txt=btn.textContent.trim().toUpperCase();
