@@ -2,6 +2,23 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.17.7.1 — przywrócone przewijanie paneli bocznych
+
+Poprawiono błąd zgłoszony po v0.7.17.7: **lewy i prawy panel stanowiska nie przewijały się w dół** mimo istniejącego `overflow-y:auto`.
+
+Przyczyna leżała w układzie Flexbox: `.leftbar` oraz `.rightbar` mają `display:flex; flex-direction:column`, a ich dzieci `.panel` mogły się kurczyć (`flex-shrink:1`). Zamiast rosnącego obszaru przewijania powstawały obcięte sekcje z `overflow:hidden`.
+
+Dodano ostatni arkusz `sidebar-scroll-fix-v071771.css`:
+- `flex:0 0 auto` dla bezpośrednich sekcji obu paneli — każda zachowuje wymaganą wysokość;
+- dla komputerów od **900 px** szerokości niezależne przewijanie w osi Y dla lewej i prawej kolumny, widoczny pasek przewijania, obsługa rolki i gestów dotykowych;
+- poniżej **900 px** zachowano poprzednią obsługę przez przewijanie całej strony;
+- w trybie **WIĘKSZA ROZDZIELNICA** trzy sekcje narzędzi nad rozdzielnicą nadal przewijają się niezależnie;
+- bez zmian dla geometrii rozdzielnicy, kabli, zacisków, SVG, diagnostyki i Panelu Użytkownika.
+
+Testy: `node --test tests/sidebar-scroll-v071771.test.mjs` — niekurczące się karty, osobne przewijanie desktopowe, mobilne, dock oraz ochrona geometrii.
+
+Po publikacji GitHub Pages wykonaj **Ctrl + F5**. Sprawdź przewijanie rolką myszy bezpośrednio nad lewym panelem (zadania i raport diagnostyczny) oraz prawym panelem (przewody, mostki, katalog i szczegóły), a także działanie +/− i przycisku „WIĘKSZA ROZDZIELNICA”. Test wizualny w zalogowanej przeglądarce jest nadal zalecany.
+
 ## v0.7.17.7 — pomoc, schematy i kontrola połączeń elektrycznych
 
 Modernizacja obejmuje **trzy istniejące mechanizmy diagnostyczne** (`stage4.js`, `electrical-engine-v0713.js`, `electrical-audit-v0712.js`) oraz analizę RCD/RCBO. Nowy raport **nie zastępuje** ich własną uproszczoną oceną: odczytuje rzeczywiste wyniki istniejącej symulacji.
