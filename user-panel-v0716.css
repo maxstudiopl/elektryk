@@ -1,0 +1,325 @@
+/* RozdzielnicaPRO.pl v0.7.16 — Panel Użytkownika / układ B.
+ * Najwyższa warstwa CSS: wyłącznie ekran hub-open i jego okna dialogowe. */
+html[data-theme="dark"] .auth-card.hub-open{
+  width:min(1040px,calc(100vw - 32px))!important;
+  max-width:calc(100vw - 32px)!important;
+  max-height:calc(100dvh - 24px)!important;
+  padding:18px 20px 14px!important;
+  border-radius:18px!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .auth-brand{
+  display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;
+  flex-wrap:nowrap!important;gap:18px!important;
+  background:#fff!important;border:1px solid #dfe7ef!important;
+  border-radius:13px!important;padding:14px 20px!important;
+  margin:0 0 13px!important;min-height:142px!important;
+  box-shadow:0 6px 20px #0003!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .auth-brand-main{
+  flex:1 1 48%!important;min-width:0!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .brand-art-frame{
+  width:100%!important;max-width:395px!important;min-height:0!important;
+  margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .brand-art-frame img{
+  display:block!important;width:100%!important;max-width:100%!important;
+  height:auto!important;object-fit:contain!important;
+}
+html[data-theme="dark"] .auth-card:not(.hub-open) .hub-brand-welcome{display:none!important}
+html[data-theme="dark"] .auth-card.hub-open .hub-brand-welcome{
+  display:flex!important;flex:1 1 48%!important;min-width:0!important;
+  flex-direction:column;align-items:flex-end;justify-content:center;text-align:right;
+  gap:4px;
+}
+html[data-theme="dark"] .auth-card.hub-open .hub-brand-welcome>small{
+  color:#516d84!important;letter-spacing:1.1px!important;font:800 10px Inter,Arial,sans-serif!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .hub-brand-welcome h1{
+  color:#102743!important;font-size:clamp(21px,2.4vw,31px)!important;
+  line-height:1.2!important;max-width:100%;margin:0!important;overflow-wrap:anywhere;
+}
+html[data-theme="dark"] .auth-card.hub-open .hub-brand-welcome h1 span{color:#177de5!important}
+html[data-theme="dark"] .auth-card.hub-open .hub-brand-welcome p{
+  color:#51677d!important;font-size:11px!important;line-height:1.4!important;margin:0!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .auth-brand-actions,
+html[data-theme="dark"] .auth-card.hub-open .player-welcome-row{display:none!important}
+html[data-theme="dark"] .hub-user-actions{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;
+  margin-bottom:14px;
+}
+html[data-theme="dark"] .hub-user-actions button{
+  min-height:48px;padding:10px 12px;border:1px solid #3a5771;border-radius:10px;
+  background:linear-gradient(155deg,#22364d,#192b3d);color:#e7f1fc;
+  font:700 12px Inter,Arial,sans-serif;letter-spacing:.1px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  cursor:pointer;transition:background .15s,border-color .15s,transform .15s;
+}
+html[data-theme="dark"] .hub-user-actions button:hover{
+  background:#2a4764;border-color:#258fff;transform:translateY(-1px);
+}
+html[data-theme="dark"] .hub-user-actions button:focus-visible{
+  outline:2px solid #65b6ff;outline-offset:2px;
+}
+html[data-theme="dark"] .hub-user-actions button:last-child{border-color:#6b4b52}
+html[data-theme="dark"] .hub-user-actions .hub-action-icon{
+  font-size:19px;font-weight:700;color:#67b3ff;line-height:1;
+}
+html[data-theme="dark"] .pro-modes-title{
+  margin:4px 0 10px!important;padding:0!important;
+  display:flex!important;justify-content:space-between;align-items:end!important;gap:12px;
+}
+html[data-theme="dark"] .pro-modes-title span{
+  color:#eff7ff!important;font:800 18px Inter,Arial,sans-serif!important;letter-spacing:.5px!important;
+}
+html[data-theme="dark"] .pro-modes-title small{
+  color:#aabed3!important;font-size:11px!important;line-height:1.4!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:12px!important;margin:0!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card{
+  display:grid!important;position:relative!important;
+  grid-template-columns:48px minmax(0,1fr)!important;
+  grid-template-rows:auto 1fr!important;align-content:start!important;align-items:start!important;
+  gap:5px 12px!important;min-width:0!important;min-height:151px!important;
+  padding:20px 16px!important;border-radius:12px!important;
+  background:linear-gradient(155deg,#233a51,#172a3d)!important;
+  border:1px solid #39536c!important;cursor:pointer!important;
+  opacity:1!important;transition:transform .15s,background .15s,border-color .15s!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card:hover{
+  transform:translateY(-2px)!important;border-color:#288cfa!important;
+  background:linear-gradient(155deg,#294866,#1d3449)!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card:focus-visible{
+  outline:2px solid #57aeff!important;outline-offset:3px!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card .mode-icon{
+  grid-column:1!important;grid-row:1/span 2!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:46px!important;height:46px!important;font-size:23px!important;margin:0!important;
+  border-radius:10px!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card>b{
+  grid-column:2!important;grid-row:1!important;display:block!important;
+  font-size:clamp(13px,1.38vw,16px)!important;line-height:1.35!important;
+  letter-spacing:.1px!important;margin:0!important;overflow-wrap:anywhere!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card>small{
+  grid-column:2!important;grid-row:2!important;display:block!important;
+  font-size:11px!important;line-height:1.5!important;color:#bdcee1!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.free{border-top:3px solid #60baf5!important}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.learn{border-top:3px solid #58d6a4!important}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.industrial{
+  border-top:3px solid #aa9aee!important;grid-column:auto!important;grid-row:auto!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.industrial em{
+  bottom:8px!important;right:10px!important;top:auto!important;
+  font-size:8px!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.exam{
+  grid-column:1/-1!important;grid-row:auto!important;
+  min-height:92px!important;padding:18px 24px!important;
+  grid-template-columns:55px minmax(0,1fr)!important;
+  grid-template-rows:auto auto!important;
+  border-top:3px solid #ecb66a!important;border-color:#826a49!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.exam .mode-icon{
+  width:48px!important;height:48px!important;color:#ffd18c!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.exam em{
+  display:inline-block!important;right:18px!important;top:15px!important;
+  color:#f0cb8e!important;background:#443628!important;border:1px solid #9b7847!important;
+  padding:6px 10px!important;border-radius:7px!important;font:800 9px Inter,Arial,sans-serif!important;
+  font-style:normal!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.exam:hover{
+  border-color:#e4ad5a!important;
+}
+html[data-theme="dark"] .hub-project-info{
+  display:flex;justify-content:space-between;gap:16px;align-items:center;
+  padding:13px 16px;margin-top:15px;border:1px solid #39536c;border-radius:11px;
+  background:linear-gradient(135deg,#1a2d41,#132538);
+}
+html[data-theme="dark"] .hub-project-info h2{
+  font:800 12px Inter,Arial,sans-serif!important;color:#eff7ff!important;margin:0 0 5px!important;
+}
+html[data-theme="dark"] .hub-project-info p{
+  font:400 11px/1.55 Inter,Arial,sans-serif!important;color:#b2c8dc!important;margin:0!important;
+}
+html[data-theme="dark"] .hub-project-info small{display:block;font-size:9px;color:#80b7e9;margin-top:6px}
+html[data-theme="dark"] .hub-project-info button{
+  flex:0 0 auto;padding:10px 12px;background:#203d5a;color:#cce9ff;
+  border:1px solid #3976aa;border-radius:8px;cursor:pointer;font:700 10px Inter,Arial,sans-serif;
+}
+html[data-theme="dark"] .hub-project-info button:hover{background:#285784;border-color:#62b5fd}
+html[data-theme="dark"] .auth-card.hub-open .hub-tools{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;margin-top:9px!important;gap:0!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .hub-tools:not(:has(button:not([hidden]))){display:none!important}
+html[data-theme="dark"] .auth-card.hub-open .hub-tools #hubPlayers{
+  min-height:42px!important;padding:8px 12px!important;text-align:center!important;
+}
+html[data-theme="dark"] .auth-card.hub-open .auth-footer{
+  font-size:9px!important;margin-top:12px!important;padding-top:11px!important;
+}
+
+/* Okno statystyk oraz O symulatorze */
+html[data-theme="dark"] .hub-user-dialog{
+  position:fixed;inset:0;z-index:11050;background:#030913c9;
+  display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(5px);
+}
+html[data-theme="dark"] .hub-user-dialog[hidden]{display:none!important}
+html[data-theme="dark"] .hub-user-dialog-window{
+  width:min(690px,calc(100vw - 24px));max-height:min(86dvh,850px);overflow:auto;
+  border:1px solid #456b8d;border-radius:15px;
+  background:linear-gradient(155deg,#1b2e42,#111f31);
+  color:#f4f8fc;box-shadow:0 25px 75px #000b;
+}
+html[data-theme="dark"] .hub-dialog-header{
+  padding:17px 19px;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  background:#20354b;border-bottom:1px solid #435b75;
+}
+html[data-theme="dark"] .hub-dialog-header h2{
+  margin:0!important;font-size:18px!important;color:#f4f8fc!important;font-weight:800;
+}
+html[data-theme="dark"] .hub-dialog-header button{
+  font-size:23px;color:#e9f3fd;background:#122437;border:1px solid #486784;
+  width:36px;height:36px;border-radius:8px;cursor:pointer;
+}
+html[data-theme="dark"] .hub-dialog-content{padding:17px 19px}
+html[data-theme="dark"] #hubStatsModal .pro-hub-stats{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:12px!important;margin:0!important;
+}
+html[data-theme="dark"] #hubStatsModal .pro-hub-stat{
+  min-height:110px!important;padding:16px!important;
+}
+html[data-theme="dark"] .hub-dialog-note{
+  color:#9dbad4;font:400 11px/1.55 Inter,Arial,sans-serif;
+  margin:14px 0 0;
+}
+html[data-theme="dark"] .hub-settings-tabs{
+  padding:10px 14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
+  background:#122339;border-bottom:1px solid #3b556e;
+}
+html[data-theme="dark"] .hub-settings-tabs button{
+  background:#203248;border:1px solid #3b5874;border-radius:8px;
+  color:#cbddef;font:700 11px Inter,Arial,sans-serif;padding:10px;cursor:pointer;
+}
+html[data-theme="dark"] .hub-settings-tabs button.is-active,
+html[data-theme="dark"] .hub-settings-tabs button[aria-selected="true"]{
+  border-color:#329bff;background:#184c7a;color:#fff;
+}
+html[data-theme="dark"] .hub-settings-pane[hidden],
+html[data-theme="dark"] .hub-about-pane[hidden]{display:none!important}
+html[data-theme="dark"] .hub-settings-pane .account-summary{
+  margin:0!important;display:block!important;padding:13px!important;
+}
+html[data-theme="dark"] .hub-settings-pane .account-grid{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;
+}
+html[data-theme="dark"] .hub-settings-pane .account-grid>div{
+  min-width:0!important;overflow-wrap:anywhere!important;
+}
+html[data-theme="dark"] .game-settings-window{
+  width:min(650px,calc(100vw - 28px))!important;max-height:86dvh!important;
+  overflow:auto!important;
+}
+html[data-theme="dark"] .hub-settings-info{
+  color:#bdd1e5;font:400 12px/1.65 Inter,Arial,sans-serif;
+}
+html[data-theme="dark"] .hub-settings-info strong{color:#f4f8fc}
+html[data-theme="dark"] .hub-about-pane h3{
+  font:800 16px Inter,Arial,sans-serif!important;color:#f3f8ff!important;margin:0 0 9px!important;
+}
+html[data-theme="dark"] .hub-about-pane p{
+  font:400 12px/1.7 Inter,Arial,sans-serif!important;color:#c3d4e5!important;
+}
+html[data-theme="dark"] .hub-about-pane ul{
+  margin:8px 0 13px;padding-left:19px;color:#c3d4e5;
+  font:400 12px/1.9 Inter,Arial,sans-serif;
+}
+html[data-theme="dark"] .hub-about-pane a{color:#78c0ff}
+html[data-theme="dark"] .hub-version{
+  display:inline-block;background:#163d62;border:1px solid #337aac;border-radius:7px;
+  padding:6px 10px;color:#9dd5ff;font-size:11px;font-weight:800;
+}
+html[data-theme="dark"] .hub-update-item{
+  padding:12px 0;border-bottom:1px solid #3a536b;
+}
+html[data-theme="dark"] .hub-update-item:last-child{border-bottom:0}
+html[data-theme="dark"] .hub-update-item b{font-size:13px;color:#cce8ff}
+html[data-theme="dark"] .hub-update-item p{margin:6px 0 0!important}
+html[data-theme="dark"] .hub-user-dialog button:focus-visible,
+html[data-theme="dark"] .game-settings-modal button:focus-visible{
+  outline:2px solid #69bdff!important;outline-offset:2px!important;
+}
+@media(max-width:850px){
+  html[data-theme="dark"] .auth-card.hub-open{
+    width:min(720px,calc(100vw - 24px))!important;
+    max-width:calc(100vw - 24px)!important;
+    padding:13px!important;
+  }
+  html[data-theme="dark"] .auth-card.hub-open .auth-brand{
+    min-height:110px!important;padding:12px 14px!important;
+  }
+  html[data-theme="dark"] .auth-card.hub-open .player-modes{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.industrial{
+    grid-column:1/-1!important;
+  }
+}
+@media(max-width:580px){
+  html[data-theme="dark"] .auth-card.hub-open{
+    width:calc(100vw - 16px)!important;max-width:calc(100vw - 16px)!important;
+    max-height:calc(100dvh - 14px)!important;padding:10px!important;
+  }
+  html[data-theme="dark"] .auth-card.hub-open .auth-brand{
+    flex-direction:column!important;align-items:flex-start!important;gap:5px!important;
+    min-height:0!important;padding:10px 12px!important;
+  }
+  html[data-theme="dark"] .auth-card.hub-open .brand-art-frame{max-width:235px!important}
+  html[data-theme="dark"] .auth-card.hub-open .hub-brand-welcome{
+    width:100%!important;align-items:flex-start!important;text-align:left!important;
+  }
+  html[data-theme="dark"] .auth-card.hub-open .hub-brand-welcome h1{
+    font-size:21px!important;
+  }
+  html[data-theme="dark"] .hub-user-actions{
+    grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-bottom:11px;
+  }
+  html[data-theme="dark"] .hub-user-actions button{font-size:10px;min-height:41px;padding:8px 5px}
+  html[data-theme="dark"] .auth-card.hub-open .player-modes{
+    grid-template-columns:minmax(0,1fr)!important;gap:8px!important;
+  }
+  html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card{
+    min-height:95px!important;padding:13px 12px!important;
+  }
+  html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.industrial,
+  html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.exam{
+    grid-column:1!important;
+  }
+  html[data-theme="dark"] .auth-card.hub-open .player-modes>.mode-card.exam{
+    padding:13px 12px!important;min-height:88px!important;
+  }
+  html[data-theme="dark"] .hub-project-info{flex-direction:column;align-items:stretch;gap:9px}
+  html[data-theme="dark"] .hub-project-info button{width:100%}
+  html[data-theme="dark"] #hubStatsModal .pro-hub-stats{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  html[data-theme="dark"] .hub-settings-tabs{gap:4px;padding:7px}
+  html[data-theme="dark"] .hub-settings-tabs button{font-size:9px;padding:8px 3px}
+  html[data-theme="dark"] .hub-settings-pane .account-grid{
+    grid-template-columns:1fr!important;
+  }
+}
