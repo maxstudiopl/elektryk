@@ -2,6 +2,32 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.17.5 — profesjonalny wybór rozdzielnicy (etap 02)
+
+Zmodernizowano ekran **Wolna Budowa → Wybierz rozdzielnicę** bez modyfikowania mechaniki elektrycznej, liczby modułów, zacisków ani projektów zapisanych w przeglądarce.
+
+- Nowe, pełnoekranowo responsywne okno wyboru ze znacznie większymi miniaturami rzeczywistych układów DIN oraz wyraźnymi danymi: rzędy, moduły na rząd i łączna pojemność.
+- Wyszukiwanie po nazwie, typie, rozmiarze i oznaczeniu ZUG; rozpoznawane są wymiary z symbolem `×` i literą `x`.
+- Filtry rodzin: Wszystkie, Domowe, Duże i Przemysłowe. Dodatkowy filtr liczby modułów: do 36, 37–96 oraz od 97.
+- Rozdzielnice przemysłowe mają osobne oznaczenie oraz liczbę pozycji listwy X1. Wyraźnie poinformowano, że okablowanie tej listwy nie jest jeszcze zintegrowane.
+- Po wejściu z kafelka **Rozdzielnice Przemysłowe** otwiera się ten sam katalog, ograniczony do dwóch modeli PRO 4×24 i 5×24. Nie wybiera on już automatycznie pierwszej obudowy.
+- Podkreślenie modelu aktualnie wybranego, polecanej obudowy i stanu podglądu DEMO.
+- Komunikat braku wyników i przycisk czyszczenia filtrów.
+- Dostępność: opisane przyciski i etykiety formularzy, Escape do zamknięcia, zarządzanie fokusem i obsługa klawiaturą.
+- Nowy styl: `board-selector-pro-v07175.css`, rozszerzony `auth-v050.js`, zaktualizowane `index.html`.
+- Test regresyjny: `node --test tests/board-selector-v07175.test.mjs`, m.in. filtrowanie wszystkich 7 wspieranych modeli, rodziny, wyszukiwarka ZUG i 5×24, puste wyniki, ponowne uruchomienie modelu.
+
+### Kontrola w podglądzie
+
+1. Wejdź na https://maxstudiopl.github.io/elektryk/ i wybierz **Wolna Budowa**: sprawdź wszystkie 7 modeli.
+2. Filtrowanie: wybierz „Domowe” (2 modele), „Duże” (2 modele), „Przemysłowe” (2 modele) i wypróbuj wyszukiwanie „ZUG” oraz „5×24”.
+3. Kliknij **Rozdzielnice Przemysłowe** z Panelu Użytkownika: powinny być do wyboru PRO 4×24 i PRO XL 5×24.
+4. Uruchom obudowę, wróć do zmiany modelu, sprawdź podświetlenie aktywnej oraz zachowanie projektu.
+5. Przetestuj mobilny widok okna, Escape, TAB, zamknięcie i wznowienie pracy.
+6. Potwierdź, że lista ZUG, aparaty DIN, przewody i zapisy projektów nie uległy zmianie.
+
+Testy logiki filtra przeprowadzono na bazie modeli repozytorium. Widok w rzeczywistej, zalogowanej przeglądarce wymaga jeszcze akceptacji po publikacji GitHub Pages.
+
 ## v0.7.17.4 — górne wyjścia kablowe O1 / O2
 
 Naprawa zgłoszona na zrzucie ekranu użytkownika: w prawym górnym rogu rozdzielnicy wizualny kierunek rozchodzenia się żył kabla był niezgodny z kierunkiem wprowadzenia kabla od góry.
