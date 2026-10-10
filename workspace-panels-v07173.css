@@ -119,7 +119,7 @@ html[data-theme="dark"] body.pro-tools-docked .pro-focus-dock .pro-fold-toggle-p
   position:sticky!important;
   float:right!important;
   top:5px!important;
-  margin: -36px 8px 4px 0!important;
+  margin:-36px 8px 4px 0!important;
   z-index:5!important;
 }
 /* Szeroki katalog: FILTRY w jednym wierszu i APARATY przewijane poziomo. */
