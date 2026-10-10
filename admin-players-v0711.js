@@ -42,7 +42,7 @@ function refreshAccountSummary(){
   Object.entries(ids).forEach(([id,value])=>{const el=document.getElementById(id);if(el)el.textContent=value});
   const active=store()?.licenseActive?.(a);
   const warning=document.getElementById('hubLicenseWarning');
-  [document.getElementById('modeFree'),document.getElementById('modeLearn'),document.getElementById('modeExam')]
+  [document.getElementById('modeFree'),document.getElementById('modeLearn'),document.getElementById('modeExam'),document.getElementById('modeIndustrial')]
     .forEach(el=>el?.classList.toggle('license-disabled',!active));
   if(warning){
     warning.hidden=!!active;
@@ -51,11 +51,18 @@ function refreshAccountSummary(){
       warning.textContent='BRAK AKTYWNEJ LICENCJI • '+(a.paymentStatus||'STATUS PŁATNOŚCI NIEUSTAWIONY')+'.'+pay;
     }
   }
+  const notice=document.getElementById('hubAccessNotice');
+  if(notice){
+    notice.hidden=!!active;
+    notice.textContent=active?'':warning?.textContent||'Brak aktywnej licencji. Otwórz Ustawienia → Moje konto.';
+  }
 }
 
 function showLicenseWarning(){
   refreshAccountSummary();
-  document.getElementById('hubLicenseWarning')?.scrollIntoView?.({behavior:'smooth',block:'center'});
+  auth()?.openSettings?.();
+  window.ElektrykUserPanel?.showSettingsTab?.('account');
+  requestAnimationFrame(()=>document.getElementById('hubLicenseWarning')?.scrollIntoView?.({behavior:'smooth',block:'center'}));
 }
 
 function ensureToolbar(){
