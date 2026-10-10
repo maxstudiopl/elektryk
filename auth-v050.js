@@ -232,6 +232,7 @@ function mountingLabel(value){
     surface:'NATYNKOWA',
     flush:'PODTYNKOWA',
     flush_or_surface:'POD / NADTYNKOWA',
+    industrial_surface:'SZAFOWA PRZEMYSŁOWA',
     unknown:'MODUŁOWA'
   };
   return map[value]||String(value||'MODUŁOWA').toUpperCase();
