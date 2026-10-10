@@ -218,6 +218,11 @@ html[data-theme="dark"] body .game-shell .pro-mobile-jump:focus-visible{
   html[data-theme="dark"] body .game-shell .pro-mobile-jump:hover{
     background:#245a7b;border-color:#75bded;
   }
+  html[data-theme="dark"] body .game-shell>.leftbar,
+  html[data-theme="dark"] body .game-shell>.rightbar,
+  html[data-theme="dark"] body .game-shell>.workspace>.pro-focus-dock{
+    scroll-margin-top:128px!important;
+  }
   html[data-theme="dark"] body .workspace>.pro-workspace-toolbar{
     position:relative!important;
     top:auto!important;
