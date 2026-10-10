@@ -37,7 +37,8 @@ const scripts=[
   'industrial-view-v07161.js?v=07162',
   'demo-mode-v07133.js?v=07140',
   'workspace-panels-v07173.js?v=07173',
-  'verification-pro-v07177.js?v=07177'
+  'verification-pro-v07177.js?v=07177',
+  'responsive-workspace-v0719.js?v=0719'
 ];
 
 let gameLoaded=false;
