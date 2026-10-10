@@ -1,0 +1,118 @@
+/* RozdzielnicaPRO.pl v0.7.16 • INDUSTRIAL PRO / ZUG X1.
+   Osobna warstwa — nie zmienia współrzędnych zacisków DIN ani WLZ. */
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"]{
+  --industrial-frame:#555f64;
+  border-color:#616b70!important;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 30px,#72808710 31px 32px),
+    linear-gradient(90deg,#c4cacb,#e4e8e6 6%,#e9ece9 50%,#cbd2cf 96%,#a8b2b0)!important;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .enclosure-realism .case-marking{
+  color:#193b4c!important;background:#d4e6edb5!important;
+  font-size:7px!important;padding:4px 8px!important;
+}
+html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .din-row-label span{
+  color:#195b7f!important;
+}
+html[data-theme="dark"] .industrial-zug-rail{
+  position:absolute;top:9px;left:410px;right:19px;z-index:32;
+  min-height:104px;padding:6px 8px 5px;
+  background:linear-gradient(180deg,#c3ced2,#e7eceb 18%,#bdc8c9 90%,#889a9f);
+  border:2px solid #64777e;border-radius:4px;color:#183440;
+  box-shadow:inset 0 1px #fff,0 3px 8px #14242b60;
+}
+html[data-theme="dark"] .industrial-zug-rail[hidden]{display:none!important}
+html[data-theme="dark"] .iz-rail-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px;font-size:8px}
+html[data-theme="dark"] .iz-rail-head strong{font-size:9px;letter-spacing:.5px;color:#0c415c}
+html[data-theme="dark"] .iz-rail-head span{font-size:7px;color:#435d67}
+html[data-theme="dark"] .iz-rail-track{
+  --iz-slots:24;display:grid;grid-template-columns:repeat(var(--iz-slots),minmax(0,1fr));gap:1px;
+  padding:2px 8px;height:63px;position:relative;
+  background:linear-gradient(180deg,transparent 0 19px,#5e6c72 20px 26px,#e4e9e9 27px 32px,#727e82 33px 40px,transparent 41px);
+}
+html[data-theme="dark"] .iz-rail-track:before,html[data-theme="dark"] .iz-rail-track:after{
+  content:"";position:absolute;z-index:1;top:20px;bottom:18px;width:7px;
+  border:1px solid #6a7578;background:#c7d0d0;border-radius:2px;
+}
+html[data-theme="dark"] .iz-rail-track:before{left:0}
+html[data-theme="dark"] .iz-rail-track:after{right:0}
+html[data-theme="dark"] .iz-slot{
+  min-width:0!important;height:58px!important;padding:2px 0 0!important;position:relative;z-index:2;
+  display:flex!important;flex-direction:column;align-items:center;gap:2px;cursor:pointer;
+  border:1px solid #6f7f80;border-radius:2px!important;
+  background:linear-gradient(90deg,#bec4c1 0,#f6f8f4 24%,#e1e7e2 78%,#a6b0ad 100%);
+  color:#1b353d!important;font-family:Arial,sans-serif!important;
+  box-shadow:inset 1px 0 #fff,1px 2px 1px #52646a40;
+}
+html[data-theme="dark"] .iz-slot.is-empty{opacity:.72;border-style:dashed}
+html[data-theme="dark"] .iz-slot .iz-screw{
+  display:block;width:9px;height:9px;flex:0 0 9px;border-radius:50%;
+  background:linear-gradient(45deg,transparent 42%,#546166 45% 55%,transparent 58%),radial-gradient(circle,#cbd5d2 0 43%,#66777a 44% 73%,#dce2e2 74%);
+  border:1px solid #78878b;
+}
+html[data-theme="dark"] .iz-slot strong{
+  display:block;font-size:7px;line-height:11px;max-width:100%;overflow:hidden;color:#193541;
+}
+html[data-theme="dark"] .iz-slot small{font-size:6px;line-height:8px;color:#536b72;font-weight:800}
+html[data-theme="dark"] .iz-slot.iz-phase-l1{border-top:5px solid #986333;padding-top:0!important}
+html[data-theme="dark"] .iz-slot.iz-phase-l2{border-top:5px solid #303538;padding-top:0!important}
+html[data-theme="dark"] .iz-slot.iz-phase-l3{border-top:5px solid #80898d;padding-top:0!important}
+html[data-theme="dark"] .iz-slot.iz-neutral{border-top:5px solid #137fbe;padding-top:0!important}
+html[data-theme="dark"] .iz-slot.iz-protective{
+  border-top:5px solid #4e9645;padding-top:0!important;
+  background:repeating-linear-gradient(145deg,#e9d33e 0 5px,#489045 5px 10px);
+}
+html[data-theme="dark"] .iz-slot.iz-protective strong,html[data-theme="dark"] .iz-slot.iz-protective small{color:#10291f}
+html[data-theme="dark"] .iz-slot.iz-separator{
+  border:2px solid #b07732!important;background:linear-gradient(90deg,#b57a32,#f3c76b,#a16528);
+}
+html[data-theme="dark"] .iz-slot:hover:not(:disabled),html[data-theme="dark"] .iz-slot:focus-visible{
+  outline:2px solid #088ddd;outline-offset:1px;filter:brightness(1.05);
+}
+html[data-theme="dark"] .iz-slot:disabled{cursor:default}
+html[data-theme="dark"] .iz-rail-foot{
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:700 6.5px Arial;color:#47616b;
+  letter-spacing:.3px;margin-top:3px;text-align:center;
+}
+html[data-theme="dark"] .industrial-zug-tools .iz-tools-inner{padding:11px 10px}
+html[data-theme="dark"] .industrial-zug-tools p{font-size:10px;line-height:1.5;color:#c2d8e5;margin:0 0 9px}
+html[data-theme="dark"] .iz-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+html[data-theme="dark"] .iz-choices button,
+html[data-theme="dark"] .iz-actions button{
+  min-width:0;padding:9px 3px;color:#c8e4f1;cursor:pointer;border:1px solid #33617b;
+  border-radius:5px;background:#0b2535;font-weight:800;font-size:9px;
+}
+html[data-theme="dark"] .iz-choices button.is-selected{border-color:#60d2ff;background:#0c6090;color:#fff;box-shadow:0 0 0 1px #1a89c4}
+html[data-theme="dark"] .iz-choices .iz-phase-l1{border-bottom:3px solid #986333}
+html[data-theme="dark"] .iz-choices .iz-phase-l2{border-bottom:3px solid #50595c}
+html[data-theme="dark"] .iz-choices .iz-phase-l3{border-bottom:3px solid #a1acb0}
+html[data-theme="dark"] .iz-choices .iz-neutral{border-bottom:3px solid #1e9bd7}
+html[data-theme="dark"] .iz-choices .iz-protective{border-bottom:3px solid #8ebd46}
+html[data-theme="dark"] .iz-actions{display:flex;gap:6px;margin-top:8px}
+html[data-theme="dark"] .iz-actions button{flex:1 1 50%;font-size:8px}
+html[data-theme="dark"] .iz-choices button:disabled,
+html[data-theme="dark"] .iz-actions button:disabled{cursor:default;opacity:.45}
+html[data-theme="dark"] .iz-count{
+  font-size:9px;font-weight:800;margin-top:9px;padding:8px;
+  background:#0a3349;color:#80ceff;border:1px solid #325770;border-radius:4px;
+}
+html[data-theme="dark"] .iz-tools-inner>small{display:block;font-size:8px;line-height:1.5;color:#93b0bf;margin-top:9px}
+html[data-theme="dark"] .player-modes{grid-template-columns:repeat(4,minmax(0,1fr))}
+html[data-theme="dark"] .mode-card.industrial{border-color:#4f768a}
+html[data-theme="dark"] .mode-card.industrial .mode-icon{border-color:#5e91a4;background:#1b3e4e;color:#96def1}
+html[data-theme="dark"] .mode-card.industrial em{
+  position:absolute;right:8px;top:8px;padding:4px 6px;color:#9fe6ff;
+  border:1px solid #28698a;border-radius:5px;font:800 7px Arial;font-style:normal;
+}
+html[data-theme="dark"] .board-choice-card[data-board-id^="IND-PRO-"]{border-color:#398db3}
+html[data-theme="dark"] .board-choice-card[data-board-id^="IND-PRO-"] .board-card-top em{color:#79d7ff}
+@media(max-width:1080px){
+  html[data-theme="dark"] .player-modes{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:660px){
+  html[data-theme="dark"] .player-modes{grid-template-columns:1fr}
+}
+/* Minimalna szerokość rozdzielnic przemysłowych — zaciski X1 i WLZ nie nachodzą na siebie. */
+html[data-theme="dark"] .workspace>.cabinet .cabinet-inner[data-family="industrial"]{
+  --din-board-min:1140px!important;
+}
