@@ -2,6 +2,22 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.17.4 — górne wyjścia kablowe O1 / O2
+
+Naprawa zgłoszona na zrzucie ekranu użytkownika: w prawym górnym rogu rozdzielnicy wizualny kierunek rozchodzenia się żył kabla był niezgodny z kierunkiem wprowadzenia kabla od góry.
+
+**Przyczyna:** stary styl `stage3.css` określał `transform-origin:50% 100%` i `rotate(-22deg / +22deg)` dla dolnych kabli. Te reguły częściowo dziedziczyły również górne wyjścia, gdzie płaszcz kabla znajduje się nad żyłami. Nie jest to błąd kolejności zacisków.
+
+**Rozwiązanie:** dodano `cable-routing-top-v07174.css`, wczytywany na końcu arkuszy:
+- Górny kabel ma czarną powłokę przy krawędzi górnej, a żyły L / N / PE rozchodzą się **w dół** do oryginalnych zacisków.
+- Końcówki żył są zakotwiczone w czarnej powłoce (punkt obrotu na górze, a nie u dołu). L jest wyprowadzona pod kątem 12°, N pionowo, PE pod kątem −12°.
+- Wyeliminowano niepożądane obroty całego modelu `rotate(180deg)` dla banku górnego. Nie stosowano `scaleX(-1)` ani odbicia kolorów / kolejności.
+- Oryginalne, klikalne zaciski `LOAD:<id>:L/N/PE`, pozycje O1 / O2, pozycje napisów i zasady łączenia pozostają bez zmian.
+- Dolny bank, WLZ, szyny DIN, N/PE oraz moduł przemysłowy ZUG pozostają nietknięte.
+
+### Regresja i podgląd
+`node --test tests/cable-routing-top.test.mjs` — test reguł górnego i dolnego banku, położenia zacisków i dopasowania końców przewodów. Kontrolę trzeba uzupełnić testem wizualnym: https://maxstudiopl.github.io/elektryk/ → zadanie 001 → Widok zwykły i **WIĘKSZA ROZDZIELNICA** → sprawdzenie O1 / O2, kolorów L/N/PE, ich zacisków i prowadzenia kabli po automatycznym uzbrojeniu.
+
 ## v0.7.17.3 — narzędzia w trybie większej rozdzielnicy i sekcje + / −
 
 Główne usprawnienia dla podglądu https://maxstudiopl.github.io/elektryk/:
