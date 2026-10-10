@@ -62,3 +62,34 @@ test('New style is loaded after old sheet and avoids physical DIN geometry',()=>
  assert.equal((css.match(/\{/g)||[]).length,(css.match(/\}/g)||[]).length);
  assert.doesNotMatch(css,/\.cabinet-inner[^{]*\{|\.din-row[^{]*\{/);
 });
+
+test('Industrial X1 cannot receive a complete electrical verdict before the ZUG engine exists',()=>{
+ const data=model();
+ const industrial=evaluate(data,{complete:true},{board:{family:'industrial'}});
+ assert.equal(industrial.industrialUnverified,true);
+ assert.equal(industrial.verified,false);
+ assert.equal(industrial.status,'warn');
+ const residential=evaluate(data,{complete:true},{board:{family:'residential'}});
+ assert.equal(residential.verified,true);
+ assert.equal(residential.industrialUnverified,false);
+});
+test('Diagnostics fingerprint expires when cabinet or industrial X1 terminals change',()=>{
+ const start=source.indexOf('function stamp()');
+ const stop=source.indexOf('const openBtn=',start);
+ assert.ok(start>=0&&stop>start);
+ const board={boardId:'IND-PRO-4X24',family:'industrial',rows:4,modulesPerRow:24};
+ const zug={schema:1,capacity:24,slots:Array(24).fill(null)};
+ const mockWindow={
+  ElektrykStage2:{getBoardConfig:()=>board,getMounted:()=>[],getTask:()=>null},
+  ElektrykStage3:{getConnections:()=>[]},ElektrykBridges:{getBridges:()=>[]},
+  ElektrykIndustrialZug:{getState:()=>zug}
+ };
+ const mockDocument={querySelectorAll:()=>[]};
+ const stamp=new Function('window','document',source.slice(start,stop)+'\nreturn stamp;')(mockWindow,mockDocument);
+ const initial=stamp();
+ zug.slots[0]='L1';
+ assert.notEqual(stamp(),initial,'Changing X1 must invalidate the old test');
+ const afterZug=stamp();
+ board.boardId='IND-PRO-5X24';board.rows=5;
+ assert.notEqual(stamp(),afterZug,'Changing the cabinet must invalidate the old test');
+});

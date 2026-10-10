@@ -10,7 +10,7 @@ const LICENSE_EXPIRY=null;
 const scripts=[
   'ui.js?v=0711',
   'switchboard-db.js?v=0716',
-  'stage2.js?v=0720',
+  'stage2.js?v=07201',
   'hardware-pro-v07126.js?v=07126',
   'assembly-pro-v07129.js?v=07129',
   'stage3.js?v=07151',
@@ -37,7 +37,7 @@ const scripts=[
   'industrial-view-v07161.js?v=07162',
   'demo-mode-v07133.js?v=07140',
   'workspace-panels-v07173.js?v=07173',
-  'verification-pro-v07177.js?v=07177',
+  'verification-pro-v07177.js?v=07201',
   'responsive-workspace-v0719.js?v=0719'
 ];
 
