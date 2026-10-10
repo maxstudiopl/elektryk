@@ -198,3 +198,52 @@ test('Industrial X1 cannot produce a green electrical verification and expires a
  await expect(page.locator('#verificationProVerdict')).not.toContainText('MODEL PRZESZEDŁ');
  expect(errors).toEqual([]);
 });
+
+test('All seven supported cabinets retain exact DIN capacity and apparatus fits the final module',async({page})=>{
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await openWorkstation(page);
+ const models=await page.evaluate(()=>window.ElektrykSwitchboardDB.supported().map(({id,rows,modulesPerRow,family,zugSlots})=>({id,rows,modulesPerRow,family,zugSlots})));
+ expect(models).toHaveLength(7);
+ for(const model of models){
+   const selected=await page.evaluate(id=>window.ElektrykStage2.configureBoard(window.ElektrykSwitchboardDB.get(id)),model.id);
+   expect(selected,model.id).toBe(true);
+   await expect.poll(()=>page.locator('.din-row').count()).toBe(model.rows);
+   const result=await page.evaluate(()=>{
+     const board=window.ElektrykStage2.getBoardConfig();
+     return {board,
+       slots:document.querySelectorAll('.mount-grid .din-slot').length,
+       rails:document.querySelectorAll('.mount-grid').length,
+       zug:window.ElektrykIndustrialZug.getState()};
+   });
+   expect(result.board.rows,model.id).toBe(model.rows);
+   expect(result.board.modulesPerRow,model.id).toBe(model.modulesPerRow);
+   expect(result.board.totalModules,model.id).toBe(model.rows*model.modulesPerRow);
+   expect(result.rails,model.id).toBe(model.rows);
+   expect(result.slots,model.id).toBe(model.rows*model.modulesPerRow);
+   if(model.family==='industrial'){
+     expect(result.zug?.capacity).toBe(model.zugSlots);
+     expect(result.zug?.slots).toHaveLength(model.zugSlots);
+   }else expect(result.zug).toBeNull();
+   await page.locator('.catalog-card[data-part="B10"]').first().click();
+   await page.locator('.mount-grid[data-row="0"] .din-slot').last().click();
+   await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(1);
+   const mounted=await page.evaluate(()=>window.ElektrykStage2.getMounted()[0]);
+   expect(mounted.start,model.id).toBe(model.modulesPerRow-1);
+   await page.locator('.mounted-device').first().hover();
+   await page.locator('.mounted-device .remove-device').first().click();
+   await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(0);
+ }
+ expect(errors).toEqual([]);
+});
+test('Clear cabinet removes both DIN apparatus and industrial X1 terminals',async({page})=>{
+ await openWorkstation(page);
+ await page.evaluate(()=>window.ElektrykStage2.configureBoard(window.ElektrykSwitchboardDB.get('IND-PRO-5X24')));
+ await page.evaluate(()=>window.ElektrykIndustrialZug.setSlot(0,'L1'));
+ await expect.poll(()=>page.evaluate(()=>window.ElektrykIndustrialZug.getState().slots[0])).toBe('L1');
+ await page.locator('.catalog-card[data-part="B10"]').first().click();
+ await page.locator('.mount-grid[data-row="0"] .din-slot').first().click();
+ await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(1);
+ await page.locator('#resetMount').click();
+ await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(0);
+ expect(await page.evaluate(()=>window.ElektrykIndustrialZug.getState().slots[0])).toBeNull();
+});
