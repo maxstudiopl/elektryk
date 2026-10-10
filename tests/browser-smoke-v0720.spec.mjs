@@ -1,0 +1,106 @@
+/* RozdzielnicaPRO v0.7.20 — Chromium smoke tests on isolated local server.
+ * No production credentials or server accounts are accessed.
+ * Session stub is applied only in the test browser's local storage. */
+import {test,expect} from '@playwright/test';
+
+async function localTestSession(page){
+  await page.addInitScript(()=>{
+    localStorage.setItem('elektryk_auth_v050',JSON.stringify({
+      accountId:'admin',user:'admin',expires:Date.now()+60*60*1000
+    }));
+    localStorage.removeItem('elektryk_app_state_v0710');
+  });
+}
+async function openWorkstation(page){
+  await localTestSession(page);
+  await page.goto('/');
+  await expect(page.locator('#playerHub')).toBeVisible();
+  await page.locator('#modeFree').click();
+  await expect(page.locator('#boardSelectorModal')).toBeVisible();
+  await page.locator('.board-choice-card[data-board-id="REF-3X12-SURFACE"]').click();
+  await expect(page.locator('body')).toHaveAttribute('data-game-mode','free');
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2?.getBoardConfig?.()?.rows)).toBe(3);
+}
+test('Application loads 300 tasks and demo session without JavaScript exceptions',async({page})=>{
+  const exceptions=[];page.on('pageerror',error=>exceptions.push(error.message));
+  await page.goto('/');
+  await expect(page.locator('#authLogin')).toBeVisible();
+  await page.locator('#authLogin').fill('demo');
+  await page.locator('#authPassword').fill('demo123');
+  await page.locator('#authSubmit').click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykTasks?.all?.length)).toBe(300);
+  await expect(page.locator('.game-shell')).toBeVisible();
+  await expect(page.locator('.pro-workspace-toolbar')).toBeVisible();
+  expect(exceptions).toEqual([]);
+});
+test('Free Build: choose cabinet, install apparatus, run electrical report and save project',async({page})=>{
+  const exceptions=[];page.on('pageerror',error=>exceptions.push(error.message));
+  await openWorkstation(page);
+  await expect(page.locator('.rightbar .catalog-card')).not.toHaveCount(0);
+  await page.locator('.catalog-card[data-part="B10"]').first().click();
+  await page.locator('.mount-grid[data-row="0"] .din-slot').first().click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2?.getMounted?.().length)).toBe(1);
+  await page.locator('#checkPower').click();
+  await expect(page.locator('#verificationProModal')).toBeVisible();
+  await expect(page.locator('#verificationProVerdict')).toContainText(/BŁĘDY|WYMAGA|MODEL|KONTROLI/);
+  await page.locator('#verificationProBack').click();
+  await page.locator('#freeProjectName').fill('Audyt wersji 0.7.20');
+  await page.locator('#saveFreeProject').click();
+  await expect(page.locator('#freeSaveState')).toHaveText('ZAPISANO');
+  const storage=await page.evaluate(()=>localStorage.getItem('elektryk_freebuild_saves_v0711'));
+  expect(storage).toBeTruthy();
+  expect(exceptions).toEqual([]);
+});
+test('Laptop, tablet and phone layouts keep cabinet scroll and side tools reachable',async({page})=>{
+  await openWorkstation(page);
+  for(const viewport of [
+    {width:1366,height:768,area:'three'},
+    {width:1024,height:768,area:'two'},
+    {width:390,height:844,area:'one'}
+  ]){
+    await page.setViewportSize({width:viewport.width,height:viewport.height});
+    const measure=await page.evaluate(()=>{
+      const shell=document.querySelector('.game-shell');
+      const workspace=document.querySelector('.game-shell>.workspace');
+      const tools=document.querySelector('.game-shell>.rightbar');
+      const cabinet=document.querySelector('.workspace>.cabinet');
+      const shortcuts=document.querySelector('.pro-responsive-shortcuts');
+      return {
+        shell:getComputedStyle(shell).gridTemplateAreas,
+        workspaceWidth:workspace.getBoundingClientRect().width,
+        pageWidth:document.documentElement.scrollWidth,
+        viewport:innerWidth,toolsVisible:getComputedStyle(tools).display!=='none',
+        cabinetOverflow:getComputedStyle(cabinet).overflowX,
+        shortcuts:shortcuts?getComputedStyle(shortcuts).display:'none'
+      };
+    });
+    expect(measure.workspaceWidth).toBeGreaterThan(240);
+    expect(measure.pageWidth).toBeLessThanOrEqual(measure.viewport+12);
+    expect(measure.cabinetOverflow).toBe('auto');
+    if(viewport.area==='three')expect(measure.shell).toContain('left center right');
+    if(viewport.area==='two')expect(measure.shell).toContain('center center');
+    if(viewport.area==='one'){
+      expect(measure.shell).toContain('center');
+      expect(measure.shortcuts).not.toBe('none');
+      await page.locator('.pro-mobile-jump').first().click();
+    }
+  }
+});
+test('Enlarged board keeps original catalogue and wire controls in focus dock',async({page})=>{
+  await openWorkstation(page);
+  await page.locator('#proFocusMode').click();
+  await expect(page.locator('body')).toHaveClass(/pro-tools-docked/);
+  await expect(page.locator('#proFocusDock .rightbar .catalog-panel')).toBeVisible();
+  const state=await page.evaluate(()=>({
+    count:document.querySelectorAll('.catalog-panel').length,
+    root:document.querySelector('#proToolSidebar')?.parentElement?.id,
+    wired:!!window.ElektrykStage3?.redraw,
+    bridged:!!window.ElektrykBridges?.redraw
+  }));
+  expect(state.count).toBe(1);
+  expect(state.root).toBe('proFocusDock');
+  expect(state.wired).toBe(true);
+  expect(state.bridged).toBe(true);
+  await page.locator('#proFocusMode').click();
+  await expect(page.locator('body')).not.toHaveClass(/pro-tools-docked/);
+});
