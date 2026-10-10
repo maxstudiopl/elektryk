@@ -2,6 +2,14 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.16.2 — hotfix widoczności listwy N
+
+- Zgłoszenie ze zrzutu ekranu: przemysłowy pasek „PRO • SZAFA PRODUKCYJNA / X1” przykrywał poziomą listwę neutralną N.
+- Przyczyna: oryginalna listwa N ma położenie `top:-42px` względem strefy DIN zaczynającej się na `214px` (czyli N = `172px`), a nowy pasek otrzymał `top:170px`.
+- Poprawka: pasek informacyjny jest osobnym wierszem w `.workspace`, bezpośrednio pod `.cabinet-head` i **poza** stalową obudową. Nie zmieniono topologii szyny N/PE, identyfikatorów zacisków ani obliczania przewodów.
+- Zwiększono wersje query string CSS/JS (07162), by GitHub Pages i przeglądarka pobrały poprawkę.
+- Sprawdzono pozycjonowanie źródłowe, składnię JS/CSS i kompletność odwołań do plików. Wizualny test w zalogowanej przeglądarce pozostaje do wykonania.
+
 ## v0.7.16.1 — dopracowanie rozdzielnic przemysłowych (etap 2)
 
 - Stalowa obudowa PRO z czytelniejszą ramą, oznaczeniami i niezależnym stylem od rozdzielnic domowych.
