@@ -2,8 +2,8 @@
  * Zwarty, ale pełny funkcjonalnie tryb nauki na stanowisku.
  * Nie dotyka szyn DIN, kabli, zacisków, wymiarów obudów ani silnika. */
 /* Ukrywanie nauki w Egzaminie i DEMO ma pierwszeństwo przed wyglądem. */
-html[data-theme="dark"] body.exam-active .learning-assembly-v0715,
-html[data-theme="dark"] body.demo-viewer .learning-assembly-v0715{
+html[data-theme="dark"] body.exam-active[data-game-mode="learn"] .learning-assembly-v0715,
+html[data-theme="dark"] body.demo-viewer[data-game-mode="learn"] .learning-assembly-v0715{
   display:none!important;
 }
 html[data-theme="dark"] body[data-game-mode="learn"] .learning-board-v0712{
