@@ -78,8 +78,9 @@ test('Physical apparatus markup still includes original terminals and controls',
   assert.match(fn({...base,kind:'terminal-n',passive:true}),/class="terminal-strip-visual"/);
 });
 test('Free-build enclosure header no longer shows stale version',()=>{
-  assert.match(stage2,/version\.textContent=\x60v0\.7\.18 /);
-  assert.match(html,/v0\.7\.18/);
+  const version=html.match(/<title>[^<]*\| (v[\d.]+)<\/title>/)?.[1];
+  assert.ok(version,'Missing release version in HTML title');
+  assert.ok(stage2.includes('version.textContent=`'+version+' •'),'Free-build header differs from release');
 });
 test('CSS is syntactically balanced',()=>{
   assert.equal((withoutComments.match(/\{/g)||[]).length,(withoutComments.match(/\}/g)||[]).length);
