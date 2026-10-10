@@ -1,4 +1,4 @@
-/* RozdzielnicaPRO.pl v0.7.17.7 — szczegółowy raport edukacyjnej kontroli.
+/* RozdzielnicaPRO.pl v0.7.20.1 — szczegółowy raport edukacyjnej kontroli.
  * Dane pochodzą z funkcjonujących silników Stage4, Engine, Audit i RCD.
  * Nie modyfikuje silnika, połączeń ani naliczania XP. */
 (()=>{
@@ -20,23 +20,27 @@ function evaluate(a,detail,ctx={}){
  const layoutFailed=!!ctx.task&&(ctx.layout?.complete!==true);
  const complete=states.filter(s=>s.complete).length;
  const collisions=a?.collisions?.length||0;
+ // X1/ZUG is still a layout-only model, not a validated electrical connection.
+ const industrialUnverified=ctx.board?.family==='industrial';
  const measured=!!detail&&states.length>0;
  const verified=measured&&detail.complete===true&&complete===states.length&&
    !errors.length&&!warnings.length&&!collisions&&!problemDevices.length&&
-   !missingRequirements.length&&!layoutFailed;
+   !missingRequirements.length&&!layoutFailed&&!industrialUnverified;
  const status=!measured?'pending':verified?'ok':errors.length||collisions||problemDevices.length?'error':'warn';
  return {status,verified,states,issues,circuits,errors,warnings,monitored,problemDevices,
-   missingRequirements,layoutFailed,complete,total:states.length,collisions};
+   missingRequirements,layoutFailed,industrialUnverified,complete,total:states.length,collisions};
 }
 function context(){
  const mode=document.body.dataset.gameMode||'learn';
  const task=/^(learn|exam)$/.test(mode)?window.ElektrykStage2?.getTask?.():null;
- return {task,requirements:task?.requirements||{},
+ return {board:window.ElektrykStage2?.getBoardConfig?.()||null,task,requirements:task?.requirements||{},
    layout:task?window.ElektrykLearningBoard?.evaluate?.()||null:null,
    mounted:window.ElektrykStage2?.getMounted?.()||[]};
 }
 function stamp(){
  return JSON.stringify({
+   board:window.ElektrykStage2?.getBoardConfig?.()||null,
+   zug:window.ElektrykIndustrialZug?.getState?.()||null,
    m:window.ElektrykStage2?.getMounted?.()||[],
    c:window.ElektrykStage3?.getConnections?.()||[],
    b:window.ElektrykBridges?.getBridges?.()||[],
@@ -121,7 +125,7 @@ function refresh(){
    'Sprawdź wymagania i błędy w poniższych sekcjach.'));
  if(!r)return;
  [['ODBIORNIKI',r.complete+'/'+r.total],['BŁĘDY',r.errors.length],
-  ['KOLIZJE FAZ',r.collisions],['OSTRZEŻENIA',r.warnings.length]].forEach(([a,b])=>{
+  ['KOLIZJE FAZ',r.collisions],['OSTRZEŻENIA',r.warnings.length+(r.industrialUnverified?1:0)]].forEach(([a,b])=>{
    const tile=el('div','verification-pro-metric');
    tile.append(el('span','',a),el('b','',b));ui.stats.appendChild(tile);
  });
@@ -155,6 +159,8 @@ function refresh(){
  r.missingRequirements.forEach(m=>add('warn','Brak aparatu wymagany przez zadanie',
    m.code+': '+m.have+' z '+m.need+' szt.',null));
  if(r.layoutFailed)add('warn','Układ aparatów DIN','Sprawdź rozmieszczenie względem wzorca zadania.');
+ if(r.industrialUnverified)add('warn','Przemysłowa listwa X1 nie jest objęta testem',
+   'Zaciski X1/ZUG są obecnie tylko montażowe. Silnik nie sprawdza ich przewodów, więc pełne zaliczenie rozdzielnicy przemysłowej jest niedostępne.');
  r.issues.filter(i=>i.type==='error'||i.type==='warning'||i.type==='warn')
    .forEach(i=>add(i.type==='error'?'error':'warn',i.code||'DIAGNOSTYKA',i.text,i.ref));
  r.problemDevices.forEach(c=>add('warn','Aparat wymaga sprawdzenia',
@@ -186,7 +192,7 @@ modal.addEventListener('keydown',e=>{
 document.addEventListener('elektryk:task-started',()=>{last=null});
 document.addEventListener('elektryk:mode-selected',()=>{last=null});
 window.ElektrykVerificationPRO={
- version:'0.7.17.7',evaluate,open,run,getLast:()=>last?.report||null,
+ version:'0.7.20.1',evaluate,open,run,getLast:()=>last?.report||null,
  isCurrent:()=>!!last&&last.stamp===stamp(),
  isPassed:()=>!!last&&last.stamp===stamp()&&last.report?.verified===true
 };
