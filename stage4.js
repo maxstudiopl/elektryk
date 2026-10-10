@@ -214,9 +214,11 @@ function applyLiveVisuals(reaches,collisions){
   });
 }
 function applyLoadVisuals(states){
-  const cards=[...document.querySelectorAll('.circuits>div'),...document.querySelectorAll('.large-load-card')];
-  states.forEach((s,i)=>{
-    const card=cards[i];if(!card)return;
+  // Match by circuit ID, not visual order: Cable Routing PRO distributes
+  // the same four original cables and added outputs between two edges.
+  states.forEach(s=>{
+    const card=document.querySelector('[data-circuit="'+CSS.escape(s.load.id)+'"]');
+    if(!card)return;
     card.querySelector('.circuit-power-state')?.remove();card.querySelector('.circuit-status-label')?.remove();
     const box=document.createElement('div');box.className='circuit-power-state';
     box.innerHTML=`<span class="${s.hasPhase?'on':'off'}">L${s.phase?' '+s.phase:''}</span><span class="${s.hasN?'on':'off'}">N</span><span class="${s.hasPE?'on':'off'}">PE</span>`;
