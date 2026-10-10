@@ -1,0 +1,94 @@
+/* RozdzielnicaPRO v0.7.23 • tylko domowe rozdzielnice PRO.
+ * Panel nie zmienia wymiarów szyn, pozycji zacisków ani tras kabli.
+ */
+html[data-theme="dark"] .residential-pro-panel[hidden]{display:none!important}
+html[data-theme="dark"] .residential-pro-panel{
+  border-color:#3d718e!important;
+  background:linear-gradient(155deg,#0d2735,#142e3c 55%,#102331)!important;
+  box-shadow:inset 0 0 0 1px #72b4dc12,0 5px 16px #06121d40!important
+}
+html[data-theme="dark"] .residential-pro-panel>.panel-title{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  color:#c2e9ff!important;letter-spacing:.5px
+}
+html[data-theme="dark"] .residential-pro-panel>.panel-title small{
+  color:#84bedc;font-size:9px;letter-spacing:0
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-inner{padding:12px}
+html[data-theme="dark"] .residential-pro-panel .rpro-usage{
+  display:flex;gap:6px;align-items:center;justify-content:space-between;
+  margin-bottom:11px;font:800 10px/1.3 Inter,Arial,sans-serif;color:#d9edf7
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-usage span{
+  color:#b5e9ff;font-variant-numeric:tabular-nums
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-rows{
+  display:flex;flex-direction:column;gap:7px;margin-bottom:12px
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-track{
+  display:grid;grid-template-columns:40px minmax(0,1fr) 38px;gap:7px;align-items:center;
+  font:800 9px Inter,Arial,sans-serif;color:#bacfda
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-track small{
+  color:#90d4fa;text-align:right;font:800 9px Inter,Arial,sans-serif
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-meter{
+  height:9px;overflow:hidden;border-radius:3px;border:1px solid #335a71;
+  background:repeating-linear-gradient(90deg,#182937 0 13px,#2f4453 13px 14px)
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-meter i{
+  display:block;height:100%;border-radius:2px;
+  background:linear-gradient(90deg,#1572aa,#2fb5e5);
+  box-shadow:inset 0 1px #8ee9ff5c
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-device{
+  padding:11px 10px;border:1px solid #34566b;border-radius:6px;
+  background:linear-gradient(180deg,#0c1e2a,#102939)
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-device>strong{
+  display:block;margin-bottom:5px;font:900 13px Rajdhani,Inter,Arial,sans-serif;color:#f2fbff
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-device>small{
+  display:block;font:700 10px/1.5 Inter,Arial,sans-serif;color:#9bc4da
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-device>p{
+  font:600 10px/1.55 Inter,Arial,sans-serif;color:#afc9d8;
+  margin:6px 0 9px
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-device-stats{
+  font:800 9px/1.5 Inter,Arial,sans-serif;color:#9ce6c5;
+  border-top:1px solid #264356;padding-top:8px
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-state{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin-top:10px;padding-top:9px;border-top:1px solid #345469
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-state b{
+  font:900 9px Inter,Arial,sans-serif;letter-spacing:.2px;color:#8de8b1
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-state b.is-off{color:#f3c294}
+html[data-theme="dark"] .residential-pro-panel #rproSwitchButton{
+  border:1px solid #4489b1;border-radius:5px;background:#194d69;color:#fff;
+  padding:9px 10px;font:800 9px Inter,Arial,sans-serif;cursor:pointer
+}
+html[data-theme="dark"] .residential-pro-panel #rproSwitchButton:hover{background:#2675a2}
+html[data-theme="dark"] .residential-pro-panel #rproSwitchButton:focus-visible{
+  outline:2px solid #9feaff;outline-offset:2px
+}
+html[data-theme="dark"] .residential-pro-panel .rpro-note{
+  padding-top:8px;color:#8eabba!important;font-size:8px!important
+}
+html[data-theme="dark"] .cabinet-inner[data-family="residential"] .mounted-device.selected-mounted>.device,
+html[data-theme="dark"] .cabinet-inner[data-family="large_residential"] .mounted-device.selected-mounted>.device{
+  outline:2px solid #33a7e0!important;outline-offset:2px!important;
+  box-shadow:0 0 0 3px #10314d80,0 2px 14px #2fafff75!important
+}
+html[data-theme="dark"] .cabinet-inner:is([data-family="residential"],[data-family="large_residential"])
+  .mounted-device .lever[role="switch"]:focus-visible{
+  outline:3px solid #f2bf56!important;outline-offset:4px!important
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-theme="dark"] .residential-pro-panel *,
+ html[data-theme="dark"] .residential-pro-panel *::before,
+ html[data-theme="dark"] .residential-pro-panel *::after{transition:none!important}
+}
