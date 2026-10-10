@@ -272,21 +272,43 @@
   </main>
 
   <div class="board-selector-modal" id="boardSelectorModal" hidden>
-    <div class="board-selector-window">
+    <div class="board-selector-window" role="dialog" aria-modal="true" aria-labelledby="boardSelectorTitle" tabindex="-1">
       <div class="board-selector-head">
         <div>
-          <b>WOLNA BUDOWA — WYBIERZ ROZDZIELNICĘ</b>
-          <small>Wybierz obudowę z bazy referencyjnej. Punktacja jest wyłączona.</small>
+          <small class="board-selector-eyebrow">ROZDZIELNICAPRO.PL • KONFIGURATOR</small>
+          <h2 id="boardSelectorTitle">WYBIERZ ROZDZIELNICĘ</h2>
+          <p>Wybierz obudowę do Wolnej Budowy. Aparaturę zamontujesz już na stanowisku.</p>
         </div>
-        <button id="closeBoardSelector">×</button>
+        <button type="button" id="closeBoardSelector" aria-label="Zamknij wybór rozdzielnicy">×</button>
+      </div>
+      <div class="board-selector-controls" role="search" aria-label="Wyszukiwanie i filtrowanie rozdzielnic">
+        <label class="board-selector-search" for="boardSelectorSearch"><span>SZUKAJ MODELU</span>
+          <input id="boardSelectorSearch" type="search" autocomplete="off" placeholder="Nazwa, typ, ZUG, 4×24…" />
+        </label>
+        <label class="board-selector-size" for="boardSelectorSize"><span>LICZBA MODUŁÓW</span>
+          <select id="boardSelectorSize">
+            <option value="all">Wszystkie pojemności</option>
+            <option value="small">Do 36 modułów</option>
+            <option value="medium">37–96 modułów</option>
+            <option value="large">97 i więcej modułów</option>
+          </select>
+        </label>
+        <button type="button" id="boardSelectorReset" class="board-selector-reset">WYCZYŚĆ FILTRY</button>
+      </div>
+      <div class="board-selector-families" role="group" aria-label="Rodzaj rozdzielnicy">
+        <button type="button" data-board-family="all" aria-pressed="true" class="is-selected">WSZYSTKIE</button>
+        <button type="button" data-board-family="residential" aria-pressed="false">DOMOWE</button>
+        <button type="button" data-board-family="large_residential" aria-pressed="false">DUŻE</button>
+        <button type="button" data-board-family="industrial" aria-pressed="false">PRZEMYSŁOWE</button>
       </div>
       <div class="board-selector-info">
-        <span>▦ MODELE MODUŁOWE</span>
-        <b id="boardSelectorCount">0 dostępnych</b>
+        <span>▦ DOSTĘPNE MODELE</span>
+        <b id="boardSelectorCount" role="status" aria-live="polite">0 dostępnych</b>
       </div>
       <div class="board-selector-grid" id="boardSelectorGrid"></div>
       <div class="board-selector-foot">
-        <span>Modele powstają na podstawie naszej bazy referencyjnej i będą dalej dopracowywane wizualnie.</span>
+        <span>Obudowy PRO • Modele szkoleniowe. Listwy X1 w rozdzielnicach przemysłowych są obecnie montażowe.</span>
+        <span>ESC — zamknij okno</span>
       </div>
     </div>
   </div>
