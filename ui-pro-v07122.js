@@ -101,18 +101,44 @@ function init(){
     if(!cabinet)return;
     boardScrollHint.hidden=!(cabinet.scrollWidth>cabinet.clientWidth+8);
   }
+  // v0.7.17.3 — w trybie powiększenia przenosimy PRAWDZIWE narzędzia nad
+  // rozdzielnicę. Reparenting zachowuje listenery i zaznaczenia aparatów.
+  const focusDock=document.createElement('div');
+  focusDock.className='pro-focus-dock';
+  focusDock.id='proFocusDock';
+  focusDock.hidden=true;
+  focusDock.setAttribute('aria-label','Narzędzia montażowe nad rozdzielnicą');
+  if(cabinetHead)workspace.insertBefore(focusDock,cabinetHead);
+  else workspace.appendChild(focusDock);
+  const toolParent=right?.parentElement||null;
+  const toolNext=right?.nextSibling||null;
+  let toolsDocked=false;
   const clsLeft='pro-left-collapsed',clsRight='pro-right-collapsed';
+  function syncToolDock(shouldDock){
+    if(!right||!toolParent)return;
+    if(shouldDock&&!toolsDocked){
+      focusDock.appendChild(right);
+      toolsDocked=true;
+    }else if(!shouldDock&&toolsDocked){
+      if(toolNext&&toolNext.parentNode===toolParent)toolParent.insertBefore(right,toolNext);
+      else toolParent.appendChild(right);
+      toolsDocked=false;
+    }
+    focusDock.hidden=!shouldDock;
+    document.body.classList.toggle('pro-tools-docked',shouldDock);
+  }
   function updateButtons(){
     const l=document.body.classList.contains(clsLeft);
     const r=document.body.classList.contains(clsRight);
+    syncToolDock(l&&r);
     taskBtn.textContent=l?'▸ POKAŻ ZADANIA':'◂ UKRYJ ZADANIA';
-    toolBtn.textContent=r?'◂ POKAŻ NARZĘDZIA':'NARZĘDZIA ▸';
+    toolBtn.textContent=l&&r?'↩ PRZYWRÓĆ PRAWY PANEL':r?'◂ POKAŻ NARZĘDZIA':'NARZĘDZIA ▸';
     fullBtn.textContent=l&&r?'▣ PRZYWRÓĆ PANELE':'⛶ WIĘKSZA ROZDZIELNICA';
     taskBtn.setAttribute('aria-pressed',String(l));
     toolBtn.setAttribute('aria-pressed',String(r));
     fullBtn.setAttribute('aria-pressed',String(l&&r));
     if(left)left.setAttribute('aria-hidden',String(l));
-    if(right)right.setAttribute('aria-hidden',String(r));
+    if(right)right.setAttribute('aria-hidden',String(r&&!toolsDocked));
     // focusable elements in display:none sidebar are removed from tab order
   }
   function redrawWiring(){
