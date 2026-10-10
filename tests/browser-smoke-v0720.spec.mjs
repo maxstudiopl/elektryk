@@ -247,3 +247,44 @@ test('Clear cabinet removes both DIN apparatus and industrial X1 terminals',asyn
  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(0);
  expect(await page.evaluate(()=>window.ElektrykIndustrialZug.getState().slots[0])).toBeNull();
 });
+
+test('XL 5x24 preserves 60 independently rendered wires and their saved apparatus',async({page})=>{
+ test.setTimeout(90_000);
+ const errors=[];page.on('pageerror',error=>errors.push(error.message));
+ await openWorkstation(page);
+ const expectedMounts=61,expectedWires=60;
+ const mounted=await page.evaluate(()=>{
+   const board=window.ElektrykSwitchboardDB.get('REF-5X24');
+   window.ElektrykStage2.configureBoard(board);
+   const records=Array.from({length:61},(_,i)=>({
+     id:'M'+(i+1),code:'B10',row:Math.floor(i/24),start:i%24,modules:1
+   }));
+   return window.ElektrykStage2.restoreMounted(records);
+ });
+ expect(mounted).toBe(expectedMounts);
+ await expect(page.locator('.mounted-device')).toHaveCount(expectedMounts);
+ await expect.poll(()=>page.locator('.mounted-device .wire-terminal').count()).toBe(expectedMounts*2);
+ const cables=await page.evaluate(()=>{
+   const records=Array.from({length:60},(_,index)=>{
+     const a=document.querySelector('.mounted-device[data-mount-id="M'+(index+1)+'"] .device-topterm .wire-terminal');
+     const b=document.querySelector('.mounted-device[data-mount-id="M'+(index+2)+'"] .device-bottomterm .wire-terminal');
+     if(!a||!b)throw Error('Missing cable endpoint '+index);
+     return {id:'W'+(index+1),a:a.dataset.terminal,b:b.dataset.terminal,type:'L1',cable:'1x1.5'};
+   });
+   return window.ElektrykStage3.setConnections(records);
+ });
+ expect(cables).toBe(expectedWires);
+ await expect.poll(()=>page.evaluate(()=>window.ElektrykStage3.getConnections().length)).toBe(expectedWires);
+ await expect.poll(()=>page.locator('.wire-path').count()).toBe(expectedWires);
+ await page.locator('#freeProjectName').fill('XL 60 przewodów test');
+ await page.locator('#saveFreeProject').click();
+ await expect(page.locator('#freeSaveState')).toHaveText('ZAPISANO');
+ await page.evaluate(()=>window.ElektrykStage2.reset());
+ await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(0);
+ await page.locator('#loadFreeProject').click();
+ await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length),{timeout:15000}).toBe(expectedMounts);
+ await expect.poll(()=>page.evaluate(()=>window.ElektrykStage3.getConnections().length),{timeout:15000}).toBe(expectedWires);
+ await expect.poll(()=>page.locator('.wire-path').count(),{timeout:15000}).toBe(expectedWires);
+ await expect(page.locator('#freeSaveState')).toHaveText('ZAPISANO');
+ expect(errors).toEqual([]);
+});
