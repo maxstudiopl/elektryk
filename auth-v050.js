@@ -33,7 +33,7 @@ const scripts=[
   'exam-mode-v0714.js?v=07140c',
   'freebuild-save-v0711.js?v=0716',
   'industrial-zug-v0716.js?v=0716',
-  'industrial-view-v07161.js?v=07161',
+  'industrial-view-v07161.js?v=07162',
   'demo-mode-v07133.js?v=07140'
 ];
 
