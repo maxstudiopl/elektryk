@@ -128,7 +128,8 @@ function chooseSlot(n){
   // Selecting a slot must NEVER silently replace the active project's name.
   // Use WCZYTAJ to load a stored project or ZAPISZ to explicitly write it.
   renderSlots();
-  updateDirtyState();
+  if(activeSlot!==loadedSlot)setState('WYBRANO SLOT • NIE ZAPISANO','dirty');
+  else updateDirtyState();
   return true;
 }
 function firstAvailableSlot(){
@@ -180,6 +181,12 @@ async function loadProject(){
     setMeta('Zapis w tym slocie jest niekompletny. Nie zmieniono bieżącego projektu.','warn');
     return false;
   }
+  const rowCount=Number(p.board.rows),columns=Number(p.board.modulesPerRow);
+  if(!Number.isInteger(rowCount)||rowCount<1||rowCount>5||
+     ![12,18,24].includes(columns)||p.mounted.length>rowCount*columns){
+    setMeta('Zapis ma nieprawidłowy rozmiar rozdzielnicy. Nie rozpoczęto wczytywania.','warn');
+    return false;
+  }
   // Do not silently discard unsaved work when switching projects.
   const unsaved=signature()!==lastSavedSignature;
   const state=compactState();
@@ -214,7 +221,7 @@ async function loadProject(){
      Number(installedBoard.modulesPerRow)!==Number(template.modulesPerRow))
     throw new Error('Nie udało się przygotować zapisanej obudowy');
   window.ElektrykIndustrialZug?.restore?.(p.industrialZug||null);
-  window.ElektrykStage2?.restoreMounted?.(p.mounted||[]);
+  const restored=window.ElektrykStage2?.restoreMounted?.(p.mounted||[]);
   await waitFrame();
   await waitFrame();
   window.ElektrykStage3?.setConnections?.(p.connections||[]);
@@ -236,10 +243,17 @@ async function loadProject(){
   },p.name);
   loadedSlot=activeSlot;
   lastObservedSignature=lastSavedSignature;
-  setState('ZAPISANO','saved');
-  setMeta('Wczytano slot '+activeSlot+' • '+formatDate(p.savedAt),'ok');
+  const restoredAll=restored===p.mounted.length&&
+    (window.ElektrykStage3?.getConnections?.().length||0)===p.connections.length&&
+    (window.ElektrykBridges?.getBridges?.().length||0)===p.bridges.length;
+  setState(restoredAll?'ZAPISANO':'WCZYTANO CZĘŚCIOWO',restoredAll?'saved':'dirty');
+  setMeta(restoredAll
+    ?'Wczytano slot '+activeSlot+' • '+formatDate(p.savedAt)
+    :'Projekt wczytano częściowo: brak części aparatów lub połączeń. Sprawdź układ przed zapisem.',
+    restoredAll?'ok':'warn');
+  if(!restoredAll)lastSavedSignature='';
   renderSlots();
-  return true;
+  return restoredAll;
   }catch(err){
     console.error('Wczytanie Wolnej Budowy:',err);
     setState('BŁĄD WCZYTYWANIA','dirty');
