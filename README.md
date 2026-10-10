@@ -2,6 +2,25 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.17.3 — narzędzia w trybie większej rozdzielnicy i sekcje + / −
+
+Główne usprawnienia dla podglądu https://maxstudiopl.github.io/elektryk/:
+
+- **WIĘKSZA ROZDZIELNICA** nie odcina dostępu do aparatów i przewodów. Przy jednoczesnym zwinięciu lewej i prawej kolumny kod *przenosi istniejącą* `.rightbar` do poziomego doku nad rozdzielnicą. Widoczne pozostają trzy niezależne części: Przewody i kable, Aparatura PRO oraz Szczegóły elementu. Katalog aparatów przewija się poziomo, a poszczególne panele mają własne przewijanie pionowe.
+- **PRZYWRÓĆ PANELE** odtwarza pierwotne położenie tej samej `.rightbar` bez kopiowania elementów, gubienia event listenerów, zaznaczeń czy stanu elektrycznego. Pojedyncze przełączniki zadań/narzędzi nadal działają.
+- Sześć niezależnych przycisków **+ / −**: Aktywne zadanie, Postęp gracza, Nauka 2.0 — postęp, Przewody i kable, Aparatura PRO • DIN, Szczegóły elementu. Stan otwarcia jest pamiętany w localStorage. Zamknięcie Aktywnego zadania **nie** zamyka sekcji postępu.
+- **MOSTKI / GRZEBIEŃ ZASILAJĄCY**: opcje Mostek, Grzebień 1F i Grzebień 3F oraz przyciski akcji są układane jeden pod drugim, również w widoku powiększonym.
+- Pliki: `workspace-panels-v07173.js`, `workspace-panels-v07173.css`, aktualizacja `ui-pro-v07122.js`. Nie zmieniano geometrii, zacisków, połączeń ani logiki elektrycznej.
+
+### Lista kontroli po publikacji
+
+1. W Nauka i Wolna Budowa kliknij **WIĘKSZA ROZDZIELNICA**; ponad rozdzielnicą musi pokazać się poziomy pasek narzędzi, z aktywnymi przyciskami wyboru żyły i aparatury PRO.
+2. Wybierz przekrój kabla, żyłę, aparat oraz Mostek/Grzebień. Sprawdź reakcję i zachowanie zaznaczenia po kliknięciu **PRZYWRÓĆ PANELE**, a następnie ponownym powiększeniu.
+3. Sprawdź sześć przełączników + / −. Potwierdź, że Postęp gracza i Nauka — postęp działają niezależnie od Aktywnego zadania.
+4. Przełącz zadanie 001 → 002: przycisk + / − przy nagłówku aktywnego zadania musi pozostać.
+5. Przejdź do rozdzielnicy przemysłowej (ZUG X1) i sprawdź, czy jej górny rząd oraz szyny N/PE pozostają nienaruszone.
+6. Sprawdź laptop, szeroki monitor i telefon. Automatyczne testy kodu i logiki nie zastępują wizualnego testu w zalogowanej przeglądarce.
+
 ## v0.7.17.2 — dopracowanie lewego i prawego panelu
 
 Na podstawie rzeczywistego podglądu stanowiska przygotowano oddzielny arkusz `side-panels-v07172.css`, wczytywany jako ostatni w `index.html`.
