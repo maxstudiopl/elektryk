@@ -1,0 +1,27 @@
+name: RozdzielnicaPRO Quality Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-and-regression:
+    name: JavaScript / CSS / 300 zadań / symulator
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Pobierz kod
+        uses: actions/checkout@v4
+      - name: Skonfiguruj Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Wersja Node
+        run: node --version
+      - name: Testy źródeł i regresji
+        run: node --test tests/*.test.mjs
