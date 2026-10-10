@@ -1,0 +1,187 @@
+/* RozdzielnicaPRO.pl v0.7.15.2.1 • Cable Routing PRO / correction
+ * Upper cables descend from the top edge, lower cables rise from the bottom.
+ * Upper WLZ exclusion: 380px minimum, max 12 cables, exactly one row.
+ * Lower bank: max 7 rows, adaptive columns and detailed per-circuit labels.
+ */
+html[data-theme="dark"] .cable-routing-shell .cable-bank.cable-bank-top{
+  left:var(--crp-wlz-clearance,380px)!important;
+  right:14px!important;
+  top:4px!important;
+  bottom:auto!important;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  justify-content:flex-end!important;
+  align-items:flex-start!important;
+  align-content:flex-start!important;
+  gap:4px!important;
+  width:auto!important;
+  max-width:calc(100% - var(--crp-wlz-clearance,380px) - 14px)!important;
+  padding:3px 4px 5px!important;
+  z-index:13!important;
+  overflow:visible!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank.cable-bank-bottom{
+  left:17px!important;right:17px!important;
+  bottom:7px!important;top:auto!important;
+  width:auto!important;
+  max-width:none!important;
+  display:grid!important;
+  grid-template-columns:repeat(var(--crp-bottom-columns,10),minmax(0,1fr))!important;
+  grid-auto-flow:row!important;
+  grid-auto-rows:111px!important;
+  justify-content:stretch!important;
+  align-content:end!important;
+  align-items:center!important;
+  gap:5px 4px!important;
+  padding:8px 4px 5px!important;
+  z-index:13!important;
+  box-sizing:border-box!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank .large-cable-outlet,
+html[data-theme="dark"] .cable-routing-shell .cable-bank .large-cable-outlet.circuit-node{
+  display:block!important;
+  position:relative!important;inset:auto!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:106px!important;
+  min-height:106px!important;
+  max-height:106px!important;
+  margin:0!important;padding:0!important;
+  flex:0 1 62px!important;
+  overflow:visible!important;
+  pointer-events:auto!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-top .large-cable-outlet{
+  width:62px!important;min-width:51px!important;max-width:62px!important;
+  flex:0 1 62px!important;
+}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet>b,
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet>small{
+  box-sizing:border-box!important;
+  left:0!important;right:0!important;
+  display:block!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;text-overflow:ellipsis!important;
+  padding:2px 1px!important;
+  text-align:center!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet>b{
+  min-height:13px!important;
+  font:bold 8px/1.05 Arial,sans-serif!important;
+}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet>small{
+  min-height:12px!important;
+  font:bold 7px/1 Arial,sans-serif!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-top .large-cable-outlet>b{
+  top:77px!important;bottom:auto!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-top .large-cable-outlet>small{
+  top:92px!important;bottom:auto!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-bottom .large-cable-outlet>b{
+  top:0!important;bottom:auto!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-bottom .large-cable-outlet>small{
+  top:14px!important;bottom:auto!important;
+}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet .circuit-cable-visual{
+  position:absolute!important;
+  left:50%!important;right:auto!important;
+  top:0!important;bottom:auto!important;
+  width:54px!important;height:106px!important;
+  transform:translateX(-50%)!important;
+  pointer-events:none!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-top .large-cable-outlet .circuit-sheath{
+  top:0!important;bottom:auto!important;
+  left:50%!important;height:27px!important;
+  border-radius:3px 3px 9px 9px!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-bottom .large-cable-outlet .circuit-sheath{
+  top:auto!important;bottom:0!important;
+  left:50%!important;height:27px!important;
+  border-radius:9px 9px 3px 3px!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-top .large-cable-outlet .circuit-core{
+  top:22px!important;bottom:auto!important;
+  height:34px!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-bottom .large-cable-outlet .circuit-core{
+  top:43px!important;bottom:auto!important;
+  height:37px!important;
+}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet .core-l{left:13px!important}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet .core-n{left:25px!important}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet .core-pe{left:37px!important}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-top .large-cable-outlet .circuit-terminals{
+  top:56px!important;bottom:auto!important;
+  left:5px!important;right:5px!important;
+}
+html[data-theme="dark"] .cable-routing-shell .cable-bank-bottom .large-cable-outlet .circuit-terminals{
+  top:27px!important;bottom:auto!important;
+  left:5px!important;right:5px!important;
+}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet .circuit-terminals{
+  pointer-events:auto!important;
+  display:flex!important;
+  justify-content:center!important;
+  gap:2px!important;
+}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet .wire-terminal{
+  flex:1 1 13px!important;
+  min-width:12px!important;
+  max-width:15px!important;
+}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet.is-inspected>b{
+  border-color:#1686ed!important;
+  background:#d9edfe!important;
+  box-shadow:0 0 0 2px #1b91f777!important;
+}
+html[data-theme="dark"] .cable-routing-shell .large-cable-outlet:focus-visible{
+  outline:2px solid #228be8!important;
+  outline-offset:1px!important;
+}
+html[data-theme="dark"] .crp-cable-inspector{
+  display:block;
+  min-height:30px;
+  padding:9px 13px;
+  margin:10px 0 3px;
+  border:1px solid #3686bd;border-radius:7px;
+  background:linear-gradient(105deg,#173651,#0f253c);
+  color:#ddf0ff;
+  font:700 11px/1.5 Arial,sans-serif;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] .crp-cable-inspector:before{
+  content:"KABEL PRO • ";
+  color:#7cc7ff;
+  letter-spacing:.3px;
+}
+/* Keep the WLZ and its incoming cable visually above any nearby outgoing cable. */
+html[data-theme="dark"] .cable-routing-shell .supply-box{
+  z-index:16!important;
+}
+html[data-theme="dark"] .cable-routing-shell .supply-cable{
+  z-index:16!important;
+}
+@media(max-width:740px){
+ html[data-theme="dark"] .cable-routing-shell .cable-bank.cable-bank-top{
+   right:9px!important;
+ }
+ html[data-theme="dark"] .cable-routing-shell .cable-bank.cable-bank-bottom{
+   left:9px!important;right:9px!important;
+   gap:4px 2px!important
+ }
+ html[data-theme="dark"] .crp-cable-inspector{
+   font-size:10px
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-theme="dark"] .cable-routing-shell .large-cable-outlet{
+   animation:none!important;transition:none!important
+ }
+}
