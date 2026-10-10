@@ -25,3 +25,28 @@ jobs:
         run: node --version
       - name: Testy źródeł i regresji
         run: node --test tests/*.test.mjs
+  browser-smoke:
+    name: Chromium / stanowisko / diagnostyka / RWD
+    needs: static-and-regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Pobierz kod
+        uses: actions/checkout@v4
+      - name: Skonfiguruj Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Zainstaluj testy przeglądarkowe
+        run: npm install --no-save --no-package-lock @playwright/test@1.56.1
+      - name: Zainstaluj Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Uruchom testy aplikacji w przeglądarce
+        run: npx playwright test --config=playwright.config.mjs
+      - name: Zachowaj ślady błędów
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-debug
+          path: test-results/
+          if-no-files-found: ignore
