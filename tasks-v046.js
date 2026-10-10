@@ -1097,7 +1097,7 @@ input.type='search';
 input.autocomplete='off';
 input.placeholder='Numer, opis, aparat RCD / RCBO / MCB…';
 input.setAttribute('aria-label','Wyszukaj zadanie');
-input.addEventListener('input',()=>{query=normal(input.value);page=0;render()});
+input.addEventListener('input',()=>{query=normal(input.value);if(query)activeFilter='all';page=0;render()});
 function selectField(id,choices,onChange){
   const select=element('select','task-filter-select');
   select.id=id;
