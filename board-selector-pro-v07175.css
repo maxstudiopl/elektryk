@@ -1,0 +1,409 @@
+/* RozdzielnicaPRO.pl — v0.7.17.5
+ * Okno wyboru obudowy PRO. Tylko UI okna, bez zmian montażu
+ * i rozmiarów właściwych rozdzielnic.
+ */
+html[data-theme="dark"] .board-selector-modal{
+  padding:clamp(8px,2vw,26px)!important;
+  background:#020912df!important;
+  backdrop-filter:blur(7px)!important;
+}
+html[data-theme="dark"] .board-selector-window{
+  display:flex!important;
+  flex-direction:column!important;
+  width:min(1230px,100%)!important;
+  max-width:calc(100vw - 16px)!important;
+  max-height:calc(100dvh - 20px)!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border:1px solid #4b7594!important;
+  border-radius:16px!important;
+  background:#102033!important;
+  box-shadow:0 25px 85px #000d,inset 0 1px #ffffff17!important;
+  color:#edf6ff!important;
+}
+html[data-theme="dark"] .board-selector-head{
+  flex:0 0 auto;
+  gap:20px!important;
+  padding:21px clamp(14px,2vw,26px)!important;
+  background:linear-gradient(115deg,#233f5b,#14283e)!important;
+  border-bottom:1px solid #44627c!important;
+}
+html[data-theme="dark"] .board-selector-head>div{
+  min-width:0;
+}
+html[data-theme="dark"] .board-selector-head .board-selector-eyebrow{
+  display:block;
+  color:#83cbff!important;
+  font:800 10px/1.4 Inter,"Segoe UI",sans-serif!important;
+  letter-spacing:1.1px!important;
+  margin:0 0 5px!important;
+}
+html[data-theme="dark"] .board-selector-head h2{
+  margin:0!important;
+  color:#f5faff!important;
+  font:800 clamp(19px,2vw,26px)/1.25 Inter,"Segoe UI",sans-serif!important;
+  letter-spacing:.3px!important;
+}
+html[data-theme="dark"] .board-selector-head p{
+  margin:6px 0 0!important;
+  max-width:74ch;
+  color:#c7daed!important;
+  font:400 11px/1.6 Inter,"Segoe UI",sans-serif!important;
+}
+html[data-theme="dark"] .board-selector-head #closeBoardSelector{
+  flex:0 0 38px!important;
+  width:38px!important;height:38px!important;
+  min-width:38px!important;
+  border-radius:9px!important;
+  border:1px solid #527693!important;
+  background:#102b40!important;
+  color:#f0f7ff!important;
+  font:bold 26px/1 Arial,sans-serif!important;
+}
+html[data-theme="dark"] .board-selector-head #closeBoardSelector:hover{
+  background:#2a5474!important;border-color:#83c4f1!important;
+}
+html[data-theme="dark"] .board-selector-controls{
+  display:grid;
+  grid-template-columns:minmax(240px,1fr) minmax(175px,230px) auto;
+  align-items:end;
+  gap:12px;
+  padding:15px clamp(14px,2vw,26px) 9px;
+  background:#14283d;
+}
+html[data-theme="dark"] .board-selector-controls>label{
+  display:flex;flex-direction:column;gap:6px;min-width:0;
+}
+html[data-theme="dark"] .board-selector-controls label>span{
+  color:#a8c3d9;
+  font:800 10px/1.3 Inter,"Segoe UI",sans-serif;
+  letter-spacing:.5px;
+}
+html[data-theme="dark"] .board-selector-controls :is(input,select){
+  box-sizing:border-box;
+  width:100%;height:42px;min-width:0;
+  padding:10px 12px;
+  color:#ecf7ff;
+  border:1px solid #50718d;
+  border-radius:8px;
+  background:#0b2032;
+  font:600 12px/1.3 Inter,"Segoe UI",sans-serif;
+  outline:none;
+}
+html[data-theme="dark"] .board-selector-controls input::placeholder{
+  color:#84a1b6;
+}
+html[data-theme="dark"] .board-selector-controls :is(input,select):focus-visible,
+html[data-theme="dark"] .board-selector-window button:focus-visible{
+  outline:2px solid #7cc6ff!important;
+  outline-offset:2px!important;
+}
+html[data-theme="dark"] .board-selector-reset{
+  height:42px;min-height:42px;
+  padding:0 13px;
+  border:1px solid #477391;
+  border-radius:8px;
+  color:#d2e8f9;
+  background:#203b54;
+  white-space:nowrap;
+  cursor:pointer;
+  font:800 10px/1.2 Inter,"Segoe UI",sans-serif;
+}
+html[data-theme="dark"] .board-selector-reset:hover{
+  background:#295979;border-color:#69b7ee;
+}
+html[data-theme="dark"] .board-selector-families{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  padding:4px clamp(14px,2vw,26px) 13px;
+  background:#14283d;
+  border-bottom:1px solid #334e66;
+}
+html[data-theme="dark"] .board-selector-families button{
+  min-width:0;min-height:37px;padding:7px 8px;
+  background:#1b344b;
+  border:1px solid #41617c;
+  border-radius:8px;
+  color:#c7dcec;
+  cursor:pointer;
+  font:800 10px/1.3 Inter,"Segoe UI",sans-serif;
+  letter-spacing:.2px;
+  transition:background .13s,border-color .13s;
+}
+html[data-theme="dark"] .board-selector-families button:hover{
+  background:#284965;border-color:#6eafe2;
+}
+html[data-theme="dark"] .board-selector-families button[aria-pressed="true"]{
+  color:#fff;background:#1766a1;border-color:#6dbdff;
+  box-shadow:inset 0 0 0 1px #ffffff1a;
+}
+html[data-theme="dark"] .board-selector-info{
+  flex:0 0 auto;
+  align-items:center;
+  padding:11px clamp(14px,2vw,26px)!important;
+  border-bottom:1px solid #2f4c67!important;
+  background:#0e2134!important;
+}
+html[data-theme="dark"] .board-selector-info>span{
+  color:#8fcaff!important;
+  font:800 10px Inter,"Segoe UI",sans-serif!important;
+  letter-spacing:.8px!important;
+}
+html[data-theme="dark"] .board-selector-info>b{
+  color:#d7ebfa!important;
+  font:800 11px Inter,"Segoe UI",sans-serif!important;
+}
+html[data-theme="dark"] .board-selector-grid{
+  box-sizing:border-box;
+  flex:1 1 auto;
+  min-height:110px;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-content:start;
+  gap:14px!important;
+  padding:16px clamp(14px,2vw,26px) 21px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  scrollbar-color:#527a98 #12273a;
+  scrollbar-width:thin;
+  background:radial-gradient(ellipse at top,#1a385045,#0e1d2d 70%);
+}
+html[data-theme="dark"] .board-choice-card{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+  min-width:0!important;
+  min-height:344px!important;
+  height:auto!important;
+  padding:16px!important;
+  text-align:left!important;
+  border:1px solid #456581!important;
+  border-radius:12px!important;
+  color:#edf7ff!important;
+  background:linear-gradient(150deg,#203a52,#15293b)!important;
+  box-shadow:0 5px 14px #0003,inset 0 1px #ffffff0a!important;
+  cursor:pointer;
+  transform:none!important;
+}
+html[data-theme="dark"] .board-choice-card:hover{
+  border-color:#72bcf6!important;
+  background:linear-gradient(150deg,#2a4964,#193449)!important;
+  box-shadow:0 9px 20px #0007,0 0 0 1px #2f88d859!important;
+}
+html[data-theme="dark"] .board-choice-card.recommended{
+  border-color:#4eac92!important;
+}
+html[data-theme="dark"] .board-choice-card.is-current{
+  border-color:#60c2ff!important;
+  box-shadow:0 0 0 2px #268eed63!important;
+}
+html[data-theme="dark"] .board-choice-card.is-industrial{
+  border-top:3px solid #a4abf1!important;
+}
+html[data-theme="dark"] .board-choice-card .board-card-top{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:6px;
+  margin:0 0 10px!important;
+}
+html[data-theme="dark"] .board-choice-card .board-card-top span{
+  display:inline-flex;align-items:center;
+  padding:5px 7px!important;
+  border-radius:6px!important;
+  border:1px solid #53738e!important;
+  color:#b8d3e8!important;
+  background:#10293e!important;
+  font:800 9px/1.2 Inter,"Segoe UI",sans-serif!important;
+  letter-spacing:.2px!important;
+}
+html[data-theme="dark"] .board-choice-card .board-card-top em{
+  font:800 9px/1.2 Inter,"Segoe UI",sans-serif!important;
+  font-style:normal!important;
+  letter-spacing:.25px!important;
+  color:#83dcb5!important;
+}
+html[data-theme="dark"] .board-choice-card.is-industrial .board-card-top em{color:#c6c0ff!important}
+html[data-theme="dark"] .board-choice-card.is-current .board-card-top em{color:#8bd5ff!important}
+html[data-theme="dark"] .board-choice-card>strong{
+  display:block!important;
+  color:#f4f9ff!important;
+  font:800 15px/1.4 Inter,"Segoe UI",sans-serif!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] .board-choice-card>small{
+  display:block!important;
+  color:#b9ccde!important;
+  margin:5px 0 0!important;
+  font:600 10.5px/1.35 Inter,"Segoe UI",sans-serif!important;
+}
+html[data-theme="dark"] .board-choice-card .board-preview{
+  flex:0 0 auto!important;
+  position:relative!important;
+  display:flex!important;
+  flex-direction:column!important;
+  box-sizing:border-box;
+  gap:6px!important;
+  width:100%!important;
+  height:138px!important;
+  padding:10px!important;
+  margin:14px 0 12px!important;
+  border:7px solid #77858a!important;
+  border-radius:5px!important;
+  background:linear-gradient(105deg,#aebcbb,#f4f5f0 13%,#e3e8e4 82%,#b6c1be)!important;
+  box-shadow:inset 0 0 0 2px #f4f8f5,inset 0 0 16px #52605a40,0 4px 10px #0005!important;
+}
+html[data-theme="dark"] .board-choice-card .board-preview-row{
+  flex:1 1 0!important;min-height:0!important;
+  height:auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(var(--preview-cols,12),minmax(0,1fr))!important;
+  gap:2px!important;margin:0!important;
+  padding:5px 4px!important;
+  border:1px solid #899b98!important;
+  border-radius:2px!important;
+  background:linear-gradient(#e4eae4,#bac8c1)!important;
+  box-shadow:inset 0 -3px #768c89!important;
+}
+html[data-theme="dark"] .board-choice-card .board-preview-slot{
+  min-width:0!important;
+  border:1px solid #9daead!important;
+  border-radius:1px!important;
+  background:linear-gradient(#fff,#d6dcd8)!important;
+}
+html[data-theme="dark"] .board-choice-card .board-preview-industrial{
+  border-color:#6e8085!important;
+}
+html[data-theme="dark"] .board-choice-card .board-preview-industrial:before{
+  content:"PRO • X1 / ZUG";
+  display:block;
+  flex:0 0 auto;
+  width:100%;
+  min-height:11px;
+  padding:0 3px 2px;
+  box-sizing:border-box;
+  border-bottom:2px solid #7b9b9a;
+  color:#275b70;
+  font:800 8px/1.2 Inter,"Segoe UI",sans-serif;
+}
+html[data-theme="dark"] .board-choice-card .board-card-meta{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:7px!important;
+  margin:0 0 9px!important;
+}
+html[data-theme="dark"] .board-choice-card .board-card-meta.board-card-meta-four{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+}
+html[data-theme="dark"] .board-choice-card .board-card-meta>div{
+  min-width:0!important;
+  padding:10px 5px!important;
+  border:1px solid #405e79!important;
+  border-radius:7px!important;
+  text-align:center!important;
+  background:#10273a!important;
+}
+html[data-theme="dark"] .board-choice-card .board-card-meta span{
+  display:block!important;
+  color:#adcadf!important;
+  font:800 8px/1.3 Inter,"Segoe UI",sans-serif!important;
+}
+html[data-theme="dark"] .board-choice-card .board-card-meta b{
+  display:block!important;
+  margin-top:4px!important;
+  color:#e5f5ff!important;
+  font:800 14px/1.2 Inter,"Segoe UI",sans-serif!important;
+}
+html[data-theme="dark"] .board-choice-card .board-card-note{
+  display:block;
+  margin:0 0 9px;
+  color:#c8cbf2;
+  font:600 9px/1.4 Inter,"Segoe UI",sans-serif;
+}
+html[data-theme="dark"] .board-choice-card .board-card-action{
+  display:block!important;
+  margin:auto 0 0!important;
+  padding-top:10px!important;
+  border-top:1px solid #40566e!important;
+  color:#87ceff!important;
+  font:800 10px/1.3 Inter,"Segoe UI",sans-serif!important;
+  letter-spacing:.3px!important;
+}
+html[data-theme="dark"] .board-choice-card.recommended .board-card-action{
+  color:#86e4c1!important;
+}
+html[data-theme="dark"] .board-selector-empty{
+  grid-column:1/-1;
+  padding:40px 20px;
+  border:1px dashed #507b9b;
+  border-radius:12px;
+  background:#122d43;
+  text-align:center;
+}
+html[data-theme="dark"] .board-selector-empty strong{
+  display:block;color:#f0f8ff;
+  font:800 16px Inter,"Segoe UI",sans-serif;
+}
+html[data-theme="dark"] .board-selector-empty p{
+  color:#afcde2;font:400 12px/1.5 Inter,"Segoe UI",sans-serif;
+}
+html[data-theme="dark"] .board-selector-foot{
+  flex:0 0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:11px clamp(14px,2vw,26px)!important;
+  border-top:1px solid #3e5d76!important;
+  background:#13283d!important;
+  color:#b3cadc!important;
+  font:500 10px/1.45 Inter,"Segoe UI",sans-serif!important;
+}
+html[data-theme="dark"] .board-selector-foot span:last-child{
+  flex:0 0 auto;white-space:nowrap;
+  color:#89c8f6!important;
+}
+@media(max-width:1100px){
+  html[data-theme="dark"] .board-selector-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:720px){
+  html[data-theme="dark"] .board-selector-window{
+    max-height:calc(100dvh - 12px)!important;
+    max-width:calc(100vw - 12px)!important;
+    border-radius:11px!important;
+  }
+  html[data-theme="dark"] .board-selector-head{
+    padding:14px!important;
+  }
+  html[data-theme="dark"] .board-selector-controls{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:9px;padding:12px 12px 8px;
+  }
+  html[data-theme="dark"] .board-selector-search{grid-column:1/-1}
+  html[data-theme="dark"] .board-selector-reset{
+    padding:0 8px;font-size:9px;
+  }
+  html[data-theme="dark"] .board-selector-families{
+    gap:5px;padding:5px 12px 11px;
+  }
+  html[data-theme="dark"] .board-selector-families button{
+    font-size:9px;padding:7px 3px;
+  }
+  html[data-theme="dark"] .board-selector-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:10px!important;padding:12px!important;
+  }
+  html[data-theme="dark"] .board-choice-card{
+    min-height:300px!important;
+  }
+  html[data-theme="dark"] .board-selector-foot span:last-child{display:none}
+}
+@media(max-width:420px){
+  html[data-theme="dark"] .board-selector-families{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  html[data-theme="dark"] .board-selector-head h2{font-size:19px!important}
+  html[data-theme="dark"] .board-choice-card .board-card-meta span{font-size:7px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme="dark"] .board-choice-card,
+  html[data-theme="dark"] .board-selector-families button{transition:none!important}
+}
