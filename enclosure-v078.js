@@ -58,7 +58,7 @@ document.addEventListener('elektryk:board-changed',e=>{
   const v=document.querySelector('.cabinet-head .version');
   const rows=Number(template.rows||inner.dataset.rows||1);
   const modules=Number(template.modulesPerRow||inner.dataset.modulesPerRow||18);
-  if(v)v.textContent='v0.7.17.1 • ROZDZIELNICAPRO.PL • WOLNA BUDOWA • '+rows+'×'+modules+'M';
+  if(v)v.textContent='v0.7.17.2 • ROZDZIELNICAPRO.PL • WOLNA BUDOWA • '+rows+'×'+modules+'M';
 });
 document.addEventListener('elektryk:task-started',e=>{
   const task=e.detail?.task||{};
