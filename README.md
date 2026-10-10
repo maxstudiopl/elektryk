@@ -2,6 +2,20 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.17.2 — dopracowanie lewego i prawego panelu
+
+Na podstawie rzeczywistego podglądu stanowiska przygotowano oddzielny arkusz `side-panels-v07172.css`, wczytywany jako ostatni w `index.html`.
+
+**Lewy panel:** poprawiono wielkość i kontrast tekstu w aktywnym zadaniu, listę wymagań, liczniki postępu, nagrodę XP, podsumowanie okablowania, wybór modelu i trzy sloty zapisu projektu. Liczniki postępu mają układ 2×2 na desktopie, 4 w rzędzie na średnich ekranach oraz 2×2 na telefonach. Stan aktywnego slotu, zapisu i błędów pozostał rozróżnialny.
+
+**Prawy panel:** powiększono przyciski przekroju kabli, poprawiono zaznaczenie aktywnej żyły L1/L2/L3/N/PE bez zmiany jej fizycznego koloru, uporządkowano przyciski okablowania i mostków, filtry katalogu, dwukolumnowe karty aparatów PRO oraz szczegóły wybranego aparatu. Zarówno `selected`, jak i `install-selected` mają widoczne wyróżnienie.
+
+**Nie zmieniono:** algorytmów elektrycznych, układu rozdzielnicy, współrzędnych zacisków, fizycznej geometrii przewodów, trybów gry i Panelu Użytkownika. Poprawki dotyczą tylko prezentacji bocznych paneli i synchronizacji numeru wersji.
+
+### Sprawdzenie w podglądzie
+
+Na https://maxstudiopl.github.io/elektryk/ sprawdź wybór zadania, postępy, zaznaczanie slotów zapisu, zmianę przekroju kabla, przełączanie żył, mostków i kliknięcie aparatu w katalogu. Warto porównać szerokość 1755 px z ekranem laptopa i telefonu. Kontrola źródeł oraz składni została wykonana; pełna wizualna kontrola działającej gry pozostaje do przeprowadzenia w przeglądarce.
+
 ## v0.7.17.1 — ergonomia Nauki 2.0 na podstawie zrzutów użytkownika
 
 Po analizie rzeczywistego ekranu 1755 × 862 usunięto zbędne zajmowanie wysokości przez dwa panele instruktażowe nad rozdzielnicą.
