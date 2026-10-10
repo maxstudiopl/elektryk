@@ -25,7 +25,7 @@ test('HTML stylesheet and script assets exist, in their original order',()=>{
   assert.ok(html.indexOf('responsive-workspace-v0719.css')>html.indexOf('desktop-layout-v07124.css'));
 });
 test('Dynamic game modules exist and appear only once in the game loader',()=>{
-  const beginning=auth.indexOf('const gameScripts=');
+  const beginning=auth.indexOf('const scripts=');
   assert.ok(beginning>=0,'gameScripts array missing');
   const closing=auth.indexOf('];',beginning);
   assert.ok(closing>beginning);
