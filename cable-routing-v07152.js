@@ -10,7 +10,8 @@ if(!cabinet||!legacy)return;
 const bases=[...legacy.querySelectorAll(':scope > .circuit-node')];
 const baseLabels=new Map(bases.map(node=>[node,{
  name:node.querySelector(':scope > b')?.textContent||'',
- cable:node.querySelector(':scope > small')?.textContent||''
+ cable:node.querySelector(':scope > small')?.textContent||'',
+ exit:node.dataset.exit||'bottom'
 }]));
 let root=null,inspector=null,active=[],routing=[],baseHeight=null,expandedHeight=null;
 const MAX_TOP=12,MAX_BOTTOM_ROWS=7;
@@ -113,18 +114,18 @@ function inspect(load,el){
   +' • WYJŚCIE '+(el?.dataset.cableExit==='top'?'GÓRĄ':'DOŁEM');
 }
 function enableInspection(el,load){
- el.addEventListener('click',ev=>{
+ el.onclick=ev=>{
    if(ev.target?.closest?.('.wire-terminal'))return;
    inspect(load,el);
- });
+ };
  el.tabIndex=0;
  el.setAttribute('aria-label',load?
    'Kabel obwodu '+load.number+', '+load.label+', '+load.code+', '+load.section+'. Kliknij, aby zobaczyć szczegóły':
    'Kabel rezerwowy, bez przypisanego obwodu.');
- el.addEventListener('keydown',ev=>{
+ el.onkeydown=ev=>{
    if(ev.target!==el||!(ev.key==='Enter'||ev.key===' '))return;
    ev.preventDefault();inspect(load,el);
- });
+ };
 }
 function sectionsFor(board){
  // Sort by real protective section while preserving the numbered circuit IDs.
@@ -137,10 +138,14 @@ function teardown(){
    node.classList.remove('large-load-card','large-cable-outlet','cable-base-outlet');
    node.style.removeProperty('--cable-l');
    node.removeAttribute('data-cable-exit');
+   node.onclick=null;node.onkeydown=null;
+   node.removeAttribute('aria-label');
+   node.removeAttribute('tabindex');
    const saved=baseLabels.get(node);
    const heading=node.querySelector(':scope > b'),subtitle=node.querySelector(':scope > small');
    if(heading&&saved)heading.textContent=saved.name;
    if(subtitle&&saved)subtitle.textContent=saved.cable;
+   node.dataset.exit=saved?.exit||'bottom';
    legacy.appendChild(node);
  }
  root.remove();inspector?.remove();inspector=null;root=null;active=[];routing=[];
@@ -182,6 +187,7 @@ function prepare(board){
    }
    el.dataset.circuit=load.id;el.dataset.breakerId=load.breakerId||'';
    el.dataset.cableExit=parent;
+   el.dataset.exit=parent==='top'?'top-right':'bottom';
    el.style.setProperty('--cable-l',PHASE_COLORS[load.phase]||PHASE_COLORS.L1);
    el.title='Obwód '+load.number+' • '+(load.label||load.code)+' • '+(load.section||'')+' • '+load.phase+' • '+cableCode(load);
    (parent==='top'?top:bottom).appendChild(el);
@@ -194,6 +200,7 @@ function prepare(board){
    const parent='bottom';counts[parent]++;
    node.classList.add('large-load-card','large-cable-outlet','cable-base-outlet');
    node.dataset.cableExit=parent;
+   node.dataset.exit='bottom';
    node.style.setProperty('--cable-l',PHASE_COLORS.L1);
    node.title='Wyjście rezerwowe • brak przypisanego zabezpieczenia w zadaniu';
    (parent==='top'?top:bottom).appendChild(node);
