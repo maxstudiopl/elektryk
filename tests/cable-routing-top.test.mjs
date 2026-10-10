@@ -36,7 +36,7 @@ test('Upper sheathing and conductor origins join continuously',()=>{
   const sheath=rule('.circuit-sheath');
   const core=rule('.circuit-core');
   const anchors=rule('.circuit-terminals');
-  assert.equal(prop(sheath,'top'),'0px');
+  assert.ok(['0','0px'].includes(prop(sheath,'top')));
   assert.equal(prop(sheath,'height'),'27px');
   assert.equal(prop(core,'top'),'22px');
   assert.equal(prop(core,'height'),'36px');
