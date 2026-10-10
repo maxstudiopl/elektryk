@@ -106,7 +106,7 @@ function validateProject(p){
     return 'Zapis nie odpowiada wybranemu modelowi obudowy.';
   const used=new Set(),ids=new Set(),parts=window.ElektrykStage2?.parts;
   for(const m of p.mounted){
-    if(!m||!/^M[1-9]\\d*$/.test(String(m.id||''))||ids.has(m.id))
+    if(!m||!/^M[1-9]\d*$/.test(String(m.id||''))||ids.has(m.id))
       return 'Aparaty mają nieprawidłowe lub powielone identyfikatory.';
     const row=Number(m.row),start=Number(m.start),code=String(m.code||'');
     const part=parts?.[code],width=Number(part?.modules??m.modules);
@@ -134,7 +134,7 @@ function validateProject(p){
         return 'Nieprawidłowy lub powtórzony '+kind+'.';
       seen.add(String(record.id));
       for(const endpoint of [record.a,record.b]){
-        const mount=endpoint.match(/^(M\\d+):/);
+        const mount=endpoint.match(/^(M\d+):/);
         if(mount&&!ids.has(mount[1]))
           return 'Połączenie wskazuje aparat, którego nie ma w zapisie.';
       }
