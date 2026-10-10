@@ -22,7 +22,8 @@ html[data-theme="dark"] body .game-shell .pro-fold-toggle:focus-visible{
   outline:2px solid #80d0ff!important;outline-offset:2px!important;
 }
 html[data-theme="dark"] body .game-shell .pro-fold-toggle-panel{
-  position:absolute!important;z-index:3;right:9px;top:7px;
+  position:sticky!important;z-index:5;top:7px;
+  float:right!important;margin:-37px 9px 7px 0!important;
 }
 html[data-theme="dark"] body .game-shell .pro-fold-toggle-inline{
   position:relative!important;flex:0 0 29px!important;
