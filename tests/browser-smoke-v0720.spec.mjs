@@ -111,6 +111,14 @@ test('Real terminal clicks create a wire, undo works and removal prunes stale en
   await page.locator('.catalog-card[data-part="B10"]').first().click();
   await page.locator('.mount-grid[data-row="0"] .din-slot').first().click();
   await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(1);
+  console.log('MOUNT_DIAG_WIRES',JSON.stringify(await page.evaluate(()=>({
+    mounted:window.ElektrykStage2.getMounted(),count:document.querySelectorAll('.mounted-device').length,
+    inRows:document.querySelector('.din-rows-host')?.querySelectorAll('.mounted-device').length,
+    grid:document.querySelector('.mount-grid[data-row="0"]')?.outerHTML.slice(0,280),
+    mountId:window.ElektrykStage2.getMounted()[0]?.id,
+    bodyMode:document.body.dataset.gameMode
+  }))));
+  await expect.poll(()=>page.locator('.mounted-device').count(),{timeout:10000}).toBe(1);
   const supply=page.locator('[data-terminal="SUPPLY:L1"]');
   const breaker=page.locator('.mounted-device [data-role="L"][data-zone="top"]').first();
   await expect(supply).toBeVisible();
@@ -132,6 +140,12 @@ test('Saved free-build project restores mounted apparatus from selected slot',as
   await page.locator('.catalog-card[data-part="B10"]').first().click();
   await page.locator('.mount-grid[data-row="0"] .din-slot').first().click();
   await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(1);
+  console.log('MOUNT_DIAG_SAVE',JSON.stringify(await page.evaluate(()=>({
+    mounted:window.ElektrykStage2.getMounted(),count:document.querySelectorAll('.mounted-device').length,
+    inRows:document.querySelector('.din-rows-host')?.querySelectorAll('.mounted-device').length,
+    grid:document.querySelector('.mount-grid[data-row="0"]')?.outerHTML.slice(0,280)
+  }))));
+  await expect.poll(()=>page.locator('.mounted-device').count(),{timeout:10000}).toBe(1);
   await page.locator('#freeProjectName').fill('Projekt do odtworzenia');
   await page.locator('#saveFreeProject').click();
   await expect(page.locator('#freeSaveState')).toHaveText('ZAPISANO');
