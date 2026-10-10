@@ -11,7 +11,8 @@ const bases=[...legacy.querySelectorAll(':scope > .circuit-node')];
 const baseLabels=new Map(bases.map(node=>[node,{
  name:node.querySelector(':scope > b')?.textContent||'',
  cable:node.querySelector(':scope > small')?.textContent||'',
- exit:node.dataset.exit||'bottom'
+ exit:node.dataset.exit||'bottom',
+ title:node.title||'',breakerId:node.dataset.breakerId||''
 }]));
 let root=null,inspector=null,active=[],routing=[],baseHeight=null,expandedHeight=null;
 const MAX_TOP=12,MAX_BOTTOM_ROWS=7;
@@ -146,6 +147,9 @@ function teardown(){
    if(heading&&saved)heading.textContent=saved.name;
    if(subtitle&&saved)subtitle.textContent=saved.cable;
    node.dataset.exit=saved?.exit||'bottom';
+   node.title=saved?.title||'';
+   if(saved?.breakerId)node.dataset.breakerId=saved.breakerId;
+   else delete node.dataset.breakerId;
    legacy.appendChild(node);
  }
  root.remove();inspector?.remove();inspector=null;root=null;active=[];routing=[];
