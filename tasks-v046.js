@@ -1016,59 +1016,238 @@ const shortcut=document.querySelector('.task-button small');
 if(shortcut)shortcut.textContent=TASKS.length+' zadań • montaż, diagnostyka i schematy';
 function usedModules(task){return Object.entries(task.requirements).reduce((sum,[code,n])=>sum+(MODULES[code]||0)*n,0)}
 function reqSummary(task){return Object.entries(task.requirements).map(([code,n])=>code+'×'+n).join(' • ')}
-const tool=document.createElement('div');tool.className='task-catalog-tabs';tool.setAttribute('aria-label','Grupy zadań');
+// v0.7.17.6: katalog PRO korzysta z zapisanych wyników istniejącego systemu XP.
+const tool=document.createElement('div');
+tool.className='task-catalog-tabs';
+tool.setAttribute('role','group');
+tool.setAttribute('aria-label','Rozmiar rozdzielnicy');
 const filters=[
  {key:'all',label:'WSZYSTKIE'},
  {key:'one',label:'1 SZYNA DIN'},
  {key:'two',label:'2 SZYNY DIN'},
  {key:'three',label:'3 SZYNY DIN'},
- {key:'xl',label:'DUŻE ROZDZIELNICE'}
+ {key:'xl',label:'DUŻE / XL'}
 ].map(f=>({...f,count:f.key==='all'?TASKS.length:TASKS.filter(t=>t.group===f.key).length}));
-let activeFilter='one',page=0,query='';
+let activeFilter='all',page=0,query='',activeLevel='all',activeStatus='all',sortBy='number';
+let activeTaskId=Number(window.ElektrykStage2?.getTask?.()?.id)||1;
+function progressData(){
+  const p=window.ElektrykProgress?.get?.();
+  return p&&typeof p==='object'?p:{completed:{},bestStars:{},xp:0};
+}
+function isDone(id,p){return !!p.completed?.[id]}
+function normal(value){
+  return String(value??'').toLocaleLowerCase('pl-PL')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/\s+/g,' ').trim();
+}
+function element(tag,cls,txt){
+  const el=document.createElement(tag);
+  if(cls)el.className=cls;
+  if(txt!==undefined)el.textContent=String(txt);
+  return el;
+}
 filters.forEach(f=>{
-  const btn=document.createElement('button');btn.type='button';btn.dataset.group=f.key;
-  btn.textContent=f.label+' ('+f.count+')';
-  btn.addEventListener('click',()=>{activeFilter=f.key;page=0;render()});
-  tool.appendChild(btn)
+  const button=element('button','task-group-button',f.label+' ('+f.count+')');
+  button.type='button';
+  button.dataset.group=f.key;
+  button.addEventListener('click',()=>{activeFilter=f.key;page=0;render()});
+  tool.appendChild(button);
 });
 cards.insertAdjacentElement('beforebegin',tool);
-const catalogSearch=document.createElement('div');catalogSearch.className='task-search';
-const input=document.createElement('input');input.type='search';
-input.placeholder='Szukaj zadania, aparatu, poziomu lub numeru…';
-input.setAttribute('aria-label','Szukaj spośród 300 zadań');
-input.addEventListener('input',()=>{query=input.value.trim().toLocaleLowerCase('pl-PL');page=0;render()});
-catalogSearch.appendChild(input);
-const counter=document.createElement('span');counter.className='task-search-counter';
-catalogSearch.appendChild(counter);cards.insertAdjacentElement('beforebegin',catalogSearch);
-const pagination=document.createElement('div');pagination.className='task-pagination';
-const prev=document.createElement('button');prev.type='button';prev.textContent='← POPRZEDNIE';
-const summary=document.createElement('span');summary.setAttribute('aria-live','polite');
-const next=document.createElement('button');next.type='button';next.textContent='NASTĘPNE →';
+
+const overview=element('div','task-overview');
+const overviewLeft=element('div','task-overview-copy');
+overviewLeft.append(
+  element('span','task-overview-kicker','TWÓJ POSTĘP NAUKI'),
+  element('strong','task-overview-title','300 ZADAŃ • AKADEMIA PRO'),
+  element('small','task-overview-caption','Każde ukończone zadanie zwiększa Twój postęp. XP przyznawane jest za pierwsze zaliczenie.')
+);
+const overviewStats=element('div','task-overview-stats');
+function metric(label){
+  const box=element('div','task-overview-metric');
+  const key=element('span','',label);
+  const value=element('b','', '0');
+  box.append(key,value);
+  overviewStats.appendChild(box);
+  return value;
+}
+const doneCount=metric('UKOŃCZONE');
+const remainingCount=metric('DO WYKONANIA');
+const xpCount=metric('ZDOBYTE XP');
+const completionBar=element('div','task-overview-bar');
+completionBar.setAttribute('role','progressbar');
+completionBar.setAttribute('aria-label','Postęp ukończenia katalogu zadań');
+completionBar.setAttribute('aria-valuemin','0');
+completionBar.setAttribute('aria-valuemax',String(TASKS.length));
+const completionFill=element('div','task-overview-fill');
+completionBar.appendChild(completionFill);
+overview.append(overviewLeft,overviewStats,completionBar);
+tool.insertAdjacentElement('beforebegin',overview);
+
+const catalogSearch=element('div','task-search task-filter-toolbar');
+function field(labelText,id,control){
+  const wrap=element('label','task-filter-field');
+  wrap.setAttribute('for',id);
+  wrap.append(element('span','task-filter-label',labelText),control);
+  return wrap;
+}
+const input=element('input','task-search-input');
+input.id='taskCatalogSearch';
+input.type='search';
+input.autocomplete='off';
+input.placeholder='Numer, opis, aparat RCD / RCBO / MCB…';
+input.setAttribute('aria-label','Wyszukaj zadanie');
+input.addEventListener('input',()=>{query=normal(input.value);page=0;render()});
+function selectField(id,choices,onChange){
+  const select=element('select','task-filter-select');
+  select.id=id;
+  choices.forEach(([value,label])=>{
+    const opt=element('option','',label);
+    opt.value=value;
+    select.appendChild(opt);
+  });
+  select.addEventListener('change',()=>{onChange(select.value);page=0;render()});
+  return select;
+}
+const levelChoices=[...new Set(TASKS.map(t=>String(t.level||'PODSTAWY')))];
+const levelSelect=selectField('taskCatalogLevel',
+  [['all','Każdy poziom'],...levelChoices.map(v=>[v,v])],
+  value=>activeLevel=value);
+const statusSelect=selectField('taskCatalogStatus',
+  [['all','Wszystkie zadania'],['open','Nieukończone'],['done','Ukończone']],
+  value=>activeStatus=value);
+const orderSelect=selectField('taskCatalogSort',
+  [['number','Numer rosnąco'],['xp','Najwięcej XP'],['undone','Nieukończone najpierw']],
+  value=>sortBy=value);
+const clear=element('button','task-clear-filters','WYCZYŚĆ FILTRY');
+clear.type='button';
+clear.addEventListener('click',()=>{
+  activeFilter='all';activeLevel='all';activeStatus='all';sortBy='number';query='';
+  input.value='';levelSelect.value='all';statusSelect.value='all';orderSelect.value='number';
+  page=0;render();input.focus();
+});
+catalogSearch.append(
+  field('SZUKAJ ZADANIA','taskCatalogSearch',input),
+  field('POZIOM','taskCatalogLevel',levelSelect),
+  field('STATUS','taskCatalogStatus',statusSelect),
+  field('SORTOWANIE','taskCatalogSort',orderSelect),
+  clear
+);
+const counter=element('span','task-search-counter');
+counter.setAttribute('role','status');
+counter.setAttribute('aria-live','polite');
+const resultsRow=element('div','task-results-row');
+resultsRow.append(
+  element('strong','', 'DOSTĘPNE ZADANIA'),
+  counter
+);
+cards.insertAdjacentElement('beforebegin',catalogSearch);
+cards.insertAdjacentElement('beforebegin',resultsRow);
+
+const pagination=element('div','task-pagination');
+const prev=element('button','', '← POPRZEDNIE');
+const summary=element('span');
+summary.setAttribute('aria-live','polite');
+const next=element('button','', 'NASTĘPNE →');
+prev.type=next.type='button';
 prev.addEventListener('click',()=>{page=Math.max(0,page-1);render()});
 next.addEventListener('click',()=>{page++;render()});
-pagination.append(prev,summary,next);cards.insertAdjacentElement('afterend',pagination);
+pagination.append(prev,summary,next);
+cards.insertAdjacentElement('afterend',pagination);
 function render(){
   cards.replaceChildren();
-  tool.querySelectorAll('button').forEach(b=>{const on=b.dataset.group===activeFilter;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on))});
-  const eligible=TASKS.filter(t=>(query||activeFilter==='all'||t.group===activeFilter)&&
-    (!query||[t.id,t.title,t.description,t.level,t.section||'',
-      Object.keys(t.requirements||{}).join(' ')].join(' ').toLocaleLowerCase('pl-PL').includes(query)));
+  const p=progressData();
+  const completed=TASKS.reduce((n,t)=>n+(isDone(t.id,p)?1:0),0);
+  doneCount.textContent=completed+' / '+TASKS.length;
+  remainingCount.textContent=TASKS.length-completed;
+  xpCount.textContent=Number(p.xp||0).toLocaleString('pl-PL');
+  completionBar.setAttribute('aria-valuenow',String(completed));
+  completionFill.style.width=(100*completed/TASKS.length).toFixed(2)+'%';
+  tool.querySelectorAll('button').forEach(button=>{
+    const on=button.dataset.group===activeFilter;
+    button.classList.toggle('active',on);
+    button.setAttribute('aria-pressed',String(on));
+  });
+  const eligible=TASKS.filter(t=>{
+    if(activeFilter!=='all'&&t.group!==activeFilter)return false;
+    if(activeLevel!=='all'&&t.level!==activeLevel)return false;
+    if(activeStatus==='done'&&!isDone(t.id,p))return false;
+    if(activeStatus==='open'&&isDone(t.id,p))return false;
+    const haystack=normal([t.id,String(t.id).padStart(3,'0'),t.title,t.description,
+      t.level,t.section||'',t.rows+'x'+t.modulesPerRow,
+      ...(t.topics||[]),...Object.keys(t.requirements||{})].join(' '));
+    return !query||haystack.includes(query);
+  });
+  if(sortBy==='xp')eligible.sort((a,b)=>Number(b.xp||0)-Number(a.xp||0)||a.id-b.id);
+  if(sortBy==='undone')eligible.sort((a,b)=>Number(isDone(a.id,p))-Number(isDone(b.id,p))||a.id-b.id);
   const size=12,totalPages=Math.max(1,Math.ceil(eligible.length/size));
-  page=Math.min(page,totalPages-1);
+  page=Math.max(0,Math.min(page,totalPages-1));
   counter.textContent=eligible.length+' z '+TASKS.length+' zadań';
   summary.textContent='Strona '+(page+1)+' / '+totalPages;
-  prev.disabled=page===0;next.disabled=page>=totalPages-1;
+  prev.disabled=page===0;
+  next.disabled=page>=totalPages-1;
+  if(!eligible.length){
+    const empty=element('div','task-catalog-empty');
+    empty.append(
+      element('strong','', 'Nie znaleziono zadań'),
+      element('p','', 'Zmień filtry lub wyszukiwaną frazę. Ukończone zadania są zapamiętywane na Twoim koncie.'),
+      element('small','', 'Możesz też wybrać „Wyczyść filtry”.')
+    );
+    cards.appendChild(empty);
+  }
   eligible.slice(page*size,(page+1)*size).forEach(task=>{
-    const btn=document.createElement('button');btn.type='button';btn.className='task-card rows-'+task.rows;btn.dataset.taskId=String(task.id);
-    btn.innerHTML='<div class="task-card-top"><b>'+String(task.id).padStart(2,'0')+'</b><span>'+task.level+'</span></div>'+
-      '<strong>'+task.title+'</strong>'+
-      '<div class="task-card-meta"><span>'+task.rows+'×'+task.modulesPerRow+'M</span><span>'+usedModules(task)+'/'+(task.rows*task.modulesPerRow)+'M</span><span>'+task.xp+' XP</span></div>'+
-      '<small>'+reqSummary(task)+'</small><em>ROZPOCZNIJ ZADANIE ›</em>';
-    btn.addEventListener('click',()=>startTask(task,btn));cards.appendChild(btn);
+    const completedTask=isDone(task.id,p);
+    const card=element('button','task-card rows-'+task.rows);
+    card.type='button';
+    card.dataset.taskId=String(task.id);
+    card.classList.toggle('task-completed',completedTask);
+    card.classList.toggle('selected-task',task.id===activeTaskId);
+    card.setAttribute('aria-label','Zadanie '+task.id+': '+task.title+
+      ', '+task.level+', '+(completedTask?'ukończone':'nieukończone'));
+    const top=element('div','task-card-top');
+    top.append(element('b','',String(task.id).padStart(3,'0')),element('span','',task.level));
+    const name=element('strong','',task.title);
+    const section=element('span','task-card-section',
+      String(task.section||filters.find(x=>x.key===task.group)?.label||'ĆWICZENIE'));
+    const meta=element('div','task-card-meta');
+    [task.rows+'×'+task.modulesPerRow+'M',
+      usedModules(task)+'/'+task.rows*task.modulesPerRow+'M',
+      task.xp+' XP'].forEach(t=>meta.appendChild(element('span','',t)));
+    const req=element('small','',reqSummary(task));
+    const state=element('div','task-save-state');
+    const st=Number(p.bestStars?.[task.id]||0);
+    state.textContent=completedTask?'✓ UKOŃCZONE • '+('★'.repeat(st)+'☆'.repeat(Math.max(0,3-st))):'NIEUKOŃCZONE';
+    const action=element('em','',task.id===activeTaskId?'AKTYWNE ZADANIE ›':
+      completedTask?'POWTÓRZ ZADANIE ›':'ROZPOCZNIJ ZADANIE ›');
+    card.append(top,name,section,meta,req,state,action);
+    card.addEventListener('click',()=>startTask(task,card));
+    cards.appendChild(card);
   });
   window.ElektrykProgress?.refreshProfile?.();
-  window.ElektrykProgress?.refreshCards?.();
+  // Decoration is handled from saved progress in this render; avoid extra DOM work.
 }
+document.addEventListener('elektryk:progress-updated',render);
+function focusCatalog(){
+  if(!modal||modal.hidden)return;
+  render();
+  requestAnimationFrame(()=>input.focus());
+}
+document.querySelector('.task-button')?.addEventListener('click',focusCatalog);
+modal?.addEventListener('keydown',event=>{
+  if(modal.hidden)return;
+  if(event.key==='Escape'){
+    event.preventDefault();
+    document.getElementById('closeTasks')?.click();
+    return;
+  }
+  if(event.key!=='Tab')return;
+  const nodes=[...modal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled])')]
+    .filter(el=>el.getClientRects().length>0);
+  if(!nodes.length)return;
+  const first=nodes[0],last=nodes[nodes.length-1];
+  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+  else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+});
 function applyCircuitLayout(task){
  const host=document.querySelector('.circuits');if(!host)return;
  const layout=task.rows===1?'bottom':'mixed';
@@ -1077,22 +1256,28 @@ function applyCircuitLayout(task){
  requestAnimationFrame(()=>{window.ElektrykStage3?.redraw?.();window.ElektrykStage3?.refreshGuidance?.()});
 }
 function startTask(task,btn){
+ activeTaskId=task.id;
  window.ElektrykStage2.configureTask(task);
  applyCircuitLayout(task);
  document.dispatchEvent(new CustomEvent('elektryk:task-started',{detail:{task}}));
  tool.querySelectorAll('button').forEach(b=>b.classList.toggle('selected-task',b.dataset.group===task.group));
  if(modal)modal.hidden=true;
  const title=document.querySelector('.active-task .panel-title');if(title)title.textContent='AKTYWNE ZADANIE • '+String(task.id).padStart(3,'0')+'/'+TASKS.length;
- const ver=document.querySelector('.cabinet-head .version');if(ver)ver.textContent='v0.7.17.5 • ROZDZIELNICAPRO.PL • ZADANIE '+String(task.id).padStart(2,'0')+' • '+task.rows+'×'+task.modulesPerRow+'M';
+ const ver=document.querySelector('.cabinet-head .version');if(ver)ver.textContent='v0.7.17.6 • ROZDZIELNICAPRO.PL • ZADANIE '+String(task.id).padStart(2,'0')+' • '+task.rows+'×'+task.modulesPerRow+'M';
 }
 render();
 startTask(TASKS[0],cards.querySelector('[data-task-id="1"]'));
 window.ElektrykTasks={all:TASKS,
   start:function(id){const t=TASKS.find(x=>x.id===Number(id));if(!t)return false;
-    activeFilter=t.group;page=0;query='';input.value='';render();
+    activeFilter=t.group;activeLevel='all';activeStatus='all';sortBy='number';
+    page=Math.max(0,Math.floor(TASKS.filter(x=>x.group===t.group&&x.id<t.id).length/12));
+    query='';input.value='';levelSelect.value='all';statusSelect.value='all';orderSelect.value='number';
+    render();
     startTask(t,cards.querySelector('[data-task-id="'+t.id+'"]'));return true
   },
   current:function(){return window.ElektrykStage2.getTask()},
-  groups:filters,filter:(group)=>{if(filters.some(f=>f.key===group)){activeFilter=group;page=0;render()}}
+  groups:filters,
+  refreshCatalog:render,
+  filter:(group)=>{if(filters.some(f=>f.key===group)){activeFilter=group;page=0;render()}}
 };
 })();
