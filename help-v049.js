@@ -20,6 +20,20 @@ const modal=document.createElement('div');
 modal.className='solution-modal';modal.hidden=true;
 modal.innerHTML='<div class="solution-window"><div class="solution-head"><div><b id="solutionTitle">ROZWIĄZANIE</b><small id="solutionMeta"></small></div><button id="closeSolution">×</button></div><div class="solution-body"><div class="solution-warning"><b>TRYB EDUKACYJNY SYMULATORA</b> — schemat pokazuje logikę połączeń w grze. Nie jest projektem wykonawczym ani instrukcją pracy przy rzeczywistej instalacji.</div><div id="solutionLayout"></div><div id="solutionConnections"></div></div></div>';
 document.body.appendChild(modal);
+const solutionWindow=modal.querySelector('.solution-window');
+solutionWindow?.setAttribute('role','dialog');
+solutionWindow?.setAttribute('aria-modal','true');
+solutionWindow?.setAttribute('aria-labelledby','solutionTitle');
+document.getElementById('closeSolution')?.setAttribute('aria-label','Zamknij schemat połączeń');
+document.getElementById('closeSolution')?.setAttribute('type','button');
+document.getElementById('taskHintBtn')?.setAttribute('type','button');
+document.getElementById('taskSolutionBtn')?.setAttribute('type','button');
+let solutionReturnFocus=null;
+function closeSolution(){
+ if(modal.hidden)return;
+ modal.hidden=true;
+ if(solutionReturnFocus?.isConnected)solutionReturnFocus.focus();
+}
 
 function currentTask(){return tasksApi.current?.()||stage2.getTask?.()||tasksApi.all?.[0]}
 function mountedCounts(){
@@ -326,8 +340,10 @@ function openSolution(){
   document.getElementById('solutionConnections').innerHTML=
     '<section class="solution-section"><h3>POŁĄCZENIA KROK PO KROKU</h3>'+filterBar()+'<div class="wire-step-list">'+connectionRows(schema.connections)+'</div></section>'+
     '<section class="solution-section compact"><h3>WSKAZÓWKI DO TEGO ZADANIA</h3>'+tips.map(function(x){return '<p>• '+esc(x)+'</p>'}).join('')+'</section>';
+  solutionReturnFocus=document.activeElement;
   modal.hidden=false;
   highlightStep(1);
+  document.getElementById('closeSolution')?.focus();
 }
 function highlightStep(step){
   modal.querySelectorAll('.solution-wire').forEach(function(p){p.classList.toggle('active',Number(p.dataset.step)===Number(step))});
@@ -345,12 +361,21 @@ modal.addEventListener('click',function(e){
   if(filter){setFilter(filter.dataset.filter);return}
   const path=e.target.closest('.solution-wire');
   if(path){highlightStep(path.dataset.step);return}
-  if(e.target===modal)modal.hidden=true;
+  if(e.target===modal)closeSolution();
 });
 document.getElementById('taskHintBtn').addEventListener('click',showHint);
 document.getElementById('taskSolutionBtn').addEventListener('click',openSolution);
-document.getElementById('closeSolution').addEventListener('click',function(){modal.hidden=true});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)modal.hidden=true});
+document.getElementById('closeSolution').addEventListener('click',closeSolution);
+modal.addEventListener('keydown',function(e){
+ if(modal.hidden)return;
+ if(e.key==='Escape'){e.preventDefault();closeSolution();return}
+ if(e.key!=='Tab')return;
+ const buttons=[...modal.querySelectorAll('button:not(:disabled)')]
+  .filter(button=>button.getClientRects().length);
+ if(!buttons.length)return;
+ if(e.shiftKey&&document.activeElement===buttons[0]){e.preventDefault();buttons[buttons.length-1].focus()}
+ else if(!e.shiftKey&&document.activeElement===buttons[buttons.length-1]){e.preventDefault();buttons[0].focus()}
+});
 
 const title=document.querySelector('.active-task h2');
 if(title)new MutationObserver(function(){hintBox.hidden=true;hintIndex=0;lastTaskId=currentTask()?.id||null}).observe(title,{childList:true,subtree:true});
@@ -372,12 +397,13 @@ function refreshLearning(){
   const wires=window.ElektrykStage3?.getConnections?.()||[];
   const bridge=window.ElektrykBridges?.getBridges?.()||[];
   const analysis=window.ElektrykPower?.getLast?.();
-  const ready=!!analysis?.states?.length&&analysis.states.every(state=>state.complete)&&!(analysis.issues||[]).some(issue=>issue.type==='error');
+  const verified=window.ElektrykVerificationPRO;
+  const ready=verified?.isPassed?.()===true;
   const steps=[
     {name:'Dobierz wymagane aparaty',ok:completeMount,detail:requirements.filter(([code,count])=>(have[code]||0)<count).map(([code,count])=>code+' '+(have[code]||0)+'/'+count).join(', ')},
     {name:'Odwzoruj rozmieszczenie ze schematu',ok:!!layoutCheck?.complete,detail:layoutCheck?'Pozycje zgodne: '+layoutCheck.matched+'/'+layoutCheck.total+(layoutCheck.extra.length?' • nadmiarowe: '+layoutCheck.extra.length:''):'Sprawdź rozmieszczenie na wzorcu rozdzielnicy'},
     {name:'Wykonaj połączenia przewodami lub mostkami',ok:wires.length>0||bridge.length>0,detail:'Przewody: '+wires.length+' • mostki: '+bridge.length},
-    {name:'Sprawdź instalację analizatorem',ok:ready,detail:ready?'Wszystkie analizowane obwody poprawne':'Kliknij SPRAWDŹ INSTALACJĘ i usuń wskazane błędy'}
+    {name:'Sprawdź instalację analizatorem',ok:ready,detail:ready?'Testy modelu zaliczone. To nie zastępuje pomiarów instalacji.':'Kliknij SPRAWDŹ INSTALACJĘ i popraw wskazane błędy. Kontrola musi być aktualna.'}
   ];
   const done=steps.filter(step=>step.ok).length;
   learning.querySelector('#learningProgress').textContent=done+'/'+steps.length;
