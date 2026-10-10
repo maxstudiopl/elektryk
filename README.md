@@ -2,6 +2,16 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.20.1 — aktualność raportu i diagnostyka przemysłowego X1
+
+- Po każdej zmianie modelu rozdzielnicy lub montażu zacisków X1/ZUG stary raport sprawdzenia jest nieaktualny i wymaga ponownego uruchomienia **Sprawdź instalację**.
+- Silnik kontroli nie modeluje jeszcze elektrycznie listwy X1; dla rozdzielnic przemysłowych wynik nie może zatem wskazać pełnego zaliczenia instalacji nawet po zaliczeniu pozostałych testów odbiorników.
+- Raport jawnie pokazuje ostrzeżenie, a licznik ostrzeżeń uwzględnia nieweryfikowaną listwę X1. Odbiorniki, aparaty i inne błędy pozostają oceniane dotychczasowymi algorytmami.
+- Zabezpieczenie dotyczy wyłącznie oceny i aktualności raportu. **Nie** zmienia położenia aparatów, przewodów, silnika elektrycznego, sposobu zapisu projektu, kont i punktacji XP.
+- Testy: `tests/verification-pro-v07177.test.mjs` (czysty ewaluator + odcisk stanu) oraz `tests/browser-smoke-v0720.spec.mjs` (próba X1 w Chromium).
+
+**Ograniczenie:** kontrola ma charakter dydaktyczny i nie potwierdza poprawności ani bezpieczeństwa rzeczywistej instalacji.
+
 ## v0.7.19 — responsywność i optymalizacja stanowiska
 
 Etap porządkujący sprzeczne breakpointy `responsive-v07123.css` i `desktop-layout-v07124.css`, bez zmian silnika elektrycznego, geometrii DIN czy Panelu Użytkownika.
