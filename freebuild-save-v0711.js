@@ -301,9 +301,13 @@ async function loadProject(){
   },p.name);
   loadedSlot=activeSlot;
   lastObservedSignature=lastSavedSignature;
+  const restoredZug=window.ElektrykIndustrialZug?.getState?.()||null;
+  const zugMatched=!p.industrialZug||
+    (restoredZug?.capacity===p.industrialZug.capacity&&
+     JSON.stringify(restoredZug?.slots)===JSON.stringify(p.industrialZug.slots));
   const restoredAll=restored===p.mounted.length&&
     (window.ElektrykStage3?.getConnections?.().length||0)===p.connections.length&&
-    (window.ElektrykBridges?.getBridges?.().length||0)===p.bridges.length;
+    (window.ElektrykBridges?.getBridges?.().length||0)===p.bridges.length&&zugMatched;
   setState(restoredAll?'ZAPISANO':'WCZYTANO CZĘŚCIOWO',restoredAll?'saved':'dirty');
   setMeta(restoredAll
     ?'Wczytano slot '+activeSlot+' • '+formatDate(p.savedAt)
