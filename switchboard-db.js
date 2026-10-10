@@ -90,7 +90,7 @@ const TEMPLATES=[
     enclosureProfile:'industrial-4x24',
     enclosureLook:{shell:'industrial-steel',door:'industrial',depth:'deep',rowSpacing:'service'},
     equipmentHint:{din:true,zug:true},
-    notes:'Rozdzielnica produkcyjna z górną listwą X1; połączenia ZUG będą dostępne w kolejnym etapie.'
+    notes:'Rozdzielnica produkcyjna z górną listwą X1; dostępne porty T/B, okablowanie i diagnostyka modelu.'
   },
   {
     id:'IND-PRO-5X24',
@@ -107,7 +107,7 @@ const TEMPLATES=[
     enclosureProfile:'industrial-5x24',
     enclosureLook:{shell:'industrial-steel-xl',door:'industrial',depth:'deep',rowSpacing:'service'},
     equipmentHint:{din:true,zug:true},
-    notes:'Duża rozdzielnica przemysłowa z 30 pozycjami górnej listwy X1.'
+    notes:'Duża rozdzielnica przemysłowa z 30 pozycjami X1 i portami T/B.'
   },
   {
     id:'REF-CONSTRUCTION',
