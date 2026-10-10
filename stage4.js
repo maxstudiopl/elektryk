@@ -150,6 +150,13 @@ function setSwitchVisual(m){
   badge.classList.toggle('state-off',!on);
   badge.title=on?'Stan aparatu: ZAŁĄCZONY':'Stan aparatu: WYŁĄCZONY';
   badge.setAttribute('aria-label',badge.title);
+  const lever=m.querySelector('.lever[data-power-toggle]');
+  if(lever){
+    lever.setAttribute('role','switch');
+    lever.setAttribute('aria-checked',String(on));
+    lever.setAttribute('aria-label',(m.dataset.deviceLabel||m.dataset.code||'Aparat')+': '+(on?'załączony':'wyłączony')+'. Enter lub spacja przełącza.');
+    lever.tabIndex=0;
+  }
 }
 function decorateSwitches(){
   document.querySelectorAll('.mounted-device').forEach(m=>{
@@ -165,6 +172,14 @@ function decorateSwitches(){
         e.stopPropagation();e.preventDefault();
         m.dataset.switchState=m.dataset.switchState==='off'?'on':'off';
         setSwitchVisual(m);analyze(false);
+        document.dispatchEvent(new CustomEvent('elektryk:apparatus-state-changed',{
+          detail:{id:m.dataset.mountId,code:m.dataset.code,switchState:m.dataset.switchState}
+        }));
+      });
+      lever.addEventListener('keydown',e=>{
+        if(!['Enter',' '].includes(e.key))return;
+        e.stopPropagation();e.preventDefault();
+        lever.click();
       });
     }
   });
