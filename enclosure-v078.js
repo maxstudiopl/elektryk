@@ -9,7 +9,9 @@ const PROFILES={
   'REF-3X12-FLUSH-SURFACE':{profile:'residential-3x12-flush',mounting:'flush_or_surface',family:'residential'},
   'REF-3X12-SURFACE':{profile:'residential-3x12-surface',mounting:'surface',family:'residential'},
   'REF-5X12':{profile:'residential-5x12',mounting:'unknown',family:'large_residential'},
-  'REF-5X24':{profile:'residential-5x24-xl',mounting:'unknown',family:'large_residential'}
+  'REF-5X24':{profile:'residential-5x24-xl',mounting:'unknown',family:'large_residential'},
+  'IND-PRO-4X24':{profile:'industrial-4x24',mounting:'industrial_surface',family:'industrial'},
+  'IND-PRO-5X24':{profile:'industrial-5x24',mounting:'industrial_surface',family:'industrial'}
 };
 
 function ensureHardware(){
@@ -56,14 +58,14 @@ document.addEventListener('elektryk:board-changed',e=>{
   const v=document.querySelector('.cabinet-head .version');
   const rows=Number(template.rows||inner.dataset.rows||1);
   const modules=Number(template.modulesPerRow||inner.dataset.modulesPerRow||18);
-  if(v)v.textContent='v0.7.15.3 • ROZDZIELNICAPRO.PL • WOLNA BUDOWA • '+rows+'×'+modules+'M';
+  if(v)v.textContent='v0.7.16 • ROZDZIELNICAPRO.PL • WOLNA BUDOWA • '+rows+'×'+modules+'M';
 });
 document.addEventListener('elektryk:task-started',e=>{
   const task=e.detail?.task||{};
   const template=task.boardId&&task.boardId!=='TRAINING-TASK'?window.ElektrykSwitchboardDB?.get?.(task.boardId):null;
   apply(template||{id:'TRAINING-TASK',rows:task.rows||1,modulesPerRow:task.modulesPerRow||18,mounting:'training',family:'training'});
   const v=document.querySelector('.cabinet-head .version');
-  if(v)v.textContent='v0.7.15.3 • ROZDZIELNICAPRO.PL • ZADANIE '+String(task.id||1).padStart(2,'0')+' • '+Number(task.rows||1)+'×'+Number(task.modulesPerRow||18)+'M';
+  if(v)v.textContent='v0.7.16 • ROZDZIELNICAPRO.PL • ZADANIE '+String(task.id||1).padStart(2,'0')+' • '+Number(task.rows||1)+'×'+Number(task.modulesPerRow||18)+'M';
 });
 document.addEventListener('elektryk:rails-changed',e=>{
   if(!inner.dataset.enclosureProfile){
