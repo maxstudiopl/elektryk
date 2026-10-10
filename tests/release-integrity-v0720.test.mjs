@@ -34,7 +34,7 @@ test('Dynamic game modules exist and appear only once in the game loader',()=>{
   assert.ok(modules.length>=25,'Unexpected dynamic module count');
   for(const entry of modules)assert.ok(fileNames.has(entry.split('?')[0]),'Missing lazy asset '+entry);
   assert.equal(new Set(modules.map(x=>x.split('?')[0])).size,modules.length,'Duplicate modules');
-  assert.ok(modules.indexOf('verification-pro-v07177.js?v=0722')>modules.indexOf('stage4.js?v=0722'));
+  assert.ok(modules.indexOf('verification-pro-v07177.js?v=0722')>modules.indexOf('stage4.js?v=0723'));
   assert.ok(modules.indexOf('responsive-workspace-v0719.js?v=0719')>modules.indexOf('workspace-panels-v07173.js?v=07173'));
 });
 test('Every root-level JavaScript file parses under current Node',()=>{
