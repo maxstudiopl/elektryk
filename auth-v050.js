@@ -35,7 +35,8 @@ const scripts=[
   'freebuild-save-v0711.js?v=0716',
   'industrial-zug-v0716.js?v=0716',
   'industrial-view-v07161.js?v=07162',
-  'demo-mode-v07133.js?v=07140'
+  'demo-mode-v07133.js?v=07140',
+  'workspace-panels-v07173.js?v=07173'
 ];
 
 let gameLoaded=false;
