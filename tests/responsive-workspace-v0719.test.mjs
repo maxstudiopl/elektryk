@@ -135,8 +135,8 @@ test('Latest CSS and JS cache are correctly registered',()=>{
   assert.ok(html.indexOf('responsive-workspace-v0719.css?v=0719')>
     html.indexOf('apparatus-realism-v0718.css?v=0718'));
   assert.match(html,/ui-pro-v07122\.js\?v=0719/);
-  assert.match(html,/auth-v050\.js\?v=0719/);
+  assert.match(html,/auth-v050\.js\?v=0720/);
   assert.match(loader,/responsive-workspace-v0719\.js\?v=0719/);
-  assert.match(loader,/stage2\.js\?v=0719/);
-  assert.match(loader,/tasks-v046\.js\?v=0719/);
+  assert.match(loader,/stage2\.js\?v=0720/);
+  assert.match(loader,/tasks-v046\.js\?v=0720/);
 });
