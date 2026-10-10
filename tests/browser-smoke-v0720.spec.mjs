@@ -177,3 +177,24 @@ test('Learning catalogue contains task 300 and running a task cannot award XP wi
   const after=await page.evaluate(()=>window.ElektrykProgress?.get?.()?.xp);
   expect(after).toBe(before);
 });
+
+test('Industrial X1 cannot produce a green electrical verification and expires after editing X1',async({page})=>{
+ const errors=[];page.on('pageerror',error=>errors.push(error.message));
+ await localTestSession(page);
+ await page.goto('/');
+ await expect(page.locator('#playerHub')).toBeVisible();
+ await page.locator('#modeFree').click();
+ await expect(page.locator('#boardSelectorModal')).toBeVisible();
+ await page.locator('.board-choice-card[data-board-id="IND-PRO-4X24"]').click();
+ await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2?.getBoardConfig?.()?.family)).toBe('industrial');
+ await page.locator('#checkPower').click();
+ await expect(page.locator('#verificationProModal')).toBeVisible();
+ await expect(page.locator('#verificationProVerdict')).not.toContainText('MODEL PRZESZEDŁ');
+ await expect(page.locator('#verificationProIssues')).toContainText('X1');
+ await expect.poll(()=>page.evaluate(()=>window.ElektrykVerificationPRO?.isCurrent?.())).toBe(true);
+ await page.evaluate(()=>window.ElektrykIndustrialZug.setSlot(0,'L1'));
+ await expect.poll(()=>page.evaluate(()=>window.ElektrykVerificationPRO?.isCurrent?.())).toBe(false);
+ await page.locator('#verificationProRun').click();
+ await expect(page.locator('#verificationProVerdict')).not.toContainText('MODEL PRZESZEDŁ');
+ expect(errors).toEqual([]);
+});
