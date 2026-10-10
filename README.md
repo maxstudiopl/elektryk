@@ -2,6 +2,40 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.19 — responsywność i optymalizacja stanowiska
+
+Etap porządkujący sprzeczne breakpointy `responsive-v07123.css` i `desktop-layout-v07124.css`, bez zmian silnika elektrycznego, geometrii DIN czy Panelu Użytkownika.
+
+### Zakres
+
+- **Od 1200 px:** zachowano widok trzech kolumn (zadania — stanowisko — narzędzia), niezależne przewijanie lewej i prawej strony oraz ochronę `flex:0 0 auto` dla kart paneli. Rozdzielnica może być przewijana poziomo **wyłącznie we własnym obszarze**.
+- **900–1199 px:** naprawiono konflikt CSS, który wymuszał trzy wąskie kolumny i stałą wysokość 100dvh. Stanowisko zajmuje teraz pełną szerokość, a panel zadań i narzędzi są pod nim, obok siebie. Strona jest przewijana w pionie. Zachowano wszystkie stany zwijania paneli.
+- **720–899 px:** pionowo przewijana strona oraz stanowisko u góry; pod nim dwa panele, a nawigacja szybko przenosi do wybranej sekcji.
+- **Do 719 px:** stanowisko w pierwszej kolejności, potem przewody / katalog aparatów i zadania. Bez przewijania całej strony w poziomie — tylko szeroka rozdzielnica przewija się we własnym oknie. Poprawiono dostępność przycisków i dolnych statystyk.
+- **Bardzo wąski telefon (do 390 px):** przyciski układu mogą być w osobnych wierszach, a katalog aparatów ma dwa warianty w wierszu.
+- **Niska wysokość ekranu (do 700 px i szerokość do 899 px):** okna wyboru obudowy i katalogu zadań mogą przewijać cały dialog, aby przyciski i wyniki były dostępne także w poziomej orientacji telefonu.
+- Dwa dodatkowe przyciski tylko na wąskich ekranach: **PRZEWODY I APARATURA** oraz **ZADANIA I POSTĘP**. Skaczą do istniejących paneli i przywracają je istniejącymi przyciskami, jeśli były schowane. W trybie **WIĘKSZA ROZDZIELNICA** pierwszy skrót prowadzi do rzeczywistego doku narzędzi. Zachowano ich stan, aktywne zaznaczenia i event listenery.
+- Optymalizacja w `ui-pro-v07122.js`: wiele zdarzeń `resize`/`ResizeObserver` w jednej klatce skutkuje maksymalnie jednym przerysowaniem przewodów i mostków SVG. Rzeczywista geometria i sposób obliczania połączeń pozostają bez zmian.
+
+### Pliki
+
+- Dodano `responsive-workspace-v0719.css`, ładowany **na końcu** kaskady CSS.
+- Dodano `responsive-workspace-v0719.js`, ładowany po istniejącym interfejsie.
+- Zmiana `ui-pro-v07122.js` wyłącznie w harmonogramie istniejącego przerysowywania SVG.
+- Zaktualizowano wersję w `index.html`, `tasks-v046.js`, `enclosure-v078.js`, `stage2.js` i odświeżono cache modułów w `auth-v050.js`.
+- Test: `node --test tests/responsive-workspace-v0719.test.mjs` — układy ekranu, zwinięte panele, dok, obsługa skrótów mobilnych, limit przerysowań i ochrona geometrii.
+
+### Kontrola w przeglądarce po publikacji
+
+1. **1920×1080 i 2560×1440:** trzy kolumny, osobne przewijanie paneli, bez przechwytywania scrolla przez rozdzielnicę.
+2. **1366×768:** nadal trzy kolumny, dostępne kable, aparaty, zapis i diagnostyka.
+3. **1024×768:** stanowisko na górze, dwa panele poniżej; test skrótów i powrotu z „WIĘKSZA ROZDZIELNICA”.
+4. **768×1024:** układ tabletowy z dostępnym oknem katalogu zadań i schematem.
+5. **390×844 i 360×640:** rozdzielnica jako pierwsza, naturalne przewijanie strony, przyciski skoków do zadań i aparatów; brak utraty zacisków podczas przewijania poziomego rozdzielnicy.
+6. **Telefon poziomo:** przewijanie okien i dostęp do przycisku zamknięcia.
+
+Testy statyczne i logiki nie zastępują oględzin rzeczywistego renderu w zalogowanej przeglądarce. Dotyczy to zwłaszcza czytelności aparatów oraz niezależności scrolla na urządzeniach dotykowych.
+
 ## v0.7.18 — aparat modułowy PRO: realizm wizualny 3.0
 
 Etap modernizacji **aparatury PRO** dla symulatora szkoleniowego. Aparaty są autorskimi, fikcyjnymi modelami PRO, a ich oznaczenia graficzne nie stanowią deklaracji zgodności z normami ani certyfikacji rzeczywistych wyrobów.
