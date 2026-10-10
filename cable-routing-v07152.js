@@ -8,6 +8,10 @@
 const cabinet=document.querySelector('.cabinet-inner'),legacy=document.querySelector('.circuits');
 if(!cabinet||!legacy)return;
 const bases=[...legacy.querySelectorAll(':scope > .circuit-node')];
+const baseLabels=new Map(bases.map(node=>[node,{
+ name:node.querySelector(':scope > b')?.textContent||'',
+ cable:node.querySelector(':scope > small')?.textContent||''
+}]));
 let root=null,active=[],routing=[],baseHeight=null,expandedHeight=null;
 const PHASE_COLORS={L1:'#8b4a17',L2:'#161819',L3:'#777f83'};
 const cableCode=load=>load?.cable||(load?.code==='B10'?'YDYp 3×1,5':'YDYp 3×2,5');
@@ -85,6 +89,10 @@ function teardown(){
    node.classList.remove('large-load-card','large-cable-outlet','cable-base-outlet');
    node.style.removeProperty('--cable-l');
    node.removeAttribute('data-cable-exit');
+   const saved=baseLabels.get(node);
+   const heading=node.querySelector(':scope > b'),subtitle=node.querySelector(':scope > small');
+   if(heading&&saved)heading.textContent=saved.name;
+   if(subtitle&&saved)subtitle.textContent=saved.cable;
    legacy.appendChild(node);
  }
  root.remove();root=null;active=[];routing=[];
@@ -117,7 +125,12 @@ function prepare(board){
    const parent=decideOutlet(load,rows,counts);counts[parent]++;
    const el=saved.get(load.id)||createCable(load);used.add(load.id);
    el.classList.add('large-load-card','large-cable-outlet');
-   if(saved.has(load.id))el.classList.add('cable-base-outlet');
+   if(saved.has(load.id)){
+     el.classList.add('cable-base-outlet');
+     const heading=el.querySelector(':scope > b'),subtitle=el.querySelector(':scope > small');
+     if(heading)heading.textContent=String(load.number).padStart(2,'0')+' '+(load.label||load.code).toUpperCase().slice(0,6);
+     if(subtitle)subtitle.textContent=load.section||'OBWÓD';
+   }
    el.dataset.circuit=load.id;el.dataset.breakerId=load.breakerId||'';
    el.dataset.cableExit=parent;
    el.style.setProperty('--cable-l',PHASE_COLORS[load.phase]||PHASE_COLORS.L1);
