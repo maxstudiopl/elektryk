@@ -82,3 +82,9 @@ Pilnuj rozróżnienia:
 - **DO ZROBIENIA** — kolejny etap.
 
 Najpierw sprawdź `main`, niezakończone PR, ostatnie workflow i zweryfikuj, czy niniejszy wpis nadal jest aktualny.
+
+### 2026-10-10 — etap v0.7.22 (elektryczna listwa X1)
+
+Ustalenie: dokończyć połączenia X1/ZUG w obu szafach przemysłowych i zachować dotychczasowe tryby gry.
+
+Gałąź robocza: `feat/v0.7.22-x1-electrical`. Zmiany: porty T/B złączek X1, przewody przez istniejący silnik, diagnostyka ciągłości i zasilania, zgodność zapisów oraz testy. Separator nie przewodzi. Szczegóły techniczne w `README.md`. Przed zatwierdzeniem sprawdzić testy CI i odnotować commit wdrożenia.
