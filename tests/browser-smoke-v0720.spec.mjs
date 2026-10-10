@@ -130,6 +130,8 @@ test('Real terminal clicks create a wire, undo works and removal prunes stale en
   await expect.poll(()=>page.evaluate(()=>window.ElektrykStage3.getConnections().length)).toBe(0);
   await supply.click();await breaker.click();
   await expect.poll(()=>page.evaluate(()=>window.ElektrykStage3.getConnections().length)).toBe(1);
+  await page.locator('.mounted-device').first().hover();
+  await expect(page.locator('.mounted-device .remove-device').first()).toBeVisible();
   await page.locator('.mounted-device .remove-device').first().click();
   await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(0);
   await expect.poll(()=>page.evaluate(()=>window.ElektrykStage3.getConnections().length)).toBe(0);
@@ -149,6 +151,8 @@ test('Saved free-build project restores mounted apparatus from selected slot',as
   await page.locator('#freeProjectName').fill('Projekt do odtworzenia');
   await page.locator('#saveFreeProject').click();
   await expect(page.locator('#freeSaveState')).toHaveText('ZAPISANO');
+  await page.locator('.mounted-device').first().hover();
+  await expect(page.locator('.mounted-device .remove-device').first()).toBeVisible();
   await page.locator('.mounted-device .remove-device').first().click();
   await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(0);
   await page.locator('#loadFreeProject').click();
