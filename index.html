@@ -48,6 +48,7 @@
   <link rel="stylesheet" href="cable-routing-fix-v071521.css?v=071521a">
   <link rel="stylesheet" href="apparatus-pro-v07153.css?v=07153">
   <link rel="stylesheet" href="industrial-zug-v0716.css?v=0716">
+  <link rel="stylesheet" href="user-panel-v0716.css?v=0716b">
   <style>
     /* v0.4.5 critical DIN layout hotfix — bypasses stale cached CSS */
     .mount-grid .mounted-device{position:absolute!important;top:0!important;height:194px!important;margin:0!important;padding:0!important;transform:none!important;box-sizing:border-box!important;z-index:12!important}
@@ -82,9 +83,10 @@
             <img src="rozdzielnicapro-logo.svg?v=07132" alt="RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic" width="640" height="215" fetchpriority="high">
           </div>
         </div>
-        <div class="auth-brand-actions">
-          <button class="hub-header-link" id="hubAbout" disabled><b>O GRZE</b><small>W BUDOWIE</small></button>
-          <button class="hub-header-link" id="hubUpdates" disabled><b>AKTUALIZACJE</b><small>W BUDOWIE</small></button>
+        <div class="hub-brand-welcome">
+          <small>PANEL UŻYTKOWNIKA</small>
+          <h1>Witaj, <span id="hubPlayerName">UŻYTKOWNIKU</span>!</h1>
+          <p>Wybierz tryb pracy i rozwijaj swoje umiejętności.</p>
         </div>
       </div>
       <div class="auth-login-view" id="authLoginView">
@@ -98,15 +100,14 @@
       </div>
 
       <div class="player-hub" id="playerHub" hidden>
-        <div class="player-welcome-row">
-          <div class="player-welcome">
-            <small>WITAJ W ROZDZIELNICAPRO.PL</small>
-            <h1>Witaj, <span id="hubPlayerName">GRACZU</span></h1>
-            <p>Wybierz tryb pracy i przejdź do rozdzielnicy.</p>
-          </div>
-          <button class="hub-logout" id="hubLogout"><span>↪</span><b>WYLOGUJ SIĘ</b></button>
-        </div>
+        <nav class="hub-user-actions" aria-label="Nawigacja Panelu Użytkownika">
+          <button type="button" id="hubStats"><span class="hub-action-icon" aria-hidden="true">▥</span> STATYSTYKI</button>
+          <button type="button" id="hubSettings"><span class="hub-action-icon" aria-hidden="true">⚙</span> USTAWIENIA</button>
+          <button type="button" id="hubAbout"><span class="hub-action-icon" aria-hidden="true">ⓘ</span> O SYMULATORZE</button>
+          <button type="button" id="hubLogout"><span class="hub-action-icon" aria-hidden="true">↪</span> WYLOGUJ</button>
+        </nav>
 
+        <div class="pro-modes-title"><span>WYBIERZ TRYB PRACY</span><small>Samodzielny montaż, nauka lub sprawdzian wiedzy</small></div>
         <div class="player-modes">
           <button class="mode-card free" id="modeFree">
             <span class="mode-icon">▦</span>
@@ -118,33 +119,31 @@
             <b>NAUKA</b>
             <small>Zadania treningowe, podpowiedzi, XP i analiza instalacji.</small>
           </button>
+          <button class="mode-card industrial" id="modeIndustrial">
+            <span class="mode-icon">▥</span>
+            <b>ROZDZIELNICE PRZEMYSŁOWE</b>
+            <small>Rozdzielnice produkcyjne, aparatura PRO oraz montaż górnej listwy ZUG X1.</small>
+            <em>NOWOŚĆ 0.7.16</em>
+          </button>
           <button class="mode-card exam" id="modeExam">
             <span class="mode-icon">✓</span>
             <b>EGZAMIN</b>
-            <small>Samodzielne wykonanie układu bez podpowiedzi.</small>
+            <small>Sprawdź wiedzę w części teoretycznej i praktycznej, bez podpowiedzi.</small>
             <em>10 PYTAŃ + 3 ZADANIA</em>
-          </button>
-          <button class="mode-card industrial" id="modeIndustrial">
-            <span class="mode-icon">▥</span>
-            <b>PRZEMYSŁ • PRO</b>
-            <small>Budowa rozdzielnic produkcyjnych, górna szyna ZUG X1 i aparatura DIN PRO.</small>
-            <em>NOWOŚĆ 0.7.16</em>
           </button>
         </div>
 
-        <section class="account-summary">
-          <div class="account-summary-head"><b>INFORMACJE O KONCIE</b><span class="account-active">● AKTYWNE</span></div>
-          <div class="account-grid">
-            <div><span>UŻYTKOWNIK</span><b id="hubAccountUser">—</b></div>
-            <div><span>LICENCJA</span><b id="hubLicense">BETA / TESTOWA</b></div>
-            <div><span>WYGAŚNIĘCIE DOSTĘPU</span><b id="hubLicenseExpiry">NIE USTAWIONO</b></div>
-            <div><span>AKTUALNA SESJA DO</span><b id="hubSessionExpiry">—</b></div>
+        <section class="hub-project-info">
+          <div>
+            <h2>O PROJEKCIE</h2>
+            <p>RozdzielnicaPRO.pl to rozwijany symulator edukacyjny montażu i okablowania rozdzielnic elektrycznych.</p>
+            <small>v0.7.16 • WERSJA BETA • PROJEKT W ROZWOJU</small>
           </div>
+          <button type="button" id="hubUpdates">HISTORIA AKTUALIZACJI ↗</button>
         </section>
 
         <section class="hub-tools">
-          <button id="hubSettings"><b>USTAWIENIA GRY</b><small>Opcje interfejsu i działania symulatora.</small></button>
-          <button id="hubPlayers" class="admin-only" hidden><b>PANEL GRACZY</b><small>Konta, role i dostęp do symulatora.</small></button>
+          <button type="button" id="hubPlayers" class="admin-only" hidden><b>ZARZĄDZANIE UŻYTKOWNIKAMI</b><small>Administracja kontami i dostępem.</small></button>
         </section>
       </div>
 
@@ -154,8 +153,8 @@
   <header class="topbar">
     <div class="brand"><img class="brand-icon" src="brand-icon.svg?v=07132" width="34" height="34" alt=""><div><b>Rozdzielnica<span>PRO</span>.pl</b><small>SYMULATOR BUDOWY ROZDZIELNIC</small></div></div>
     <nav class="mainnav player-mainnav">
-      <button class="player-navbtn" id="openPlayerHub">PANEL GRACZA</button>
-      <button class="player-navbtn" id="openGameSettings">USTAWIENIA GRY</button>
+      <button class="player-navbtn" id="openPlayerHub">PANEL UŻYTKOWNIKA</button>
+      <button class="player-navbtn" id="openGameSettings">USTAWIENIA</button>
       <div class="player-level-status" id="topPlayerLevel">TWÓJ POZIOM: 1</div>
     </nav>
     <div class="profile profile-compact"><div class="auth-profile"><span id="authUserLabel">ADMIN</span><button id="authLogout" class="auth-logout">WYLOGUJ</button></div></div>
@@ -311,21 +310,72 @@
   <div class="game-settings-modal" id="gameSettingsModal" hidden>
     <div class="game-settings-window">
       <div class="game-settings-head">
-        <div><b>USTAWIENIA GRY</b><small>Ustawienia lokalne tego urządzenia</small></div>
+        <div><b>USTAWIENIA UŻYTKOWNIKA</b><small>Konto, opcje symulatora i informacje o projekcie</small></div>
         <button id="closeGameSettings">×</button>
       </div>
+      <div class="hub-settings-tabs" role="tablist" aria-label="Działy ustawień">
+        <button type="button" role="tab" id="settingsTabAccount" data-user-settings-tab="account" aria-controls="settingsPaneAccount" aria-selected="true">MOJE KONTO</button>
+        <button type="button" role="tab" id="settingsTabGame" data-user-settings-tab="game" aria-controls="settingsPaneGame" aria-selected="false">USTAWIENIA GRY</button>
+        <button type="button" role="tab" id="settingsTabInfo" data-user-settings-tab="info" aria-controls="settingsPaneInfo" aria-selected="false">INFORMACJE</button>
+      </div>
       <div class="game-settings-body">
-        <label class="setting-row"><div><b>ANIMACJE INTERFEJSU</b><small>Efekty przejść i podświetlenia elementów.</small></div><input id="settingAnimations" type="checkbox" checked></label>
-        <label class="setting-row"><div><b>PODŚWIETLENIE ZACISKÓW</b><small>Podpowiedzi wizualne podczas wykonywania połączeń.</small></div><input id="settingGuidance" type="checkbox" checked></label>
-        <label class="setting-row setting-row-select">
-          <div><b>ROZMIAR TEKSTU PANELI</b><small>Powiększa tekst w Panelu Gracza, ustawieniach i Panelu Graczy.</small></div>
-          <select id="settingPanelText">
-            <option value="normal">100%</option>
-            <option value="large" selected>115%</option>
-            <option value="xlarge">130%</option>
-          </select>
-        </label>
-        <div class="settings-note"><b>CZYTELNOŚĆ</b><span>Domyślnie ustawiono 115%. Możesz zmienić rozmiar w każdej chwili.</span></div>
+        <section class="hub-settings-pane" id="settingsPaneAccount" data-settings-pane="account" role="tabpanel" aria-labelledby="settingsTabAccount">
+          <section class="account-summary">
+            <div class="account-summary-head"><b>INFORMACJE O KONCIE</b><span class="account-active">● AKTYWNE</span></div>
+            <div class="account-grid">
+              <div><span>UŻYTKOWNIK</span><b id="hubAccountUser">—</b></div>
+              <div><span>LICENCJA</span><b id="hubLicense">BETA / TESTOWA</b></div>
+              <div><span>WYGAŚNIĘCIE DOSTĘPU</span><b id="hubLicenseExpiry">NIE USTAWIONO</b></div>
+              <div><span>AKTUALNA SESJA DO</span><b id="hubSessionExpiry">—</b></div>
+            </div>
+          </section>
+        </section>
+        <section class="hub-settings-pane" id="settingsPaneGame" data-settings-pane="game" role="tabpanel" aria-labelledby="settingsTabGame" hidden>
+          <label class="setting-row"><div><b>ANIMACJE INTERFEJSU</b><small>Efekty przejść i podświetlenia elementów.</small></div><input id="settingAnimations" type="checkbox" checked></label>
+          <label class="setting-row"><div><b>PODŚWIETLENIE ZACISKÓW</b><small>Podpowiedzi wizualne podczas wykonywania połączeń.</small></div><input id="settingGuidance" type="checkbox" checked></label>
+          <label class="setting-row setting-row-select">
+            <div><b>ROZMIAR TEKSTU PANELI</b><small>Powiększa tekst w Panelu Użytkownika, ustawieniach i panelu administracyjnym.</small></div>
+            <select id="settingPanelText"><option value="normal">100%</option><option value="large" selected>115%</option><option value="xlarge">130%</option></select>
+          </label>
+          <div class="settings-note"><b>CZYTELNOŚĆ</b><span>Domyślnie ustawiono 115%. Możesz zmienić rozmiar w każdej chwili.</span></div>
+        </section>
+        <section class="hub-settings-pane hub-settings-info" id="settingsPaneInfo" data-settings-pane="info" role="tabpanel" aria-labelledby="settingsTabInfo" hidden>
+          <p><strong>RozdzielnicaPRO.pl</strong> — Symulator Budowy Rozdzielnic.</p>
+          <p>Wersja <strong>v0.7.16 (BETA)</strong>. Projekt ma charakter edukacyjny. Nie zastępuje projektu wykonawczego ani pomiarów elektrycznych.</p>
+          <p>Projekt i rozwój: <strong>Damian Górny — MaxStudio</strong>.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="hub-user-dialog" id="hubStatsModal" hidden>
+    <div class="hub-user-dialog-window" role="dialog" aria-modal="true" aria-labelledby="hubStatsTitle">
+      <div class="hub-dialog-header"><h2 id="hubStatsTitle">STATYSTYKI UŻYTKOWNIKA</h2><button type="button" aria-label="Zamknij statystyki" data-modal-close>×</button></div>
+      <div class="hub-dialog-content"><div id="hubStatsBody"></div><p class="hub-dialog-note">Statystyki pochodzą z rzeczywistego postępu nauki zapisanego w symulatorze.</p></div>
+    </div>
+  </div>
+  <div class="hub-user-dialog" id="hubAboutModal" hidden>
+    <div class="hub-user-dialog-window" role="dialog" aria-modal="true" aria-labelledby="hubAboutTitle">
+      <div class="hub-dialog-header"><h2 id="hubAboutTitle">O SYMULATORZE</h2><button type="button" aria-label="Zamknij informacje" data-modal-close>×</button></div>
+      <div class="hub-settings-tabs" role="tablist" aria-label="Informacje o projekcie">
+        <button type="button" role="tab" id="aboutTabOverview" data-about-tab="overview" aria-controls="aboutOverview" aria-selected="true">O PROJEKCIE</button>
+        <button type="button" role="tab" id="aboutTabUpdates" data-about-tab="updates" aria-controls="aboutUpdates" aria-selected="false">AKTUALIZACJE</button>
+      </div>
+      <div class="hub-dialog-content">
+        <section class="hub-about-pane" id="aboutOverview" role="tabpanel" aria-labelledby="aboutTabOverview" data-about-pane="overview">
+          <h3>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic</h3>
+          <p>Przeglądarkowy projekt edukacyjny do nauki montażu aparatury modułowej PRO, podstaw okablowania i samodzielnego budowania rozdzielnic.</p>
+          <ul><li>Wolna Budowa — wybór obudowy, montaż i zapis projektów.</li><li>Nauka — zadania treningowe i schematy połączeń.</li><li>Rozdzielnice Przemysłowe — obudowy produkcyjne oraz montaż listwy X1 ZUG.</li><li>Egzamin szkoleniowy — 10 pytań i 3 zadania praktyczne.</li></ul>
+          <span class="hub-version">v0.7.16 • BETA / W ROZWOJU</span>
+          <p>Połączenia elektryczne górnej listwy ZUG X1 nie są jeszcze sprawdzane przez silnik symulatora. Projekt ma charakter szkoleniowy, nie zastępuje pomiarów ani projektu wykonawczego.</p>
+          <p>Projekt i rozwój: Damian Górny — <a href="https://maxstudio.pl" target="_blank" rel="noopener noreferrer">MaxStudio</a>.</p>
+        </section>
+        <section class="hub-about-pane" id="aboutUpdates" role="tabpanel" aria-labelledby="aboutTabUpdates" data-about-pane="updates" hidden>
+          <div class="hub-update-item"><b>v0.7.16 — ROZDZIELNICE PRZEMYSŁOWE</b><p>Dwie obudowy przemysłowe 4×24 i 5×24, montaż listew ZUG X1 oraz nowy Panel Użytkownika.</p></div>
+          <div class="hub-update-item"><b>v0.7.15.3 — MARKA PRO</b><p>Wprowadzono własne oznaczenia aparatury PRO.</p></div>
+          <div class="hub-update-item"><b>v0.7.15.2.1 — PROWADZENIE KABLI</b><p>Usprawniono układ i identyfikację przewodów wyjściowych.</p></div>
+          <p class="hub-dialog-note">Kolejne etapy będą rozwijać wygląd rozdzielnic przemysłowych i obsługę ich okablowania.</p>
+        </section>
       </div>
     </div>
   </div>
@@ -336,6 +386,7 @@
   <script src="auth-v050.js?v=0716"></script>
   <script src="admin-players-v0711.js?v=0711users6"></script>
   <script src="ui-pro-v07122.js?v=07123b"></script>
+  <script src="user-panel-v0716.js?v=0716b"></script>
   <script src="brand-pro-v07132.js?v=07132"></script>
 </body>
 </html>
