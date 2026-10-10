@@ -330,11 +330,12 @@ function analyze(manual=false){
   if(manual){
     document.dispatchEvent(new CustomEvent('elektryk:power-check',{
       detail:{
-        complete:states.length>0&&states.every(x=>x.complete)&&collisions.length===0&&!issues.some(i=>i.type==='error')&&!(engine?.circuits||[]).some(c=>c.hasOutgoingConnection&&c.outputPhases.length>0&&c.status!=='ready'),
+        complete:states.length>0&&states.every(x=>x.complete)&&collisions.length===0&&!issues.some(i=>['error','warning','warn'].includes(i.type))&&!(engine?.circuits||[]).some(c=>c.hasOutgoingConnection&&c.outputPhases.length>0&&c.status!=='ready'),
         completeLoads:states.filter(x=>x.complete).length,
         totalLoads:states.length,
         collisions:collisions.length,
         errors:issues.filter(i=>i.type==='error').length,
+        warnings:issues.filter(i=>i.type==='warn'||i.type==='warning').length,
         mountedCircuits:engine?.stats.total||0,
         readyCircuits:engine?.stats.ready||0
       }
