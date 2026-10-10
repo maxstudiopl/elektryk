@@ -80,10 +80,10 @@ test('Board database preserves 7 supported models and industrial choices',()=>{
 });
 test('Power-check awards no success while errors or warnings remain',()=>{
   const script=read('stage4.js');
-  const predicate=script.match(/complete:states\.length>0&&[^,\n]+/);
+  const predicate=script.split('\n').find(line=>line.trim().startsWith('complete:states.length>0&&'));
   assert.ok(predicate,'Manual completion condition missing');
-  assert.match(predicate[0],/collisions\.length===0/);
-  assert.match(predicate[0],/issues\.some\(i=>\['error','warning','warn'\]\.includes\(i\.type\)\)/);
+  assert.match(predicate,/collisions\.length===0/);
+  assert.match(predicate,/issues\.some\(i=>\['error','warning','warn'\]\.includes\(i\.type\)\)/);
   assert.match(script,/document\.dispatchEvent\(new CustomEvent\('elektryk:power-check'/);
 });
 test('Saved-project slots are never auto-overwritten during unload',()=>{
