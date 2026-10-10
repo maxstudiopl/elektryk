@@ -1,0 +1,341 @@
+/* RozdzielnicaPRO.pl — v0.7.18 • APARATURA PRO REALISM
+ * Oryginalna, fikcyjna linia PRO — wygląd edukacyjny, bez znaków producentów
+ * i deklaracji certyfikacji aparatury.
+ *
+ * Wszystkie reguły dotyczą MATERIAŁÓW, NADRUKÓW, DETALI i MINIATUR.
+ * NIE zmieniać pozycji / wymiarów .mounted-device, .device, .device-topterm,
+ * .device-bottomterm, .wire-terminal ani hitboxów; NIE zmieniać układu DIN,
+ * kabla SVG, transformacji korpusu lub algorytmów elektrycznych.
+ */
+
+/* 1. MATOWA OBUDOWA ABS — podział na moduły i profilowane krawędzie. */
+html[data-theme="dark"] body .mount-grid .mounted-device>.device{
+  --pro-face:#f5f7f3;
+  background:
+    linear-gradient(180deg,#fff9 0%,transparent 13%,#68756a15 69%,#fafffb47 100%),
+    linear-gradient(90deg,#8d9791 0%,#cbd3cb 2%,#f8faf7 7%,
+      #fff 32%,#f7f9f4 63%,#e3e9e1 90%,#b0b9b0 98%,#75837c 100%)!important;
+  border:1px solid #687570!important;
+  border-radius:3px!important;
+  box-shadow:inset 2px 0 1px #ffffffdc,inset -2px 0 2px #65766c88,
+    inset 0 2px 1px #fff,0 1px 1px #3849406b,
+    3px 5px 10px #0d1b1680!important;
+  color:#13221e!important;
+}
+/* Delikatne, nieinteraktywne tłoczenie pod nadrukiem.
+   ::after pozostaje nadrukiem identyfikacyjnym rodziny z v0.7.9. */
+html[data-theme="dark"] body .mount-grid .mounted-device>.device::before{
+  content:"";pointer-events:none!important;
+  position:absolute;left:5px;right:5px;top:70px;
+  height:6px;border-radius:1px;
+  background:
+    repeating-linear-gradient(90deg,#6d7d7522 0 2px,#fcfffa66 2px 5px,#b7c4b930 5px 7px);
+  border-top:1px solid #a1aca348;
+  border-bottom:1px solid #ffffff91;
+  z-index:0;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-modules="2"]>.device{
+  background-image:
+    linear-gradient(180deg,#fff8,transparent 22%,#67766a0c 74%,#ffffff66),
+    linear-gradient(90deg,transparent 49.4%,#89968d55 49.7%,#fff 50.1%,transparent 50.5%),
+    linear-gradient(90deg,#929c94,#edf2eb 5%,#fff 24%,#e5ebe3 93%,#8e9a90)!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-modules="3"]>.device{
+  background-image:
+    linear-gradient(180deg,#fff8,transparent 24%,#7f8d7c12),
+    linear-gradient(90deg,transparent 32.8%,#83908458 33%,#fff 33.25%,transparent 33.5%,
+      transparent 66%,#83908458 66.2%,#fff 66.45%,transparent 66.7%),
+    linear-gradient(90deg,#929b94,#f0f4ed 4%,#fff 22%,#e6ece5 94%,#89978d)!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-modules="4"]>.device{
+  background-image:
+    linear-gradient(180deg,#fff9,transparent 23%,#8d9b8912),
+    linear-gradient(90deg,transparent 24.7%,#8a9a8a65 24.9%,#fff 25.15%,transparent 25.35%,
+      transparent 49.7%,#8a9a8a65 49.9%,#fff 50.15%,transparent 50.35%,
+      transparent 74.7%,#8a9a8a65 74.9%,#fff 75.15%,transparent 75.35%),
+    linear-gradient(90deg,#939d96,#f0f3ef 4%,#fff 21%,#e6ebe5 94%,#89978c)!important;
+}
+
+/* 2. OZNACZENIA — etykieta PRO z pasem zależnym od funkcji aparatu. */
+html[data-theme="dark"] body .mount-grid .mounted-device .brand-strip{
+  background:linear-gradient(180deg,#ffffff 0%,#f3f9fb 40%,#dae8ef 100%)!important;
+  border:1px solid #9caeb9!important;
+  border-top:3px solid var(--pro-family-accent,#277ea8)!important;
+  border-radius:2px!important;
+  box-shadow:inset 0 1px #fff,0 1px 0 #9aaba77d!important;
+  color:#153d55!important;
+  text-shadow:0 1px #fff!important;
+  font-family:Rajdhani,Inter,Arial,sans-serif!important;
+  font-weight:900!important;
+  letter-spacing:.25px!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device .brand-strip::after{
+  content:"P-LINE"!important;
+  font:800 4.3px/1 Inter,Arial,sans-serif!important;
+  color:#587487!important;letter-spacing:.1px!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-modules="1"] .brand-strip::after{
+  content:none!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device .device-type{
+  color:#121d20!important;
+  font-family:Rajdhani,Inter,Arial,sans-serif!important;
+  font-weight:900!important;
+  letter-spacing:-.2px!important;
+  text-shadow:0 1px #fff!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device .device-rating{
+  color:#263a41!important;
+  font-family:Inter,Arial,sans-serif!important;
+  font-weight:850!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device .device-meta{
+  color:#53656a!important;
+  font-weight:750!important;
+  letter-spacing:.05px!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device .device-function{
+  background:linear-gradient(180deg,#f6f9f5,#e7eee9 56%,#d7e1db)!important;
+  border-top:1px solid #a7b8ad!important;
+  border-bottom:1px solid #8a9b92!important;
+  border-radius:1px!important;
+  box-shadow:inset 0 1px #fff9!important;
+  color:#40534c!important;
+  font-weight:900!important;
+}
+
+/* 3. WNĘKI ZACISKÓW — głębia odlewu, bez ruszania pozycji śrub
+   i bez nadpisywania kolorów zajętych zacisków L/N/PE. */
+html[data-theme="dark"] body .mount-grid .mounted-device
+:is(.device-topterm,.device-bottomterm){
+  background:
+    linear-gradient(180deg,#6a786f 0%,#bac6bc 8%,#e5ebe6 38%,#b8c4ba 63%,#929f95 100%)!important;
+  border-color:#76867c!important;
+  border-radius:3px!important;
+  box-shadow:inset 0 3px 4px #2d3b305e,inset 0 -1px 1px #f6fff5ac,
+    0 1px 0 #fff8!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device .wire-terminal:not(
+ .used-terminal,.start-terminal,.bad-terminal,.guide-compatible,.guide-target,
+ .guide-source,.bridge-eligible,.bridge-start,.guide-dim){
+  background:
+    radial-gradient(ellipse at 49% 44%,#414d47 0 12%,#aab5ad 17% 31%,#eef3ec 33% 48%,#697970 52% 72%,#303a34 90%)!important;
+  border-color:#56645d!important;
+  box-shadow:inset 0 0 0 1px #a4b3aa,0 1px 2px #0008!important;
+}
+/* Existing .wire-terminal::after indicates installed wire/bridge;
+   do not override it or alter button hit areas. */
+
+/* 4. WNĘKA I DŹWIGNIA — selektywne wykończenia rodzin. */
+html[data-theme="dark"] body .mount-grid .mounted-device .pro-face-mold{
+  background:linear-gradient(90deg,#b9c9ba28,#fbfffd05 30%,#cbd7cc20 78%,#839b8e26)!important;
+  border-left:1px solid #788b7b60!important;
+  border-right:1px solid #788b7b60!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device .lever{
+  border:1px solid #121c1d!important;
+  border-radius:3px!important;
+  box-shadow:inset 0 3px 2px #ffffff4d,inset 0 -4px 3px #000b,
+    0 0 0 2px #5c786555,0 4px 5px #0005!important;
+  transition:filter .16s ease,box-shadow .16s ease!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device .lever::before{
+  background:linear-gradient(90deg,#ffffff12,#faffff75 40%,#ffffff08)!important;
+  height:4px!important;
+  border-radius:2px!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device .lever::after{
+  background:linear-gradient(180deg,#ffffff33,#0a11136b)!important;
+  border-radius:2px!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-code^="FR"] .lever{
+  background:linear-gradient(90deg,#6f1115,#be2d2e 10%,#e66a63 36%,#c2322f 55%,#8f1e1d 80%,#5d1415)!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-code^="RCD"] .lever{
+  background:linear-gradient(90deg,#084364,#187caf 14%,#5bb4d4 42%,#22799f 60%,#0d5076 87%,#09364f)!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-code^="RCBO"] .lever{
+  background:linear-gradient(90deg,#111d20 0 34%,#388fc0 36% 49%,#151f23 52%,#353f40 76%,#0c1517)!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device:is([data-code^="B"],[data-code^="C"]) .lever{
+  background:linear-gradient(90deg,#0f1417,#3c4447 16%,#747f82 41%,#232a2e 54%,#525a5f 77%,#101518)!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device:is(.switch-off,[data-switch-state="off"]) .lever{
+  filter:brightness(.79) contrast(1.05)!important;
+  box-shadow:inset 0 5px 6px #0009,inset 0 -1px 2px #fff4,
+    0 0 0 2px #5a726452,0 1px 2px #0005!important;
+}
+/* Nie zmieniamy transform:translateX(...) i położenia dźwigni:
+   obecny silnik kontroluje klasy ON/OFF i wizualne przesunięcie. */
+html[data-theme="dark"] body .mount-grid .mounted-device.selected-mounted>.device{
+  outline:2px solid #74bdff!important;
+  outline-offset:2px!important;
+  box-shadow:inset 2px 0 #fff,inset -2px 0 #7e8e83,
+    2px 4px 10px #0007,0 0 0 3px #64b6fa5e!important;
+}
+
+/* 5. PRZYCISK TEST I WSKAŹNIKI SPD — fizyczne wykończenie. */
+html[data-theme="dark"] body .mount-grid .mounted-device .test-btn{
+  box-shadow:inset 0 2px 1px #fff,0 1px 2px #0005,0 0 0 2px #899a9466!important;
+  border:1px solid #6a8079!important;
+  font:900 8px/1 Inter,Arial,sans-serif!important;
+  text-shadow:0 1px #fff5!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-code^="RCD"] .test-btn{
+  background:radial-gradient(circle at 39% 24%,#fff 0%,#d2e7f2 34%,#8cb7c6 92%)!important;
+  color:#1c465c!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-code^="RCBO"] .test-btn{
+  background:radial-gradient(circle at 39% 24%,#fff8d0 0%,#eac657 39%,#b18829 95%)!important;
+  color:#654800!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-code^="SPD"] .spd-window{
+  border:2px solid #758d7c!important;
+  border-radius:3px!important;
+  box-shadow:inset 0 2px 1px #e8ffe599,inset 0 -3px 2px #27452b44,
+    0 1px 3px #0006!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-code="SPD"] .spd-window{
+  background:linear-gradient(180deg,#66bb77,#359b58 62%,#d6e4d6 63%,#e5eee5)!important;
+}
+/* Dla SPD4 pozostawiamy podział na cztery oddzielne kasety z v0.7.9. */
+
+/* 6. ZACISKI N/PE — osobna identyfikacja kolorem obudowy, NIE żyły. */
+html[data-theme="dark"] body .mount-grid .mounted-device:is([data-code^="NTB"],[data-code^="PETB"])
+ .terminal-strip-visual{
+  border:1px solid #82938a!important;
+  box-shadow:inset 0 3px 3px #263c3261,0 1px #fff!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-code^="NTB"] .device-function{
+  border-top-color:#57a7ce!important;color:#175f8d!important;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device[data-code^="PETB"] .device-function{
+  border-top-color:#87ae4d!important;color:#46772a!important;
+}
+
+/* 7. MINIATURY KATALOGU PRO — obudowa, nitowane detale, grupa urządzenia. */
+html[data-theme="dark"] body .game-shell .catalog-card{
+  border:1px solid #416481!important;
+  background:linear-gradient(155deg,#1e374d,#132a3f)!important;
+  box-shadow:inset 0 1px #ffffff0a,0 3px 9px #0003!important;
+  transition:border-color .16s ease,box-shadow .16s ease,background .16s ease!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card:hover{
+  border-color:#72baf3!important;
+  background:linear-gradient(155deg,#264961,#1a3550)!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card:is(.selected,.install-selected){
+  border:2px solid #76caff!important;
+  background:linear-gradient(155deg,#244d6c,#193650)!important;
+  box-shadow:inset 0 1px #ffffff24,0 0 0 1px #2a7ab095,0 5px 13px #0005!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card .mini-device{
+  position:relative!important;
+  border:1px solid #6e7d75!important;
+  border-radius:3px!important;
+  background:linear-gradient(90deg,#919d94,#edf2ec 8%,#fff 34%,#fafcf8 64%,#dce5dc 91%,#87958a)!important;
+  box-shadow:inset 1px 0 #fff,inset -1px 0 #849189,1px 3px 4px #0007!important;
+  flex-shrink:0!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card .mini-device::before{
+  content:"PRO"!important;
+  background:linear-gradient(180deg,#fff,#dceaf1)!important;
+  border-top:2px solid var(--pro-catalog-accent,#377fa4)!important;
+  border-bottom:1px solid #99acb7!important;
+  color:#1b5070!important;
+  font:900 7px/1 Rajdhani,Inter,Arial,sans-serif!important;
+  text-shadow:0 1px #fff!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card .mini-device::after{
+  content:"";pointer-events:none!important;
+  position:absolute!important;
+  top:3px;left:4px;right:4px;height:3px;border-radius:1px;
+  background:repeating-linear-gradient(90deg,#6f8075 0 2px,#c4d0c4 2px 5px,#6f8075 5px 7px);
+  box-shadow:0 55px 0 #a4b4a6;
+}
+html[data-theme="dark"] body .game-shell .catalog-card .mini-device i{
+  border:1px solid #263035!important;
+  border-radius:2px!important;
+  box-shadow:inset 0 2px 1px #ffffff4d,inset 0 -2px 2px #0008,
+    0 1px 2px #0005!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card .mini-device strong{
+  font-family:Rajdhani,Inter,Arial,sans-serif!important;
+  font-weight:900!important;
+  color:#17262c!important;
+  text-shadow:0 1px #fff!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card .mini-device em{
+  color:#42545b!important;font-weight:850!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card[data-part^="FR"]{
+  --pro-catalog-accent:#c34e45;
+}
+html[data-theme="dark"] body .game-shell .catalog-card[data-part^="RCD"],
+html[data-theme="dark"] body .game-shell .catalog-card[data-part^="RCBO"]{
+  --pro-catalog-accent:#278cc5;
+}
+html[data-theme="dark"] body .game-shell .catalog-card[data-part^="SPD"]{
+  --pro-catalog-accent:#d59c42;
+}
+html[data-theme="dark"] body .game-shell .catalog-card[data-part^="NTB"]{
+  --pro-catalog-accent:#2a9bdb;
+}
+html[data-theme="dark"] body .game-shell .catalog-card[data-part^="PETB"]{
+  --pro-catalog-accent:#80aa45;
+}
+html[data-theme="dark"] body .game-shell .catalog-card[data-part^="FR"] .mini-device i{
+  background:linear-gradient(90deg,#6e1418,#e26159 41%,#b32e2b 71%,#731616)!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card[data-part^="RCD"] .mini-device i{
+  background:linear-gradient(90deg,#145475,#5fb4d6 42%,#257eaf 70%,#0e4a69)!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card[data-part^="RCBO"] .mini-device i{
+  background:linear-gradient(90deg,#1e2629 0 39%,#238dc4 40% 58%,#1a2023 59% 100%)!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card[data-part^="SPD"] .mini-device i{
+  background:linear-gradient(180deg,#4fae68 0 64%,#cfddd3 65% 100%)!important;
+}
+html[data-theme="dark"] body .game-shell .catalog-card>b{
+  color:#eff8ff!important;
+  font:900 10.5px/1.4 Inter,"Segoe UI",sans-serif!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell .catalog-card>small{
+  color:#bfd4e7!important;
+  font:600 9px/1.4 Inter,"Segoe UI",sans-serif!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell .catalog-card:is(.selected,.install-selected)>small{
+  color:#ddf4ff!important;
+}
+
+/* 8. SZCZEGÓŁY WYBRANEGO APARATU — wspólny materiał z miniaturą. */
+html[data-theme="dark"] body .game-shell .details-content .detail-device{
+  border:1px solid #657a72!important;
+  border-radius:4px!important;
+  background:linear-gradient(90deg,#a2aca4,#f4f7f2 12%,#fff 46%,#e6ece5 89%,#92a198)!important;
+  box-shadow:inset 1px 0 #fff,0 3px 7px #0008!important;
+}
+html[data-theme="dark"] body .game-shell .detail-device::before{
+  content:"PRO"!important;
+  background:linear-gradient(180deg,#faffff,#dcecf6)!important;
+  border-top:3px solid #268dd3!important;
+  color:#174767!important;
+  font:900 8px/10px Rajdhani,Inter,Arial,sans-serif!important;
+}
+html[data-theme="dark"] body .game-shell .detail-device i{
+  border:1px solid #1b2a2e!important;
+  border-radius:2px!important;
+  background:linear-gradient(90deg,#192125,#5b686e 44%,#1c2529 64%,#0f171b)!important;
+  box-shadow:inset 0 2px #ffffff39,0 2px 3px #0006!important;
+}
+html[data-theme="dark"] body .game-shell .details-content :is(#detailName,#detailSpec,#detailDesc){
+  line-height:1.5!important;
+}
+
+/* Brak nowych animacji modułów, aby nie przesunąć przewodów w trakcie renderu. */
+@media(prefers-reduced-motion:reduce){
+ html[data-theme="dark"] body .game-shell .catalog-card,
+ html[data-theme="dark"] body .mount-grid .mounted-device .lever{transition:none!important}
+}
