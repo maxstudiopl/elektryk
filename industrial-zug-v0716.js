@@ -29,7 +29,7 @@ tools.innerHTML=
  '<div class="iz-count" id="izCount" role="status" aria-live="polite">ZUG X1 • 0/0 pozycji</div>'+
  '<small>Zaciski X1 są na tym etapie wyłącznie montażowe. Nie łączą jeszcze przewodów silnika symulacji.</small>'+
  '</div>';
-sidebar.appendChild(tools);
+sidebar.insertBefore(tools,document.getElementById('freeSavePanel')||sidebar.querySelector('.active-task')||null);
 const buttons=tools.querySelector('#izChoices');
 Object.keys(TYPES).forEach(code=>{
  const b=document.createElement('button');
@@ -51,7 +51,7 @@ rail.id='industrialZugRail';
 rail.hidden=true;
 rail.setAttribute('aria-label','Górna szyna zaciskowa X1');
 rail.innerHTML=
- '<div class="iz-rail-head"><strong>PRO • X1 / ZUG</strong><span id="izRailMeta">SZyna TH35 • zaciski montażowe</span></div>'+
+ '<div class="iz-rail-head"><strong>PRO • X1 / ZUG</strong><span id="izRailMeta">SZYNA TH35 • ZACISKI MONTAŻOWE</span></div>'+
  '<div class="iz-rail-track" id="izRailTrack"></div>'+
  '<div class="iz-rail-foot">X1 • GÓRNA LISTWA ZACISKOWA • PRZEWODY ZEWNĘTRZNE W KOLEJNYM ETAPIE</div>';
 cabinet.appendChild(rail);
