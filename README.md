@@ -2,6 +2,25 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.22 — elektryczna listwa zaciskowa X1/ZUG (model szkoleniowy)
+
+**Zakres:** w obu przemysłowych obudowach PRO (4×24 oraz 5×24) każda wstawiona złączka L1, L2, L3, N lub PE oferuje dwa porty do podpięcia przewodu: **T (górny)** i **B (dolny)**. Kliknięcie środka złączki nadal umożliwia wymianę typu z palety, a separator **SEP** nie posiada portów elektrycznych.
+
+- X1 korzysta z **tego samego** modelu połączeń i kolorów żył co szyny DIN, WLZ oraz odbiorniki; nie tworzono alternatywnego silnika. Porty mają trwałe identyfikatory `X1:01:L1:TOP` i `X1:01:L1:BOTTOM` (analogicznie dla typów i numerów).
+- W silniku `stage4.js` i `electrical-engine-v0713.js` oba porty złączki są połączone *wewnętrznym torem* danego rodzaju. Sąsiednie złączki są odrębnymi węzłami; sam separator nie tworzy połączenia.
+- Diagnostyka X1 sprawdza istnienie zgodnych portów, podłączenie przewodu oraz osiągalność od właściwego zasilania WLZ w grafie. Nieobsadzone, niepodłączone i niezasilone listwy nie otrzymują pozytywnego wyniku; problem jest opisany w raporcie razem z pozostałymi błędami modelu.
+- Przewody X1 zapisują się w zwykłej tablicy `connections` trzy-slotowego projektu. Nie zmieniono dotychczasowego formatu `industrialZug.schema=1`; przy ładowaniu weryfikowane są referencje portów do typu i miejsca X1.
+- Zmiana typu lub usunięcie złączki usuwa przewody przypięte do nieistniejącego już portu, zamiast pozostawiać niepoprawne zakończenia.
+- Nowy arkusz `industrial-wiring-v0722.css` dotyczy wyłącznie przemysłowego X1 i nie zmienia geometrii terminali DIN ani WLZ.
+
+### Testy
+
+- `node --test tests/*.test.mjs`: dodatkowy test `industrial-x1-v0722.test.mjs` obejmujący porty złączki, brak zasilania, nieprawidłowe żyły i separatory.
+- `npx playwright test --config=playwright.config.mjs`: scenariusz wyboru przemysłowej obudowy, podpięcia fazy do portu X1, wyświetlenia wyniku, zapisu/odtworzenia projektu, zmiany typu i usuwania osieroconego przewodu.
+- Należy potwierdzić status `RozdzielnicaPRO Quality Gate` w GitHub Actions przed scaleniem i publikacją.
+
+**Ograniczenia:** symulator potwierdza wyłącznie ciągłość i zgodność roli przewodów w swoim modelu edukacyjnym. Nie modeluje jeszcze pełnych obciążeń, parametrów cieplnych, selektywności zabezpieczeń, warunków zwarciowych ani pomiarów odbiorczych. Tego wyniku nie należy używać do montażu lub odbioru rzeczywistej rozdzielnicy.
+
 ## v0.7.21 — audyt rozdzielnic, integralność zapisów i komunikatów
 
 Analiza wszystkich **7 obsługiwanych modeli** (1×18, 3×12 ×2, 5×12, 5×24, przemysłowe 4×24/5×24) i mechanizmów montażu, okablowania, resetu oraz zapisu.
