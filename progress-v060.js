@@ -130,7 +130,7 @@ function completeTask(detail){
   }
   data.bestStars[id]=Math.max(previousStars,stars);
   if(!previousTime||seconds<previousTime)data.bestTime[id]=seconds;
-  save();renderStats();showResult(task,seconds,stars,first?Number(task.xp||0):0,attempts,newBest);
+  save();renderStats();document.dispatchEvent(new CustomEvent('elektryk:progress-updated'));showResult(task,seconds,stars,first?Number(task.xp||0):0,attempts,newBest);
   return true;
 }
 document.addEventListener('elektryk:task-started',e=>{
