@@ -141,8 +141,14 @@ function init(){
     if(right)right.setAttribute('aria-hidden',String(r&&!toolsDocked));
     // focusable elements in display:none sidebar are removed from tab order
   }
+  let wiringFramePending=false;
   function redrawWiring(){
+    // Widok responsywny: wiele zdarzeń resize/ResizeObserver w jednym
+    // cyklu klatki powinno powodować tylko jeden redraw SVG.
+    if(wiringFramePending)return;
+    wiringFramePending=true;
     requestAnimationFrame(()=>{
+      wiringFramePending=false;
       window.ElektrykStage3?.redraw?.();
       window.ElektrykBridges?.redraw?.();
     });
