@@ -9,7 +9,7 @@ const LICENSE_EXPIRY=null;
 
 const scripts=[
   'ui.js?v=0711',
-  'switchboard-db.js?v=0711',
+  'switchboard-db.js?v=0716',
   'stage2.js?v=07153pro',
   'hardware-pro-v07126.js?v=07126',
   'assembly-pro-v07129.js?v=07129',
@@ -31,7 +31,8 @@ const scripts=[
   'cable-routing-v07152.js?v=071521b',
   'learning-assembly-v0715.js?v=07151b',
   'exam-mode-v0714.js?v=07140c',
-  'freebuild-save-v0711.js?v=0711admin2',
+  'freebuild-save-v0711.js?v=0716',
+  'industrial-zug-v0716.js?v=0716',
   'demo-mode-v07133.js?v=07140'
 ];
 
@@ -276,7 +277,7 @@ function renderBoardSelector(){
 
     const top=document.createElement('div');
     top.className='board-card-top';
-    top.innerHTML='<span>'+mountingLabel(template.mounting)+'</span><em>'+(template.id==='REF-3X12-FLUSH-SURFACE'?'POLECANA':'DOSTĘPNA')+'</em>';
+    top.innerHTML='<span>'+mountingLabel(template.mounting)+'</span><em>'+(template.family==='industrial'?'PRZEMYSŁOWA':template.id==='REF-3X12-FLUSH-SURFACE'?'POLECANA':'DOSTĘPNA')+'</em>';
 
     const title=document.createElement('strong');
     title.textContent=template.name;
@@ -428,6 +429,16 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('modeLearn')?.addEventListener('click',()=>enterGame('learn'));
   document.getElementById('modeExam')?.addEventListener('click',()=>enterGame('exam'));
   document.getElementById('modeFree')?.addEventListener('click',openBoardSelector);
+  document.getElementById('modeIndustrial')?.addEventListener('click',async()=>{
+    if(!sessionValid()){location.reload();return}
+    if(!licenseActive()){showHub();window.ElektrykAdminPlayers?.showLicenseWarning?.();return}
+    try{
+      await loadScripts();
+      const model=window.ElektrykSwitchboardDB?.get?.('IND-PRO-4X24');
+      if(!model)throw new Error('Brak szablonu rozdzielnicy przemysłowej.');
+      await enterGame('free',model);
+    }catch(err){console.error('PRZEMYSŁ:',err);showMessage('Nie udało się uruchomić trybu przemysłowego.','error');}
+  });
   document.getElementById('changeFreeBoard')?.addEventListener('click',openBoardSelector);
   document.getElementById('closeBoardSelector')?.addEventListener('click',closeBoardSelector);
   document.getElementById('boardSelectorModal')?.addEventListener('click',e=>{if(e.target.id==='boardSelectorModal')closeBoardSelector()});
