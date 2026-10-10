@@ -24,6 +24,7 @@ class Element{
 function setup(){
   const map=new Map(),browserEvents={};
   let confirmValue=true,saveFailures=false,entered=0;
+  const delayed=[];
   const storage={
     getItem:key=>map.get(key)||null,
     setItem:(key,value)=>{
@@ -79,12 +80,14 @@ function setup(){
   };
   const context={
     window,document,localStorage:storage,
-    setTimeout:()=>0,setInterval:()=>0,clearTimeout:()=>{},
+    setTimeout:fn=>{delayed.push(fn);return delayed.length},setInterval:()=>0,clearTimeout:()=>{},
+
     requestAnimationFrame:fn=>fn(),
     confirm:()=>confirmValue,console:{error:()=>{}},
     Date,Number,Math,String,JSON
   };
   vm.runInNewContext(source,context,{filename:'freebuild-save-v0711.js'});
+  while(delayed.length)delayed.shift()(); // browser startup: finish initializing/restore check
   return {
     window,elems,slots,map,state,browserEvents,
     saved:()=>JSON.parse(map.get('elektryk_freebuild_saves_v0711:test-user')||'{}'),
