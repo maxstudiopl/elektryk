@@ -9,7 +9,7 @@ const LICENSE_EXPIRY=null;
 
 const scripts=[
   'ui.js?v=0711',
-  'switchboard-db.js?v=0716',
+  'switchboard-db.js?v=0722a',
   'stage2.js?v=0722',
   'hardware-pro-v07126.js?v=07126',
   'assembly-pro-v07129.js?v=07129',
@@ -34,7 +34,7 @@ const scripts=[
   'exam-mode-v0714.js?v=07140c',
   'freebuild-save-v0711.js?v=0721',
   'industrial-zug-v0716.js?v=0722',
-  'industrial-view-v07161.js?v=07162',
+  'industrial-view-v07161.js?v=0722a',
   'demo-mode-v07133.js?v=07140',
   'workspace-panels-v07173.js?v=07173',
   'verification-pro-v07177.js?v=0722',
@@ -372,7 +372,7 @@ function renderBoardSelector(){
     if(industrial){
       const note=document.createElement('span');
       note.className='board-card-note';
-      note.textContent='Listwa X1: montaż ZUG • okablowanie w przygotowaniu';
+      note.textContent='Listwa X1: montaż i podłączanie przewodów T / B';
       card.appendChild(note);
     }
     card.appendChild(action);
