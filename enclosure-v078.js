@@ -17,7 +17,7 @@ function ensureHardware(){
   if(decor)return decor;
   decor=document.createElement('div');
   decor.className='enclosure-realism';
-  decor.innerHTML='<i class="case-screw tl"></i><i class="case-screw tr"></i><i class="case-screw bl"></i><i class="case-screw br"></i><span class="case-marking">XYZ • MODULAR ENCLOSURE</span>';
+  decor.innerHTML='<i class="case-screw tl"></i><i class="case-screw tr"></i><i class="case-screw bl"></i><i class="case-screw br"></i><span class="case-marking">PRO • MODULAR ENCLOSURE</span>';
   inner.prepend(decor);
   return decor;
 }
@@ -48,7 +48,7 @@ function apply(template={}){
     el.dataset.modulesPerRow=String(p.modules);
   });
   const mark=ensureHardware().querySelector('.case-marking');
-  if(mark)mark.textContent='XYZ • '+p.rows+'×'+p.modules+'M • '+String(p.mounting).replaceAll('_',' ').toUpperCase();
+  if(mark)mark.textContent='PRO • '+p.rows+'×'+p.modules+'M • '+String(p.mounting).replaceAll('_',' ').toUpperCase();
 }
 document.addEventListener('elektryk:board-changed',e=>{
   const template=e.detail?.template||{};
