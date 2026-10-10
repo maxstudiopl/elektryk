@@ -1,0 +1,43 @@
+/* RozdzielnicaPRO.pl v0.7.20 — stabilne zaciski i dostępny demontaż.
+ * Puls podświetlenia nie może animować transform/scale terminala,
+ * ponieważ ruchomy hitbox utrudnia kliknięcie i przewidywalne prowadzenie
+ * przewodów. Modyfikujemy tylko nazwę animacji i wygląd przycisku.
+ * Bez zmian fizycznej geometrii, zacisków DIN i modelu elektrycznego. */
+html[data-theme="dark"] body .wire-terminal.guide-target:not(.used-terminal){
+  animation:proStableGuideTarget 1.15s ease-in-out infinite!important;
+}
+@keyframes proStableGuideTarget{
+  0%,100%{
+    box-shadow:inset 0 0 0 2px #fff,0 0 0 3px #31ce7980,0 0 11px #40e698aa;
+  }
+  50%{
+    box-shadow:inset 0 0 0 2px #fff,0 0 0 5px #39d685a8,0 0 18px #5bf0a9de;
+  }
+}
+/* Przycisk usuwania: po zaznaczeniu aparatu, najechaniu lub TAB. */
+html[data-theme="dark"] body .mount-grid .mounted-device:is(
+ .selected-mounted,:hover,:focus-within)>.remove-device{
+  display:flex!important;
+  justify-content:center!important;align-items:center!important;
+  min-width:19px!important;
+  min-height:19px!important;
+  border:1px solid #e6a39c!important;
+  background:#71312e!important;
+  color:#fff!important;
+  outline-offset:2px;
+}
+html[data-theme="dark"] body .mount-grid .mounted-device>.remove-device:focus-visible{
+  outline:2px solid #ffd48d!important;
+}
+/* Bez hover nie chowaj akcji demontażu na telefonie lub tablecie. */
+@media(hover:none){
+  html[data-theme="dark"] body .mount-grid .mounted-device>.remove-device{
+    display:flex!important;
+    justify-content:center!important;align-items:center!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme="dark"] body .wire-terminal.guide-target:not(.used-terminal){
+    animation:none!important;
+  }
+}
