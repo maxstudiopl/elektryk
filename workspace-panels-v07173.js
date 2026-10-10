@@ -38,7 +38,7 @@ function init(){
     button.type='button';
     button.className='pro-fold-toggle '+(def.type==='panel'?'pro-fold-toggle-panel':'pro-fold-toggle-inline');
     button.dataset.fold=def.key;
-    if(def.type==='panel')el.appendChild(button);
+    if(def.type==='panel')header.insertAdjacentElement('afterend',button);
     else header.appendChild(button);
     const initial=typeof saved[def.key]==='boolean'?saved[def.key]:true;
     apply(el,button,def.key,def.label,initial);
