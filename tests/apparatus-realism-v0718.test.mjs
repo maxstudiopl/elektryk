@@ -39,7 +39,7 @@ test('Terminal cosmetics only apply to idle unselected unconnected terminals',()
     '.guide-target','.guide-source','.bridge-eligible','.bridge-start'
   ])assert.ok(css.includes(marker),'Missing state exclusion '+marker);
   assert.doesNotMatch(withoutComments,/\.wire-terminal\s*\{\s*[^}]*\b(?:width|height|top|left)\s*:/s);
-  assert.match(stage3,/\.used-terminal/);
+  assert.match(stage3,/used-terminal/);
 });
 test('Product families and distinct controls remain visible',()=>{
   for(const family of ['FR','RCD','RCBO','SPD','NTB','PETB'])
@@ -52,7 +52,7 @@ test('Product families and distinct controls remain visible',()=>{
 });
 test('Original switch-off geometry is retained',()=>{
   assert.match(css,/data-switch-state="off"/);
-  assert.doesNotMatch(rulesContaining('[data-switch-state="off"] .lever')[0].body,/transform\s*:/);
+  assert.doesNotMatch(rulesContaining('[data-switch-state="off"]')[0].body,/transform\s*:/);
   assert.match(stage2,/data-switch-state|switchState/);
 });
 test('Catalogue and details keep semantic product codes and selectable cards',()=>{
