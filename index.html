@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic | v0.7.17.6</title>
+  <title>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic | v0.7.17.7</title>
   <meta name="description" content="RozdzielnicaPRO.pl — symulator budowy rozdzielnic elektrycznych. Nauka montażu aparatów DIN, okablowania i diagnostyki instalacji.">
   <meta name="theme-color" content="#0B1F3A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,6 +57,7 @@
   <link rel="stylesheet" href="cable-routing-top-v07174.css?v=07174">
   <link rel="stylesheet" href="board-selector-pro-v07175.css?v=07175">
   <link rel="stylesheet" href="task-catalog-pro-v07176.css?v=07176">
+  <link rel="stylesheet" href="diagnostics-pro-v07177.css?v=07177">
   <style>
     /* v0.4.5 critical DIN layout hotfix — bypasses stale cached CSS */
     .mount-grid .mounted-device{position:absolute!important;top:0!important;height:194px!important;margin:0!important;padding:0!important;transform:none!important;box-sizing:border-box!important;z-index:12!important}
@@ -147,7 +148,7 @@
           <div>
             <h2>O PROJEKCIE</h2>
             <p>RozdzielnicaPRO.pl to rozwijany symulator edukacyjny montażu i okablowania rozdzielnic elektrycznych.</p>
-            <small>v0.7.17.6 • WERSJA BETA • PROJEKT W ROZWOJU</small>
+            <small>v0.7.17.7 • WERSJA BETA • PROJEKT W ROZWOJU</small>
           </div>
           <button type="button" id="hubUpdates">HISTORIA AKTUALIZACJI ↗</button>
         </section>
@@ -206,7 +207,7 @@
     </aside>
 
     <section class="workspace">
-      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.7.17.6 • ROZDZIELNICAPRO.PL • APARATURA PRO</span></div>
+      <div class="cabinet-head"><div><b>ROZDZIELNICA TRENINGOWA</b><small>230/400 V • 3F + N + PE</small></div><span class="version">v0.7.17.7 • ROZDZIELNICAPRO.PL • APARATURA PRO</span></div>
       <div class="cabinet">
         <div class="cabinet-inner">
           <div class="supply-box">
@@ -373,7 +374,7 @@
         </section>
         <section class="hub-settings-pane hub-settings-info" id="settingsPaneInfo" data-settings-pane="info" role="tabpanel" aria-labelledby="settingsTabInfo" hidden>
           <p><strong>RozdzielnicaPRO.pl</strong> — Symulator Budowy Rozdzielnic.</p>
-          <p>Wersja <strong>v0.7.17.6 (BETA)</strong>. Projekt ma charakter edukacyjny. Nie zastępuje projektu wykonawczego ani pomiarów elektrycznych.</p>
+          <p>Wersja <strong>v0.7.17.7 (BETA)</strong>. Projekt ma charakter edukacyjny. Nie zastępuje projektu wykonawczego ani pomiarów elektrycznych.</p>
           <p>Projekt i rozwój: <strong>Damian Górny — MaxStudio</strong>.</p>
         </section>
       </div>
@@ -398,11 +399,12 @@
           <h3>RozdzielnicaPRO.pl — Symulator Budowy Rozdzielnic</h3>
           <p>Przeglądarkowy projekt edukacyjny do nauki montażu aparatury modułowej PRO, podstaw okablowania i samodzielnego budowania rozdzielnic.</p>
           <ul><li>Wolna Budowa — wybór obudowy, montaż i zapis projektów.</li><li>Nauka — zadania treningowe i schematy połączeń.</li><li>Rozdzielnice Przemysłowe — obudowy produkcyjne oraz montaż listwy X1 ZUG.</li><li>Egzamin szkoleniowy — 10 pytań i 3 zadania praktyczne.</li></ul>
-          <span class="hub-version">v0.7.17.6 • BETA / W ROZWOJU</span>
+          <span class="hub-version">v0.7.17.7 • BETA / W ROZWOJU</span>
           <p>Połączenia elektryczne górnej listwy ZUG X1 nie są jeszcze sprawdzane przez silnik symulatora. Projekt ma charakter szkoleniowy, nie zastępuje pomiarów ani projektu wykonawczego.</p>
           <p>Projekt i rozwój: Damian Górny — <a href="https://maxstudio.pl" target="_blank" rel="noopener noreferrer">MaxStudio</a>.</p>
         </section>
         <section class="hub-about-pane" id="aboutUpdates" role="tabpanel" aria-labelledby="aboutTabUpdates" data-about-pane="updates" hidden>
+          <div class="hub-update-item"><b>v0.7.17.7 — POMOC, SCHEMATY I DIAGNOSTYKA</b><p>Dopracowano okna schematów i pomocy, analizator zasilania oraz szczegółowy raport kontroli instalacji w symulatorze: L/N/PE, aparaty DIN, RCD/RCBO, błędy i wskazówki.</p></div>
           <div class="hub-update-item"><b>v0.7.17.6 — KATALOG 300 ZADAŃ PRO</b><p>Przebudowano listę zadań: filtry trudności i statusu, wyszukiwanie, XP, postępy, ukończone zadania i czytelne karty.</p></div>
           <div class="hub-update-item"><b>v0.7.17.5 — WYBÓR ROZDZIELNICY PRO</b><p>Nowe okno wyboru: większe miniatury, wyszukiwarka, filtry rodzaju i liczby modułów oraz wybór rozdzielnic przemysłowych 4×24/5×24.</p></div>
           <div class="hub-update-item"><b>v0.7.17.4 — POPRAWNE WYJŚCIA GÓRNE</b><p>Skorygowano kierunek i punkt obrotu żył L/N/PE w kablach wychodzących górą O1/O2. Zachowano położenia zacisków, kolory i dolne wyjścia.</p></div>
@@ -436,7 +438,7 @@
   </div>
   <script src="enclosure-v078.js?v=07176"></script>
   <script src="accounts-v0711.js?v=07133demo"></script>
-  <script src="auth-v050.js?v=07176"></script>
+  <script src="auth-v050.js?v=07177"></script>
   <script src="admin-players-v0711.js?v=0711users6"></script>
   <script src="ui-pro-v07122.js?v=07173"></script>
   <script src="user-panel-v0716.js?v=0716b"></script>
