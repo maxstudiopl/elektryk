@@ -1,0 +1,425 @@
+/* RozdzielnicaPRO.pl v0.7.17.2
+ * Ergonomia LEWEGO i PRAWEGO panelu stanowiska.
+ * Tylko elementy sterujące i informacyjne; bez zmian geometrii DIN,
+ * przewodów i rozdzielnicy. Nie dotyka Panelu Użytkownika.
+ */
+html[data-theme="dark"] body .game-shell>.leftbar,
+html[data-theme="dark"] body .game-shell>.rightbar{
+  min-width:0!important;
+  scroll-padding-top:12px;
+  scrollbar-width:thin;
+  scrollbar-color:#4c7594 #102235;
+}
+html[data-theme="dark"] body .game-shell :is(.leftbar,.rightbar) .panel{
+  min-width:0!important;
+  border-color:#41607b!important;
+  background:linear-gradient(160deg,#1a3046,#132438)!important;
+}
+html[data-theme="dark"] body .game-shell :is(.leftbar,.rightbar) .panel-title{
+  min-height:44px!important;
+  padding:11px 13px!important;
+  color:#f3f9ff!important;
+  font:800 11px/1.4 Inter,"Segoe UI",Arial,sans-serif!important;
+  letter-spacing:.45px!important;
+}
+html[data-theme="dark"] body .game-shell :is(.leftbar,.rightbar) button{
+  -webkit-tap-highlight-color:transparent;
+}
+html[data-theme="dark"] body .game-shell :is(.leftbar,.rightbar) :is(button,input,select):focus-visible{
+  outline:2px solid #77c1ff!important;outline-offset:2px!important;
+}
+
+/* LEWA STRONA — zadania i stan realizacji */
+html[data-theme="dark"] body .game-shell>.leftbar .task-shortcut,
+html[data-theme="dark"] body .game-shell>.leftbar .free-board-shortcut{
+  padding:7px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar :is(.task-button,.free-board-button){
+  display:grid!important;
+  grid-template-columns:25px minmax(0,1fr) 15px!important;
+  gap:8px!important;
+  width:100%!important;
+  min-height:52px!important;
+  padding:10px!important;
+  text-align:left!important;
+  align-items:center!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar :is(.task-button,.free-board-button)>div{
+  min-width:0!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar :is(.task-button,.free-board-button) b{
+  font-size:11px!important;line-height:1.35!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar :is(.task-button,.free-board-button) small{
+  display:block!important;font-size:10px!important;
+  line-height:1.4!important;white-space:normal!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .active-task{
+  padding-bottom:12px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .active-task h2{
+  margin:12px 12px 7px!important;
+  padding:0!important;
+  font:800 16px/1.36 Inter,"Segoe UI",Arial,sans-serif!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .active-task>p{
+  margin:0 12px 12px!important;
+  font:400 11.5px/1.6 Inter,"Segoe UI",Arial,sans-serif!important;
+  color:#c9d9e8!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .task-goals{
+  margin:0 11px 12px!important;
+  padding:10px!important;
+  gap:7px!important;
+  border:1px solid #355873!important;
+  background:#12283d!important;
+  border-radius:8px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .task-goals span{
+  min-width:0!important;
+  padding:2px 0!important;
+  color:#d6e5f3!important;
+  font:600 10.5px/1.4 Inter,"Segoe UI",Arial,sans-serif!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .task-goals span.done{
+  color:#84e7af!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .task-goals span b{
+  margin-left:auto!important;
+  color:#7ccaff!important;
+  font-size:10px!important;
+  white-space:nowrap!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .task-goals span.done b{
+  color:#74e2ad!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .reward{
+  margin:0 11px 10px!important;
+  padding:10px!important;
+  border:1px solid #587044!important;
+  border-radius:8px!important;
+  background:#1b342c!important;
+  color:#dfecdc!important;
+  font-size:10px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .reward b{
+  font-size:14px!important;color:#ffd47d!important;
+}
+
+/* Pasek postępu i punkty XP pochodzą z istniejących modułów. */
+html[data-theme="dark"] body .game-shell>.leftbar .player-progress{
+  margin:0 11px 11px!important;
+  padding:11px 9px!important;
+  border:1px solid #3b5a75!important;
+  border-radius:9px!important;
+  background:linear-gradient(150deg,#142f43,#102235)!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .player-progress-head{
+  flex-wrap:wrap!important;
+  gap:5px!important;margin-bottom:9px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .player-progress-head b{
+  color:#eef6ff!important;
+  font:800 10.5px/1.4 Inter,"Segoe UI",Arial,sans-serif!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .player-progress-head span{
+  color:#ffd785!important;
+  font:800 10px/1.3 Inter,"Segoe UI",Arial,sans-serif!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .player-progress-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .player-progress-grid>div{
+  min-width:0!important;
+  padding:9px 5px!important;
+  border:1px solid #355977!important;
+  border-radius:6px!important;
+  background:#0f283c!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .player-progress-grid span{
+  color:#a9c7dc!important;
+  font:700 8.5px/1.3 Inter,"Segoe UI",Arial,sans-serif!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .player-progress-grid b{
+  color:#75cbff!important;
+  font:800 13px/1.3 Inter,"Segoe UI",Arial,sans-serif!important;
+  margin-top:4px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .player-progress-current{
+  color:#c4dbed!important;
+  font:600 9.5px/1.5 Inter,"Segoe UI",Arial,sans-serif!important;
+  background:#102e45!important;
+  border-left:3px solid #399ff3!important;
+  border-radius:4px!important;
+  padding:8px!important;margin-top:9px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .wiring-progress{
+  margin:10px 11px!important;
+  border-radius:8px!important;
+  padding:10px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .wiring-progress :is(b,span){
+  font-size:10px!important;
+  line-height:1.45!important;
+}
+/* Zapis projektu — nie zmieniaj widoczności ani klas stanów zapisu. */
+html[data-theme="dark"] body .game-shell>.leftbar .free-save-slots{
+  gap:6px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .free-save-slot{
+  min-height:59px!important;
+  padding:10px 6px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .free-save-slot b{
+  font-size:10px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .free-save-slot small{
+  font-size:9px!important;
+  line-height:1.3!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .free-save-actions{
+  gap:6px!important;
+}
+html[data-theme="dark"] body .game-shell>.leftbar .free-save-actions button{
+  min-width:0!important;
+  min-height:38px!important;
+  font-size:9px!important;
+  overflow-wrap:anywhere;
+}
+
+/* PRAWA STRONA — wybór przewodu i żyły */
+html[data-theme="dark"] body .game-shell>.rightbar .cable-buttons{
+  gap:6px!important;
+  padding:10px 9px 7px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .cable-buttons button{
+  min-width:0!important;
+  min-height:39px!important;
+  font:800 10px/1.25 Inter,"Segoe UI",Arial,sans-serif!important;
+  white-space:nowrap;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wire-colors{
+  gap:6px!important;
+  padding:0 9px 10px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wire-colors .wire{
+  cursor:pointer;
+  min-width:0!important;
+  min-height:51px!important;
+  height:auto!important;
+  padding:6px 2px!important;
+  gap:4px!important;
+  border:1px solid #3e617e!important;
+  border-radius:7px!important;
+  background:#0f263a!important;
+  color:#deedfa!important;
+  font:800 10px/1.2 Inter,"Segoe UI",Arial,sans-serif!important;
+  transition:background .13s,border-color .13s,box-shadow .13s!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wire-colors .wire:before{
+  width:18px!important;height:18px!important;
+  flex:0 0 18px!important;
+  border:1px solid #ffffff6b!important;
+  box-shadow:0 0 0 1px #010b16a3!important;
+}
+/* Kolor żyły L1/L2/L3/N/PE pozostaje nietknięty — to semantyka elektryczna. */
+html[data-theme="dark"] body .game-shell>.rightbar .wire-colors .wire:hover{
+  background:#193f5d!important;
+  border-color:#5ca4df!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wire-colors .wire.active{
+  background:#17486c!important;
+  border-color:#62bdff!important;
+  box-shadow:inset 0 0 0 1px #5db3f74d,0 0 0 1px #125d8e!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wiring-console{
+  margin:0 9px 10px!important;
+  padding:10px!important;
+  border:1px solid #426280!important;
+  border-radius:9px!important;
+  background:linear-gradient(160deg,#172e42,#102438)!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wiring-console-head{
+  flex-wrap:wrap!important;
+  gap:6px!important;
+  margin-bottom:7px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wiring-console-head b{
+  color:#d8f0ff!important;
+  font:800 11px/1.3 Inter,"Segoe UI",Arial,sans-serif!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wiring-console-head span{
+  color:#8ecaff!important;
+  font:700 10px/1.35 Inter,"Segoe UI",Arial,sans-serif!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wiring-status{
+  padding:9px!important;
+  color:#c9dced!important;
+  font:500 10px/1.5 Inter,"Segoe UI",Arial,sans-serif!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wiring-actions{
+  gap:6px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .wiring-actions button{
+  min-height:37px!important;
+  padding:7px 6px!important;
+  border-radius:6px!important;
+  font:800 9px/1.35 Inter,"Segoe UI",Arial,sans-serif!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .bridge-console{
+  padding:10px!important;
+  border-radius:8px!important;
+  border-color:#496d56!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .bridge-console-head{
+  gap:6px!important;
+  flex-wrap:wrap!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .bridge-console-head b{
+  font:800 10px/1.4 Inter,"Segoe UI",Arial,sans-serif!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .bridge-console-head span{
+  font:800 9px/1.35 Inter,"Segoe UI",Arial,sans-serif!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .bridge-mode-btn{
+  min-height:36px!important;
+  font:800 10px/1.35 Inter,"Segoe UI",Arial,sans-serif!important;
+  border-radius:6px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .bridge-help{
+  color:#b5cbbb!important;
+  font:500 10px/1.45 Inter,"Segoe UI",Arial,sans-serif!important;
+  padding:9px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .bridge-actions{
+  gap:6px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .bridge-actions button{
+  min-height:36px!important;
+  padding:7px!important;
+  font:800 9px/1.35 Inter,"Segoe UI",Arial,sans-serif!important;
+  border-radius:6px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .bridge-counter{
+  font:700 10px/1.35 Inter,"Segoe UI",Arial,sans-serif!important;
+  padding:8px!important;
+}
+
+/* Katalog aparatów PRO — przyjazne karty przy dwóch kolumnach. */
+html[data-theme="dark"] body .game-shell>.rightbar .category-tabs{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important;
+  padding:10px 9px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .category-tabs button{
+  min-width:0!important;
+  min-height:35px!important;
+  padding:7px 5px!important;
+  font:800 10px/1.25 Inter,"Segoe UI",Arial,sans-serif!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .category-tabs button:last-child:nth-child(odd){
+  grid-column:1/-1;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .catalog-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:9px!important;
+  padding:0 9px 11px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .catalog-card{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:139px!important;
+  padding:11px 7px 9px!important;
+  border:1px solid #486883!important;
+  border-radius:9px!important;
+  background:linear-gradient(145deg,#233e55,#182e42)!important;
+  color:#f0f7ff!important;
+  gap:5px!important;
+  text-align:center!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .catalog-card .mini-device{
+  flex-shrink:0!important;
+  margin:0 auto 1px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .catalog-card>b{
+  color:#f4f9ff!important;
+  font:800 11px/1.3 Inter,"Segoe UI",Arial,sans-serif!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .catalog-card>small{
+  margin:0!important;
+  font:500 9.5px/1.35 Inter,"Segoe UI",Arial,sans-serif!important;
+  color:#bad2e5!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .catalog-card:hover{
+  border-color:#77c3ff!important;
+  background:linear-gradient(145deg,#2b4e69,#1b3b57)!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .catalog-card:is(.selected,.install-selected){
+  border-color:#60b8ff!important;
+  background:linear-gradient(145deg,#215578,#193d5b)!important;
+  box-shadow:0 0 0 2px #2595f264,inset 0 1px #ffffff13!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .details-panel .details-content{
+  padding:12px!important;
+  grid-template-columns:58px minmax(0,1fr)!important;
+  gap:11px!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .details-content>div:last-child{
+  min-width:0!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .details-content #detailName{
+  color:#f2f8ff!important;
+  font:800 11px/1.4 Inter,"Segoe UI",Arial,sans-serif!important;
+  overflow-wrap:anywhere;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .details-content #detailSpec{
+  display:block!important;
+  color:#86c6fa!important;
+  font:700 9px/1.4 Inter,"Segoe UI",Arial,sans-serif!important;
+}
+html[data-theme="dark"] body .game-shell>.rightbar .details-content #detailDesc{
+  color:#c0d5e7!important;
+  font:400 10px/1.55 Inter,"Segoe UI",Arial,sans-serif!important;
+}
+@media(max-width:1279px){
+  html[data-theme="dark"] body .game-shell>.leftbar .player-progress-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+  html[data-theme="dark"] body .game-shell>.rightbar .catalog-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:719px){
+  html[data-theme="dark"] body .game-shell>.leftbar .player-progress-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html[data-theme="dark"] body .game-shell>.rightbar .cable-buttons{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html[data-theme="dark"] body .game-shell>.rightbar .wire-colors{
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme="dark"] body .game-shell>.rightbar :is(.wire,.catalog-card){
+    transition:none!important;
+  }
+}
