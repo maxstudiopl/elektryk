@@ -2,6 +2,28 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.17.6 — nowy katalog 300 zadań PRO
+
+Przebudowano katalog zadań szkoleniowych na podstawie dotychczasowego silnika `tasks-v046.js`, `curriculum-v0714.js` i danych użytkownika z `progress-v060.js`. **Zachowano identyfikatory zadań 1–300, schematy, wymagania aparatury i przyznawanie XP**.
+
+- Nowy nagłówek Akademia PRO oraz panel postępów: ukończone zadania, pozostałe zadania, zdobyte XP i pasek realizacji katalogu.
+- Filtrowanie wielokryterialne po liczbie szyn DIN (1, 2, 3, Duże/XL), poziomie trudności, statusie **Ukończone / Nieukończone** i połączenie tych filtrów z wyszukiwarką numeru, nazwy, opisu lub aparatury.
+- Sortowanie po numerze, liczbie XP lub pierwszeństwie nieukończonych.
+- Karty z numerem, poziomem, obudową DIN, wykorzystanymi modułami, XP, aparaturą, stanem zaliczenia i gwiazdkami.
+- 12 kart na stronie, sterowanie paginacją i komunikat pustego wyniku; bez tworzenia 300 kart jednocześnie.
+- Pasek wyników odświeża się na podstawie **tego samego** zapisu postępów użytkownika, a po zaliczeniu albo resecie profilu katalog otrzymuje zdarzenie `elektryk:progress-updated`. Nie dodano osobnego stanu ukończenia ani ponownego naliczania XP.
+- Ulepszono obsługę klawiaturą: widoczne etykiety pól, Escape do zamknięcia katalogu, fokus na wyszukiwarkę i nawigacja TAB.
+- Responsywny arkusz `task-catalog-pro-v07176.css` — karty 3 kolumny na desktopie, 2 na tablecie i 1 na telefonie.
+- Automatyczne uruchamianie i wznawianie zadania przez `ElektrykTasks.start(id)` nadal działa.
+- Test: `node --test tests/task-catalog-v07176.test.mjs` (300 unikalnych zadań, filtrowanie, wyniki XP, uruchomienie zadania, odświeżenie po ukończeniu).
+
+### Sprawdzenie po publikacji
+
+Otwórz https://maxstudiopl.github.io/elektryk/ i wybierz **Nauka → Wybierz zadanie**.
+Sprawdź kategorie, wyszukiwarkę (np. „201”, „RCD”), poziomy trudności i sortowanie. Filtr Ukończone będzie użyteczny po zaliczeniu pierwszych zadań. Spróbuj zamknąć okno klawiszem Escape oraz przełączyć strony, uruchomić zadanie i ponownie otworzyć katalog. Potwierdź, że ukończenie zadania aktualizuje postęp, gwiazdki i XP.
+
+Kontrola kodu oraz testy logiki przeszły pozytywnie; wygląd na rzeczywistym ekranie w zalogowanej przeglądarce nadal wymaga weryfikacji.
+
 ## v0.7.17.5 — profesjonalny wybór rozdzielnicy (etap 02)
 
 Zmodernizowano ekran **Wolna Budowa → Wybierz rozdzielnicę** bez modyfikowania mechaniki elektrycznej, liczby modułów, zacisków ani projektów zapisanych w przeglądarce.
