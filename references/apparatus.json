@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "fictional_brand": "XYZ",
+  "version": "1.1.0",
+  "fictional_brand": "PRO",
   "design_goal": "Create a coherent fictional DIN product family inspired by real European modular apparatus without copying a real manufacturer's trade dress 1:1.",
   "catalog_reference": {
     "label": "Legrand — aparatura zabezpieczająca",
@@ -86,11 +86,12 @@
     }
   ],
   "visual_rules": [
-    "One consistent XYZ logo position and typography across the family.",
+    "A consistent original PRO logotype and technical typography across all DIN devices.",
     "Realistic 18 mm module rhythm and clear pole segmentation.",
     "Terminal screws must visually align with logical connection points.",
     "No floating labels above mounted apparatus.",
     "Device state should be shown by the lever and a subtle indicator only.",
     "Avoid copying Legrand/Schneider/Hager branding, logos, exact label layouts or protected trade dress."
-  ]
+  ],
+  "brand_disclaimer": "PRO is the fictional apparatus brand of the RozdzielnicaPRO.pl training simulator, not a real certification or manufacturer."
 }
