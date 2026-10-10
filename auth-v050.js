@@ -264,75 +264,152 @@ function boardPreview(template){
   }
   return host;
 }
+let selectedBoardFamily='all';
+let boardSelectorReturnFocus=null;
+function normalizeBoardSearch(value){
+  return String(value||'').toLocaleLowerCase('pl')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[×x]/g,'x').replace(/\s+/g,' ').trim();
+}
+function setBoardFamily(value){
+  selectedBoardFamily=['all','residential','large_residential','industrial'].includes(value)?value:'all';
+  document.querySelectorAll('[data-board-family]').forEach(button=>{
+    const selected=button.dataset.boardFamily===selectedBoardFamily;
+    button.classList.toggle('is-selected',selected);
+    button.setAttribute('aria-pressed',String(selected));
+  });
+  renderBoardSelector();
+}
 function renderBoardSelector(){
   const grid=document.getElementById('boardSelectorGrid');
   const count=document.getElementById('boardSelectorCount');
   if(!grid)return;
-  grid.innerHTML='';
   const templates=(window.ElektrykSwitchboardDB?.supported?.()||[])
-    .filter(t=>t.rows&&t.modulesPerRow&&t.family!=='construction');
-  if(count)count.textContent=templates.length+' dostępnych';
-
-  templates.forEach((template,index)=>{
+    .filter(t=>Number(t.rows)>0&&Number(t.modulesPerRow)>0&&t.family!=='construction');
+  const query=normalizeBoardSearch(document.getElementById('boardSelectorSearch')?.value);
+  const capacity=document.getElementById('boardSelectorSize')?.value||'all';
+  const filtered=templates.filter(t=>{
+    const familyOK=selectedBoardFamily==='all' ||
+      (selectedBoardFamily==='residential'
+        ?t.family==='residential':t.family===selectedBoardFamily);
+    const total=Number(t.totalModules)||Number(t.rows)*Number(t.modulesPerRow);
+    const capacityOK=capacity==='all'||
+      (capacity==='small'&&total<=36)||
+      (capacity==='medium'&&total>36&&total<=96)||
+      (capacity==='large'&&total>=97);
+    const searchText=normalizeBoardSearch([
+      t.name,t.id,t.sourceRef,t.family,mountingLabel(t.mounting),
+      t.rows+'x'+t.modulesPerRow,t.notes||'',t.zugSlots?'ZUG X1':''
+    ].join(' '));
+    return familyOK&&capacityOK&&(!query||searchText.includes(query));
+  });
+  if(count)count.textContent=filtered.length+' z '+templates.length+' modeli';
+  grid.replaceChildren();
+  if(!filtered.length){
+    const empty=document.createElement('div');
+    empty.className='board-selector-empty';
+    empty.setAttribute('role','status');
+    const title=document.createElement('strong');
+    title.textContent='Nie znaleziono rozdzielnicy';
+    const help=document.createElement('p');
+    help.textContent='Zmień rodzaj, liczbę modułów albo wyszukiwaną frazę.';
+    empty.append(title,help);
+    grid.appendChild(empty);
+    return;
+  }
+  const fragment=document.createDocumentFragment();
+  filtered.forEach(template=>{
     const card=document.createElement('button');
     card.type='button';
-    card.className='board-choice-card'+(template.id==='REF-3X12-FLUSH-SURFACE'?' recommended':'');
+    card.className='board-choice-card';
+    const recommended=template.id==='REF-3X12-FLUSH-SURFACE';
+    const industrial=template.family==='industrial';
+    const current=activeFreeTemplate?.id===template.id;
+    card.classList.toggle('recommended',recommended);
+    card.classList.toggle('is-industrial',industrial);
+    card.classList.toggle('is-current',current);
     card.dataset.boardId=template.id;
-
+    card.dataset.boardFamily=template.family;
+    card.setAttribute('aria-label','Wybierz '+template.name+', '+template.totalModules+' modułów'+
+      (industrial?', '+template.zugSlots+' miejsc ZUG X1':''));
     const top=document.createElement('div');
     top.className='board-card-top';
-    top.innerHTML='<span>'+mountingLabel(template.mounting)+'</span><em>'+(template.family==='industrial'?'PRZEMYSŁOWA':template.id==='REF-3X12-FLUSH-SURFACE'?'POLECANA':'DOSTĘPNA')+'</em>';
-
+    const tag=document.createElement('span');
+    tag.textContent=mountingLabel(template.mounting);
+    const badge=document.createElement('em');
+    badge.textContent=isDemo()?'PODGLĄD':current?'WYBRANA':industrial?'PRZEMYSŁOWA':recommended?'POLECANA':'DOSTĘPNA';
+    top.append(tag,badge);
     const title=document.createElement('strong');
     title.textContent=template.name;
     const sub=document.createElement('small');
-    sub.textContent=levelLabel(template.level)+' • baza '+(template.sourceRef||'symulator');
-
+    sub.textContent=levelLabel(template.level)+' • '+template.rows+' × '+template.modulesPerRow+' modułów DIN';
     const preview=boardPreview(template);
-
+    if(industrial)preview.classList.add('board-preview-industrial');
     const meta=document.createElement('div');
     meta.className='board-card-meta';
-    meta.innerHTML=
-      '<div><span>RZĘDY</span><b>'+template.rows+'</b></div>'+
-      '<div><span>MODUŁY / RZĄD</span><b>'+template.modulesPerRow+'</b></div>'+
-      '<div><span>RAZEM</span><b>'+template.totalModules+'M</b></div>';
-
+    const fields=[
+      ['RZĘDY',template.rows],
+      ['MODUŁY / RZĄD',template.modulesPerRow],
+      ['ŁĄCZNIE',template.totalModules+'M']
+    ];
+    if(industrial)fields.push(['ZUG X1',template.zugSlots]);
+    fields.forEach(([name,value])=>{
+      const field=document.createElement('div');
+      const label=document.createElement('span');
+      label.textContent=name;
+      const number=document.createElement('b');
+      number.textContent=String(value);
+      field.append(label,number);
+      meta.appendChild(field);
+    });
+    if(industrial)meta.classList.add('board-card-meta-four');
     const action=document.createElement('span');
     action.className='board-card-action';
-    action.textContent='WYBIERZ I ROZPOCZNIJ ›';
-
-    card.append(top,title,sub,preview,meta,action);
-    if(isDemo()){
-      action.textContent='PODGLĄD • BEZ EDYCJI ›';
-      top.querySelector('em').textContent='TYLKO PODGLĄD';
+    action.textContent=isDemo()?'OTWÓRZ PODGLĄD ›':current?'URUCHOM PONOWNIE ›':'WYBIERZ I ROZPOCZNIJ ›';
+    card.append(top,title,sub,preview,meta);
+    if(industrial){
+      const note=document.createElement('span');
+      note.className='board-card-note';
+      note.textContent='Listwa X1: montaż ZUG • okablowanie w przygotowaniu';
+      card.appendChild(note);
     }
+    card.appendChild(action);
     card.addEventListener('click',()=>{
       if(isDemo()){
         window.ElektrykDemo?.preview?.(template);
-        closeBoardSelector();
+        closeBoardSelector(false);
       }else enterGame('free',template);
     });
-    grid.appendChild(card);
+    fragment.appendChild(card);
   });
+  grid.appendChild(fragment);
 }
 async function openBoardSelector(){
   if(!sessionValid()){location.reload();return}
   if(!licenseActive()){showHub();window.ElektrykAdminPlayers?.showLicenseWarning?.();return}
   try{await loadScripts()}catch{return}
+  const modal=document.getElementById('boardSelectorModal');
+  if(!modal)return;
+  if(modal.hidden)boardSelectorReturnFocus=document.activeElement;
   renderBoardSelector();
-  const modal=document.getElementById('boardSelectorModal');
-  if(modal)modal.hidden=false;
+  modal.hidden=false;
+  const search=document.getElementById('boardSelectorSearch');
+  requestAnimationFrame(()=>search?.focus());
 }
-function closeBoardSelector(){
+function closeBoardSelector(restoreFocus=true){
   const modal=document.getElementById('boardSelectorModal');
-  if(modal)modal.hidden=true;
+  if(!modal||modal.hidden)return;
+  modal.hidden=true;
+  const previous=boardSelectorReturnFocus;
+  boardSelectorReturnFocus=null;
+  if(restoreFocus&&previous?.isConnected)requestAnimationFrame(()=>previous.focus());
 }
 async function enterGame(mode='learn',freeTemplate=null,taskId=null){
   if(!sessionValid()){location.reload();return}
   if(!licenseActive()){showHub();window.ElektrykAdminPlayers?.showLicenseWarning?.();return}
   try{await loadScripts()}catch{return}
 
-  closeBoardSelector();
+  closeBoardSelector(false);
 
   document.body.classList.remove('auth-locked');
   document.body.classList.add('auth-ready');
@@ -446,6 +523,35 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('changeFreeBoard')?.addEventListener('click',openBoardSelector);
   document.getElementById('closeBoardSelector')?.addEventListener('click',closeBoardSelector);
   document.getElementById('boardSelectorModal')?.addEventListener('click',e=>{if(e.target.id==='boardSelectorModal')closeBoardSelector()});
+  document.getElementById('boardSelectorSearch')?.addEventListener('input',renderBoardSelector);
+  document.getElementById('boardSelectorSize')?.addEventListener('change',renderBoardSelector);
+  document.querySelectorAll('[data-board-family]').forEach(button=>{
+    button.addEventListener('click',()=>setBoardFamily(button.dataset.boardFamily));
+  });
+  document.getElementById('boardSelectorReset')?.addEventListener('click',()=>{
+    const search=document.getElementById('boardSelectorSearch');
+    const size=document.getElementById('boardSelectorSize');
+    if(search)search.value='';
+    if(size)size.value='all';
+    setBoardFamily('all');
+    search?.focus();
+  });
+  document.getElementById('boardSelectorModal')?.addEventListener('keydown',event=>{
+    const modal=document.getElementById('boardSelectorModal');
+    if(!modal||modal.hidden)return;
+    if(event.key==='Escape'){
+      event.preventDefault();
+      closeBoardSelector();
+      return;
+    }
+    if(event.key!=='Tab')return;
+    const focusable=[...modal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled])')]
+      .filter(el=>el.getClientRects().length>0);
+    const first=focusable[0],last=focusable[focusable.length-1];
+    if(!first)return;
+    if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+  });
 
   document.getElementById('openPlayerHub')?.addEventListener('click',showHub);
   document.getElementById('openGameSettings')?.addEventListener('click',openSettings);
