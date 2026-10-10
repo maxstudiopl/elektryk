@@ -186,6 +186,8 @@ modal.addEventListener('keydown',e=>{
 document.addEventListener('elektryk:task-started',()=>{last=null});
 document.addEventListener('elektryk:mode-selected',()=>{last=null});
 window.ElektrykVerificationPRO={
- version:'0.7.17.7',evaluate,open,run,getLast:()=>last?.report||null
+ version:'0.7.17.7',evaluate,open,run,getLast:()=>last?.report||null,
+ isCurrent:()=>!!last&&last.stamp===stamp(),
+ isPassed:()=>!!last&&last.stamp===stamp()&&last.report?.verified===true
 };
 })();
