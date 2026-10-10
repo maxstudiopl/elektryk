@@ -204,6 +204,12 @@ html[data-theme="dark"] body .game-shell>.rightbar .cable-buttons button{
   font:800 10px/1.25 Inter,"Segoe UI",Arial,sans-serif!important;
   white-space:nowrap;
 }
+html[data-theme="dark"] body .game-shell>.rightbar .cable-buttons button.active{
+  background:#1764a1!important;
+  border:1px solid #74c1ff!important;
+  color:#fff!important;
+  box-shadow:inset 0 0 0 1px #ffffff1e,0 0 0 1px #175f95!important;
+}
 html[data-theme="dark"] body .game-shell>.rightbar .wire-colors{
   gap:6px!important;
   padding:0 9px 10px!important;
