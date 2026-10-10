@@ -5,6 +5,7 @@
 (()=>{
 'use strict';
 const BASE=['LIGHT','SOCKET','KITCHEN','WASH'];
+const MAX_OUTPUT_CABLES=70; // Instalacyjne: 50–70 przewodów wyjściowych. Powyżej limitu — rezerwa.
 const LABELS={LIGHT:'oświetlenie',SOCKET:'gniazda',KITCHEN:'kuchnia',WASH:'pralka'};
 const POL={
  FR:{top:['L1','L2','L3','N'],bottom:['L1','L2','L3','N']},
@@ -91,9 +92,11 @@ function diagram(task,plan){
    }
  }
  // Protected educational outputs: 4 established loads, then dynamically numbered outputs.
- const pePorts=receivers.length;
- for(let i=0;i<receivers.length;i++){
-   const a=receivers[i],load=i<BASE.length?BASE[i]:'AUTO'+String(i-3).padStart(3,'0');
+ const reservedCount=Math.max(0,receivers.length-MAX_OUTPUT_CABLES);
+ const outputReceivers=receivers.slice(0,MAX_OUTPUT_CABLES);
+ const pePorts=outputReceivers.length;
+ for(let i=0;i<outputReceivers.length;i++){
+   const a=outputReceivers[i],load=i<BASE.length?BASE[i]:'AUTO'+String(i-3).padStart(3,'0');
    const label=LABELS[load]||'obwód '+String(i+1).padStart(2,'0');
    const sectionIndex=a.rcd?sections.findIndex(g=>g.items[0]?.id===a.rcd.id):-1;
    const section=sectionIndex>=0?'RCD '+(sectionIndex+1):(a.kind==='rcbo'?'RCBO':'BEZ RCD');
@@ -111,8 +114,8 @@ function diagram(task,plan){
    bridge(neutralRoot,t(spd,'top','N'),'N','Połącz tor N SPD przed aparatami RCD.');
    wire(t(spd,'bottom','PE'),'BAR:PE:2','PE','Połącz SPD do listwy PE.');
  }
- const message='Przygotowano '+loads.length+' osobnych obwodów L/N/PE, '+sections.length+' sekcji RCD i '+rcbos.length+' RCBO. Jest to szkoleniowy rozdział obwodów, bez doboru obciążalności i pomiarów.';
- return {devices,wires,bridges,steps,loads,nSections,pePorts,connectedLoads:loads.length,unwiredNote:message};
+ const message='Przygotowano '+loads.length+' obwodów L/N/PE. '+(reservedCount?'Dodatkowych '+reservedCount+' aparatów pozostaje jako rezerwa, bez kabla wyjściowego (limit '+MAX_OUTPUT_CABLES+'). ':'')+'Model dydaktyczny — nie zastępuje projektu, doboru przekrojów ani pomiarów.';
+ return {devices,wires,bridges,steps,loads,nSections,pePorts,connectedLoads:loads.length,reservedCount,cableLimit:MAX_OUTPUT_CABLES,unwiredNote:message};
 }
 function validate(board){
  const occupied=new Set(),terminals=new Set(),seenWire=new Set();
@@ -128,5 +131,5 @@ function validate(board){
  if(board.loads.some(l=>!l.id||!l.breakerId))return {ok:false,reason:'Brak wyjścia aparatu'};
  return {ok:true,mounted:board.devices.length,wires:board.wires.length,bridges:board.bridges.length,loads:board.loads.length};
 }
-window.ElektrykAutoBoard={diagram,validate};
+window.ElektrykAutoBoard={diagram,validate,MAX_OUTPUT_CABLES};
 })();
