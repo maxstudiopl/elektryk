@@ -1,4 +1,4 @@
-/* v0.7.9 — APARATURA XYZ 2.0
+/* v0.7.9 — APARATURA PRO 2.0
    Spójna fikcyjna rodzina aparatów modułowych do symulatora. */
 
 .mount-grid .mounted-device>.device{
@@ -14,7 +14,7 @@
   overflow:hidden!important;
 }
 
-/* jedna linia wzornicza producenta XYZ */
+/* jedna linia wzornicza producenta PRO */
 .mount-grid .mounted-device .brand-strip{
   left:4px!important;
   right:4px!important;
@@ -34,7 +34,7 @@
   box-shadow:inset 0 1px #fff!important;
 }
 .mount-grid .mounted-device .brand-strip:after{
-  content:'X-SERIES';
+  content:'P-SERIES';
   margin-left:auto;
   color:#6d7779;
   font:bold 4px Arial;
@@ -120,11 +120,11 @@
   pointer-events:none!important;
 }
 .mounted-device[data-code^="B"]>.device:after,
-.mounted-device[data-code^="C"]>.device:after{content:'XYZ • IEC 60898-1'!important}
-.mounted-device[data-code^="RCD"]>.device:after{content:'XYZ • RCCB • TYPE A'!important}
-.mounted-device[data-code^="RCBO"]>.device:after{content:'XYZ • RCBO • TYPE A'!important}
-.mounted-device[data-code^="FR"]>.device:after{content:'XYZ • MAIN ISOLATOR'!important}
-.mounted-device[data-code^="SPD"]>.device:after{content:'XYZ • SPD • TYPE 2'!important}
+.mounted-device[data-code^="C"]>.device:after{content:'PRO • IEC 60898-1'!important}
+.mounted-device[data-code^="RCD"]>.device:after{content:'PRO • RCCB • TYPE A'!important}
+.mounted-device[data-code^="RCBO"]>.device:after{content:'PRO • RCBO • TYPE A'!important}
+.mounted-device[data-code^="FR"]>.device:after{content:'PRO • MAIN ISOLATOR'!important}
+.mounted-device[data-code^="SPD"]>.device:after{content:'PRO • SPD • TYPE 2'!important}
 
 /* podział szerokich aparatów na fizyczne moduły */
 .mounted-device[data-modules="2"]>.device{
@@ -256,14 +256,14 @@
   min-width:8px!important;
 }
 
-/* miniatury katalogu XYZ 2.0 */
+/* miniatury katalogu PRO 2.0 */
 .catalog-card .mini-device{
   background:linear-gradient(90deg,#b4b9b5,#fafbf8 12%,#fff 50%,#e4e7e3 88%,#9ea5a1)!important;
   border-color:#6c7471!important;
   box-shadow:inset 1px 0 #fff,0 2px 3px #0003!important;
 }
 .catalog-card .mini-device:before{
-  content:'XYZ'!important;
+  content:'PRO'!important;
   background:linear-gradient(#fafbf8,#e1e5e1)!important;
   color:#232a2c!important;
   border-top:2px solid #2a98c7!important;
