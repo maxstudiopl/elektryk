@@ -22,7 +22,10 @@ info.setAttribute('aria-label','Informacje o rozdzielnicy przemysłowej');
 info.innerHTML=
  '<div class="ibi-left"><strong id="industrialBoardType">PRO • SZAFOWA</strong><span id="industrialBoardDimension"></span></div>'+
  '<div class="ibi-right"><b id="industrialBoardTerminalCount">X1 • ZUG</b><small>MONTAŻ ZACISKÓW • OKABLOWANIE X1 W PRZYGOTOWANIU</small></div>';
-inner.appendChild(info);
+// v0.7.16.2: N is located above the DIN zone (top:-42px).
+// The previous position:absolute;top:170px covered that real terminal bar.
+// Keep the information OUTSIDE the cabinet to preserve all N/PE click targets.
+cabinetHead.insertAdjacentElement('afterend',info);
 
 const actions=document.createElement('div');
 actions.className='industrial-zug-quick-actions';
@@ -121,7 +124,7 @@ document.addEventListener('elektryk:mode-selected',e=>{
  if(e.detail?.mode!=='free')update(null);
 });
 window.ElektrykIndustrialView={
- version:'0.7.16.1',isActive:()=>active,
+ version:'0.7.16.2',isActive:()=>active,
  board:()=>board?{...board}:null,
  insertNext,example
 };
