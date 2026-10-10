@@ -2,6 +2,30 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.18 — aparat modułowy PRO: realizm wizualny 3.0
+
+Etap modernizacji **aparatury PRO** dla symulatora szkoleniowego. Aparaty są autorskimi, fikcyjnymi modelami PRO, a ich oznaczenia graficzne nie stanowią deklaracji zgodności z normami ani certyfikacji rzeczywistych wyrobów.
+
+### Wygląd aparatów DIN
+
+- Nowa matowa bryła obudowy z warstwami światła, głębokości i tłoczeń formy wtryskowej. Aparaty 1M, 2M, 3M i 4M posiadają spójne szczeliny modularne, bez zmiany szerokości montażu.
+- Logo **PRO / P-LINE**, kontrastowe typy i dane znamionowe, nadruki funkcji i drobne żłobienia frontu. Akcenty identyfikują rodziny: **FR (czerwony), MCB B/C (grafit), RCD (niebieski), RCBO (grafit + niebieski), SPD (pomarańczowy)**, listwy **N (niebieski) / PE (zielony)**.
+- Głębsze, metaliczne wnęki zacisków. Dekoracje dotyczą wyłącznie **wolnych, neutralnych wizualnie zacisków**. Kolory rzeczywistych podłączonych żył i stany diagnostyczne `used-terminal`, `start-terminal`, `bad-terminal` i podpowiedzi pozostały nienaruszone.
+- Dźwignie z refleksami i wyraźniejszą wnęką, rozdzielenie wyglądu FR, MCB, RCD i RCBO. Stan OFF jest przyciemniony wizualnie, ale pozycję przełącznika oraz istniejącą transformację ON/OFF nadal obsługuje stary model.
+- Doprecyzowano przycisk testowy RCD/RCBO, wskaźnik kasety SPD i etykiety listew N/PE. Montaż na szynie DIN zachowuje istniejące zaczepy TH35, śruby, animację zatrzasku i zaznaczenie wybranego urządzenia.
+- Miniatury katalogu i podgląd **Szczegóły elementu** używają tych samych materiałów i barw co aparaty na szynie; karty zaznaczone mają wyraźne wyróżnienie. Filtry i zdarzenia wyboru katalogu pozostają bez zmian.
+
+### Pliki i granice zmian
+
+- Nowy arkusz `apparatus-realism-v0718.css`, ładowany na końcu CSS w `index.html`; wykorzystuje stare klasy i atrybuty `data-code`/`data-part`.
+- `stage2.js`: zsynchronizowano etykietę wersji w **Wolnej Budowie** oraz dodano opis dostępności do przycisku usuwania aparatu. Silnik montażu i `apparatusHtml()` nie zostały zmienione.
+- Nie zmieniono: `.mounted-device` i wymiarów `.device`, położeń `.wire-terminal`, szyn DIN, przewodów SVG, listw N/PE i ZUG, punktacji, silników audytu/diagnostyki, Panelu Użytkownika ani zwijania/przewijania paneli bocznych.
+- Test regresyjny: `node --test tests/apparatus-realism-v0718.test.mjs`, kontroluje izolację stylów, stany zacisków i dźwigni, wszystkie rodziny aparatów oraz niezmieniony sposób renderowania ich zacisków i kontrolek.
+
+### Weryfikacja wizualna
+
+Po publikacji GitHub Pages wejdź na https://maxstudiopl.github.io/elektryk/ (Ctrl + F5). W **Nauka** oraz **Wolna Budowa** sprawdź montaż FR, B10/B16, RCD, RCBO, SPD oraz listwy N/PE. Porównaj miniaturę katalogu z frontem osadzonego aparatu, podświetlenie wybranego, zachowanie śrub i stanów zasilania. Przetestuj także **Większa Rozdzielnica** i przemysłowe szyny DIN 4×24/5×24 — nie powinny zmieniać położenia przewodów ani zacisków. Statyczne testy źródeł nie zastępują sprawdzenia renderowania w zalogowanej przeglądarce.
+
 ## v0.7.17.7.1 — przywrócone przewijanie paneli bocznych
 
 Poprawiono błąd zgłoszony po v0.7.17.7: **lewy i prawy panel stanowiska nie przewijały się w dół** mimo istniejącego `overflow-y:auto`.
