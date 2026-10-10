@@ -107,6 +107,8 @@
           <button type="button" id="hubLogout"><span class="hub-action-icon" aria-hidden="true">↪</span> WYLOGUJ</button>
         </nav>
 
+        <div id="hubAccessNotice" class="hub-access-notice" hidden role="alert"></div>
+
         <div class="pro-modes-title"><span>WYBIERZ TRYB PRACY</span><small>Samodzielny montaż, nauka lub sprawdzian wiedzy</small></div>
         <div class="player-modes">
           <button class="mode-card free" id="modeFree">
@@ -311,7 +313,7 @@
     <div class="game-settings-window">
       <div class="game-settings-head">
         <div><b>USTAWIENIA UŻYTKOWNIKA</b><small>Konto, opcje symulatora i informacje o projekcie</small></div>
-        <button id="closeGameSettings">×</button>
+        <button id="closeGameSettings" type="button" aria-label="Zamknij ustawienia">×</button>
       </div>
       <div class="hub-settings-tabs" role="tablist" aria-label="Działy ustawień">
         <button type="button" role="tab" id="settingsTabAccount" data-user-settings-tab="account" aria-controls="settingsPaneAccount" aria-selected="true">MOJE KONTO</button>
