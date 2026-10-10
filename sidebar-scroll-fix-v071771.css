@@ -1,0 +1,74 @@
+/* RozdzielnicaPRO.pl v0.7.17.7.1 — przywrócenie scrollowania bocznych kolumn
+ *
+ * Przyczyna: .panel-stack to flex-column, a .panel miały domyślne
+ * flex-shrink:1 i overflow:hidden. Zamiast wypchnąć zawartość poza
+ * viewport, sekcje zmniejszały się i obcinały swoją zawartość.
+ *
+ * Poprawka dotyczy wyłącznie bocznych kontenerów w .game-shell.
+ * Nie dotyka Panelu Użytkownika, .cabinet-inner, zacisków ani SVG.
+ */
+
+/* Żadna karta nie może zostać pomniejszona, gdy suma wysokości
+ * przekracza wysokość panelu bocznego. To klucz do powstania scrolla. */
+html[data-theme="dark"] body .game-shell>.leftbar>.panel,
+html[data-theme="dark"] body .game-shell>.rightbar>.panel{
+  flex:0 0 auto!important;
+  flex-shrink:0!important;
+}
+
+/* Na komputerach cała kolumna jest osobnym obszarem przewijania,
+ * niezależnym od rozdzielnicy pośrodku. */
+@media(min-width:900px){
+  html[data-theme="dark"] body .game-shell>.leftbar,
+  html[data-theme="dark"] body .game-shell>.rightbar{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    overscroll-behavior-y:contain!important;
+    scrollbar-width:auto!important;
+    scrollbar-color:#6b9fc3 #102235!important;
+    scrollbar-gutter:stable;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-y;
+  }
+
+  html[data-theme="dark"] body .game-shell>.leftbar::-webkit-scrollbar,
+  html[data-theme="dark"] body .game-shell>.rightbar::-webkit-scrollbar{
+    width:10px;
+  }
+  html[data-theme="dark"] body .game-shell>.leftbar::-webkit-scrollbar-thumb,
+  html[data-theme="dark"] body .game-shell>.rightbar::-webkit-scrollbar-thumb{
+    border:2px solid #102235;border-radius:10px;background:#6b9fc3;
+  }
+  html[data-theme="dark"] body .game-shell>.leftbar::-webkit-scrollbar-track,
+  html[data-theme="dark"] body .game-shell>.rightbar::-webkit-scrollbar-track{
+    background:#102235;
+  }
+}
+
+/* Mobilnie sekcje leżą pod stanowiskiem i przewija się całą stronę;
+ * nie zamieniaj tej wersji w osobne, zamknięte okno scrollowania. */
+@media(max-width:899px){
+  html[data-theme="dark"] body .game-shell>.leftbar,
+  html[data-theme="dark"] body .game-shell>.rightbar{
+    height:auto!important;
+    max-height:none!important;
+    overflow-y:visible!important;
+    overflow-x:visible!important;
+    scrollbar-gutter:auto;
+    touch-action:auto;
+  }
+}
+
+/* W trybie WIĘKSZA ROZDZIELNICA te same narzędzia przenoszone są
+ * do poziomego doku. Pozostawiaj indywidualne przewijanie sekcji doku. */
+html[data-theme="dark"] body.pro-tools-docked
+.game-shell>.workspace>.pro-focus-dock>.rightbar>.panel{
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior-y:auto!important;
+}
