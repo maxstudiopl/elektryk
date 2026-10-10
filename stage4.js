@@ -285,16 +285,18 @@ function renderAnalyzer(states,collisions,issues,manual,engine=null){
   renderEngine(engine);
   const activeCircuitWarnings=(engine?.circuits||[]).some(c=>c.hasOutgoingConnection&&c.outputPhases.length>0&&c.status!=='ready');
   const advisoryWarnings=issues.some(i=>i.type==='warning'||i.type==='warn');
+  const industrialUnverified=window.ElektrykStage2?.getBoardConfig?.()?.family==='industrial';
   const ok=states.filter(s=>s.complete).length,partial=states.filter(s=>s.any&&!s.complete).length;
   const okEl=document.getElementById('powerLoadsOk'),partEl=document.getElementById('powerLoadsPartial'),confEl=document.getElementById('powerConflicts');
   if(okEl)okEl.textContent=`${ok}/${states.length}`;if(partEl)partEl.textContent=partial;if(confEl)confEl.textContent=collisions.length;
   const main=document.getElementById('powerMainStatus');
   if(main){
-    main.className='power-main-status '+(collisions.length||issues.some(i=>i.type==='error')?'error':ok===states.length&&!activeCircuitWarnings&&!advisoryWarnings?'ok':'warn');
+    main.className='power-main-status '+(collisions.length||issues.some(i=>i.type==='error')?'error':ok===states.length&&!activeCircuitWarnings&&!advisoryWarnings&&!industrialUnverified?'ok':'warn');
     if(collisions.length)main.textContent='Wykryto kolizję faz — instalacja wymaga poprawy.';
     else if(issues.some(i=>i.type==='error'))main.textContent='Wykryto błędy w połączeniach, neutralnych torach RCD lub osłonach grzebieni.';
     else if(ok===states.length&&activeCircuitWarnings)main.textContent='Odbiorniki zasilone, ale co najmniej jeden aparat wymaga dodatkowej kontroli.';
     else if(ok===states.length&&advisoryWarnings)main.textContent='Tory odbiorników są kompletne, ale analiza wykryła ostrzeżenia wymagające sprawdzenia.';
+    else if(ok===states.length&&industrialUnverified)main.textContent='Tory odbiorników w modelu działają, ale zaciski X1/ZUG nie podlegają jeszcze kontroli elektrycznej.';
     else if(ok===states.length)main.textContent='✓ Wszystkie odbiorniki mają kompletny tor w modelu symulatora. Wynik nie zastępuje pomiarów instalacji.';
     else if(ok>0)main.textContent=`${ok} z ${states.length} odbiorników ma poprawne zasilanie. Pozostałe wymagają dokończenia.`;
     else main.textContent=manual?'Brak kompletnego toru zasilania. Sprawdź L, N, PE i kolejność aparatów.':'Analiza aktualizuje się automatycznie podczas budowy.';
@@ -330,7 +332,7 @@ function analyze(manual=false){
   if(manual){
     document.dispatchEvent(new CustomEvent('elektryk:power-check',{
       detail:{
-        complete:states.length>0&&states.every(x=>x.complete)&&collisions.length===0&&!issues.some(i=>['error','warning','warn'].includes(i.type))&&!(engine?.circuits||[]).some(c=>c.hasOutgoingConnection&&c.outputPhases.length>0&&c.status!=='ready'),
+        complete:states.length>0&&states.every(x=>x.complete)&&collisions.length===0&&!issues.some(i=>['error','warning','warn'].includes(i.type))&&!(engine?.circuits||[]).some(c=>c.hasOutgoingConnection&&c.outputPhases.length>0&&c.status!=='ready')&&window.ElektrykStage2?.getBoardConfig?.()?.family!=='industrial',
         completeLoads:states.filter(x=>x.complete).length,
         totalLoads:states.length,
         collisions:collisions.length,
