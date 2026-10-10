@@ -106,30 +106,36 @@ html[data-theme="dark"] .industrial-duct-overlay .iduct{
 }
 html[data-theme="dark"] .industrial-duct-overlay .iduct-left{left:7px}
 html[data-theme="dark"] .industrial-duct-overlay .iduct-right{right:7px}
-html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .industrial-board-info{
-  position:absolute;z-index:12;top:170px;left:54px;right:54px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  min-height:34px;padding:5px 13px;border-radius:4px;
-  border:1px solid #a4b4b4;
-  color:#284955;background:linear-gradient(180deg,#f2f6f2df,#dce6e1db);
-  box-shadow:0 2px 5px #21353624;pointer-events:none;
+/* Status rozdzielnicy jest elementem panelu, a nie nakładką na szynę N.
+   N znajduje się na y=214px-42px=172px wewnątrz obudowy. */
+html[data-theme="dark"] .workspace>.industrial-board-info{
+  position:relative!important;top:auto!important;left:auto!important;right:auto!important;
+  z-index:auto!important;flex:0 0 auto!important;width:100%!important;min-width:0!important;
+  display:flex!important;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px 16px;
+  min-height:42px;padding:10px 15px!important;
+  margin:0!important;border-radius:0!important;
+  border:1px solid #3c5970!important;border-top:0!important;border-bottom:0!important;
+  color:#d9ebfa!important;
+  background:linear-gradient(110deg,#1d354b,#152b3d)!important;
+  box-shadow:none!important;
+  pointer-events:auto!important;
 }
-html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .industrial-board-info[hidden]{
-  display:none!important
+html[data-theme="dark"] .workspace>.industrial-board-info[hidden]{
+  display:none!important;
 }
 html[data-theme="dark"] .industrial-board-info .ibi-left,
 html[data-theme="dark"] .industrial-board-info .ibi-right{
   display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;
 }
 html[data-theme="dark"] .industrial-board-info strong{
-  color:#16496b;font:bold 9px Arial,sans-serif;letter-spacing:.5px;
+  color:#a4d9ff;font:bold 10px Arial,sans-serif;letter-spacing:.5px;
 }
 html[data-theme="dark"] .industrial-board-info span,
 html[data-theme="dark"] .industrial-board-info small{
-  color:#556a71;font:800 7px Arial,sans-serif;letter-spacing:.2px;
+  color:#a9c5db;font:800 9px Arial,sans-serif;letter-spacing:.2px;
 }
 html[data-theme="dark"] .industrial-board-info b{
-  color:#1e6e98;font:bold 9px Arial,sans-serif;
+  color:#75cbff;font:bold 10px Arial,sans-serif;
 }
 html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .industrial-zug-rail{
   top:10px!important;left:408px!important;right:20px!important;
@@ -221,8 +227,12 @@ html[data-theme="dark"] .board-choice-card[data-board-id^="IND-PRO-"] .board-car
   color:#84d5ff!important;
 }
 @media(max-width:850px){
-  html[data-theme="dark"] .cabinet-inner[data-family="industrial"] .industrial-board-info{
-    left:45px;right:45px;flex-wrap:wrap;gap:3px;
+  html[data-theme="dark"] .workspace>.industrial-board-info{
+    gap:6px;align-items:flex-start;padding:9px 12px!important;
+  }
+  html[data-theme="dark"] .workspace>.industrial-board-info .ibi-left,
+  html[data-theme="dark"] .workspace>.industrial-board-info .ibi-right{
+    width:100%;
   }
 }
 @media(prefers-reduced-motion:reduce){
