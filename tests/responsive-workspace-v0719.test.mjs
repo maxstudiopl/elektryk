@@ -31,6 +31,7 @@ class Node{
     };
   }
   appendChild(node){node.parent=this;this.children.push(node)}
+  append(...nodes){nodes.forEach(node=>this.appendChild(node))}
   setAttribute(key,value){this.attrs[key]=String(value)}
   addEventListener(name,fn){(this.handlers[name]??=[]).push(fn)}
   click(){for(const fn of this.handlers.click||[])fn({target:this})}
