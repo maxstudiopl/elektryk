@@ -1211,7 +1211,7 @@ function render(){
       String(task.section||filters.find(x=>x.key===task.group)?.label||'ĆWICZENIE'));
     const meta=element('div','task-card-meta');
     [task.rows+'×'+task.modulesPerRow+'M',
-      usedModules(task)+'/'+task.rows*task.modulesPerRow+'M',
+      usedModules(task)+'/'+(task.rows*task.modulesPerRow)+'M',
       task.xp+' XP'].forEach(t=>meta.appendChild(element('span','',t)));
     const req=element('small','',reqSummary(task));
     const state=element('div','task-save-state');
