@@ -76,6 +76,40 @@ const TEMPLATES=[
     equipmentHint:null
   },
   {
+    id:'IND-PRO-4X24',
+    name:'Przemysłowa PRO 4×24 • ZUG X1',
+    family:'industrial',
+    mounting:'industrial_surface',
+    rows:4,
+    modulesPerRow:24,
+    totalModules:96,
+    zugSlots:24,
+    sourceRef:'PRO-IND-001',
+    level:'advanced',
+    engineStatus:'supported',
+    enclosureProfile:'industrial-4x24',
+    enclosureLook:{shell:'industrial-steel',door:'industrial',depth:'deep',rowSpacing:'service'},
+    equipmentHint:{din:true,zug:true},
+    notes:'Rozdzielnica produkcyjna z górną listwą X1; połączenia ZUG będą dostępne w kolejnym etapie.'
+  },
+  {
+    id:'IND-PRO-5X24',
+    name:'Przemysłowa PRO XL 5×24 • ZUG X1',
+    family:'industrial',
+    mounting:'industrial_surface',
+    rows:5,
+    modulesPerRow:24,
+    totalModules:120,
+    zugSlots:30,
+    sourceRef:'PRO-IND-002',
+    level:'advanced',
+    engineStatus:'supported',
+    enclosureProfile:'industrial-5x24',
+    enclosureLook:{shell:'industrial-steel-xl',door:'industrial',depth:'deep',rowSpacing:'service'},
+    equipmentHint:{din:true,zug:true},
+    notes:'Duża rozdzielnica przemysłowa z 30 pozycjami górnej listwy X1.'
+  },
+  {
     id:'REF-CONSTRUCTION',
     name:'Rozdzielnica budowlana',
     family:'construction',
@@ -103,7 +137,7 @@ function supported(){
 }
 
 window.ElektrykSwitchboardDB={
-  version:'0.3.0',
+  version:'0.7.16',
   all,
   get,
   byFamily,
