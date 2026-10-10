@@ -104,3 +104,58 @@ test('Enlarged board keeps original catalogue and wire controls in focus dock',a
   await page.locator('#proFocusMode').click();
   await expect(page.locator('body')).not.toHaveClass(/pro-tools-docked/);
 });
+
+test('Real terminal clicks create a wire, undo works and removal prunes stale endpoints',async({page})=>{
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  await openWorkstation(page);
+  await page.locator('.catalog-card[data-part="B10"]').first().click();
+  await page.locator('.mount-grid[data-row="0"] .din-slot').first().click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(1);
+  const supply=page.locator('[data-terminal="SUPPLY:L1"]');
+  const breaker=page.locator('.mounted-device [data-role="L"][data-zone="top"]').first();
+  await expect(supply).toBeVisible();
+  await expect(breaker).toBeVisible();
+  await supply.click();
+  await breaker.click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage3.getConnections().length)).toBe(1);
+  await page.locator('#undoWire').click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage3.getConnections().length)).toBe(0);
+  await supply.click();await breaker.click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage3.getConnections().length)).toBe(1);
+  await page.locator('.mounted-device .remove-device').first().click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(0);
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage3.getConnections().length)).toBe(0);
+  expect(errors).toEqual([]);
+});
+test('Saved free-build project restores mounted apparatus from selected slot',async({page})=>{
+  await openWorkstation(page);
+  await page.locator('.catalog-card[data-part="B10"]').first().click();
+  await page.locator('.mount-grid[data-row="0"] .din-slot').first().click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(1);
+  await page.locator('#freeProjectName').fill('Projekt do odtworzenia');
+  await page.locator('#saveFreeProject').click();
+  await expect(page.locator('#freeSaveState')).toHaveText('ZAPISANO');
+  await page.locator('.mounted-device .remove-device').first().click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(0);
+  await page.locator('#loadFreeProject').click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykStage2.getMounted().length)).toBe(1);
+  await expect(page.locator('#freeProjectName')).toHaveValue('Projekt do odtworzenia');
+  await expect(page.locator('#freeSaveState')).toHaveText('ZAPISANO');
+});
+test('Learning catalogue contains task 300 and running a task cannot award XP without wiring',async({page})=>{
+  await localTestSession(page);
+  await page.goto('/');
+  await expect(page.locator('#playerHub')).toBeVisible();
+  await page.locator('#modeLearn').click();
+  await expect.poll(()=>page.evaluate(()=>window.ElektrykTasks?.all?.length)).toBe(300);
+  await page.locator('.task-button').click();
+  await expect(page.locator('#taskModal')).toBeVisible();
+  await page.locator('#taskCatalogSearch').fill('300');
+  await expect(page.locator('.task-card[data-task-id="300"]')).toBeVisible();
+  await page.locator('.task-card[data-task-id="300"]').click();
+  await expect.poll(()=>page.evaluate(()=>Number(window.ElektrykStage2?.getTask?.()?.id))).toBe(300);
+  const before=await page.evaluate(()=>window.ElektrykProgress?.get?.()?.xp);
+  await page.locator('#checkPower').click();
+  const after=await page.evaluate(()=>window.ElektrykProgress?.get?.()?.xp);
+  expect(after).toBe(before);
+});
