@@ -102,7 +102,7 @@ function render(){
      used++;
      for(const side of ['TOP','BOTTOM']){
        const wirePort=port(side==='TOP'?'T':'B',code,terminalId(i,code,side),side);
-       if(wirePort)wrapper.appendChild(wirePort);
+       if(wirePort){wirePort.disabled=!isEditable();wrapper.appendChild(wirePort)}
      }
    }else{
      const screwTop=document.createElement('span');screwTop.className='iz-screw iz-screw-top';
@@ -167,7 +167,8 @@ function apply(template){
  tools.classList.toggle('mode-hidden',!active);
  cabinet.classList.toggle('industrial-zug-active',active);
  document.body.classList.toggle('industrial-board-active',active);
- if(active){select('L1');render();}
+ if(active){select('L1');render();}else track.replaceChildren();
+ window.ElektrykStage3?.refreshMounted?.();
 }
 tools.querySelector('#izUndo').addEventListener('click',undo);
 tools.querySelector('#izClear').addEventListener('click',clear);
