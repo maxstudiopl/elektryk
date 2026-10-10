@@ -45,7 +45,7 @@ Historia szczegółowa znajduje się także w `README.md` i zakładce „Aktuali
 - Rozmiar i montaż: **`enclosure-v078.js`**, **`stage2.js`**.
 - Zaciski, przewody, widoczne ścieżki: **`stage3.js`**, **`cable-routing-v07152.js`**; mostki: **`bridges-v031.js`**.
 - Analiza: **`stage4.js`**, **`electrical-engine-v0713.js`**, **`electrical-audit-v0712.js`**, **`rcd-diagnostic-v07131.js`**, raport **`verification-pro-v07177.js`**.
-- Listwa przemysłowa X1: **`industrial-zug-v0716.js`**; dziś **tylko montażowa**. Nie wolno deklarować, że wykonuje walidację elektryczną zacisków.
+- Listwa przemysłowa X1: **`industrial-zug-v0716.js`**; od v0.7.22 posiada porty T/B, przewody i edukacyjną diagnostykę grafową. Nie wolno mylić walidacji w grze z realnymi pomiarami instalacji.
 - Zapisy Wolnej Budowy: **`freebuild-save-v0711.js`**, trzy sloty, `localStorage`, zapis wyłącznie na żądanie użytkownika (brak niejawnego nadpisania przy zamykaniu).
 - Testy Node: `node --test tests/*.test.mjs`. Chromium/Playwright: konfiguracja `playwright.config.mjs` i `tests/browser-smoke-v0720.spec.mjs`.
 - CI: `.github/workflows/quality.yml`; strona: **https://maxstudiopl.github.io/elektryk/**.
@@ -88,3 +88,9 @@ Najpierw sprawdź `main`, niezakończone PR, ostatnie workflow i zweryfikuj, czy
 Ustalenie: dokończyć połączenia X1/ZUG w obu szafach przemysłowych i zachować dotychczasowe tryby gry.
 
 Gałąź robocza: `feat/v0.7.22-x1-electrical`. Zmiany: porty T/B złączek X1, przewody przez istniejący silnik, diagnostyka ciągłości i zasilania, zgodność zapisów oraz testy. Separator nie przewodzi. Szczegóły techniczne w `README.md`. Przed zatwierdzeniem sprawdzić testy CI i odnotować commit wdrożenia.
+
+### 2026-10-10 — ukończone v0.7.22
+
+WYKONANO: połączono zaciski X1/ZUG (port górny i dolny) ze wspólnym grafem symulatora, dodano przewody, kontrolę podłączania i zasilenia zacisków, walidację zapisów, nieprzewodzące separatory oraz testy Node/Chromium. Zapis kompatybilny z dotychczasową listwą. Testy GitHub Actions na PR #5: zaliczone. Zmiany scalone do `main` jako commit `0a44203c472d1ea7851cee7ebeb55b694a6a364c`.
+
+Dodatkowy etap po publikacji: poprawa starych opisów interfejsu, które nadal informowały, że okablowanie X1 jest w przygotowaniu. Prace w gałęzi `chore/v0.7.22-x1-finish`. W razie kolejnego czatu zweryfikować aktualny status tej poprawki oraz ostatni wynik GitHub Actions.
