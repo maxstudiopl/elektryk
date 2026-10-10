@@ -2,6 +2,31 @@
 
 Przeglądarkowy symulator szkoleniowy montażu aparatury modułowej PRO i okablowania rozdzielnic. Projekt statyczny (HTML, CSS, JavaScript), uruchamiany w przeglądarce.
 
+## v0.7.21 — audyt rozdzielnic, integralność zapisów i komunikatów
+
+Analiza wszystkich **7 obsługiwanych modeli** (1×18, 3×12 ×2, 5×12, 5×24, przemysłowe 4×24/5×24) i mechanizmów montażu, okablowania, resetu oraz zapisu.
+
+### Naprawione problemy
+
+1. **Wczytanie uszkodzonego projektu:** wcześniej weryfikowano głównie liczbę rzędów i modułów. Wprowadzono kontrolę przed niszczącym `enterGame`: zgodność obudowy z katalogiem, pojemność, pozycje i szerokości aparatów, duplikaty identyfikatorów, nakładanie się modułów DIN, referencje aparatów użyte przez przewody/mostki, poprawność ich typu oraz format i pojemność listwy X1.
+2. **Pozycje aparatów:** `stage2.js` odrzuca niecałkowite współrzędne montażowe i powtórzone identyfikatory przy odtwarzaniu. Wcześniej współrzędne ułamkowe lub niespójne mogły skutkować niepoprawnym dostępem do slotu.
+3. **Przycisk „WYCZYŚĆ ROZDZIELNICĘ”:** teraz czyści także listwę X1/ZUG w aktywnej szafie przemysłowej, a nie tylko aparaty DIN i przewody.
+4. **Zapis X1:** pełny komunikat „ZAPISANO” po odtworzeniu wymaga potwierdzenia również układu slotów X1.
+5. **Analizator przemysłowy:** wstępny pasek diagnostyczny nie może być zielony ani zgłaszać pełnego zaliczenia całej instalacji, gdy niezaimplementowana jeszcze kontrola elektryczna X1/ZUG pozostaje poza grafem. Raport szczegółowy miał już takie ograniczenie od v0.7.20.1; teraz synchronizujemy z nim pasek i zdarzenie sprawdzania.
+6. **Wersja interfejsu:** zsynchronizowano dynamicznie wyświetlane numery w trybie nauki i wolnej budowy oraz odświeżono cache zasobów.
+
+### Zakres testów
+
+- Node.js: dotychczasowe testy wraz z dodatkowymi przypadkami uszkodzonych danych zapisu, nakładania aparatów DIN, niespójnych identyfikatorów, rozmiaru znanego modelu i listwy przemysłowej X1.
+- Chromium: sprawdzenie **każdego z 7 modeli**, liczby fizycznych miejsc DIN, zamontowania B10 w ostatnim module i usuwania oraz pełnego wyczyszczenia przemysłowej X1.
+- CI: `.github/workflows/quality.yml`, należy sprawdzić wyniki PR i dopiero po pełnym sukcesie scalać do `main`. Testy przeglądarkowe nie zastępują rzeczywistych oględzin instalacji.
+
+### Pozostające ograniczenia
+
+- **X1/ZUG pozostaje montażową wizualizacją**, bez przypinania przewodów, i nie jest walidowana jako fizyczny tor elektryczny.
+- Gra nie certyfikuje rzeczywistego doboru aparatów, zabezpieczeń, przewodów ani zgodności rozdzielnicy z normami.
+- Bardzo rozbudowane projekty (wiele rzędów, kilkadziesiąt przewodów i grzebienie) oraz wygląd na konkretnym monitorze wymagają dalszych testów UX/performance.
+
 ## v0.7.20.1 — aktualność raportu i diagnostyka przemysłowego X1
 
 - Po każdej zmianie modelu rozdzielnicy lub montażu zacisków X1/ZUG stary raport sprawdzenia jest nieaktualny i wymaga ponownego uruchomienia **Sprawdź instalację**.
