@@ -4,7 +4,7 @@
 const phases=['L1','L2','L3'],types=[...phases,'N','PE'];
 const breaker=c=>/^(?:[BC]\d+(?:_(?:2P|3P))?|RCBO\w*)$/.test(c||'');
 const residual=c=>/^(RCD|RCBO)/.test(c||'');
-function evaluate({terminals=[],mounted=[],connections=[],bridges=[]}={}){
+function evaluate({terminals=[],mounted=[],connections=[],bridges=[],zug=null}={}){
   const term=new Map(terminals.map(t=>[String(t.id),t]));
   const dev=new Map(mounted.map(m=>[String(m.id),m]));
   const graph=new Map([...term.keys()].map(id=>[id,[]]));
@@ -26,6 +26,20 @@ function evaluate({terminals=[],mounted=[],connections=[],bridges=[]}={}){
     }
     edge(e.a,e.b,e.p,'external');
   });
+  // Same electrical graph as DIN and WLZ; X1 slots are independent two-port feedthroughs.
+  // The separator never creates an electrical edge.
+  const x1Slots=zug?.slots?.map?.((code,index)=>({code,index}))?.filter?.(x=>x.code&&x.code!=='SEP')||[];
+  const x1Valid=[];
+  for(const item of x1Slots){
+    const id='X1:'+String(item.index+1).padStart(2,'0')+':'+item.code;
+    const a=term.get(id+':TOP'),b=term.get(id+':BOTTOM');
+    if(!a||!b||a.role!==item.code||b.role!==item.code){
+      addIssue('X1_TERMINAL','Zacisk '+id+' ma uszkodzone lub niezgodne porty.',id);
+      continue;
+    }
+    edge(a.id,b.id,item.code,'zug',id);
+    x1Valid.push({...item,id,a:a.id,b:b.id});
+  }
   for(const m of mounted){
     const t=terminals.filter(x=>x.mountId===m.id),code=String(m.code||'');
     if(/^(NTB|PETB)/.test(code)){
@@ -92,6 +106,22 @@ function evaluate({terminals=[],mounted=[],connections=[],bridges=[]}={}){
     collisions.push({id:t.id,phases:ps});
     addIssue('PHASE_COLLISION','Kolizja faz '+ps.join('/')+' na '+t.id+'.',t.id);
   }}
+  let zugStatus=null;
+  if(zug){
+    const entries=x1Valid.map(item=>{
+      const wired=connections.some(c=>c.a===item.a||c.b===item.a||c.a===item.b||c.b===item.b);
+      const powered=types.some(p=>p===item.code&&reach[p].seen.has(item.a));
+      if(!wired)issues.push({type:'warning',code:'X1_UNWIRED',text:'X1:'+String(item.index+1).padStart(2,'0')+' ('+item.code+') nie ma przewodu.',ref:item.a});
+      else if(!powered)issues.push({type:'warning',code:'X1_UNFED',text:'X1:'+String(item.index+1).padStart(2,'0')+' ('+item.code+') nie ma potwierdzonej ciągłości od zasilania w modelu.',ref:item.a});
+      return {...item,wired,powered,ready:wired&&powered};
+    });
+    zugStatus={total:x1Slots.length,connected:entries.filter(x=>x.wired).length,
+      ready:entries.filter(x=>x.ready).length,
+      complete:x1Slots.length>0&&x1Valid.length===x1Slots.length&&entries.every(x=>x.ready),
+      entries};
+    if(!x1Slots.length)issues.push({type:'warning',code:'X1_EMPTY',
+      text:'Rozdzielnica przemysłowa: zamontuj i podłącz zaciski X1/ZUG, aby sprawdzić listwę.',ref:null});
+  }
   const circuits=[];
   for(const m of mounted.filter(x=>breaker(x.code))){
     const t=terminals.filter(x=>x.mountId===m.id);
@@ -124,7 +154,7 @@ function evaluate({terminals=[],mounted=[],connections=[],bridges=[]}={}){
   }
   const stats={total:circuits.length,ready:circuits.filter(c=>c.status==='ready').length,
     incomplete:circuits.filter(c=>c.status!=='ready').length,errors:issues.length,collisions:collisions.length};
-  return {version:'2.0',circuits,issues,collisions,stats};
+  return {version:'2.1',circuits,issues,collisions,stats,zug:zugStatus};
 }
 function snapshot(){
   const terminals=[...document.querySelectorAll('.wire-terminal')].map(el=>({
@@ -133,7 +163,8 @@ function snapshot(){
   })).filter(t=>t.id);
   return {terminals,mounted:window.ElektrykStage2?.getMounted?.()||[],
     connections:window.ElektrykStage3?.getConnections?.()||[],
-    bridges:window.ElektrykBridges?.getBridges?.()||[]};
+    bridges:window.ElektrykBridges?.getBridges?.()||[],
+    zug:window.ElektrykIndustrialZug?.getState?.()||null};
 }
 window.ElektrykElectricalEngine={evaluate,snapshot,analyze:()=>evaluate(snapshot())};
 })();
