@@ -20,7 +20,9 @@ const newBtn=document.getElementById('newFreeProject');
 const slotButtons=[...document.querySelectorAll('[data-save-slot]')];
 if(!panel||!nameInput||!stateEl||!metaEl)return;
 
-let activeSlot=Number(localStorage.getItem(userKey(ACTIVE_KEY))||0);
+const savedActiveSlot=Number(localStorage.getItem(userKey(ACTIVE_KEY))||0);
+let activeSlot=Number.isInteger(savedActiveSlot)&&savedActiveSlot>=1&&savedActiveSlot<=3?savedActiveSlot:0;
+let loadedSlot=0;
 let lastSavedSignature='';
 let lastObservedSignature='';
 let initializing=true;
@@ -65,8 +67,10 @@ function compactState(){
     industrialZug:window.ElektrykIndustrialZug?.getState?.()||null
   };
 }
-function signature(data=compactState()){
-  try{return JSON.stringify(data)}catch{return ''}
+function signature(data=compactState(),name=nameInput.value){
+  try{
+    return JSON.stringify({...data,name:String(name||'Mój projekt').trim().slice(0,32)});
+  }catch{return ''}
 }
 function snapshot(){
   const board=window.ElektrykStage2?.getBoardConfig?.();
@@ -76,7 +80,7 @@ function snapshot(){
   const bridges=window.ElektrykBridges?.getBridges?.()||[];
   return {
     schema:2,
-    gameVersion:'0.7.16',
+    gameVersion:'0.7.20',
     name:(nameInput.value||'Mój projekt').trim().slice(0,32)||'Mój projekt',
     savedAt:Date.now(),
     templateId:board.boardId||null,
@@ -117,12 +121,15 @@ function renderSlots(){
   }
 }
 function chooseSlot(n){
-  activeSlot=Number(n)||0;
-  if(activeSlot)localStorage.setItem(userKey(ACTIVE_KEY),String(activeSlot));
-  else localStorage.removeItem(userKey(ACTIVE_KEY));
-  const p=readStore()[activeSlot];
-  if(p?.name)nameInput.value=p.name;
+  const slot=Number(n);
+  if(!Number.isInteger(slot)||slot<1||slot>3)return false;
+  activeSlot=slot;
+  localStorage.setItem(userKey(ACTIVE_KEY),String(activeSlot));
+  // Selecting a slot must NEVER silently replace the active project's name.
+  // Use WCZYTAJ to load a stored project or ZAPISZ to explicitly write it.
   renderSlots();
+  updateDirtyState();
+  return true;
 }
 function firstAvailableSlot(){
   const store=readStore();
@@ -135,8 +142,19 @@ function saveProject(silent=false){
   const data=snapshot();
   if(!data)return false;
   const store=readStore();
+  if(store[activeSlot]&&activeSlot!==loadedSlot){
+    if(silent||!confirm('Slot '+activeSlot+' zawiera już projekt „'+
+      (store[activeSlot].name||'Bez nazwy')+'”. Zastąpić istniejący zapis?'))return false;
+  }
   store[activeSlot]=data;
-  writeStore(store);
+  try{writeStore(store)}
+  catch(err){
+    console.error('Zapis Wolnej Budowy:',err);
+    setState('BŁĄD ZAPISU','dirty');
+    setMeta('Nie udało się zapisać projektu. Sprawdź dostępne miejsce w przeglądarce.','warn');
+    return false;
+  }
+  loadedSlot=activeSlot;
   nameInput.value=data.name;
   lastSavedSignature=signature({
     board:data.board,
@@ -144,7 +162,7 @@ function saveProject(silent=false){
     connections:data.connections,
     bridges:data.bridges,
     industrialZug:data.industrialZug
-  });
+  },data.name);
   lastObservedSignature=lastSavedSignature;
   setState('ZAPISANO','saved');
   renderSlots();
@@ -157,7 +175,18 @@ function waitFrame(){
 async function loadProject(){
   if(!activeSlot){setMeta('Najpierw wybierz slot do wczytania.','warn');return}
   const p=readStore()[activeSlot];
-  if(!p){setMeta('Wybrany slot jest pusty.','warn');return}
+  if(!p){setMeta('Wybrany slot jest pusty.','warn');return false}
+  if(!p.board||!Array.isArray(p.mounted)||!Array.isArray(p.connections)||!Array.isArray(p.bridges)){
+    setMeta('Zapis w tym slocie jest niekompletny. Nie zmieniono bieżącego projektu.','warn');
+    return false;
+  }
+  // Do not silently discard unsaved work when switching projects.
+  const unsaved=signature()!==lastSavedSignature;
+  const state=compactState();
+  const occupied=state.mounted.length+state.connections.length+state.bridges.length+
+    (state.industrialZug?.slots?.filter(x=>x&&x!=='SEP').length||0);
+  if(unsaved&&occupied&&!confirm('Masz niezapisane zmiany. Wczytanie slotu '+activeSlot+
+    ' zastąpi bieżącą rozdzielnicę. Kontynuować?'))return false;
 
   let template=window.ElektrykSwitchboardDB?.get?.(p.templateId)||null;
   if(!template){
@@ -176,7 +205,14 @@ async function loadProject(){
   }
 
   setState('WCZYTYWANIE','dirty');
-  await window.ElektrykAuth?.enterGame?.('free',template);
+  try{
+  if(!window.ElektrykAuth?.enterGame)throw new Error('Nie można uruchomić Wolnej Budowy');
+  await window.ElektrykAuth.enterGame('free',template);
+  if(document.body.dataset.gameMode!=='free')throw new Error('Nie uruchomiono trybu Wolnej Budowy');
+  const installedBoard=window.ElektrykStage2?.getBoardConfig?.();
+  if(!installedBoard||Number(installedBoard.rows)!==Number(template.rows)||
+     Number(installedBoard.modulesPerRow)!==Number(template.modulesPerRow))
+    throw new Error('Nie udało się przygotować zapisanej obudowy');
   window.ElektrykIndustrialZug?.restore?.(p.industrialZug||null);
   window.ElektrykStage2?.restoreMounted?.(p.mounted||[]);
   await waitFrame();
@@ -197,11 +233,19 @@ async function loadProject(){
     connections:window.ElektrykStage3?.getConnections?.()||p.connections||[],
     bridges:window.ElektrykBridges?.getBridges?.()||p.bridges||[],
     industrialZug:window.ElektrykIndustrialZug?.getState?.()||null
-  });
+  },p.name);
+  loadedSlot=activeSlot;
   lastObservedSignature=lastSavedSignature;
   setState('ZAPISANO','saved');
   setMeta('Wczytano slot '+activeSlot+' • '+formatDate(p.savedAt),'ok');
   renderSlots();
+  return true;
+  }catch(err){
+    console.error('Wczytanie Wolnej Budowy:',err);
+    setState('BŁĄD WCZYTYWANIA','dirty');
+    setMeta('Wczytanie nie powiodło się. Zapis w slocie pozostał bez zmian.','warn');
+    return false;
+  }
 }
 function newProject(){
   if(!isFree())return;
@@ -211,7 +255,7 @@ function newProject(){
   window.ElektrykStage2?.reset?.();
   window.ElektrykIndustrialZug?.reset?.();
   nameInput.value='Nowy projekt';
-  activeSlot=0;
+  activeSlot=0;loadedSlot=0;
   localStorage.removeItem(userKey(ACTIVE_KEY));
   lastSavedSignature='';
   lastObservedSignature=signature();
@@ -234,7 +278,7 @@ function onMode(mode){
     lastObservedSignature=signature();
     const p=activeSlot?readStore()[activeSlot]:null;
     if(p){
-      const savedSig=signature({board:p.board,mounted:p.mounted||[],connections:p.connections||[],bridges:p.bridges||[],industrialZug:p.industrialZug||null});
+      const savedSig=signature({board:p.board,mounted:p.mounted||[],connections:p.connections||[],bridges:p.bridges||[],industrialZug:p.industrialZug||null},p.name);
       lastSavedSignature=savedSig;
     }else lastSavedSignature='';
     setState(lastSavedSignature&&lastObservedSignature===lastSavedSignature?'ZAPISANO':'NIE ZAPISANO',lastSavedSignature&&lastObservedSignature===lastSavedSignature?'saved':'dirty');
@@ -250,9 +294,10 @@ slotButtons.forEach(btn=>btn.addEventListener('click',()=>chooseSlot(Number(btn.
 saveBtn?.addEventListener('click',()=>saveProject(false));
 loadBtn?.addEventListener('click',loadProject);
 newBtn?.addEventListener('click',newProject);
-nameInput.addEventListener('input',()=>{if(isFree())setState('NIEZAPISANE ZMIANY','dirty')});
+nameInput.addEventListener('input',()=>{if(isFree())updateDirtyState()});
 document.addEventListener('elektryk:mode-selected',e=>onMode(e.detail?.mode||'learn'));
-window.addEventListener('beforeunload',()=>{if(isFree()&&activeSlot)saveProject(true)});
+// Explicit saves only. Automatic beforeunload overwrote selected project slots.
+// In browsers with quota limits saving should never occur without the user's action.
 
 setInterval(updateDirtyState,500);
 renderSlots();
