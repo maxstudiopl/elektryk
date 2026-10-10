@@ -384,16 +384,19 @@ function renderBoardSelector(){
   });
   grid.appendChild(fragment);
 }
-async function openBoardSelector(){
+async function openBoardSelector(preferredFamily='all'){
   if(!sessionValid()){location.reload();return}
   if(!licenseActive()){showHub();window.ElektrykAdminPlayers?.showLicenseWarning?.();return}
   try{await loadScripts()}catch{return}
   const modal=document.getElementById('boardSelectorModal');
   if(!modal)return;
   if(modal.hidden)boardSelectorReturnFocus=document.activeElement;
-  renderBoardSelector();
-  modal.hidden=false;
   const search=document.getElementById('boardSelectorSearch');
+  const size=document.getElementById('boardSelectorSize');
+  if(search)search.value='';
+  if(size)size.value='all';
+  setBoardFamily(preferredFamily);
+  modal.hidden=false;
   requestAnimationFrame(()=>search?.focus());
 }
 function closeBoardSelector(restoreFocus=true){
@@ -509,18 +512,9 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   document.getElementById('modeLearn')?.addEventListener('click',()=>enterGame('learn'));
   document.getElementById('modeExam')?.addEventListener('click',()=>enterGame('exam'));
-  document.getElementById('modeFree')?.addEventListener('click',openBoardSelector);
-  document.getElementById('modeIndustrial')?.addEventListener('click',async()=>{
-    if(!sessionValid()){location.reload();return}
-    if(!licenseActive()){showHub();window.ElektrykAdminPlayers?.showLicenseWarning?.();return}
-    try{
-      await loadScripts();
-      const model=window.ElektrykSwitchboardDB?.get?.('IND-PRO-4X24');
-      if(!model)throw new Error('Brak szablonu rozdzielnicy przemysłowej.');
-      await enterGame('free',model);
-    }catch(err){console.error('PRZEMYSŁ:',err);showMessage('Nie udało się uruchomić trybu przemysłowego.','error');}
-  });
-  document.getElementById('changeFreeBoard')?.addEventListener('click',openBoardSelector);
+  document.getElementById('modeFree')?.addEventListener('click',()=>openBoardSelector('all'));
+  document.getElementById('modeIndustrial')?.addEventListener('click',()=>openBoardSelector('industrial'));
+  document.getElementById('changeFreeBoard')?.addEventListener('click',()=>openBoardSelector('all'));
   document.getElementById('closeBoardSelector')?.addEventListener('click',closeBoardSelector);
   document.getElementById('boardSelectorModal')?.addEventListener('click',e=>{if(e.target.id==='boardSelectorModal')closeBoardSelector()});
   document.getElementById('boardSelectorSearch')?.addEventListener('input',renderBoardSelector);
